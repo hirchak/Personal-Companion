@@ -11,10 +11,10 @@
 | Implementation C3 | `bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd` |
 | Evidence R4 | `7ecd3f025793213089b801947deb91c4c800d658` (status/report/evidence-only) |
 | Post-publication attestation R5 | status/evidence-only follow-up; SHA in final message to avoid self-hash |
-| Current main before R5 | `origin/main` verified at R4 `7ecd3f025793213089b801947deb91c4c800d658`; C3 is its parent |
+| Current main before R5 | `origin/main` verified at R5 `175fc934ad16552759273d2ed6770835b6f28786` at M1 start |
 | Review branch | historical `review/m0-bootstrap` remains at R3 `ca0e1fc3af42bcc31e4038a591f7356713718005` |
 | Main workflow permission | `push_main=true`; `push_review_branch=false`; `merge_main/deploy/providers/private-data=false` |
-| Push / CI | C3/R4 normal pushes and default-branch edit succeeded; R5 fast-forward to main is the remaining attestation action. CI NOT_RUN |
+| Push / CI | C3/R4 normal pushes and default-branch edit succeeded; R5 main publication verified at M1 start (see M0_ARCHITECT_REVIEW.md). CI NOT_RUN |
 
 ## Owner decision and schema update
 
@@ -52,9 +52,9 @@ clinical activation, billing/auth change, deployment or release.
 | Privacy scan | C3/R4 staged trees, all Git objects, generated snapshots | PASS, heuristic scope |
 | R4/R5 path whitelist and `git diff --check` | R4/R5 | PASS; only status/evidence paths |
 | C3/R4 main publication | GitHub API + `git ls-remote` | PASS; R4 on `origin/main`, GitHub actual default `main` |
-| R5 post-publication push | pending this commit's final push | normal fast-forward only to `main` |
+| R5 post-publication push | verified at M1 start, exact R5 | normal fast-forward only to `main` |
 
-Detailed evidence: `reports/evidence/M0/CANONICAL_STARTER_VERIFY.json`, `C3_CHECKS.json`,
+Detailed evidence: `reports/evidence/M0/CANONICAL_STARTER_VERIFY.json`, `C3_RERUN_2026-10-01.json`,
 `C3_SNAPSHOT_HASHES.json`, `R4_CHECKS.json`, `R4_SNAPSHOT_VERIFY.json`,
 `GITHUB_MAIN_NORMALIZATION.json`, `MAIN_PUBLICATION_VERIFY.json`, and `R5_CHECKS.json`.
 

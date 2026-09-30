@@ -1,0 +1,44 @@
+{
+  "scope": "R staged evidence-only on exact C 6695ffd64d56f935ec41a2d11df5cad7fbfa8106; record itself staged after execution",
+  "environment": {
+    "python": "3.13.2"
+  },
+  "staged_paths": [
+    "HANDOFF.md",
+    "STATE.md",
+    "devlog/2026-10-01-M1.md",
+    "docs/ROADMAP.md",
+    "reports/M0_ARCHITECT_REVIEW.md",
+    "reports/M0_BOOTSTRAP_REPORT.md",
+    "reports/M1_LOCAL_JOURNAL_REPORT.md",
+    "reports/evidence/M0/C3_RERUN_2026-10-01.json",
+    "reports/evidence/M1/ARTIFACT_REVIEW.json",
+    "reports/evidence/M1/EXACT_C_CHECKS.json",
+    "reports/evidence/M1/PERFORMANCE.json",
+    "reports/evidence/M1/PRE_C_CHECKS.json",
+    "reports/evidence/M1/STAGED_PRIVACY.json",
+    "reports/evidence/M1/ui/desktop.png",
+    "reports/evidence/M1/ui/mobile.png"
+  ],
+  "snapshot_sources_verified": 47,
+  "records": [
+    {
+      "command": "python scripts/check_docs.py",
+      "run_at_utc": "2026-09-30T22:30:10Z",
+      "exit_code": 0,
+      "output": "PASS — documentation checks\n{\"files_checked\": 126, \"json_checked\": 34, \"local_links_checked\": 68, \"research_prompts\": 16, \"snapshot_source_files\": 43}\nDocumentation structure only; not exhaustive privacy, security, clinical or app verification.\n"
+    },
+    {
+      "command": "python scripts/check_privacy.py --include-generated",
+      "run_at_utc": "2026-09-30T22:30:10Z",
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"errors\": [],\n  \"metrics\": {\n    \"worktree_text_files\": 131,\n    \"git_objects\": 320,\n    \"git_text_objects\": 241\n  },\n  \"git_scope\": \"SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED\",\n  \"generated_included\": true,\n  \"limitations\": \"Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded.\"\n}\n"
+    },
+    {
+      "command": "git diff --cached --check",
+      "run_at_utc": "2026-09-30T22:30:13Z",
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

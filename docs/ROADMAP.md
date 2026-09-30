@@ -1,7 +1,8 @@
 # Roadmap і критерії переходу
 
-M0 direct-main normalization: AWAITING_REVIEW; application M1–M8: NOT_STARTED.
-Наявність цього документа не є ACCEPT або дозволом перейти до M1.
+M0 engineering/bootstrap: ACCEPT за зовнішнім architect review. M1: AWAITING_REVIEW
+за явно виданою goal M1_LOCAL_JOURNAL; exact C local checks PASS.
+M2–M8: NOT_STARTED; переходу без нової owner goal немає.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
 | ID | Результат | Залежності | Основна модель |

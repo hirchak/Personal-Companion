@@ -1,0 +1,25 @@
+{
+  "scope": "Exact C built assets + reviewed synthetic viewport captures",
+  "command": "PYTHONPATH=scripts Python PATTERNS scan + SHA256 inventory + visual viewport inspection",
+  "run_at_utc": "2026-09-30T22:27:52Z",
+  "exit_code": 0,
+  "files": {
+    "apps/web/dist/index.html": "e246a5d8b08845b87d9d36dec04bf9d355c1a4c6fefd9e69192c6bfb970b3e6c",
+    "apps/web/dist/assets/index-CGsrPKjS.css": "9ead5681a7a4473c31276f793c20f97f4987f01c19e240c8b30b46a12c1f5b7d",
+    "apps/web/dist/assets/index-B4_Qp9CS.js": "77c47b73810fd670d17e42ee0b00d2ecbf11ebb252a853431f372e946cd82e45",
+    "reports/evidence/M1/ui/desktop.png": "1920cec1624995e6f60f47b6ea60fde267b18738f43e8b79f4e28e08e94fc129",
+    "reports/evidence/M1/ui/mobile.png": "726177b1603b160412024d3c8e98278934fff0637d137cff3cf99a87a3567e26"
+  },
+  "material_review": "Original synthetic authored text; no research/media ingest; no external runtime fonts/images/analytics",
+  "screenshot_review": "Desktop/mobile viewport inspected; no desktop, terminal, unlock code or private path. Synthetic entry UUID is not an account ID.",
+  "runtime_denial": "test_A10_process_egress_denial and test_A09_browser_end_to_end are separate from this static scan",
+  "npm_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "sha": "6695ffd64d56f935ec41a2d11df5cad7fbfa8106"
+}
