@@ -1,0 +1,88 @@
+{
+  "scope": "Exact final C fd056cc4e91b826a032a871381dbf3a64180bd44 plus evidence-only R2",
+  "status": "LOCAL_REQUIREMENTS_PROVED_PRE_PUSH",
+  "command": "Read goal/contract/code/tests and verify all mapped references exist; assess each numbered requirement against actual sources",
+  "environment": {
+    "python": "3.13.2"
+  },
+  "run_at_utc": "2026-09-30T23:44:56Z",
+  "exit_code": 0,
+  "goal_sections": {
+    "1": "Owner explicit M1 goal; synthetic offline journal only; no M2+ work.",
+    "2": "M0 external ACCEPT C3 and exact rerun evidence preserved; starting R5 and prior R1/main verified; published history preserved.",
+    "3": "Authoritative goal/contracts/workflow/state read; contract v3 explicitly records allowed semantic clarifications.",
+    "4": "Pinned Python/FastAPI/Pydantic/SQLite and React/TS/Vite; real domain, UI, maintenance and shared schemas.",
+    "5": "A01-A04: exact text/types/tags/history/receipts/concurrency/tombstones/null-zero/UTC/DST/TZ-edit; recording time fixed.",
+    "6": "A07/A09: loopback exact Host/Origin, session/CSRF/TTL/revoke, no-store/CSP, inert text, draft errors/lock, keyboard and responsive UI.",
+    "7": "A05/A06/A08: canonical fresh roots, permissions, rollback/backup/restore/epoch/reconciliation and preview-bound lossless export; malformed metadata now refused. UUID/owner/restore-epoch/server-time metadata and revision-parent integrity validated before restore activation.",
+    "8": "Project-local pinned setup command executed successfully; runtime egress denial tested separately; no global installs/firewall/provider/CI/deploy changes.",
+    "9": "PRODUCT/INTEGRATIONS/OPEN_QUESTIONS contain Galaxy Watch7 with compatibility NOT_VERIFIED; research INDEX metadata only; EXPERIENCE backlog deferred.",
+    "10": "A01-A10 explicitly mapped; 104 exact-final-C tests, build/docs/snapshot/privacy PASS, including actual script/browser flows. Count is not a substitute for requirement coverage.",
+    "11": "Autonomous forward corrections stay in M1; no scope reduction or next milestone; safe checkpoint maintained.",
+    "12": "C1/R1 preserved; C2-C5 are substantive forward fixes, final C exact-source PASS. Evidence-only R2 and final remote receipt pending.",
+    "13": "Only own synthetic fixtures and roots; no real vault/raw DOCX/provider/health/voice/LAN/force-push/history rewrite.",
+    "14": "Report/state/handoff/README/roadmap/devlog and snapshot pointers exist; final C/R, remote receipt and demo command returned after publication."
+  },
+  "gates": {
+    "M1-A01": [
+      "tests/test_m1_domain.py::test_A01_crud_history_purge",
+      "tests/test_m1_domain.py::test_A01_type_change_explicit",
+      "tests/test_m1_domain.py::test_A01_revision_recording_time_immutable_and_legacy_unknown",
+      "tests/test_m1_api.py::test_A01_response_and_recorded_history_contract"
+    ],
+    "M1-A02": [
+      "tests/test_m1_domain.py::test_A02_commit_failure_retry_and_restart",
+      "tests/test_m1_domain.py::test_A02_process_crash_durability",
+      "tests/test_m1_domain.py::test_A02_failed_edit_delete_leave_original_and_history",
+      "tests/test_m1_api.py::test_A02_storage_error_no_success"
+    ],
+    "M1-A03": [
+      "tests/test_m1_domain.py::test_A03_receipt_reuse_conflict_tombstone",
+      "tests/test_m1_domain.py::test_A03_concurrent_writes",
+      "tests/test_m1_domain.py::test_A03_concurrent_duplicate",
+      "tests/test_m1_domain.py::test_A03_new_delete_operation_is_receipted_and_cannot_be_reused"
+    ],
+    "M1-A04": [
+      "tests/test_m1_domain.py::test_A04_invalid_schema",
+      "tests/test_m1_domain.py::test_A04_time_unknown_zero_dst",
+      "tests/test_m1_domain.py::test_A04_event_edit_and_system_zone_change",
+      "tests/test_m1_api.py::test_A04_invalid_unicode_scalars_rejected_before_storage",
+      "tests/test_m1_api.py::test_A04_invalid_unicode_patch_is_schema_error_and_keeps_original"
+    ],
+    "M1-A05": [
+      "tests/test_m1_domain.py::test_A05_live_wal_backup_restore",
+      "tests/test_m1_domain.py::test_A05_bad_backup_does_not_touch_live",
+      "tests/test_m1_domain.py::test_A05_logically_invalid_backup_rejected",
+      "tests/test_m1_domain.py::test_A05_invalid_backup_metadata_rejected"
+    ],
+    "M1-A06": [
+      "tests/test_m1_domain.py::test_A06_root_paths_permissions",
+      "tests/test_m1_domain.py::test_A06_migration_rollback_and_newer"
+    ],
+    "M1-A07": [
+      "tests/test_m1_api.py::test_A07_auth_host_origin_csrf",
+      "tests/test_m1_api.py::test_A07_unlock_once_ttl_rate_and_cookies",
+      "tests/test_m1_api.py::test_A07_owner_schema_errors_limits_logs",
+      "tests/test_m1_api.py::test_A07_patch_invalid_values_are_schema_errors_without_changes",
+      "tests/test_m1_api.py::test_A07_non_ascii_unlock_is_denied_without_internal_error",
+      "tests/test_m1_api.py::test_A07_non_ascii_csrf_is_forbidden_without_internal_error"
+    ],
+    "M1-A08": [
+      "tests/test_m1_domain.py::test_A08_export_bound_roundtrip_escaping",
+      "tests/test_m1_api.py::test_A08_api_export_session_bound"
+    ],
+    "M1-A09": [
+      "tests/test_m1_browser.py::test_A09_browser_end_to_end",
+      "tests/test_m1_launcher.py::test_A09_documented_demo_start_unlock_restart_stop"
+    ],
+    "M1-A10": [
+      "tests/test_m1_api.py::test_A10_process_egress_denial",
+      "scripts/check_privacy.py",
+      "reports/evidence/M1/FINAL_C_ARTIFACT_REVIEW.json"
+    ]
+  },
+  "limitations": "Independent architect acceptance, real data, clinical, hardware/wake, encryption and M2+ remain OFF/NOT_RUN; publication proof is final remote receipt, not this pre-push audit.",
+  "sha": "fd056cc4e91b826a032a871381dbf3a64180bd44",
+  "actual_test_evidence": "reports/evidence/M1/EXACT_FINAL_C_CHECKS.json",
+  "remaining_authorized_action": "Evidence-only R2 normal push and verify remote SHA; receipt in final handoff, no attestation-only extra commit"
+}

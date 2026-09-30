@@ -1,0 +1,46 @@
+{
+  "scope": "Final R2 evidence-only on C fd056cc4e91b826a032a871381dbf3a64180bd44; this evidence file staged after execution",
+  "environment": {
+    "python": "3.13.2"
+  },
+  "staged_paths": [
+    "HANDOFF.md",
+    "STATE.md",
+    "devlog/2026-10-01-M1.md",
+    "reports/M1_LOCAL_JOURNAL_REPORT.md",
+    "reports/evidence/M1/AUDIT_PRE_C2_CHECKS.json",
+    "reports/evidence/M1/AUDIT_PRE_C3_CHECKS.json",
+    "reports/evidence/M1/C2_PERFORMANCE.json",
+    "reports/evidence/M1/C3_ARTIFACT_REVIEW.json",
+    "reports/evidence/M1/C3_PERFORMANCE.json",
+    "reports/evidence/M1/COMPLETION_AUDIT.json",
+    "reports/evidence/M1/EXACT_C2_CHECKS.json",
+    "reports/evidence/M1/EXACT_C3_CHECKS.json",
+    "reports/evidence/M1/EXACT_FINAL_C_CHECKS.json",
+    "reports/evidence/M1/FINAL_C_ARTIFACT_REVIEW.json",
+    "reports/evidence/M1/FINAL_C_PERFORMANCE.json",
+    "reports/evidence/M1/FINAL_R2_PRIVACY.json",
+    "reports/evidence/M1/SETUP_CHECK.json"
+  ],
+  "snapshot_sources_verified": 47,
+  "records": [
+    {
+      "command": "python scripts/check_docs.py",
+      "run_at_utc": "2026-09-30T23:48:02Z",
+      "exit_code": 0,
+      "output": "PASS — documentation checks\n{\"files_checked\": 141, \"json_checked\": 48, \"local_links_checked\": 70, \"research_prompts\": 16, \"snapshot_source_files\": 43}\nDocumentation structure only; not exhaustive privacy, security, clinical or app verification.\n"
+    },
+    {
+      "command": "python scripts/check_privacy.py --include-generated",
+      "run_at_utc": "2026-09-30T23:48:02Z",
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"errors\": [],\n  \"metrics\": {\n    \"worktree_text_files\": 146,\n    \"git_objects\": 399,\n    \"git_text_objects\": 290\n  },\n  \"git_scope\": \"SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED\",\n  \"generated_included\": true,\n  \"limitations\": \"Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded.\"\n}\n"
+    },
+    {
+      "command": "git diff --cached --check",
+      "run_at_utc": "2026-09-30T23:48:07Z",
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

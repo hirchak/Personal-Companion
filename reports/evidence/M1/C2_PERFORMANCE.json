@@ -1,0 +1,23 @@
+{
+  "scope": "Exact C2 0e2a4c7daaea62e39bdf573db12b11cecf496e9d",
+  "N": 200,
+  "python": "3.13.2",
+  "sqlite": "3.45.3",
+  "os": "Darwin 27.0.0",
+  "architecture": "arm64",
+  "method": "200 committed SQLite saves; 30 literal searches(limit=100); same-process reopen; 0.5s idle CPU; ps RSS",
+  "save_ms": {
+    "median": 0.9344789432361722,
+    "max": 2.469707978889346
+  },
+  "search_ms": {
+    "median": 1.0665205190889537,
+    "max": 1.497040968388319
+  },
+  "reopen_ms": 3.5376250743865967,
+  "rss_kib": 33296,
+  "idle_cpu_percent": 0.009606092209566996,
+  "measured_at_utc": "2026-09-30T22:51:14Z",
+  "command": "python -m scripts.measure_m1",
+  "exit_code": 0
+}
