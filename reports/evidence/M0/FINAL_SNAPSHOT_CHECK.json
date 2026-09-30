@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "exit_code": 0,
+  "method": "SHA256 all manifest sources/outputs plus dynamic pointers and C-to-R paths whitelist",
+  "head_sha": "18fefa8dd037fae1982dcc34a64f34325c10830c",
+  "tree": "C code plus final evidence overlay",
+  "source_files_verified": 57,
+  "output_files_verified": 5,
+  "changed_tracked_paths": [
+    "HANDOFF.md",
+    "STATE.md",
+    "docs/ROADMAP.md",
+    "reports/M0_BOOTSTRAP_REPORT.md"
+  ]
+}

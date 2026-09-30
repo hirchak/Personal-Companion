@@ -1,0 +1,14 @@
+{
+  "phase": "C_EXACT_COMMITTED_TREE",
+  "command": [
+    "python3",
+    "-c",
+    "import pathlib,json,hashlib,subprocess\nroot=pathlib.Path.cwd(); folder=root/'generated/chatgpt_context';m=json.loads((folder/'SNAPSHOT_MANIFEST.json').read_text());sha=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();assert m['source_commit']==sha\nassert len(list(folder.glob('*.md')))==4 and len(m['outputs'])==5\nfor name,digest in m['sources'].items(): assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name\nfor name,digest in m['outputs'].items(): assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==digest,name\nfor name in ('prompts/M0_BOOTSTRAP.md','docs/M1_CONTRACT.md','reports/M0_BOOTSTRAP_REPORT.md'): assert name in m['sources'],name\nprint(json.dumps({'status':'PASS','source_commit':sha,'sources_verified':len(m['sources']),'outputs_verified':len(m['outputs'])}))\n"
+  ],
+  "exit_code": 1,
+  "status": "FAIL",
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    for name in ('prompts/M0_BOOTSTRAP.md','docs/M1_CONTRACT.md','reports/M0_BOOTSTRAP_REPORT.md'): assert name in m['sources'],name\n                                                                                                           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: reports/M0_BOOTSTRAP_REPORT.md\n",
+  "head_sha": "62c2e5e0f57e62e300733e299ab06d447a55a553",
+  "diagnosis": "STATE.report_path null in C; all listed hashes match but report source omitted. Correct in evidence metadata R, then regenerate and rerun."
+}

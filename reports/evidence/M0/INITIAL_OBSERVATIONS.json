@@ -1,0 +1,28 @@
+{
+  "kind": "Transcribed initial tool observations; not rerun on modified tree",
+  "starter_manifest_expected": 61,
+  "matching_existing_canonical_files": 58,
+  "missing": [
+    ".gitignore",
+    ".project/context_map.json",
+    ".project/project.json"
+  ],
+  "changed": [],
+  "initial_docs_check_exit_code": 1,
+  "initial_docs_status": "FAIL",
+  "initial_git_status_exit_code": 128,
+  "initial_git_error": "fatal: not a git repository (or any of the parent directories): .git",
+  "baseline_starter_pattern_scan": {
+    "files": 59,
+    "findings": [],
+    "scope": "58 supplied canonical files plus PACKAGE_MANIFEST; no history existed"
+  },
+  "git_ls_remote": {
+    "exit_code": 0,
+    "advertised_refs": []
+  },
+  "gh_repo_view": {
+    "exit_code": 1,
+    "error": "error connecting to api.github.com"
+  }
+}
