@@ -1,0 +1,13 @@
+# M1 journal UI
+
+Mode: Operate. Scope: synthetic local journal. Direction follows the explicit neutral
+M1 brief and owner instruction to proceed autonomously; no visual decision blocks M1.
+
+Quiet warm paper, muted green navigation, dark ink, locally installed system body face
+and Georgia headings. No external assets. A persistent section rail, chronological
+text-led entries and one primary add action. Capture opens inline with protected focus;
+optional fields use disclosure. No scores, streaks, game cosmetics or AI controls.
+
+Desktop has generous reading space; narrow screens move sections above the journal.
+Plain text wraps without execution. Focus rings, 44px actions, labels, visible committed
+save feedback and recoverable errors. Auto-lock unmounts all journal state.

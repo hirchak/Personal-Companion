@@ -79,3 +79,26 @@ User acceptance: власниця розуміє offline/cloud/sharing режи�
 диск/кеш/weights, тривалість звичайного save та search. Пороги SLO запропонувати на M1
 після вимірювання; не приписувати пристрою протестовану швидкість до benchmark.
 При зайнятості відкладати ASR/background jobs; збереження тексту має пріоритет.
+
+## M1 local synthetic checks
+
+```bash
+npm --prefix apps/web run build
+.venv/bin/python -m pytest -q
+.venv/bin/python scripts/check_docs.py
+.venv/bin/python scripts/build_chatgpt_context.py
+.venv/bin/python scripts/check_privacy.py --include-generated
+.venv/bin/python -m scripts.measure_m1
+```
+
+Browser tests require project-local Chromium:
+`PLAYWRIGHT_BROWSERS_PATH="$PWD/generated/chromium" .venv/bin/python -m playwright install chromium`.
+They start only loopback server 8766 and temporary canonical synthetic roots, use real SQLite,
+block external browser requests, and keep screenshots under ignored `generated/ui`.
+The launcher installs a process-local Python audit deny-egress boundary. No global firewall.
+
+Tooling excludes only dependency/build/cache trees (`node_modules`, `.venv`, `dist`,
+`.pytest_cache`, `generated`). Source TS/TSX/CSS/HTML/shell/lockfiles are privacy-scanned;
+private/raw/secrets deny rules remain unchanged. Local artifact/evidence review separately
+checks built resources, synthetic screenshots, known generated snapshots and exact C archive.
+M0 archive rerun deliberately reports no local Git-object scan; M1 main scan includes objects.

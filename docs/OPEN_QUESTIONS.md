@@ -11,7 +11,7 @@
 | Q04 | Client catalog має Sol/Luna і high; active model/effort/auth/retention/runtime use NOT_VERIFIED | M3 | Mock/OFF, без live call |
 | Q05 | MiniMax actual plan/seat/route/Credits handling | Перед MiniMax | OFF |
 | Q06 | Private HTTPS/DNS/transport для Android | M2 | Synthetic only, manual encrypted export fallback |
-| Q07 | Точна модель wearable і версії apps | M6 | Wearable disabled |
+| Q07 | Galaxy Watch7 відомий; versions/fields/compatibility NOT_VERIFIED | M6 | Wearable disabled |
 | Q08 | Згода власниці на кожний data flow і retention | Перед реальними даними | LOCAL_ONLY; ніякого seed import |
 | Q09 | Account cloud backups/Samsung sync/OS dictation | Перед private use | Видиме попередження, перевірка налаштувань |
 | Q10 | Клінічний reviewer і права на протоколи | До M7 activation | Protocol flags OFF |

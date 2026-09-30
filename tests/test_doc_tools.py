@@ -10,7 +10,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from check_docs import validate, public_files
+from check_docs import validate, public_files, state_fields
 from build_chatgpt_context import build
 
 class DocToolsTests(unittest.TestCase):
@@ -121,7 +121,7 @@ class DocToolsTests(unittest.TestCase):
         self.assertEqual({p.name for p in out.glob('*.md')},{
             '01_PROJECT_CONTEXT.md','02_TECHNICAL_SPEC.md',
             '03_RESEARCH_AND_SAFETY.md','04_DELIVERY_AND_CURRENT_STATE.md'})
-        self.assertIn('prompts/M0_DIRECT_MAIN_FINALIZATION.md',man['sources'])
+        self.assertIn(state_fields((self.root/'STATE.md').read_text())['current_goal_path'],man['sources'])
         for name,sha in man['outputs'].items():
             self.assertEqual(hashlib.sha256((out/name).read_bytes()).hexdigest(),sha)
     def test_output_cannot_overwrite_repo(self):
@@ -143,7 +143,7 @@ class DocToolsTests(unittest.TestCase):
         (self.root/'prompts/M1_TEST.md').write_text('# Synthetic current goal')
         (self.root/'reports/M1_TEST.md').write_text('# Synthetic current report')
         p=self.root/'STATE.md'
-        s=p.read_text().replace('prompts/M0_DIRECT_MAIN_FINALIZATION.md','prompts/M1_TEST.md')
+        s=re.sub(r'^current_goal_path:.*$', 'current_goal_path: prompts/M1_TEST.md', p.read_text(), flags=re.MULTILINE)
         s=re.sub(r'^report_path:.*$', 'report_path: reports/M1_TEST.md', s, flags=re.MULTILINE)
         p.write_text(s)
         out=self.root/'generated/chatgpt_context';man=build(self.root,out)

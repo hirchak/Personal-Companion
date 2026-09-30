@@ -53,3 +53,20 @@ class PrivacyToolsTests(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+class M1PrivacySourceTests(unittest.TestCase):
+    def test_source_extensions_are_scanned(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            for suffix in ['.tsx','.ts','.css','.html','.sh','.lock']:
+                file=root/('synthetic'+suffix)
+                file.write_text('sk-'+'Z'*40)
+                self.assertEqual(scan(root)['status'],'FAIL')
+                file.unlink()
+    def test_build_exclusion_does_not_hide_private_sources(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder); (root/'apps/web/dist').mkdir(parents=True); (root/'apps/web/dist/app.js').write_text('bundled synthetic')
+            (root/'private').mkdir(); (root/'private/data.txt').write_bytes(b'\xff')
+            result=scan(root)
+            self.assertEqual(result['status'],'FAIL')
+            self.assertTrue(any('private' in x for x in result['errors']))

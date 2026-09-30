@@ -1,9 +1,16 @@
 # M1 contract — локальний щоденник без AI
 
-Дата: 2026-09-30. Версія контракту: 1. Статус: PROPOSED / AWAITING_REVIEW.
-Це результат M0, не дозвіл виконувати M1 і не реалізація. Початок M1 потребує
-технічного review M0 та окремої цілі власника. Усі перевірки нижче — критерії
-майбутнього M1; їх поточний execution status — NOT_RUN.
+Дата: 2026-09-30. Версія контракту: 2. Статус: PROPOSED / AWAITING_REVIEW.
+M1 execution authorized by owner goal M1_LOCAL_JOURNAL; M0 ACCEPT recorded externally.
+Acceptance evidence lives in the M1 report, not in this requirements document.
+
+Change note v2: explicit type-change confirmation; sleep interval is user-estimated,
+not TST; static GET navigation may omit Origin but exact Host is always required.
+Unlock requires exact Origin, JSON, one-use code and bounded attempts; all other private
+API requires a session, writes/exports also CSRF. Canonical system temp parent is resolved
+before fresh test root creation. Persistent explicitly SYNTHETIC demo root is allowed.
+Backup is consistent SQLite snapshot; restore only into a fresh empty root.
+UI drafts are memory-only and cleared at reload/lock. No trust-boundary changes.
 
 Baseline: [ARCHITECTURE.md](ARCHITECTURE.md), [DATA_MEMORY.md](DATA_MEMORY.md),
 [PRIVACY_SECURITY.md](PRIVACY_SECURITY.md), [TESTING.md](TESTING.md).
@@ -216,7 +223,7 @@ screenshots + console/network check, test output, privacy scan та відомі
 
 ## Рішення для старту
 
-Blocking-for-M1: review цього контракту/M0 та окрема M1 execution goal. Відсутні
+M0 review and M1 execution goal supplied; no start authorization blocker. Відсутні
 FastAPI/Uvicorn/pytest/Alembic не блокують M0: у M1 обрати сумісні versions,
 project-local environment і lockfiles; якщо dependency fetch недоступний — exact
 blocker без global install/sudo. Візуальний стиль M1 — нейтральний мінімум,

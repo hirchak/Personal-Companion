@@ -1,0 +1,194 @@
+"""Loopback-only same-origin HTTP adapter. No provider or credential discovery."""
+import secrets
+import sqlite3
+import threading
+import time
+from pathlib import Path
+from uuid import UUID, uuid4
+from datetime import date
+from fastapi import FastAPI, Request, Query
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException
+from starlette.responses import JSONResponse, Response, FileResponse
+from pydantic import ValidationError
+from .models import Create, Patch, Delete, Selector, Export, Unlock
+from .storage import SafeError, Store
+from .domain import Journal
+
+CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+
+class Auth:
+    def __init__(self, clock=time.monotonic):
+        self.clock = clock
+        self.code = secrets.token_urlsafe(18)
+        self.code_until = clock() + 300
+        self.attempts, self.sessions = [], {}
+        self.lock = threading.Lock()
+
+    def unlock(self, code):
+        with self.lock:
+            now = self.clock()
+            self.attempts = [x for x in self.attempts if now - x < 60]
+            if len(self.attempts) >= 5:
+                raise SafeError('UNLOCK_RATE_LIMIT', 429)
+            self.attempts.append(now)
+            if not self.code or now >= self.code_until or not secrets.compare_digest(code, self.code):
+                raise SafeError('UNLOCK_DENIED', 401)
+            self.code = None
+            token = secrets.token_urlsafe(32)
+            self.sessions[token] = {'csrf': secrets.token_urlsafe(32), 'created': now, 'last': now}
+            return token, self.sessions[token]
+
+    def session(self, token):
+        with self.lock:
+            now = self.clock()
+            s = self.sessions.get(token)
+            if s is None or now - s['last'] >= 900 or now - s['created'] >= 28800:
+                self.sessions.pop(token, None)
+                raise SafeError('LOCKED', 401)
+            s['last'] = now
+            return s
+
+
+def create_app(root, port=8765, clock=time.monotonic, web=None):
+    store = Store(root)
+    journal, auth = Journal(store, clock), Auth(clock)
+    app = FastAPI(title='M1 Local Journal', version='1.0.0', docs_url=None, redoc_url=None, openapi_url=None)
+    app.state.store, app.state.journal, app.state.auth = store, journal, auth
+    host, origin = f'127.0.0.1:{port}', f'http://127.0.0.1:{port}'
+    web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
+
+    def error(code, status):
+        return JSONResponse({'code': code, 'request_id': str(uuid4())}, status_code=status, headers={'Cache-Control': 'no-store', 'Content-Security-Policy': CSP})
+
+    @app.middleware('http')
+    async def boundary(request: Request, call_next):
+        try:
+            if request.headers.get('host') != host:
+                raise SafeError('HOST_DENIED', 403)
+            request_origin = request.headers.get('origin')
+            if request_origin is not None and request_origin != origin:
+                raise SafeError('ORIGIN_DENIED', 403)
+            if request.headers.get('sec-fetch-site') == 'cross-site':
+                raise SafeError('ORIGIN_DENIED', 403)
+            if request.method not in {'GET', 'HEAD'}:
+                if request_origin != origin:
+                    raise SafeError('ORIGIN_REQUIRED', 403)
+                if request.headers.get('content-type', '').split(';')[0] != 'application/json':
+                    raise SafeError('JSON_REQUIRED', 415)
+                length = 0
+                chunks = []
+                async for chunk in request.stream():
+                    length += len(chunk)
+                    if length > 1048576:
+                        raise SafeError('BODY_LIMIT', 413)
+                    chunks.append(chunk)
+                request._body = b''.join(chunks)
+            if request.url.path.startswith('/api/') and request.url.path != '/api/v1/auth/unlock':
+                token = request.cookies.get('m1_session', '')
+                s = auth.session(token)
+                request.state.session = token
+                if request.method not in {'GET', 'HEAD'} and not secrets.compare_digest(request.headers.get('x-csrf-token', ''), s['csrf']):
+                    raise SafeError('CSRF_DENIED', 403)
+            response = await call_next(request)
+        except SafeError as exc:
+            response = error(exc.code, exc.status)
+        except (sqlite3.Error, OSError):
+            response = error('STORAGE_UNAVAILABLE', 503)
+        response.headers.update({'Cache-Control': 'no-store', 'Content-Security-Policy': CSP,
+                                 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
+                                 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'})
+        return response
+
+    @app.exception_handler(SafeError)
+    async def domain_error(request, exc):
+        return error(exc.code, exc.status)
+
+    @app.exception_handler(RequestValidationError)
+    @app.exception_handler(ValidationError)
+    async def invalid(request, exc):
+        return error('SCHEMA_INVALID', 422)  # never echo input, paths, SQL or error context
+
+    @app.exception_handler(sqlite3.Error)
+    @app.exception_handler(OSError)
+    async def storage_error(request, exc):
+        return error('STORAGE_UNAVAILABLE', 503)
+
+    @app.exception_handler(Exception)
+    async def unexpected_error(request, exc):
+        return error('INTERNAL_ERROR', 500)
+
+    @app.exception_handler(HTTPException)
+    async def http_error(request, exc):
+        return error('NOT_FOUND' if exc.status_code == 404 else 'REQUEST_DENIED', exc.status_code)
+
+    @app.post('/api/v1/auth/unlock')
+    def unlock(body: Unlock):
+        token, s = auth.unlock(body.code)
+        r = JSONResponse({'csrf_token': s['csrf'], 'idle_seconds': 900, 'absolute_seconds': 28800})
+        r.set_cookie('m1_session', token, httponly=True, samesite='strict', path='/', max_age=28800)
+        return r
+
+    @app.get('/api/v1/auth/session')
+    def session(request: Request):
+        s = auth.sessions[request.state.session]
+        return {'csrf_token': s['csrf'], 'idle_seconds': 900, 'absolute_seconds': 28800}
+
+    @app.post('/api/v1/auth/lock')
+    def lock(request: Request):
+        auth.sessions.pop(request.state.session, None)
+        journal.plans = {k: v for k, v in journal.plans.items() if v['session'] != request.state.session}
+        r = JSONResponse({'code': 'LOCKED'}); r.delete_cookie('m1_session', path='/')
+        return r
+
+    @app.get('/api/v1/status')
+    def status():
+        return {'schema_version': 1, 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
+
+    @app.post('/api/v1/entries', status_code=201)
+    def create(body: Create):
+        return journal.write('create', body.entry_id, body)
+
+    @app.get('/api/v1/entries')
+    def entries(q: str = Query('', max_length=200), type: str | None = None,
+                tag: str | None = Query(None, max_length=64), date_from: date | None = None,
+                date_to: date | None = None, limit: int = Query(50, ge=1, le=100), cursor: str | None = Query(None, max_length=1024)):
+        if type is not None and type not in {'inbox', 'daily', 'sleep', 'creative'}:
+            raise SafeError('SCHEMA_INVALID')
+        return journal.list(q, type, tag, date_from.isoformat() if date_from else None, date_to.isoformat() if date_to else None, limit, cursor)
+
+    @app.get('/api/v1/entries/{entry_id}')
+    def get(entry_id: UUID):
+        return journal.get(str(entry_id))
+
+    @app.get('/api/v1/entries/{entry_id}/revisions')
+    def revisions(entry_id: UUID, limit: int = Query(100, ge=1, le=100), after: int = Query(0, ge=0)):
+        return journal.history(str(entry_id), limit, after)
+
+    @app.patch('/api/v1/entries/{entry_id}')
+    def edit(entry_id: UUID, body: Patch):
+        return journal.write('edit', entry_id, body)
+
+    @app.delete('/api/v1/entries/{entry_id}')
+    def delete(entry_id: UUID, body: Delete):
+        return journal.write('delete', entry_id, body)
+
+    @app.post('/api/v1/exports/preview')
+    def preview(body: Selector, request: Request):
+        return journal.preview(body, request.state.session)
+
+    @app.post('/api/v1/exports')
+    def export(body: Export, request: Request):
+        text = journal.export(body.plan_id, body.format, request.state.session)
+        ext = 'json' if body.format == 'json' else 'md'
+        return Response(text, media_type='application/json' if ext == 'json' else 'text/markdown', headers={'Content-Disposition': f'attachment; filename="selected-journal.{ext}"'})
+
+    @app.get('/{path:path}')
+    def shell(path: str):
+        if path.startswith('api/'):
+            raise SafeError('NOT_FOUND', 404)
+        target = web / (path or 'index.html')
+        if not target.resolve().is_relative_to(web.resolve()) or not target.is_file():
+            raise SafeError('NOT_FOUND', 404)
+        return FileResponse(target)
+    return app

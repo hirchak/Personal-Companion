@@ -2,7 +2,9 @@
 
 ## Samsung Health / Health Connect
 
-Потрібні точна модель годинника, версії Android/Samsung Health і фактично доступні поля.
+Reference hardware: Samsung Galaxy Watch7 — модель повідомлена власником.
+Версії Android/Samsung Health/firmware, available fields і hardware compatibility NOT_VERIFIED.
+M1 не підключається до wearable.
 Їх не вгадувати за назвою телефона. Базовий підтримуваний маршрут для дослідження:
 
 ```text

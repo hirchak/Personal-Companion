@@ -20,7 +20,7 @@ REQUIRED = (
     'prompts/M0_BOOTSTRAP.md', 'prompts/GOAL_START.txt',
     'context/PROJECT_INSTRUCTIONS.txt', '.gitignore',
 )
-EXCLUDED = {'.git', 'generated', '__pycache__', '.venv', 'node_modules'}
+EXCLUDED = {'.git', 'generated', '__pycache__', '.venv', 'node_modules', '.pytest_cache'}
 FORBIDDEN_DIRS = {'private', 'vault', 'private_context', 'user-data', 'user_data', 'quarantine',
                   'raw', 'inbox'}
 FORBIDDEN_EXTENSIONS = {'.sqlite', '.sqlite3', '.db', '.key', '.pem', '.p12', '.wav', '.m4a',
@@ -53,7 +53,7 @@ def public_files(root: Path) -> tuple[list[Path], list[str]]:
         for name in list(dirs):
             path = Path(directory)/name
             rel = path.relative_to(root)
-            if name in EXCLUDED:
+            if name in EXCLUDED or rel == Path('apps/web/dist'):
                 dirs.remove(name)
             elif path.is_symlink() or forbidden_path(rel):
                 errors.append(f'Forbidden/symlink directory (not read): {rel}')

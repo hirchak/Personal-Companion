@@ -12,7 +12,7 @@ PATTERNS = SECRET_PATTERNS + (
     re.compile(r'\b(?:10\.(?:\d{1,3}\.){2}\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})\b'),
     re.compile(r'https?://[^\s/@:]+:[^\s/@]+@'),
 )
-TEXT_SUFFIXES = {'.md','.txt','.json','.tsv','.py'}
+TEXT_SUFFIXES = {'.md','.txt','.json','.tsv','.py','.ts','.tsx','.js','.jsx','.css','.html','.sh','.lock','.ini','.svg'}
 
 def scan(root: Path, include_generated: bool = False) -> dict:
     root = root.resolve()

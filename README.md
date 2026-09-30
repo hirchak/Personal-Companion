@@ -12,8 +12,20 @@ fast-forward development pushes у `main` для явно виданих goals �
 основний приватний vault; телефон може накопичувати власні локальні записи до синхронізації.
 AI — додаткова можливість, а не умова збереження запису.
 
-**Цей репозиторій зараз містить технічну документацію та допоміжні скрипти документації,
-а не реалізований застосунок. Жодний програмний milestone ще не прийнято.**
+**M1 — працюючий локальний synthetic щоденник, кандидат для незалежного review.**
+CRUD чотирьох типів, історія, пошук/фільтри, захищений same-origin API, selected export,
+WAL backup/restore. M0 ACCEPT записаний із зовнішнього ТЗ. M1 AWAITING_REVIEW після
+фінальних перевірок. AI, deploy, реальні записи та M2+ OFF.
+
+```bash
+./scripts/setup_demo.sh
+./scripts/demo.sh /private/tmp/personal-companion-m1-synthetic-demo
+```
+
+Відкрити `http://127.0.0.1:8765`, ввести одноразовий код із термінала. Stop: Ctrl+C.
+Повторний запуск зберігає synthetic записи й створює новий код; після lock потрібен restart.
+Незбережений текст не переживає reload/lock. [Runbook](docs/INSTALLATION.md),
+`reports/M1_LOCAL_JOURNAL_REPORT.md`, [M1 contract](docs/M1_CONTRACT.md).
 
 ## Початок
 

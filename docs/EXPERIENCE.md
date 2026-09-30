@@ -61,3 +61,10 @@ Product-feedback draft може бути створений вручну або 
 Після практики можна коротко позначити «допомогло / нейтрально / стало важче / пропустити».
 Підвищене відстеження, самокритика або небажання продовжувати — сигнал спростити продукт,
 не додати ще завдань. Немає «ідеальної користувачки», для якої треба оптимізувати метрики.
+
+## M1 та відкладений design backlog
+
+M1: neutral journal, лише чотири типи; memory-only drafts без PWA/offline persistence.
+Optional personal-space/life-simulation, creative-studio metaphor, fantasy/medieval
+cosmetics і travel/culture-inspired themes — знеособлені відкладені кандидати з
+neutral-mode parity, не затверджена тема чи дозвіл реалізації.

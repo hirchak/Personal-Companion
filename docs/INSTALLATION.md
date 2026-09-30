@@ -72,3 +72,37 @@ Sync device IDs/epoch узгодити, щоб два Mac не стали нез
 Перед SaaS або hosted runtime потрібні нові threat model, tenant isolation, data processing
 і медико-правова оцінка intended use. Особисті підписки не стають комерційним backend
 без перевірки умов. Вибір ліцензії до public release — окреме рішення [S25].
+
+## M1 synthetic demo (implemented)
+
+Python 3.13 and Node 26 were used for local checks; pinned project dependencies are in
+`requirements.lock` and `apps/web/package-lock.json`. No global install, autostart or deploy.
+From the repository root:
+
+```bash
+./scripts/setup_demo.sh
+./scripts/demo.sh /private/tmp/personal-companion-m1-synthetic-demo
+```
+
+Open `http://127.0.0.1:8765`. Enter the one-time code displayed by the launcher (5-minute TTL).
+The demo contains four explicitly SYNTHETIC notes. Stop with Ctrl+C. Restart the same command
+for durability and a fresh code; any previous session is invalid. After manual/idle lock,
+restart the launcher for a new code. Unknown existing roots are refused; initializer never
+reseeds an existing root. The demo root is persistent until OS temp cleanup; it is not a backup.
+
+Maintenance uses explicit newly named paths outside Git (do not use existing real folders):
+
+```bash
+.venv/bin/python -m apps.core.cli backup --root /private/tmp/personal-companion-m1-synthetic-demo --artifact /private/tmp/personal-companion-m1-synthetic-backup
+.venv/bin/python -m apps.core.cli restore --artifact /private/tmp/personal-companion-m1-synthetic-backup --root /private/tmp/personal-companion-m1-synthetic-restored
+```
+
+Backup destination must be new; restore target new/empty. No arbitrary-path HTTP endpoint.
+JSON export preserves selected current/history records; Markdown is escaped readable text.
+Use `validate_portable` for standalone synthetic round-trip checks, not a public import.
+
+M1 is synthetic-only. No encryption-at-rest/key recovery/FileVault acceptance or private rollout.
+Deletion purges current/history/search and prior write fingerprints; minimal operation metadata
+and tombstones remain to prevent replay. SQLite free pages/WAL, previous backups/exports/OS
+snapshots may retain older bytes. This is not forensic erase. Keep/delete entire backups by
+explicit owner choice; no automatic cleanup of unknown artifacts.
