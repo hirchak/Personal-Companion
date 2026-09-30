@@ -14,7 +14,7 @@ Research briefs збережені й перевірені структурно;
 |---|---|
 | У початковому unpack бракувало трьох hidden files | У corrective goal exact `.gitignore` і `context_map.json` відновлено з owner ZIP; оригінальний `project.json` підтверджено source SHA й усі canonical fields збережено. Hash evidence у M0 report |
 | Starter inventory мав 61 file, у working unpack збігалося 58 | Усі 61 canonical files нині присутні; 2 задані hidden SHA відповідають PACKAGE_MANIFEST |
-| URL був null, state казав «не надано» | GitHub connector підтвердив public/default `main`; owner дозволив push лише у review branch. Merge/deploy/інші permissions OFF |
+| Push workflow після M0 | Standing owner decision дозволяє direct-main pushes після local checks; permission `push_main` не дає `merge_main`, deploy/provider/private-data. Review branch optional |
 | Documentation validator читав forbidden-файл після finding | Inventory/prune до read; forbidden/env/symlink regression tests |
 | Tests copytree могли копіювати приватний каталог | Копіювання лише inventory дозволених public files; unsafe source tree →fail |
 | Generated output міг пройти через symlink `generated` назовні | Reject symlink/output escape до write; synthetic regression test |

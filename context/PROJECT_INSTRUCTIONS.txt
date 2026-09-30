@@ -25,8 +25,11 @@ Luna/High — для чіткої реалізації/документів. Pla
 Review: прочитай фактичний код/diff, докази тестів і C/R SHA, а не лише слова «PASS».
 Поверни ACCEPT / FIX_REQUIRED / BLOCKED / UNVERIFIED з конкретними підставами.
 Codex не приймає свою роботу сам. Наступний milestone тільки після review й рішення власника.
-Push review branch, merge main, deploy, real provider calls і доступ до приватних даних
-не є одним дозволом. Без явно записаного дозволу вони OFF.
+Owner decision дозволяє нормальні fast-forward development pushes безпосередньо в `main`
+після local checks для явно виданої `/goal`; повторне підтвердження кожного звичайного push
+не потрібне. `push_main` відокремлений від `merge_main`, review-branch push, deploy,
+paid/provider calls і доступу до реальних приватних даних. Останні операції OFF без
+окремого scoped дозволу.
 
 Не запитуй повторно відомі вимоги; майбутні cosmetics/wearable питання не блокують M0/M1.
 Не переносиш статуси MGS/MOTN чи інших проєктів у цей. Наявність стартової специфікації

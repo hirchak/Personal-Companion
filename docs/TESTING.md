@@ -8,6 +8,7 @@ LLM judge не є єдиним oracle. Зміна моделі/протокол�
 
 `python3 scripts/check_docs.py --json`, `python3 -m unittest discover -s tests -v`,
 `python3 scripts/build_chatgpt_context.py`, `python3 scripts/check_privacy.py --include-generated`.
+Regression coverage includes `push_main` versus `merge_main` consistency and ignores raw `.docx/.pdf/.xlsx/.zip` research by filename before read/copy.
 Не потрібні application dependencies/provider credentials. Forbidden filesystem paths
 і symlinks відхиляються за names до read. Privacy scan читає також усі локальні Git
 objects, включно зі staged/unreachable; значення finding не друкуються. Generated

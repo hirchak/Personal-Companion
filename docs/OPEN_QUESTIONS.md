@@ -5,7 +5,7 @@
 
 | ID | Що невідомо | Коли потрібно | Безпечний default |
 |---|---|---|---|
-| Q01 | Resolved: repo public, default `main`, review-branch push explicitly authorized | M0 corrective | Push only `review/m0-bootstrap`; merge/deploy OFF |
+| Q01 | Resolved: repo public, default `main`; normal direct-main development push authorized by standing owner decision | M0 workflow normalization | `push_main=true`; `merge_main`/deploy/provider/private-data remain independently OFF |
 | Q02 | Ліцензія/бренд | До public release | Working title, без LICENSE claim |
 | Q03 | macOS 27.0/arm64, Python/Node/Git/SQLite перевірені; lockfile compatibility ще ні | M1/install | Project-local dependencies; див. M0_ENVIRONMENT |
 | Q04 | Client catalog має Sol/Luna і high; active model/effort/auth/retention/runtime use NOT_VERIFIED | M3 | Mock/OFF, без live call |

@@ -156,7 +156,8 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
             if st.get(sk) != cfg.get(ck):
                 errors.append(f'STATE vs project.json mismatch: {sk}')
         perms = cfg.get('permissions', {})
-        for sk, pk in [('push_authorized','push_review_branch'),
+        for sk, pk in [('push_review_branch_authorized','push_review_branch'),
+                       ('push_main_authorized','push_main'),
                        ('deployment_authorized','deploy'),
                        ('paid_or_subscription_calls_authorized','live_provider_calls'),
                        ('real_user_data_allowed_in_development','access_real_user_data'),
@@ -172,10 +173,14 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
             'spec_version','spec_date','repo_url','default_branch','review_branch','authority',
             'permissions','snapshot_policy'}
         canonical_authority_fields = {'implementation_state','handoff','workflow'}
-        if (set(cfg) != canonical_project_fields or cfg.get('schema_version') != 1
+        canonical_permission_fields = {'push_review_branch','push_main','merge_main','deploy',
+            'live_provider_calls','access_real_user_data'}
+        if (set(cfg) != canonical_project_fields or cfg.get('schema_version') != 2
                 or cfg.get('name_status') != 'WORKING_TITLE'
                 or not isinstance(cfg.get('authority'),dict)
                 or set(cfg.get('authority',{})) != canonical_authority_fields
+                or not isinstance(cfg.get('permissions'),dict)
+                or set(cfg.get('permissions',{})) != canonical_permission_fields
                 or not isinstance(cfg.get('snapshot_policy'),str)):
             errors.append('Invalid canonical project metadata shape')
         for field, prefix in [('current_goal_path','prompts/'),

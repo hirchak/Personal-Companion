@@ -21,18 +21,10 @@
 | `git ls-remote https://github.com/hirchak/Personal-Companion.git` | 0 | Empty advertised refs; не доводить visibility чи право push |
 | `gh repo view hirchak/Personal-Companion --json url,isPrivate,defaultBranchRef` | 1 | `error connecting to api.github.com`; visibility/default branch NOT_VERIFIED |
 
-Пізніше GitHub connector успішно підтвердив repository як public із configured
-default `main` та write permission; repo перед corrective push був порожній.
-`git ls-remote` через локальну мережу досі не доступний; push/ref перевірити через
-normal Git push і повторний authenticated GitHub read після нього.
-
-GitHub connector підтвердив repo `public`, default `main`; remote repo порожній, до push
-в ньому не було refs. Owner-authorized write — тільки у `review/m0-bootstrap` та записаний
-у config/STATE. Merge/deploy OFF. Локальна гілка `review/m0-bootstrap`, origin — URL
-власника. Git init спершу отримав `Operation not permitted` через read-only `.git`
-sandbox rule; повтор із дозволеним локальним escalation успішний. Локальні commits
-дозволені ТЗ M0. Не використовувався fetch/merge/reset чужої історії чи push.
-Baseline SHA та фінальні C/R — у [M0 report](../reports/M0_BOOTSTRAP_REPORT.md).
+GitHub connector підтвердив public repo і configured default `main`. Owner direct-main
+decision застосовується до кожної явно виданої test-stage `/goal` після local checks;
+`main` налаштована як default, remote ref перевіряється перед/після normal push. Історична
+review branch M0 лишається опублікованою. `merge_main`, deploy/provider/private-data OFF.
 
 ## Codex capability та межі verification
 

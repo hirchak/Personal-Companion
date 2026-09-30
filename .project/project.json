@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "project_slug": "personal-companion",
   "display_name": "Personal Companion",
   "name_status": "WORKING_TITLE",
@@ -7,14 +7,15 @@
   "spec_date": "2026-09-30",
   "repo_url": "https://github.com/hirchak/Personal-Companion.git",
   "default_branch": "main",
-  "review_branch": "review/m0-bootstrap",
+  "review_branch": null,
   "authority": {
     "implementation_state": "STATE.md",
     "handoff": "HANDOFF.md",
     "workflow": "docs/WORKFLOW.md"
   },
   "permissions": {
-    "push_review_branch": true,
+    "push_review_branch": false,
+    "push_main": true,
     "merge_main": false,
     "deploy": false,
     "live_provider_calls": false,

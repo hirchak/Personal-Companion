@@ -39,10 +39,25 @@ Codex сам обирає план реалізації всередині ці�
 Звіт показує implementation SHA, base SHA, report commit і push/CI status без рекурсивного self-hash.
 
 Оновити документаційний snapshot через скрипт. Якщо push не дозволений — локальний
-коміт + звіт для користувача. Якщо дозволена review-гілка — звичайний push тільки туди
-після сканування секретів, приватних даних і прав на матеріали.
+коміт + звіт для користувача. Для test-stage goals чинна owner authorization дозволяє
+normal fast-forward push перевірених C/R commits безпосередньо в `main`; окреме погодження
+кожного звичайного push не потрібне. Проєктний `push_main` permission має перевірятися
+окремо від `merge_main`, deploy, provider/billing і real-user-data permissions.
+Перед публікацією перевір secrets/private-data/material rights і точний diff. Не force-push,
+не переписуй опубліковану історію; FIX_REQUIRED виправляй новим forward commit. Інша гілка
+використовується лише коли її вимагає конкретна окрема ціль.
+
+## Direct-main workflow для test-stage цілей
+
+Owner decision від 2026-09-30 дозволяє normal fast-forward pushes у `main` після local checks
+для кожної явно виданої `/goal`; повторне owner confirmation перед звичайним push не потрібне.
+Перевір `permissions.push_main` окремо від `merge_main`, deploy, provider billing і private-data
+permissions. Створи C та evidence-only R, виконай privacy/public-data scan і пуш безпосередньо
+у `main`. Architect review відбувається після push. Force-push/history rewrite заборонені.
+Наступний milestone потребує нової explicit owner goal.
 
 ## Планування і моделі
+
 
 Профілі наведені в `docs/PROVIDERS.md`. Модель і reasoning перевіряються у встановленому
 Codex, а не вгадуються. Plan Mode ON означає дослідження/план без реалізації;

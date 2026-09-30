@@ -7,6 +7,8 @@
 не друга незалежна специфікація. Версія 0.1.0; дата 2026-09-30.
 
 Ім’я `Personal Companion` тимчасове. Не купувати домен і не створювати бренд без рішення власника.
+Поточний direct-main workflow записаний у `prompts/M0_DIRECT_MAIN_FINALIZATION.md`,
+ADR-014 і `docs/WORKFLOW.md`.
 
 ## Покласти в проєкт Codex
 
@@ -30,9 +32,10 @@ M0 не є наказом реалізувати весь продукт. Це �
 Свіжий GitHub-коміт має пріоритет над старим snapshot щодо стану реалізації.
 
 URL репозиторію: `https://github.com/hirchak/Personal-Companion.git`.
-Актуальні visibility/default branch та review permissions мають збігатися у GitHub,
-`.project/project.json` і STATE; URL не дозволяє merge/deploy.
-В ChatGPT написати URL, review branch і SHA зі звіту; використовувати доступний
+Актуальні visibility/default branch та permissions мають збігатися у GitHub,
+`.project/project.json` і STATE. Direct-main push дозволений для явно виданих goals;
+merge/deploy потребують окремих дозволів.
+В ChatGPT написати URL, origin/main SHA зі звіту; використовувати доступний
 GitHub connector для читання. Public-доступ не дає ChatGPT автоматичного моніторингу.
 
 ## Що робити з приватним додатком
@@ -57,7 +60,8 @@ python3 scripts/build_chatgpt_context.py
 
 ## Цикл подальшої роботи
 
-ChatGPT задає обмежену ціль → Codex реалізує, тестує, оновлює стан → користувач
-передає звіт → ChatGPT перевіряє diff/коміт/докази → ACCEPT або FIX_REQUIRED.
-Публікація очищеної review-гілки можлива лише після явного дозволу власника.
-Прийняття milestone та merge у main — окремі дії. Наступний milestone сам не починається.
+Архітектор задає обмежену `/goal` → Codex виконує, тестує, оновлює стан → створює C/R
+→ після privacy scan робить normal fast-forward push у `main` → архітектор перевіряє точні SHA.
+Власник дозволив direct-main development pushes для явно виданих goals; це не merge/release.
+`push_main` відокремлений від `merge_main`, deploy, paid/provider і real-data permissions.
+FIX_REQUIRED виправляється наступним forward commit. Наступний milestone потребує нової goal.

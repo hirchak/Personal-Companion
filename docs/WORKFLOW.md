@@ -15,7 +15,8 @@ Git-коміти й відтворювані тести. Для навігаці
 ## Ролі й межі
 
 Власник продукту: цілі, пріоритети, public/paid/deploy permissions, прийняття ризику,
-остаточний merge/початок наступного етапу. Власниця приватних даних: consent на її дані.
+standing direct-main development permission для цього test project та початок наступного етапу.
+Власниця приватних даних: consent на її дані.
 ChatGPT-архітектор: відновлення контексту, ТЗ, рекомендований model/reasoning/Plan Mode,
 перевірка реалізації і вердикт. Це не фоновий працівник і не клінічний reviewer.
 Codex: автономне виконання чітко обмеженої цілі, tests/fixes/docs/локальний commit.
@@ -27,19 +28,27 @@ Codex: автономне виконання чітко обмеженої ці�
 3. Codex перевіряє actual environment, планує, реалізує, тестує, виправляє без
    погодження кожної дрібниці. Створює coherent implementation commit.
 4. Codex оновлює state/handoff/report, зберігає evidence й повертає один звіт.
-5. Очищений review branch може бути pushed за попередньо записаним дозволом.
-6. Користувач передає branch/SHA/report. ChatGPT читає реальні зміни й тести.
-7. Вердикт: ACCEPT / FIX_REQUIRED / BLOCKED / UNVERIFIED. Потім рішення власника.
-8. За ACCEPT та дозволу власника — merge. Нова ціль видається явно, не автоматично.
+5. Створи implementation commit C і наступний evidence-only commit R на локальному `main`.
+6. Після local checks, privacy/public-data scan та staged review — звичайний fast-forward
+   push безпосередньо `origin/main`.
+7. Architect читає точний pushed C/R SHA з GitHub і дає ACCEPT / FIX_REQUIRED / BLOCKED /
+   UNVERIFIED. FIX_REQUIRED виправляється forward commit; опублікована історія не ховається.
+8. Нова milestone goal усе одно потребує окремої явної цілі власника.
 
-## Дозвіл на push не означає release
+## Owner decision: test-stage direct-main workflow
 
-Поки repo/remote/visibility не підтверджені, push OFF.
-Власник може один раз дозволити normal push у певну review-гілку/namespace для поточного
-milestone після privacy checks. Це дозволяє архітектору читати код, не приймаючи його наперед.
-Main merge, tag/release, Vercel production, public activation і витрати мають окремі gates.
-Так не виникає циклу «рев’ю потребує push, але push дозволений лише після рев’ю».
-Public review branch теж публічний: health data й небезпечні secrets ніколи не допускаються.
+Власник установив: нормальні development pushes `main` дозволені для кожного явно виданого
+`/goal` після успішних перевірок. Це standing permission і не вимагає окремого погодження
+для кожного звичайного push. `permissions.push_main` є окремим від `permissions.merge_main`:
+прямий push не означає merge через PR чи дозвіл на інші merge-операції. Review branch не
+потрібна за замовчуванням; goal може явно задати її, якщо це потрібно.
+
+Ця згода дозволяє публікувати перевірений development commit у public `main`. Вона не
+дозволяє release/tag, Vercel чи інший deploy, public runtime activation, витрати,
+provider calls, billing/auth зміни або доступ до private data. Force-push/rewrite history
+заборонені; `main` рухається тільки fast-forward. GitHub visibility/public-data privacy
+scan залишається обов’язковим перед push. Architect review відбувається після публікації,
+але ACCEPT не припускається й M1 автоматично не починається.
 
 ## SHA без рекурсивної пастки
 

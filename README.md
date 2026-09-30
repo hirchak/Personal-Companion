@@ -3,8 +3,9 @@
 **Робоча назва, не затверджений бренд.** Пакет специфікації v0.1.0 · 30 вересня 2026.
 
 Репозиторій власника: [hirchak/Personal-Companion](https://github.com/hirchak/Personal-Companion.git).
-GitHub підтверджено як public, default branch `main`. Push дозволено лише у
-`review/m0-bootstrap`; merge/deploy залишаються OFF згідно з STATE/config.
+GitHub підтверджено як public, default branch `main`. Для явно виданих test-stage goals
+owner дозволив normal fast-forward development pushes у `main` після перевірок.
+`push_main` відокремлений від merge, deploy, provider і приватних даних.
 
 Локальний особистий простір: щоденники сну й самопочуття, структурована самодопомога,
 творчі нотатки, голосове введення та добровільна м’яка гейміфікація. Mac зберігає
@@ -38,7 +39,7 @@ AI — додаткова можливість, а не умова збереж�
 | Послідовність розробки | [ROADMAP.md](docs/ROADMAP.md) |
 | Робота ChatGPT ↔ Codex ↔ GitHub | [WORKFLOW.md](docs/WORKFLOW.md) |
 | Перевірки | [TESTING.md](docs/TESTING.md) |
-| M0 evidence і M1 proposal | [M0 report](reports/M0_BOOTSTRAP_REPORT.md), [M1 contract](docs/M1_CONTRACT.md) |
+| M0 evidence, workflow decision і M1 proposal | [M0 report](reports/M0_BOOTSTRAP_REPORT.md), [direct-main goal](prompts/M0_DIRECT_MAIN_FINALIZATION.md), [M1 contract](docs/M1_CONTRACT.md) |
 | Встановлення і перенесення | [INSTALLATION.md](docs/INSTALLATION.md) |
 | Рішення й відкриті питання | [DECISIONS.md](docs/DECISIONS.md), [OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) |
 | Перевірені технічні джерела | [SOURCES.md](research/SOURCES.md) |
@@ -49,7 +50,8 @@ AI — додаткова можливість, а не умова збереж�
 - Особистий vault не є Git-репозиторієм. Відгук для розробників — окрема погоджена копія.
 - Збереження на пристрої, синхронізація, хмарний AI та публікація — чотири різні дії зі своїми дозволами.
 - Поведінка AI обмежується кодом, версійованими сценаріями й перевірками. Ніякого автономного лікування.
-- Один milestone → звіт → перевірка точного коміту → рішення власника → наступна ціль.
+- Один явно виданий milestone → local checks → C/R commits → direct-main push → architect review.
+- Наступний milestone все одно потребує нової owner goal; direct push не є release/deploy.
 
 ## Ліцензування
 

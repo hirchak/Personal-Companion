@@ -1,0 +1,18 @@
+{
+  "decision_title": "M0 FINALIZATION — DIRECT MAIN WORKFLOW",
+  "source": "owner-provided current goal/decision; user attachment path not retained",
+  "date": "2026-09-30",
+  "repository": "https://github.com/hirchak/Personal-Companion.git",
+  "authorization": "normal fast-forward push to main for each explicit /goal after local checks",
+  "scope": "direct-main development for this test project until owner revokes standing permission",
+  "permissions": {
+    "push_main": true,
+    "push_review_branch_default": false,
+    "merge_main": false,
+    "deploy": false,
+    "live_provider_calls": false,
+    "access_real_user_data": false
+  },
+  "history_policy": "No force push, rebase rewrite, squash-away, or destructive rewrite",
+  "milestone_policy": "M1 needs a new explicit owner goal"
+}

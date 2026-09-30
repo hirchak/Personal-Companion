@@ -35,6 +35,21 @@ class DocToolsTests(unittest.TestCase):
         p=self.root/'.project/project.json';obj=json.loads(p.read_text())
         obj['permissions']['deploy']=True;p.write_text(json.dumps(obj))
         self.assertTrue(any('Permission mismatch' in e for e in validate(self.root)[0]))
+    def test_push_main_is_separate_from_merge(self):
+        cfg=self.root/'.project/project.json';obj=json.loads(cfg.read_text())
+        self.assertEqual(obj['schema_version'],2)
+        self.assertTrue(obj['permissions']['push_main'])
+        self.assertFalse(obj['permissions']['push_review_branch'])
+        self.assertFalse(obj['permissions']['merge_main'])
+        self.assertTrue(any('push_main_authorized: true' in line
+                            for line in (self.root/'STATE.md').read_text().splitlines()))
+        obj['permissions']['push_main']=False;cfg.write_text(json.dumps(obj))
+        self.assertTrue(any('Permission mismatch: push_main_authorized' in e
+                            for e in validate(self.root)[0]))
+        obj['permissions']['push_main']=True
+        obj['permissions']['merge_main']=True;cfg.write_text(json.dumps(obj))
+        self.assertTrue(any('Permission mismatch: merge_main_authorized' in e
+                            for e in validate(self.root)[0]))
     def test_canonical_snapshot_names(self):
         p=self.root/'.project/context_map.json';mapping=json.loads(p.read_text())
         mapping['04_DELIVERY_AND_CURRENT_STATE_RENAMED.md']=mapping.pop('04_DELIVERY_AND_CURRENT_STATE.md')
@@ -55,11 +70,15 @@ class DocToolsTests(unittest.TestCase):
         (self.root/'PRIVATE_test.md').write_text('synthetic placeholder')
         self.assertTrue(any('Forbidden' in e for e in validate(self.root)[0]))
     def test_raw_research_archive_denied_before_fixture_copy(self):
-        raw=self.root/'research/raw/R01.docx';raw.parent.mkdir(parents=True)
-        raw.write_bytes(b'synthetic-not-a-document')
+        names=('R01.docx','R02.pdf','R03.xlsx','sources.zip')
+        raw_paths=[]
+        for name in names:
+            raw=self.root/'research/source'/name;raw.parent.mkdir(parents=True,exist_ok=True)
+            raw.write_bytes(b'synthetic-not-a-document');raw_paths.append(raw)
         files,errors=public_files(self.root)
-        self.assertNotIn(raw,files)
-        self.assertTrue(any('research/raw' in error for error in errors))
+        for raw in raw_paths:
+            self.assertNotIn(raw,files)
+            self.assertTrue(any(raw.name in error for error in errors))
     def test_denied_content_never_read(self):
         from unittest.mock import patch
         (self.root/'vault').mkdir()
@@ -102,7 +121,7 @@ class DocToolsTests(unittest.TestCase):
         self.assertEqual({p.name for p in out.glob('*.md')},{
             '01_PROJECT_CONTEXT.md','02_TECHNICAL_SPEC.md',
             '03_RESEARCH_AND_SAFETY.md','04_DELIVERY_AND_CURRENT_STATE.md'})
-        self.assertIn('prompts/M0_BOOTSTRAP.md',man['sources'])
+        self.assertIn('prompts/M0_DIRECT_MAIN_FINALIZATION.md',man['sources'])
         for name,sha in man['outputs'].items():
             self.assertEqual(hashlib.sha256((out/name).read_bytes()).hexdigest(),sha)
     def test_output_cannot_overwrite_repo(self):
@@ -124,12 +143,12 @@ class DocToolsTests(unittest.TestCase):
         (self.root/'prompts/M1_TEST.md').write_text('# Synthetic current goal')
         (self.root/'reports/M1_TEST.md').write_text('# Synthetic current report')
         p=self.root/'STATE.md'
-        s=p.read_text().replace('prompts/M0_BOOTSTRAP.md','prompts/M1_TEST.md')
+        s=p.read_text().replace('prompts/M0_DIRECT_MAIN_FINALIZATION.md','prompts/M1_TEST.md')
         s=re.sub(r'^report_path:.*$', 'report_path: reports/M1_TEST.md', s, flags=re.MULTILINE)
         p.write_text(s)
         out=self.root/'generated/chatgpt_context';man=build(self.root,out)
         self.assertIn('prompts/M1_TEST.md',man['sources'])
         self.assertIn('reports/M1_TEST.md',man['sources'])
-        self.assertNotIn('prompts/M0_BOOTSTRAP.md',man['sources'])
+        self.assertNotIn('prompts/M0_DIRECT_MAIN_FINALIZATION.md',man['sources'])
 
 if __name__=='__main__':unittest.main()

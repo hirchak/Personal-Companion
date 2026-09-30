@@ -7,7 +7,7 @@ Base SHA:
 Implementation SHA (C):
 Branch:
 Report evidence commit (R): повідомити в фінальному повідомленні після commit; не вигадувати self-hash.
-Remote/push: NOT_PUSHED / PUSHED_TO_APPROVED_REVIEW_BRANCH
+Remote/push: NOT_PUSHED / PUSHED_TO_MAIN / PUSHED_TO_APPROVED_REVIEW_BRANCH; record exact remote ref
 CI SHA/status:
 
 ## Що зроблено

@@ -19,6 +19,7 @@
 | ADR-011 | PROPOSED_BASELINE | Private ideas ≠ public product feedback | Exact-payload approval перед export/publication |
 | ADR-012 | PROPOSED_BASELINE | Reviewed self-help і optional game layer | Без medical claims, штрафів і dependence design |
 | ADR-013 | PROPOSED_BASELINE | C implementation + R evidence commit | Перевірювані SHA без self-hash recursion |
+| ADR-014 | USER_REQUIREMENT · 2026-09-30 | Для test-stage explicit `/goal` власник дозволив normal fast-forward direct pushes у `main` після local checks і privacy scan; review branch optional. Project metadata schema v2 adds an explicit `push_main` permission | `push_main` відокремлений від `merge_main`; force push/rewrite, merge, deploy, paid calls/private data окремо заборонені; architect review відбувається після push; наступна milestone вимагає нової goal |
 
 Для зміни baseline створити ADR із альтернативами, impact на data/safety/compatibility,
 rollback і явним рішенням власника, коли змінюються межі або приватність.
