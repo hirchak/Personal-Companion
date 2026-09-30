@@ -1,6 +1,6 @@
 # Roadmap і критерії переходу
 
-M0 direct-main normalization: IN_PROGRESS; application M1–M8: NOT_STARTED.
+M0 direct-main normalization: AWAITING_REVIEW; application M1–M8: NOT_STARTED.
 Наявність цього документа не є ACCEPT або дозволом перейти до M1.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 

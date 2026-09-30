@@ -21,10 +21,11 @@
 | `git ls-remote https://github.com/hirchak/Personal-Companion.git` | 0 | Empty advertised refs; не доводить visibility чи право push |
 | `gh repo view hirchak/Personal-Companion --json url,isPrivate,defaultBranchRef` | 1 | `error connecting to api.github.com`; visibility/default branch NOT_VERIFIED |
 
-GitHub connector підтвердив public repo і configured default `main`. Owner direct-main
-decision застосовується до кожної явно виданої test-stage `/goal` після local checks;
-`main` налаштована як default, remote ref перевіряється перед/після normal push. Історична
-review branch M0 лишається опублікованою. `merge_main`, deploy/provider/private-data OFF.
+GitHub connector підтвердив public repo. Після першого push у новий порожній repo actual
+default став `review/m0-bootstrap`; owner-intended target був `main`. У цій goal C3 створив
+origin/main, потім `gh repo edit --default-branch main` повернув exit 0. `gh repo view` і
+GitHub connector після цього підтвердили actual default `main`. Historical review ref
+лишився незмінним.
 
 ## Codex capability та межі verification
 

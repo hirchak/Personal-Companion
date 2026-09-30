@@ -1,0 +1,81 @@
+{
+  "phase": "R4_PRECOMMIT",
+  "base_c3": "bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/check_docs.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "status": "PASS",
+      "tests": 25
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/build_chatgpt_context.py"
+      ],
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_privacy.py",
+        "--include-generated"
+      ],
+      "status": "PENDING_AFTER_STAGE"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd",
+        "--check"
+      ],
+      "exit_code": 0,
+      "status": "PASS"
+    }
+  ],
+  "snapshot_hashes": {
+    "status": "PASS",
+    "source_commit": "bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd",
+    "sources": 47,
+    "outputs": 5
+  },
+  "r4_paths": [
+    "HANDOFF.md",
+    "README.md",
+    "STATE.md",
+    "devlog/2026-09-30-M0.md",
+    "docs/M0_ENVIRONMENT.md",
+    "docs/OPEN_QUESTIONS.md",
+    "docs/ROADMAP.md",
+    "reports/M0_BOOTSTRAP_REPORT.md"
+  ],
+  "c3_to_r4_evidence_only": "PASS",
+  "ci": "NOT_RUN",
+  "r4_staged_privacy_scan": {
+    "command": "python3 scripts/check_privacy.py --include-generated",
+    "exit_code": 0,
+    "status": "PASS",
+    "coverage": "working tree, staged index, all local Git objects, generated snapshots"
+  },
+  "r4_diff_check": "PASS",
+  "c3_to_r4_path_whitelist": "PASS"
+}

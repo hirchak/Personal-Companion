@@ -3,8 +3,8 @@
 **Робоча назва, не затверджений бренд.** Пакет специфікації v0.1.0 · 30 вересня 2026.
 
 Репозиторій власника: [hirchak/Personal-Companion](https://github.com/hirchak/Personal-Companion.git).
-GitHub підтверджено як public, default branch `main`. Для явно виданих test-stage goals
-owner дозволив normal fast-forward development pushes у `main` після перевірок.
+GitHub підтверджено як public, actual default branch `main`. Owner дозволив normal
+fast-forward development pushes у `main` для явно виданих goals після local checks.
 `push_main` відокремлений від merge, deploy, provider і приватних даних.
 
 Локальний особистий простір: щоденники сну й самопочуття, структурована самодопомога,

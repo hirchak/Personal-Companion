@@ -6,18 +6,19 @@ project_slug: personal-companion
 repo_url: https://github.com/hirchak/Personal-Companion.git
 repo_visibility: public
 default_branch: main
+actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: c891a49f17af190b84e2b4d70e85597bf3e3b1ba
-implementation_sha: d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60
+implementation_sha: bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd
 report_path: reports/M0_BOOTSTRAP_REPORT.md
 last_reviewed_sha: 18fefa8dd037fae1982dcc34a64f34325c10830c
 current_milestone: M0
 current_goal: m0_direct_main_workflow
 current_goal_path: prompts/M0_DIRECT_MAIN_FINALIZATION.md
 current_contract_path: docs/M1_CONTRACT.md
-implementation_status: IN_PROGRESS
-review_status: NOT_REVIEWED
+implementation_status: AWAITING_REVIEW
+review_status: AWAITING_REVIEW
 next_authorized_milestone: null
 research_status: NOT_STARTED
 clinical_protocols_enabled: false
@@ -39,5 +40,6 @@ Review branch optional; існуючий `review/m0-bootstrap` з C2/R2/R3 — �
 і не дозволені новою окремою goal; протоколи DISABLED. Deploy/provider/billing/private data
 також OFF. Force-push/history rewrite заборонені.
 
-Після C3/R4 та privacy scan зробити normal fast-forward push у `origin/main`. GitHub
-default branch налаштовано як `main`; після push звірити фактичний ref/default. CI NOT_RUN.
+C3 `bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd` is pushed to `origin/main`. GitHub actual
+default is now verified as `main`. Після staged privacy scan нормальним fast-forward пушити R4
+і перевірити точний фінальний remote SHA. CI NOT_RUN.

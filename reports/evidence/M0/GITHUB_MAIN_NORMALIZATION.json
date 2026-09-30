@@ -1,0 +1,24 @@
+{
+  "c3_sha": "bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd",
+  "prior_remote_default": "review/m0-bootstrap",
+  "c3_push": {
+    "command": "git push origin main",
+    "exit_code": 0,
+    "remote_ref": "refs/heads/main",
+    "sha": "bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd"
+  },
+  "default_branch_change": {
+    "command": "gh repo edit hirchak/Personal-Companion --default-branch main",
+    "exit_code": 0,
+    "default_branch_read_exit_code": 0,
+    "actual_default": "main"
+  },
+  "remote_verification": {
+    "github_branch_list_exit_code": 0,
+    "main_sha": "bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd",
+    "historical_review_sha": "ca0e1fc3af42bcc31e4038a591f7356713718005",
+    "git_ls_remote_exit_code": 0
+  },
+  "history_rewritten": false,
+  "merge_or_deploy": false
+}
