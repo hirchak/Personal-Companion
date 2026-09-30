@@ -29,8 +29,9 @@ M0 не є наказом реалізувати весь продукт. Це �
 Копії не оновлюються разом із GitHub самі: їх потрібно перегенерувати та замінити.
 Свіжий GitHub-коміт має пріоритет над старим snapshot щодо стану реалізації.
 
-Коли з’явиться URL, записати його в `.project/project.json` і `STATE.md`,
-після чого перегенерувати ChatGPT-пакет. Поки URL не відомий — чесний `null`.
+URL репозиторію: `https://github.com/hirchak/Personal-Companion.git`.
+Актуальні visibility/default branch та review permissions мають збігатися у GitHub,
+`.project/project.json` і STATE; URL не дозволяє merge/deploy.
 В ChatGPT написати URL, review branch і SHA зі звіту; використовувати доступний
 GitHub connector для читання. Public-доступ не дає ChatGPT автоматичного моніторингу.
 

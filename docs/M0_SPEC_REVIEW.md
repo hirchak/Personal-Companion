@@ -1,5 +1,9 @@
 # M0 — consistency review специфікації
 
+> Corrective update: висновок нижче передував зовнішньому архітектурному review.
+> Canonical `.gitignore`/context map hashes і project schema тепер перевірені за
+> owner-provided Repo Starter; актуальні C2/R2 статуси — в M0 report.
+
 2026-09-30. Результат виконавця: AWAITING_REVIEW, не ACCEPTED. Прочитано обов’язкові
 M0 документи, додатково DATA_MEMORY, індекси, tooling/templates та відкриті питання.
 Research briefs збережені й перевірені структурно; clinical research не виконувалось.
@@ -8,14 +12,14 @@ Research briefs збережені й перевірені структурно;
 
 | Finding | Рішення M0 / доказ |
 |---|---|
-| У розпакованому starter немає `.gitignore`, `.project/project.json`, `.project/context_map.json` | Reconstruction з документів і script interfaces; це не hash-identical recovery. PACKAGE_MANIFEST залишено як історичний inventory |
-| Усі 58 наявних canonical starter files hash-identical | Збережено окремий baseline commit без .DS_Store. Власних/сторонніх незакомічених змін до M0 не було: Git був відсутній |
-| URL був null, state казав «не надано» | Власник надав URL; записано в config/STATE/README. Visibility NOT_VERIFIED, усі permissions false |
+| У початковому unpack бракувало трьох hidden files | У corrective goal exact `.gitignore` і `context_map.json` відновлено з owner ZIP; оригінальний `project.json` підтверджено source SHA й усі canonical fields збережено. Hash evidence у M0 report |
+| Starter inventory мав 61 file, у working unpack збігалося 58 | Усі 61 canonical files нині присутні; 2 задані hidden SHA відповідають PACKAGE_MANIFEST |
+| URL був null, state казав «не надано» | GitHub connector підтвердив public/default `main`; owner дозволив push лише у review branch. Merge/deploy/інші permissions OFF |
 | Documentation validator читав forbidden-файл після finding | Inventory/prune до read; forbidden/env/symlink regression tests |
 | Tests copytree могли копіювати приватний каталог | Копіювання лише inventory дозволених public files; unsafe source tree →fail |
 | Generated output міг пройти через symlink `generated` назовні | Reject symlink/output escape до write; synthetic regression test |
 | STATE contract/report pointers не перевірялись | Path/prefix/existence/private/symlink validation; M1 contract pointer у current state |
-| PACKET_VALIDATION стверджує historical PASS, але нинішній пакет incomplete | Не підмінено історію. Initial M0 check FAIL; після reconstruction — нові відтворювані checks/evidence |
+| PACKET_VALIDATION — історичний report starter | Не підмінили. Початковий corrective check FAIL за відсутніх files; наразі hash-pinned docs validator та повторені synthetic suite |
 | Baseline не задавав точних M1 schema/API/restore criteria | [M1 contract](M1_CONTRACT.md): domain, auth, idempotency, revision, deletion, root isolation, migration, export/backup/restore, acceptance matrix |
 
 ## Уточнення scope без архітектурного відхилення
@@ -41,7 +45,7 @@ Blocking-for-M1: архітектор має review M0/M1 contract, власни
 Engineering unknowns без owner decision: конкретні project-local dependency versions,
 test harness і measurements/SLO вибирає M1 виконавець після verification.
 
-Later-stage: remote visibility/default branch і push permission; ліцензія/бренд;
+Later-stage: ліцензія/бренд;
 TLS/private DNS/encryption/KDF/key recovery (M2/real-use gate); Codex runtime scope,
 retention/entitlement та MiniMax quota/credits (M3); wearable (M6); clinical reviewer
 і content rights (M7); backup target/FileVault/consent/private pilot (M8).

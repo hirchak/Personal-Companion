@@ -1,0 +1,57 @@
+{
+  "source": "owner-provided Repo Starter ZIP; archive paths/content not committed",
+  "archive_sha256": "469c2e998c5076c9b2d522ed0fa0e8579d76745006eec7039de79e18b5e074e9",
+  "archive_entries": 62,
+  "docx_entries": 0,
+  "raw_research_opened": false,
+  "canonical_files": {
+    ".gitignore": {
+      "sha256": "92e8adf6bde8f43f9dcef971fc29e82f9722eb39c03cd917953c5bc1aa400545",
+      "expected_sha256": "92e8adf6bde8f43f9dcef971fc29e82f9722eb39c03cd917953c5bc1aa400545"
+    },
+    ".project/context_map.json": {
+      "sha256": "86fdc85997b35959450ed6e96008c6fa0c2e3d848b221b4e155814c07ab7107d",
+      "expected_sha256": "86fdc85997b35959450ed6e96008c6fa0c2e3d848b221b4e155814c07ab7107d"
+    },
+    ".project/project.json": {
+      "starter_sha256": "4edb5d0454cba5bba611455802d970f07ca564b5a5a2653156143f66a4bbad9a",
+      "mutated_sha256": "e5cbe3bf7c2e393a3069b6353370d491f52518a3358824dde2462074881cd53f",
+      "canonical_fields_preserved": [
+        "schema_version",
+        "display_name",
+        "name_status",
+        "authority",
+        "snapshot_policy"
+      ],
+      "owner_fields_applied": [
+        "repo_url",
+        "default_branch",
+        "review_branch",
+        "permissions.push_review_branch",
+        "permissions.merge_main",
+        "permissions.deploy",
+        "permissions.live_provider_calls",
+        "permissions.access_real_user_data"
+      ]
+    }
+  },
+  "snapshot_names": [
+    "01_PROJECT_CONTEXT.md",
+    "02_TECHNICAL_SPEC.md",
+    "03_RESEARCH_AND_SAFETY.md",
+    "04_DELIVERY_AND_CURRENT_STATE.md"
+  ],
+  "owner_metadata": {
+    "repo_visibility_verified": "public",
+    "default_branch": "main",
+    "review_branch": "review/m0-bootstrap",
+    "permissions": {
+      "push_review_branch": true,
+      "merge_main": false,
+      "deploy": false,
+      "live_provider_calls": false,
+      "access_real_user_data": false
+    }
+  },
+  "archive_path_retained": false
+}

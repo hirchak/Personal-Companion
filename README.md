@@ -3,7 +3,8 @@
 **Робоча назва, не затверджений бренд.** Пакет специфікації v0.1.0 · 30 вересня 2026.
 
 Репозиторій власника: [hirchak/Personal-Companion](https://github.com/hirchak/Personal-Companion.git).
-URL не є дозволом на push/deploy; актуальні дозволи — у `STATE.md` і `.project/project.json`.
+GitHub підтверджено як public, default branch `main`. Push дозволено лише у
+`review/m0-bootstrap`; merge/deploy залишаються OFF згідно з STATE/config.
 
 Локальний особистий простір: щоденники сну й самопочуття, структурована самодопомога,
 творчі нотатки, голосове введення та добровільна м’яка гейміфікація. Mac зберігає

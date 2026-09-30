@@ -1,93 +1,52 @@
-# M0 — bootstrap report для архітектора
+# M0 corrective — review report
 
-Дата: 2026-09-30. Статус: **AWAITING_REVIEW**, review NOT_REVIEWED.
-Тільки M0 за `prompts/M0_BOOTSTRAP.md`; застосунок і M1 NOT_STARTED.
+Date: 2026-09-30. Status: corrective work in progress; M1 NOT_STARTED.
+Repository: https://github.com/hirchak/Personal-Companion.git. GitHub connector verified
+it as public, default branch `main`; the repository was empty before publication.
+Review branch: `review/m0-bootstrap`; owner authorized normal push to this branch.
+Merge/main, deploy, provider calls and private data remain disabled.
 
-| Git field | Значення |
-|---|---|
-| Repository / origin | https://github.com/hirchak/Personal-Companion.git |
-| Branch | `review/m0-bootstrap`, локальна |
-| Base B | `c891a49f17af190b84e2b4d70e85597bf3e3b1ba` — supplied-starter root commit |
-| Implementation C | `18fefa8dd037fae1982dcc34a64f34325c10830c` |
-| Report commit R | SHA у фінальному повідомленні після commit; визначається Git history, без recursive self-hash |
-| Push / CI | NOT_PUSHED / NOT_RUN, CI SHA=null |
-| Remote | Empty advertised refs від ls-remote; gh API connection failed; visibility/default remote branch NOT_VERIFIED |
+## Canonical starter correction
 
-## Зроблено і M0 DoD
+Owner supplied an owner-provided Repo Starter ZIP (local path omitted from public report).
+Archive SHA-256: `469c2e998c5076c9b2d522ed0fa0e8579d76745006eec7039de79e18b5e074e9`.
+Only `.gitignore`, `.project/context_map.json`, and `.project/project.json` were read.
+Canonical SHA checks PASS:
 
-| Requirement | Результат / evidence |
-|---|---|
-| A — capabilities | [Environment](../docs/M0_ENVIRONMENT.md): observed OS/tools, explicit NOT_VERIFIED для unavailable probes |
-| B — consistency | [Spec review](../docs/M0_SPEC_REVIEW.md), docs checks PASS; semantic engineering review, clinical review NOT_RUN |
-| C — M1 contract | [Contract](../docs/M1_CONTRACT.md): domain/time/schema, API/CRUD/history/search, auth/CSRF, revisions/delete, root isolation, migrations, export/backup/restore, acceptance gates |
-| D — durable delivery | STATE/HANDOFF/roadmap/devlog, C/R evidence, generated context; AWAITING_REVIEW, не ACCEPTED |
-
-Усі 58 наявних canonical starter файлів збігалися з PACKAGE_MANIFEST. Git був
-відсутній; збережено окремий baseline. Три missing hidden файли reconstructed
-за документами/interfaces, не hash-identical recovery. PACKAGE_MANIFEST — історичний
-inventory. URL власника записано у config/STATE/README/local origin. Усі permissions OFF.
-
-Tooling: denied/env/symlink paths перевіряються до read; tests копіюють лише public
-inventory; snapshot output не проходить через symlinks; STATE pointers перевіряються.
-Додано scanner усіх local Git objects, включно зі staged/unreachable, без виводу
-значень finding. Стек Python/React/SQLite збережено; нового architecture ADR не потрібно.
-M1 contract — proposal; M1 execution і application acceptance tests NOT_RUN.
-
-## Команди і докази
-
-Environment: macOS 27.0 arm64; Python 3.13.2; Git 2.50.1; Node 26.8.2; npm 11.19.1;
-SQLite CLI 3.54.0; Codex CLI 0.159.0. Cwd у logs — sanitized `repo/` або archive of C.
-
-| Command / метод | Tree / exit | Outcome |
+| File | Expected/original SHA-256 | Corrected value |
 |---|---|---|
-| `python3 scripts/check_docs.py --json` | Exact C через `git archive C`, 0 | PASS, C_CHECKS.json |
-| `python3 -m unittest discover -s tests -v` | Exact C archive, 0 | PASS, 20 synthetic tooling tests |
-| `python3 scripts/build_chatgpt_context.py` | Exact C archive, 0 | PASS; source_commit=null в archive без .git очікуваний |
-| Docs + 20 tests + generator | C tooling + final evidence overlay перед R, 0 | PASS, FINAL_CHECKS.json; не удавана exact-C metadata |
-| SHA-256 source/output + dynamic goal/contract/report presence | Final evidence overlay, 0 | PASS, FINAL_SNAPSHOT_CHECK.json |
-| `python3 scripts/check_privacy.py --include-generated` | Worktree/snapshot/all local objects, 0 | Heuristic PASS, FINAL_CHECKS.json; staged scan перед R |
-| `git diff --check` / `git diff --cached --check` | Final working/staged diff, 0 | PASS |
-| C→R changed paths whitelist | Final evidence overlay, 0 | Лише STATE/HANDOFF/roadmap/devlog/reports/evidence |
-| Delivery regeneration/hash check після R | R | Result у ignored delivery verification і фінальному повідомленні |
+| `.gitignore` | `92e8adf6bde8f43f9dcef971fc29e82f9722eb39c03cd917953c5bc1aa400545` | exact original bytes |
+| `.project/context_map.json` | `86fdc85997b35959450ed6e96008c6fa0c2e3d848b221b4e155814c07ab7107d` | exact original bytes |
+| `.project/project.json` | `4edb5d0454cba5bba611455802d970f07ca564b5a5a2653156143f66a4bbad9a` | original fields/structure preserved; authorized values applied |
 
-Logs: [C_CHECKS.json](evidence/M0/C_CHECKS.json),
-[INITIAL_OBSERVATIONS.json](evidence/M0/INITIAL_OBSERVATIONS.json),
-[C_SNAPSHOT_CHECK.json](evidence/M0/C_SNAPSHOT_CHECK.json),
-`INITIAL_C_CHECKS.json`, `FINAL_CHECKS.json`, `FINAL_SNAPSHOT_CHECK.json`.
+Canonical project fields `schema_version`, `display_name`, `name_status`, `authority`,
+and `snapshot_policy` were preserved exactly. Applied `repo_url`, default `main`, review
+branch `review/m0-bootstrap`, push permission true, and merge/deploy/provider/private-data
+permissions false. The context map names remain `01_PROJECT_CONTEXT.md`,
+`02_TECHNICAL_SPEC.md`, `03_RESEARCH_AND_SAFETY.md`, and
+`04_DELIVERY_AND_CURRENT_STATE.md`.
 
-Initial docs FAIL exit 1: missing hidden files; виправлено. Initial snapshot check
-на попередньому C `62c2e5e...` FAIL exit 1: STATE.report_path=null, тому report omitted;
-listed hashes збігалися. Final pointer заповнено і snapshot regenerated. Тест dynamic
-pointer припускав null; виправлення окремим local C commit, повтор suite на exact C.
-Initial FAIL збережені, не перейменовані на historical PASS.
+Archive index contained 62 entries and zero DOCX. Raw research contents were not opened
+or added. No ZIP/archive, user attachments, or provider credentials are staged.
+The history from B is preserved; no force-push or main branch operation is planned.
 
-## Privacy, права й NOT_RUN
+## M1 boundary
 
-Real vault/приватні записи/auth.json/ключі/токени/private endpoints/account IDs/home
-inventory не читались. Fixtures synthetic, без private додатка. Full local history
-починається зі supplied packet; unknown remote history не imported. Scanner покриває
-worktree, staged/all local objects і snapshots, не remote Git/CI artifacts/app runtime.
-Patterns token/key/private IPv4/URL credentials та denied names — heuristic, не доказ
-відсутності будь-яких private texts/IDs або правових проблем. Нові матеріали власні;
-third-party full texts/assets не додавались. Research baseline не отримав content ACCEPT.
+`docs/M1_CONTRACT.md` remains a proposal for local non-AI capture/CRUD/search, typed
+records, root isolation, migrations, export and backup/restore. No M1 application code,
+real-user data, runtime provider calls, Android sync, clinical protocol, deployment,
+main merge or launch automation.
 
-Live AI/Codex exec/MiniMax, dependencies install, billing/auth changes, server/port
-exposure, launchd, real migrations, push/merge/deploy — NOT_RUN. Docs web reads і
-read-only GitHub probes не inference. FileVault/crypto/Android/wearable/browser/ASR/
-clinical acceptance — NOT_RUN. Active model/reasoning/RAM — NOT_VERIFIED; observed
-client catalog Sol/high не доводить account-specific entitlement чи runtime retention.
+## Corrective checks
 
-## Review і наступний крок
+Exact C2/R2 SHAs and final evidence tables will be written at R2. Repeated commands:
+`python3 scripts/check_docs.py --json`; `python3 -m unittest discover -s tests -v`;
+`python3 scripts/build_chatgpt_context.py`; `python3 scripts/check_privacy.py --include-generated`;
+canonical hash verification; generated source/output manifest hash verification;
+`.gitignore` behavioral probes; `git diff --check`. Synthetic results only. The C2→R2
+path whitelist must contain STATE/HANDOFF/roadmap/devlog/report/evidence paths only.
 
-Generated delivery: `generated/chatgpt_context/` — чотири Markdown snapshots,
-PROJECT_INSTRUCTIONS та SHA-256 manifest, ignored і не canonical. Після R generator
-повторно прив’язує source_commit до R; outputs перевіряються окремо локальним artifact.
-Source hashes доводять фактичний текст, сам source_commit не доводить clean tree.
-R−C — лише status/evidence (roadmap включно), без прихованих code/contract changes.
-
-Архітектору передати B/C/R, report, logs та локальний evidence bundle/diff. GitHub
-ще не містить цієї роботи: push OFF; remote review не виконаний. Bundle дозволяє
-review точних SHA без publication. Git worktree має бути clean після R; snapshots ignored.
-Blocking-for-M1: review M0/M1 contract та окрема goal власника. Інших M0 blockers немає.
-Later gates: visibility/license, transport/encryption/key recovery, runtime rights/
-retention/quotas, hardware/clinical review, user-data consent/private pilot.
+Privacy scan scope: public worktree, staged entries, every local Git object, and generated
+snapshots. It is heuristic and does not prove absence of arbitrary personal data, copyright
+problems or runtime exfiltration. GitHub ref and permission will be checked after push.
+CI status is NOT_RUN. Technical ACCEPT and M1 authorization are not implied.

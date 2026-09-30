@@ -1,28 +1,53 @@
 {
-  "01_PRODUCT_AND_ARCHITECTURE.md": [
-    "README.md", "START_HERE.md", ".project/project.json",
-    "docs/PRODUCT.md", "docs/ARCHITECTURE.md", "docs/EXPERIENCE.md", "docs/INSTALLATION.md"
+  "01_PROJECT_CONTEXT.md": [
+    "README.md",
+    "START_HERE.md",
+    "docs/PRODUCT.md",
+    "docs/DECISIONS.md",
+    "docs/OPEN_QUESTIONS.md"
   ],
-  "02_DATA_PRIVACY_AND_SAFETY.md": [
-    "docs/PRIVACY_SECURITY.md", "docs/DATA_MEMORY.md", "docs/OFFLINE_SYNC.md",
-    "docs/SAFETY.md", "templates/PROTOCOL_TEMPLATE.json"
+  "02_TECHNICAL_SPEC.md": [
+    "docs/ARCHITECTURE.md",
+    "docs/PRIVACY_SECURITY.md",
+    "docs/OFFLINE_SYNC.md",
+    "docs/DATA_MEMORY.md",
+    "docs/AI_ORCHESTRATION.md",
+    "docs/PROVIDERS.md",
+    "docs/INTEGRATIONS.md",
+    "docs/EXPERIENCE.md",
+    "docs/INSTALLATION.md"
   ],
-  "03_AI_AND_RESEARCH.md": [
-    "docs/PROVIDERS.md", "docs/AI_ORCHESTRATION.md", "docs/INTEGRATIONS.md",
-    "research/INDEX.md", "research/RESEARCH_PLAN.md", "research/MASTER_RESEARCH_PROMPT.md",
-    "research/SOURCES.md", "research/sources.json",
-    "research/prompts/R01.md", "research/prompts/R02.md", "research/prompts/R03.md",
-    "research/prompts/R04.md", "research/prompts/R05.md", "research/prompts/R06.md",
-    "research/prompts/R07.md", "research/prompts/R08.md", "research/prompts/R09.md",
-    "research/prompts/R10.md", "research/prompts/R11.md", "research/prompts/R12.md",
-    "research/prompts/R13.md", "research/prompts/R14.md", "research/prompts/R15.md",
-    "research/prompts/R16.md", "templates/EVIDENCE_TEMPLATE.tsv"
+  "03_RESEARCH_AND_SAFETY.md": [
+    "docs/SAFETY.md",
+    "research/RESEARCH_PLAN.md",
+    "research/MASTER_RESEARCH_PROMPT.md",
+    "research/INDEX.md",
+    "research/SOURCES.md",
+    "research/prompts/R01.md",
+    "research/prompts/R02.md",
+    "research/prompts/R03.md",
+    "research/prompts/R04.md",
+    "research/prompts/R05.md",
+    "research/prompts/R06.md",
+    "research/prompts/R07.md",
+    "research/prompts/R08.md",
+    "research/prompts/R09.md",
+    "research/prompts/R10.md",
+    "research/prompts/R11.md",
+    "research/prompts/R12.md",
+    "research/prompts/R13.md",
+    "research/prompts/R14.md",
+    "research/prompts/R15.md",
+    "research/prompts/R16.md"
   ],
   "04_DELIVERY_AND_CURRENT_STATE.md": [
-    "AGENTS.md", "STATE.md", "HANDOFF.md", "docs/WORKFLOW.md", "docs/ROADMAP.md",
-    "docs/DECISIONS.md", "docs/OPEN_QUESTIONS.md", "docs/TESTING.md",
-    "docs/M0_ENVIRONMENT.md", "docs/M0_SPEC_REVIEW.md",
-    "templates/ADR_TEMPLATE.md", "templates/REPORT_TEMPLATE.md", "templates/REVIEW_TEMPLATE.md",
-    "templates/FEEDBACK_TEMPLATE.md", "prompts/GOAL_TEMPLATE.md", "prompts/GOAL_START.txt"
+    "AGENTS.md",
+    "STATE.md",
+    "HANDOFF.md",
+    "docs/WORKFLOW.md",
+    "docs/ROADMAP.md",
+    "docs/TESTING.md",
+    "templates/REPORT_TEMPLATE.md",
+    "templates/REVIEW_TEMPLATE.md"
   ]
 }

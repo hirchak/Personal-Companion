@@ -1,6 +1,7 @@
 # Roadmap і критерії переходу
 
-M0: AWAITING_REVIEW; application M1–M8: NOT_STARTED. Наявність цього документа не є ACCEPT.
+M0 corrective: IN_PROGRESS; application M1–M8: NOT_STARTED.
+Наявність цього документа не є ACCEPT або дозволом перейти до M1.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
 | ID | Результат | Залежності | Основна модель |

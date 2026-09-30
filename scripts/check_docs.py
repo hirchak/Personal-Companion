@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -20,8 +21,14 @@ REQUIRED = (
     'context/PROJECT_INSTRUCTIONS.txt', '.gitignore',
 )
 EXCLUDED = {'.git', 'generated', '__pycache__', '.venv', 'node_modules'}
-FORBIDDEN_DIRS = {'private', 'vault', 'private_context', 'user-data', 'user_data', 'quarantine'}
-FORBIDDEN_EXTENSIONS = {'.sqlite', '.sqlite3', '.db', '.key', '.pem', '.p12', '.wav', '.m4a'}
+FORBIDDEN_DIRS = {'private', 'vault', 'private_context', 'user-data', 'user_data', 'quarantine',
+                  'raw', 'inbox'}
+FORBIDDEN_EXTENSIONS = {'.sqlite', '.sqlite3', '.db', '.key', '.pem', '.p12', '.wav', '.m4a',
+                        '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip'}
+CANONICAL_STARTER_HASHES = {
+    '.gitignore':'92e8adf6bde8f43f9dcef971fc29e82f9722eb39c03cd917953c5bc1aa400545',
+    '.project/context_map.json':'86fdc85997b35959450ed6e96008c6fa0c2e3d848b221b4e155814c07ab7107d',
+}
 SECRET_PATTERNS = (
     re.compile(r'\bgh[pousr]_[A-Za-z0-9]{30,}\b'),
     re.compile(r'\bgithub_pat_[A-Za-z0-9_]{40,}\b'),
@@ -103,6 +110,9 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
     errors.extend(path_errors)
     if path_errors:
         return errors, warnings, metrics
+    for name, expected in CANONICAL_STARTER_HASHES.items():
+        if hashlib.sha256((root/name).read_bytes()).hexdigest() != expected:
+            errors.append(f'Canonical starter SHA-256 mismatch: {name}')
     for path in files:
         rel = path.relative_to(root)
         metrics['files_checked'] += 1
@@ -149,9 +159,25 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
         for sk, pk in [('push_authorized','push_review_branch'),
                        ('deployment_authorized','deploy'),
                        ('paid_or_subscription_calls_authorized','live_provider_calls'),
-                       ('real_user_data_allowed_in_development','access_real_user_data')]:
+                       ('real_user_data_allowed_in_development','access_real_user_data'),
+                       ('merge_main_authorized','merge_main')]:
             if type(st.get(sk)) is not bool or type(perms.get(pk)) is not bool or st.get(sk) != perms.get(pk):
                 errors.append(f'Permission mismatch: {sk}')
+        if cfg.get('default_branch') != st.get('default_branch'):
+            errors.append('STATE vs project.json mismatch: default_branch')
+        for field in ('schema_version','display_name','name_status','authority','snapshot_policy'):
+            if field not in cfg:
+                errors.append(f'Missing project metadata field: {field}')
+        canonical_project_fields = {'schema_version','project_slug','display_name','name_status',
+            'spec_version','spec_date','repo_url','default_branch','review_branch','authority',
+            'permissions','snapshot_policy'}
+        canonical_authority_fields = {'implementation_state','handoff','workflow'}
+        if (set(cfg) != canonical_project_fields or cfg.get('schema_version') != 1
+                or cfg.get('name_status') != 'WORKING_TITLE'
+                or not isinstance(cfg.get('authority'),dict)
+                or set(cfg.get('authority',{})) != canonical_authority_fields
+                or not isinstance(cfg.get('snapshot_policy'),str)):
+            errors.append('Invalid canonical project metadata shape')
         for field, prefix in [('current_goal_path','prompts/'),
                               ('current_contract_path','docs/'), ('report_path','reports/')]:
             value = st.get(field)
@@ -177,6 +203,10 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
         seen = set()
         if not isinstance(mapping,dict):
             raise ValueError('Context map must be an object')
+        canonical_outputs = {'01_PROJECT_CONTEXT.md','02_TECHNICAL_SPEC.md',
+                             '03_RESEARCH_AND_SAFETY.md','04_DELIVERY_AND_CURRENT_STATE.md'}
+        if set(mapping) != canonical_outputs:
+            errors.append('Context map output names differ from canonical snapshot names')
         for output, inputs in mapping.items():
             if Path(output).name != output or not output.endswith('.md'):
                 errors.append(f'Unsafe snapshot filename: {output}')

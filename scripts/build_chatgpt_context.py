@@ -12,6 +12,12 @@ from pathlib import Path
 
 from check_docs import validate, state_fields, forbidden_path
 
+LEGACY_RECONSTRUCTED_SNAPSHOTS = (
+    '01_PRODUCT_AND_ARCHITECTURE.md',
+    '02_DATA_PRIVACY_AND_SAFETY.md',
+    '03_AI_AND_RESEARCH.md',
+)
+
 
 def digest(blob: bytes) -> str:
     return hashlib.sha256(blob).hexdigest()
@@ -53,13 +59,22 @@ def build(root: Path, out: Path) -> dict:
     out.mkdir(parents=True, exist_ok=True)
     cfg = json.loads((root/'.project/project.json').read_text(encoding='utf-8'))
     groups = json.loads((root/'.project/context_map.json').read_text(encoding='utf-8'))
-    for name in [*groups, 'PROJECT_INSTRUCTIONS.txt', 'SNAPSHOT_MANIFEST.json']:
-        if (out/name).is_symlink():
+    destinations = [*groups, 'PROJECT_INSTRUCTIONS.txt', 'SNAPSHOT_MANIFEST.json',
+                    *LEGACY_RECONSTRUCTED_SNAPSHOTS]
+    for name in destinations:
+        path = out/name
+        if path.is_symlink():
             raise ValueError(f'Symlink snapshot destination is not allowed: {name}')
+        if name in LEGACY_RECONSTRUCTED_SNAPSHOTS and path.exists() and not path.is_file():
+            raise ValueError(f'Legacy snapshot destination is not a regular file: {name}')
     state = state_fields((root/'STATE.md').read_text(encoding='utf-8'))
     created = datetime.now(timezone.utc).isoformat(timespec='seconds')
     # Source hashes, not timestamp, identify content. Unknown commit remains null.
     head = git_head(root)
+    for name in LEGACY_RECONSTRUCTED_SNAPSHOTS:
+        stale = out/name
+        if stale.exists():
+            stale.unlink()
     manifest = {'format_version':1,'spec_version':cfg['spec_version'],
                 'generated_at_utc':created,'repo_url':cfg['repo_url'],'source_commit':head,
                 'snapshot_only':True,'private_content_included':False,
