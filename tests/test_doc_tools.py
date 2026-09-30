@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib
 import json
+import re
 import shutil
 import sys
 import tempfile
@@ -97,7 +98,10 @@ class DocToolsTests(unittest.TestCase):
     def test_dynamic_goal_and_report(self):
         (self.root/'prompts/M1_TEST.md').write_text('# Synthetic current goal')
         (self.root/'reports/M1_TEST.md').write_text('# Synthetic current report')
-        p=self.root/'STATE.md';s=p.read_text().replace('prompts/M0_BOOTSTRAP.md','prompts/M1_TEST.md').replace('report_path: null','report_path: reports/M1_TEST.md');p.write_text(s)
+        p=self.root/'STATE.md'
+        s=p.read_text().replace('prompts/M0_BOOTSTRAP.md','prompts/M1_TEST.md')
+        s=re.sub(r'^report_path:.*$', 'report_path: reports/M1_TEST.md', s, flags=re.MULTILINE)
+        p.write_text(s)
         out=self.root/'generated/chatgpt_context';man=build(self.root,out)
         self.assertIn('prompts/M1_TEST.md',man['sources'])
         self.assertIn('reports/M1_TEST.md',man['sources'])
