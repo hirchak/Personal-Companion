@@ -10,7 +10,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from check_docs import validate, state_fields
+from check_docs import validate, state_fields, forbidden_path
 
 
 def digest(blob: bytes) -> str:
@@ -31,6 +31,8 @@ def git_head(root: Path) -> str | None:
 
 
 def contained_source(root: Path, rel: str) -> Path:
+    if forbidden_path(Path(rel)) or (root/rel).is_symlink():
+        raise ValueError(f'Private/symlink path is not allowed: {rel}')
     source = (root/rel).resolve()
     if not source.is_relative_to(root.resolve()) or not source.is_file():
         raise ValueError(f'Unsafe or missing source: {rel}')
@@ -43,11 +45,17 @@ def build(root: Path, out: Path) -> dict:
     errors, _, _ = validate(root)
     if errors:
         raise ValueError('Documentation checks failed: ' + '; '.join(errors))
-    if not out.resolve().is_relative_to((root/'generated').resolve()):
+    generated = root.resolve()/'generated'
+    if (generated.is_symlink() or not out.resolve().is_relative_to(generated)
+            or any(parent.is_symlink() for parent in [out, *out.parents]
+                   if parent.is_relative_to(root.resolve()))):
         raise ValueError('Output must be inside repo/generated/ to avoid overwriting canonical files')
     out.mkdir(parents=True, exist_ok=True)
     cfg = json.loads((root/'.project/project.json').read_text(encoding='utf-8'))
     groups = json.loads((root/'.project/context_map.json').read_text(encoding='utf-8'))
+    for name in [*groups, 'PROJECT_INSTRUCTIONS.txt', 'SNAPSHOT_MANIFEST.json']:
+        if (out/name).is_symlink():
+            raise ValueError(f'Symlink snapshot destination is not allowed: {name}')
     state = state_fields((root/'STATE.md').read_text(encoding='utf-8'))
     created = datetime.now(timezone.utc).isoformat(timespec='seconds')
     # Source hashes, not timestamp, identify content. Unknown commit remains null.

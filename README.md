@@ -2,6 +2,9 @@
 
 **Робоча назва, не затверджений бренд.** Пакет специфікації v0.1.0 · 30 вересня 2026.
 
+Репозиторій власника: [hirchak/Personal-Companion](https://github.com/hirchak/Personal-Companion.git).
+URL не є дозволом на push/deploy; актуальні дозволи — у `STATE.md` і `.project/project.json`.
+
 Локальний особистий простір: щоденники сну й самопочуття, структурована самодопомога,
 творчі нотатки, голосове введення та добровільна м’яка гейміфікація. Mac зберігає
 основний приватний vault; телефон може накопичувати власні локальні записи до синхронізації.
@@ -34,6 +37,7 @@ AI — додаткова можливість, а не умова збереж�
 | Послідовність розробки | [ROADMAP.md](docs/ROADMAP.md) |
 | Робота ChatGPT ↔ Codex ↔ GitHub | [WORKFLOW.md](docs/WORKFLOW.md) |
 | Перевірки | [TESTING.md](docs/TESTING.md) |
+| M0 evidence і M1 proposal | [M0 report](reports/M0_BOOTSTRAP_REPORT.md), [M1 contract](docs/M1_CONTRACT.md) |
 | Встановлення і перенесення | [INSTALLATION.md](docs/INSTALLATION.md) |
 | Рішення й відкриті питання | [DECISIONS.md](docs/DECISIONS.md), [OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) |
 | Перевірені технічні джерела | [SOURCES.md](research/SOURCES.md) |

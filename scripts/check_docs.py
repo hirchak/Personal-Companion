@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -27,6 +28,39 @@ SECRET_PATTERNS = (
     re.compile(r'\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}\b'),
     re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),
 )
+
+
+def forbidden_path(rel: Path) -> bool:
+    return bool(set(rel.parts).intersection(FORBIDDEN_DIRS)
+                or rel.name.startswith('PRIVATE_')
+                or rel.suffix in FORBIDDEN_EXTENSIONS
+                or rel.name in ('auth.json', 'credentials.json')
+                or rel.name == '.env' or rel.name.startswith('.env.')
+                or rel.name.endswith(('.db-wal', '.db-shm', '.sqlite-wal', '.sqlite-shm')))
+
+
+def public_files(root: Path) -> tuple[list[Path], list[str]]:
+    """Inspect names first. Never descend into or read a denied path/symlink."""
+    files, errors = [], []
+    for directory, dirs, names in os.walk(root, followlinks=False):
+        for name in list(dirs):
+            path = Path(directory)/name
+            rel = path.relative_to(root)
+            if name in EXCLUDED:
+                dirs.remove(name)
+            elif path.is_symlink() or forbidden_path(rel):
+                errors.append(f'Forbidden/symlink directory (not read): {rel}')
+                dirs.remove(name)
+        for name in names:
+            path = Path(directory)/name
+            rel = path.relative_to(root)
+            if name == '.DS_Store':
+                continue
+            if path.is_symlink() or forbidden_path(rel):
+                errors.append(f'Forbidden/symlink file (not read): {rel}')
+            elif path.is_file():
+                files.append(path)
+    return sorted(files), errors
 
 def scalar(raw: str):
     value = raw.strip()
@@ -65,18 +99,13 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
     if errors:
         return errors, warnings, metrics
 
-    files = [p for p in root.rglob('*') if p.is_file()
-             and not set(p.relative_to(root).parts).intersection(EXCLUDED)]
+    files, path_errors = public_files(root)
+    errors.extend(path_errors)
+    if path_errors:
+        return errors, warnings, metrics
     for path in files:
         rel = path.relative_to(root)
         metrics['files_checked'] += 1
-        if path.is_symlink():
-            errors.append(f'Symlink needs explicit review: {rel}')
-            continue
-        if (set(rel.parts).intersection(FORBIDDEN_DIRS) or path.name.startswith('PRIVATE_')
-                or path.suffix in FORBIDDEN_EXTENSIONS
-                or path.name in ('.env', 'auth.json', 'credentials.json')):
-            errors.append(f'Forbidden private/secret file in documentation packet: {rel}')
         if path.suffix not in {'.md', '.txt', '.json', '.tsv', '.py'} and path.name != '.gitignore':
             continue
         try:
@@ -121,8 +150,19 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
                        ('deployment_authorized','deploy'),
                        ('paid_or_subscription_calls_authorized','live_provider_calls'),
                        ('real_user_data_allowed_in_development','access_real_user_data')]:
-            if st.get(sk) != perms.get(pk):
+            if type(st.get(sk)) is not bool or type(perms.get(pk)) is not bool or st.get(sk) != perms.get(pk):
                 errors.append(f'Permission mismatch: {sk}')
+        for field, prefix in [('current_goal_path','prompts/'),
+                              ('current_contract_path','docs/'), ('report_path','reports/')]:
+            value = st.get(field)
+            if value is not None:
+                source = root/value if isinstance(value,str) else root
+                if (not isinstance(value,str) or not value.startswith(prefix)
+                        or not source.resolve().is_relative_to(root.resolve())
+                        or forbidden_path(Path(value)) or source.is_symlink() or not source.is_file()):
+                    errors.append(f'Invalid public STATE pointer: {field}')
+        if st.get('implementation_status') not in {'NOT_STARTED','IN_PROGRESS','BLOCKED','AWAITING_REVIEW','ACCEPTED'}:
+            errors.append('Invalid implementation_status')
         if st.get('repo_url') is None:
             warnings.append('Repository URL is intentionally unset; remote review has not happened.')
         if st.get('implementation_status') == 'NOT_STARTED':
@@ -135,18 +175,21 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
         if len(mapping) != 4:
             errors.append('Exactly four context groups expected')
         seen = set()
+        if not isinstance(mapping,dict):
+            raise ValueError('Context map must be an object')
         for output, inputs in mapping.items():
             if Path(output).name != output or not output.endswith('.md'):
                 errors.append(f'Unsafe snapshot filename: {output}')
             for name in inputs:
                 source = (root/name).resolve()
-                if not source.is_relative_to(root.resolve()) or not source.is_file():
+                if (not source.is_relative_to(root.resolve()) or not source.is_file()
+                        or forbidden_path(Path(name)) or (root/name).is_symlink()):
                     errors.append(f'Missing/unsafe snapshot source: {name}')
                 if name in seen:
                     errors.append(f'Duplicate canonical snapshot source: {name}')
                 seen.add(name)
         metrics['snapshot_source_files'] = len(seen)
-    except (ValueError, TypeError) as exc:
+    except (ValueError, TypeError, OSError) as exc:
         errors.append(f'Context map error: {exc}')
 
     for n in range(1,17):

@@ -9,14 +9,20 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from check_docs import validate
+from check_docs import validate, public_files
 from build_chatgpt_context import build
 
 class DocToolsTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)/'repo'
-        shutil.copytree(ROOT,self.root,ignore=shutil.ignore_patterns('.git','generated','__pycache__'))
+        files, errors = public_files(ROOT)
+        if errors:
+            raise RuntimeError('Unsafe test source tree: ' + '; '.join(errors))
+        for source in files:
+            target = self.root/source.relative_to(ROOT)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source,target)
     def tearDown(self):
         self.temp.cleanup()
     def test_pristine(self):
@@ -34,6 +40,30 @@ class DocToolsTests(unittest.TestCase):
     def test_private_file_denied(self):
         (self.root/'PRIVATE_test.md').write_text('synthetic placeholder')
         self.assertTrue(any('Forbidden' in e for e in validate(self.root)[0]))
+    def test_denied_content_never_read(self):
+        from unittest.mock import patch
+        (self.root/'vault').mkdir()
+        denied = self.root/'vault/note.md'
+        denied.write_bytes(b'\xff')
+        secret = self.root/'.env.local'
+        secret.write_bytes(b'\xff')
+        original = Path.read_text
+        def guarded(path, *args, **kwargs):
+            if path in (denied,secret):
+                raise AssertionError('Denied content was read')
+            return original(path,*args,**kwargs)
+        with patch.object(Path,'read_text',guarded):
+            errors = validate(self.root)[0]
+        self.assertTrue(any('vault' in e for e in errors))
+        self.assertTrue(any('.env.local' in e for e in errors))
+    def test_symlink_source_denied(self):
+        (self.root/'docs/linked.md').symlink_to(self.root/'README.md')
+        self.assertTrue(any('symlink' in e for e in validate(self.root)[0]))
+    def test_missing_pointer_denied(self):
+        p=self.root/'STATE.md'
+        p.write_text(p.read_text().replace('current_contract_path: docs/M1_CONTRACT.md',
+                                         'current_contract_path: docs/MISSING.md'))
+        self.assertTrue(any('STATE pointer' in e for e in validate(self.root)[0]))
     def test_fake_secret_detected(self):
         (self.root/'synthetic-test.txt').write_text('ghp_'+'Z'*40)
         self.assertTrue(any('Potential secret' in e for e in validate(self.root)[0]))
@@ -51,6 +81,19 @@ class DocToolsTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256((out/name).read_bytes()).hexdigest(),sha)
     def test_output_cannot_overwrite_repo(self):
         with self.assertRaises(ValueError):build(self.root,self.root)
+    def test_output_symlink_escape_denied(self):
+        external=Path(self.temp.name)/'external';external.mkdir()
+        (self.root/'generated').symlink_to(external,target_is_directory=True)
+        with self.assertRaises(ValueError):
+            build(self.root,self.root/'generated/chatgpt_context')
+        self.assertEqual(list(external.iterdir()),[])
+    def test_snapshot_file_symlink_denied(self):
+        external=Path(self.temp.name)/'external.md';external.write_text('synthetic original')
+        out=self.root/'generated/chatgpt_context';out.mkdir(parents=True)
+        name=next(iter(json.loads((self.root/'.project/context_map.json').read_text())))
+        (out/name).symlink_to(external)
+        with self.assertRaises(ValueError):build(self.root,out)
+        self.assertEqual(external.read_text(),'synthetic original')
     def test_dynamic_goal_and_report(self):
         (self.root/'prompts/M1_TEST.md').write_text('# Synthetic current goal')
         (self.root/'reports/M1_TEST.md').write_text('# Synthetic current report')

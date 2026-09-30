@@ -1,0 +1,15 @@
+{
+  "project_slug": "personal-companion",
+  "spec_version": "0.1.0",
+  "spec_date": "2026-09-30",
+  "repo_url": "https://github.com/hirchak/Personal-Companion.git",
+  "repo_visibility": "NOT_VERIFIED",
+  "review_branch": "review/m0-bootstrap",
+  "permissions": {
+    "push_review_branch": false,
+    "deploy": false,
+    "live_provider_calls": false,
+    "access_real_user_data": false
+  },
+  "metadata_provenance": "Reconstructed on M0 from supplied public documents; original hidden starter files were absent."
+}
