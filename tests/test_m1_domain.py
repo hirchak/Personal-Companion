@@ -372,3 +372,16 @@ def test_A05_invalid_backup_metadata_rejected(journal, isolated, field, value):
     with pytest.raises(SafeError, match='METADATA_INTEGRITY'):
         Store.restore(backup, isolated/'invalid-metadata-restore')
     assert not (isolated/'invalid-metadata-restore').exists()
+
+
+def test_A03_new_delete_operation_is_receipted_and_cannot_be_reused(journal):
+    req, _ = create(journal)
+    journal.write('delete', req.entry_id, Delete(operation_id=uuid4(), base_revision=1))
+    retry = Delete(operation_id=uuid4(), base_revision=1)
+    receipt = journal.write('delete', req.entry_id, retry)
+    with journal.store.connect() as c:
+        assert c.execute('SELECT count(*) FROM operation_receipts WHERE operation_id=?', (str(retry.operation_id),)).fetchone()[0] == 1
+    assert journal.write('delete', req.entry_id, retry) == receipt
+    replacement = Create(operation_id=retry.operation_id, entry_id=uuid4(), base_revision=0, payload={'raw_text':'SYNTHETIC operation reuse'})
+    with pytest.raises(SafeError, match='OPERATION_REUSE'):
+        journal.write('create', replacement.entry_id, replacement)

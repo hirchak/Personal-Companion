@@ -68,6 +68,10 @@ class Journal:
                     raise SafeError('OPERATION_REUSE', 409)
                 return {'entry_id': entry_id, 'revision': existing['revision'], 'result_code': existing['result_code'], 'operation_id': op}
             if dead:
+                # A new operation on an already deleted entry still needs a receipt:
+                # otherwise its operation ID could be reused for another action.
+                c.execute('INSERT INTO operation_receipts VALUES(?,?,?,?,?,?,?)',
+                          (op, self.owner, entry_id, action, fp, dead['revision'], 'DELETED'))
                 return {'entry_id': entry_id, 'revision': dead['revision'], 'result_code': 'DELETED', 'operation_id': op}
             timestamp = now()
             if action == 'create':
