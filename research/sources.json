@@ -1,0 +1,227 @@
+[
+  {
+    "id": "S01",
+    "title": "OpenAI — Authentication",
+    "url": "https://developers.openai.com/codex/auth/",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено режими ChatGPT sign-in / API-key, відмінність обліку та credential storage. Локальний CLI не означає offline inference.",
+    "project_implication": "Provider auth, секрети, окремий runtime gate."
+  },
+  {
+    "id": "S02",
+    "title": "OpenAI — Non-interactive mode",
+    "url": "https://developers.openai.com/codex/noninteractive/",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено codex exec, structured output, збережену авторизацію й ephemeral flag. Не підтверджує будь-яке довільне комерційне застосування підписки.",
+    "project_implication": "Локальний private adapter після capability/terms перевірки."
+  },
+  {
+    "id": "S03",
+    "title": "OpenAI — Models",
+    "url": "https://developers.openai.com/codex/models",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Офіційний каталог містить gpt-6.1-sol і gpt-6-luna; доступні effort та доступність залежать від клієнта/акаунта.",
+    "project_implication": "Перевіряти фактичну модель перед goal, не вигадувати ID."
+  },
+  {
+    "id": "S04",
+    "title": "OpenAI — Developer commands",
+    "url": "https://developers.openai.com/codex/cli/slash-commands",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено /goal та межу objective 4000 символів.",
+    "project_implication": "Повне ТЗ у файлі; короткий goal-pointer."
+  },
+  {
+    "id": "S05",
+    "title": "MiniMax — Token Plan Overview",
+    "url": "https://platform.minimax.io/docs/token-plan/intro",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено Subscription Key ≠ PAYG API Key; 5-hour/weekly quota; доступні purchased Credits можуть покривати перевищення.",
+    "project_implication": "Окремий billing/seat/consent gate, без непомітного fallback."
+  },
+  {
+    "id": "S06",
+    "title": "MiniMax — M3 announcement",
+    "url": "https://www.minimax.io/blog/minimax-m3",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Офіційний матеріал описує M3 і 1M context; дата матеріалу 2026-06-01. Старі launch prices не є ціною конкретного акаунта сьогодні.",
+    "project_implication": "Довгий контекст не скасовує мінімізації даних."
+  },
+  {
+    "id": "S07",
+    "title": "MDN — Service Worker API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Service worker підтримує кешування/офлайн-механізми; це не постійний довільний background server.",
+    "project_implication": "Cached shell; foreground resume як обов’язковий шлях."
+  },
+  {
+    "id": "S08",
+    "title": "MDN — Storage quotas and eviction criteria",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Browser storage має quota/eviction; persistence може бути не надана; явне очищення користувачем можливе.",
+    "project_implication": "Не обіцяти абсолютну надійність phone-only data, додати backup/sync status."
+  },
+  {
+    "id": "S09",
+    "title": "Chrome Developers — Local Network Access",
+    "url": "https://developer.chrome.com/blog/local-network-access",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Офіційний опис локального мережевого доступу та browser permission. Перевіряти поведінку конкретного браузера.",
+    "project_implication": "Не вважати public shell → local Mac автоматично працездатним."
+  },
+  {
+    "id": "S10",
+    "title": "Android Developers — Health Connect architecture",
+    "url": "https://developer.android.com/health-and-fitness/health-connect/architecture",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Архітектура Android SDK/IPC, дані на пристрої та дозволи. Не web REST API для PWA.",
+    "project_implication": "Native bridge для автоматичного читання Health Connect."
+  },
+  {
+    "id": "S11",
+    "title": "Samsung — Health Data SDK overview",
+    "url": "https://developer.samsung.com/health/data/overview.html",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено доступ до вибраних даних Samsung Health і обмеження SDK. Не всі доступні типи гарантовані на будь-якому wearable.",
+    "project_implication": "Альтернативний integration path з device/permission checks."
+  },
+  {
+    "id": "S12",
+    "title": "Samsung — App creation process",
+    "url": "https://developer.samsung.com/health/data/process.html",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено окремий development/verification/partnership процес.",
+    "project_implication": "Не ототожнювати developer-mode прототип із production distribution."
+  },
+  {
+    "id": "S13",
+    "title": "Android Developers — Synchronize data",
+    "url": "https://developer.android.com/health-and-fitness/health-connect/sync-data",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Changes tokens, upsertion/deletion і resync потребують явної стратегії.",
+    "project_implication": "Ідемпотентний importer із source IDs/checkpoints."
+  },
+  {
+    "id": "S14",
+    "title": "Vercel — Deploying Git Repositories",
+    "url": "https://vercel.com/docs/git",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено Git-triggered deployments та production/preview workflow.",
+    "project_implication": "Не підключати неперевірену гілку до особистого runtime automatic deploy."
+  },
+  {
+    "id": "S15",
+    "title": "MDN — getUserMedia",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Mic capture потребує secure context і дозволу.",
+    "project_implication": "HTTPS і consent; тестувати interruptions на Samsung."
+  },
+  {
+    "id": "S16",
+    "title": "whisper.cpp — official project repository",
+    "url": "https://github.com/ggml-org/whisper.cpp",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Офіційний проєкт описує локальне ASR та Apple Silicon/Core ML support.",
+    "project_implication": "Кандидат для Mac ASR; UA benchmark потрібен окремо."
+  },
+  {
+    "id": "S17",
+    "title": "SQLite — Appropriate Uses",
+    "url": "https://www.sqlite.org/whentouse.html",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "SQLite підходить для embedded/local application storage в описаних межах.",
+    "project_implication": "Локальна DB без окремого сервера як baseline."
+  },
+  {
+    "id": "S18",
+    "title": "Telegram — Bot API",
+    "url": "https://core.telegram.org/bots/api",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Long polling; невидані updates зберігаються не довше 24 годин.",
+    "project_implication": "Не робити Telegram гарантованим offline journal при тривалому sleep Mac."
+  },
+  {
+    "id": "S19",
+    "title": "Telegram — FAQ",
+    "url": "https://telegram.org/faq",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Secret Chats і cloud chats мають різні властивості. Ботовий канал не слід називати Secret Chat.",
+    "project_implication": "Opt-in channel, не primary private vault."
+  },
+  {
+    "id": "S20",
+    "title": "OpenAI — Usage policies",
+    "url": "https://openai.com/policies/usage-policies/",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Перевірено обмеження порад, що потребують професійної ліцензії, без належної участі фахівця.",
+    "project_implication": "Safety boundaries в поведінці, а не лише дисклеймер."
+  },
+  {
+    "id": "S21",
+    "title": "NHS — Depression in adults overview",
+    "url": "https://www.nhs.uk/mental-health/conditions/depression-in-adults/overview/",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Сторінка радить звернутися до лікаря при підозрі на депресію. Це не діагностика користувачки.",
+    "project_implication": "Не відкладати людську оцінку заради розробки застосунку."
+  },
+  {
+    "id": "S22",
+    "title": "OpenAI — Projects in ChatGPT",
+    "url": "https://help.openai.com/en/articles/10169521-projects-in-chatgpt",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Офіційні project files/instructions. Наші generated files залишаються snapshots до регенерації.",
+    "project_implication": "Чотири context файли + project instructions, Git для актуального стану."
+  },
+  {
+    "id": "S23",
+    "title": "SQLite — Backup API",
+    "url": "https://www.sqlite.org/backup.html",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Узгоджене резервування живої SQLite через передбачений механізм.",
+    "project_implication": "Backup/restore тест, а не naive file copy."
+  },
+  {
+    "id": "S24",
+    "title": "Apple — Controlling app access to files in macOS",
+    "url": "https://support.apple.com/guide/security/controlling-app-access-to-files-secddd1d86a6/web",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Файлові дозволи macOS мають перевірятися як окрема частина установки.",
+    "project_implication": "Не обіцяти безумовний доступ/автозапуск на чужому Mac."
+  },
+  {
+    "id": "S25",
+    "title": "GitHub — Licensing a repository",
+    "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository",
+    "checked_at": "2026-09-30",
+    "status": "PAGE_CHECKED",
+    "finding": "Public visibility і надання open-source license — не одне й те саме.",
+    "project_implication": "Ліцензія коду та права на research/assets потребують явного вибору."
+  }
+]

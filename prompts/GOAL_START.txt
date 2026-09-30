@@ -1,0 +1,1 @@
+/goal Виконай тільки M0 за prompts/M0_BOOTSTRAP.md. Спочатку прочитай AGENTS.md, STATE.md і HANDOFF.md. Автономно перевір специфікацію та dev-середовище, підготуй M1 contract, перевірки й review-ready звіт. Без реалізації M1, приватних даних, live AI-викликів, push або deploy. Заверши оновленими STATE/HANDOFF, локальним комітом і evidence для архітектора.
