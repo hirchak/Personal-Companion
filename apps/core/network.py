@@ -4,8 +4,10 @@ import sys
 
 
 def loopback(host):
-    if host in {'localhost', None, ''}:
+    if host == 'localhost':
         return True
+    if host is None or host == '':
+        return False  # empty bind hosts mean wildcard interfaces, never loopback
     try:
         return ipaddress.ip_address(host).is_loopback
     except ValueError:

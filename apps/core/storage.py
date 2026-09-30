@@ -169,14 +169,28 @@ class Store:
         if not {'vault_meta', 'entries', 'entry_revisions', 'tombstones', 'operation_receipts', 'search_index'} <= tables:
             raise SafeError('INCOMPLETE_SCHEMA')
         # SQLite integrity alone cannot establish the typed domain schema.
-        from .models import EntryInput, EntryRevisionOutput
+        from .models import EntryInput, EntryOutput, EntryRevisionOutput, VaultMetadata
         from pydantic import ValidationError
         try:
-            for row in c.execute('SELECT payload FROM entries'):
-                EntryInput.model_validate(json.loads(row[0]))
-            for row in c.execute('SELECT payload FROM entry_revisions'):
-                entry = json.loads(row[0])
-                EntryRevisionOutput.model_validate(entry)
+            metadata = VaultMetadata.model_validate(dict(c.execute('SELECT * FROM vault_meta').fetchone()))
+            owner = str(metadata.owner_id)
+            for table in ('entries', 'tombstones', 'operation_receipts'):
+                if c.execute(f'SELECT count(*) FROM {table} WHERE owner_id IS NULL OR owner_id!=?', (owner,)).fetchone()[0]:
+                    raise SafeError('METADATA_INTEGRITY')
+        except (ValueError, TypeError, ValidationError):
+            raise SafeError('METADATA_INTEGRITY') from None
+        try:
+            for row in c.execute('SELECT * FROM entries'):
+                payload = json.loads(row['payload'])
+                EntryInput.model_validate(payload)
+                EntryOutput.model_validate(dict(payload, id=row['id'], owner_id=row['owner_id'],
+                    revision=row['revision'], created_at_utc=row['created'], updated_at_utc=row['updated'],
+                    schema_version=1, privacy_class='PRIVATE_PERSONAL', provenance_type='USER_REPORTED'))
+            for row in c.execute('SELECT entry_id,revision,payload FROM entry_revisions'):
+                entry = json.loads(row['payload'])
+                historical = EntryRevisionOutput.model_validate(entry)
+                if str(historical.owner_id) != owner or str(historical.id) != row['entry_id'] or historical.revision != row['revision']:
+                    raise SafeError('DOMAIN_INTEGRITY')
         except (ValueError, TypeError, ValidationError):
             raise SafeError('DOMAIN_INTEGRITY') from None
 

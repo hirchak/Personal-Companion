@@ -87,7 +87,7 @@ class Journal:
                 else:
                     p = json.loads(old['payload'])
                     target = request.changes.get('type', p['type'])
-                    if target not in FIELDS:
+                    if not isinstance(target, str) or target not in FIELDS:
                         raise SafeError('SCHEMA_INVALID', 422)
                     if target != p['type']:
                         removed = {k for k in FIELDS[p['type']] if p.get(k) is not None}

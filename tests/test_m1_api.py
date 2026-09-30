@@ -140,8 +140,10 @@ actions=[
  lambda:socket.gethostbyname_ex('example.invalid'),
  lambda:socket.gethostbyaddr('203.0.113.1'),
  lambda:socket.getnameinfo(('203.0.113.1',9),0),
+ lambda:socket.getaddrinfo(None,9),
 ]
 udp=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+actions += [lambda:udp.bind(('',0)), lambda:udp.bind(('0.0.0.0',0))]
 actions += [lambda:udp.sendto(b'SYNTHETIC',('203.0.113.1',9))]
 if hasattr(udp,'sendmsg'):
  actions += [lambda:udp.sendmsg([b'SYNTHETIC'],[],0,('203.0.113.1',9))]
@@ -184,3 +186,16 @@ def test_A01_response_and_recorded_history_contract(client):
     schema = app.openapi()['components']['schemas']
     assert 'recorded_at_utc' in schema['EntryRevisionOutput']['properties']
     assert 'revision' in schema['EntryOutput']['required']
+
+
+@pytest.mark.parametrize('changes', [{'type':[]}, {'type':None}, {'mood_rating':float('nan')}, {'energy_rating':float('inf')}, {'owner_id':'SYNTHETIC-forbidden'}])
+def test_A07_patch_invalid_values_are_schema_errors_without_changes(client, changes):
+    c, app = client; b = body('daily')
+    assert c.post('/api/v1/entries',json=b).status_code == 201
+    original = c.get('/api/v1/entries/'+b['entry_id']).json()
+    encoded = json.dumps({'operation_id':str(uuid4()),'base_revision':1,'changes':changes})
+    r = c.patch('/api/v1/entries/'+b['entry_id'],content=encoded,headers={'Content-Type':'application/json'})
+    assert r.status_code == 422
+    assert r.json()['code'] == 'SCHEMA_INVALID'
+    assert c.get('/api/v1/entries/'+b['entry_id']).json() == original
+    assert c.get('/api/v1/entries/'+b['entry_id']+'/revisions').json()['items'] == []

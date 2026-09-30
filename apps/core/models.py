@@ -142,6 +142,13 @@ class EntryOutput(EntryInput):
     provenance_type: Literal['USER_REPORTED']
     reported_interval_seconds: float | None = Field(default=None, ge=0)
 
+    @field_validator('created_at_utc', 'updated_at_utc')
+    @classmethod
+    def server_utc(cls, value):
+        if value.tzinfo is None or value.utcoffset().total_seconds() != 0:
+            raise ValueError('server UTC timestamp required')
+        return value
+
 
 class EntryRevisionOutput(EntryOutput):
     # Unknown only for already existing pre-correction development history.
@@ -168,3 +175,19 @@ class Receipt(StrictModel):
     operation_id: UUID
     revision: StrictInt = Field(ge=1)
     result_code: Literal['MAC_SAVED', 'DELETED']
+
+
+class VaultMetadata(StrictModel):
+    vault_id: UUID
+    owner_id: UUID
+    schema_version: Literal[1]
+    restore_epoch: StrictInt = Field(ge=0)
+    created_at_utc: datetime
+    reconciliation: Literal['NONE', 'RESTORED_REQUIRES_RECONCILIATION']
+
+    @field_validator('created_at_utc')
+    @classmethod
+    def created_utc(cls, value):
+        if value.tzinfo is None or value.utcoffset().total_seconds() != 0:
+            raise ValueError('server UTC timestamp required')
+        return value

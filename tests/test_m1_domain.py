@@ -358,3 +358,17 @@ def test_A04_event_edit_and_system_zone_change(journal, monkeypatch):
         if previous is None: os.environ.pop('TZ', None)
         else: os.environ['TZ'] = previous
         time.tzset()
+
+
+@pytest.mark.parametrize('field,value', [('owner_id','SYNTHETIC-invalid-uuid'), ('owner_id',str(uuid4())), ('restore_epoch',-1), ('created_at_utc','2026-09-30T12:00:00')])
+def test_A05_invalid_backup_metadata_rejected(journal, isolated, field, value):
+    create(journal)
+    backup = isolated / 'metadata-backup'; journal.store.backup(backup)
+    with sqlite3.connect(backup/'snapshot.sqlite3') as c:
+        c.execute(f'UPDATE vault_meta SET {field}=?', (value,))
+    manifest = json.loads((backup/'manifest.json').read_text())
+    manifest['files']['snapshot.sqlite3'] = digest((backup/'snapshot.sqlite3').read_bytes())
+    (backup/'manifest.json').write_text(encode(manifest))
+    with pytest.raises(SafeError, match='METADATA_INTEGRITY'):
+        Store.restore(backup, isolated/'invalid-metadata-restore')
+    assert not (isolated/'invalid-metadata-restore').exists()
