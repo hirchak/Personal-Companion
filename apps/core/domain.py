@@ -56,8 +56,11 @@ class Journal:
 
     def write(self, action, entry_id, request):
         entry_id, op = str(entry_id), str(request.operation_id)
-        data = request.model_dump(mode='json')
-        fp = digest(encode({'entry_id': entry_id, 'action': action, 'request': data}).encode())
+        try:
+            data = request.model_dump(mode='json')
+            fp = digest(encode({'entry_id': entry_id, 'action': action, 'request': data}).encode())
+        except (ValueError, TypeError):
+            raise SafeError('SCHEMA_INVALID', 422) from None
         with self.store.transaction() as c:
             dead = c.execute('SELECT * FROM tombstones WHERE entry_id=? AND owner_id=?', (entry_id, self.owner)).fetchone()
             existing = c.execute('SELECT * FROM operation_receipts WHERE operation_id=?', (op,)).fetchone()

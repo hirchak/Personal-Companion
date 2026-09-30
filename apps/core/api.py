@@ -32,7 +32,7 @@ class Auth:
             if len(self.attempts) >= 5:
                 raise SafeError('UNLOCK_RATE_LIMIT', 429)
             self.attempts.append(now)
-            if not self.code or now >= self.code_until or not secrets.compare_digest(code, self.code):
+            if not self.code or now >= self.code_until or not secrets.compare_digest(code.encode('utf-8', 'surrogatepass'), self.code.encode('ascii')):
                 raise SafeError('UNLOCK_DENIED', 401)
             self.code = None
             token = secrets.token_urlsafe(32)
@@ -88,7 +88,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None):
                 token = request.cookies.get('m1_session', '')
                 s = auth.session(token)
                 request.state.session = token
-                if request.method not in {'GET', 'HEAD'} and not secrets.compare_digest(request.headers.get('x-csrf-token', ''), s['csrf']):
+                if request.method not in {'GET', 'HEAD'} and not secrets.compare_digest(request.headers.get('x-csrf-token', '').encode('utf-8', 'surrogatepass'), s['csrf'].encode('ascii')):
                     raise SafeError('CSRF_DENIED', 403)
             response = await call_next(request)
         except SafeError as exc:

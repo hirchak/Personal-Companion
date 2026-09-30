@@ -199,3 +199,41 @@ def test_A07_patch_invalid_values_are_schema_errors_without_changes(client, chan
     assert r.json()['code'] == 'SCHEMA_INVALID'
     assert c.get('/api/v1/entries/'+b['entry_id']).json() == original
     assert c.get('/api/v1/entries/'+b['entry_id']+'/revisions').json()['items'] == []
+
+
+def test_A07_non_ascii_unlock_is_denied_without_internal_error(isolated):
+    app = create_app(isolated/'nonascii-unlock')
+    with TestClient(app, base_url=ORIGIN, raise_server_exceptions=False) as c:
+        response = c.post('/api/v1/auth/unlock', headers={'Origin':ORIGIN}, json={'code':'SYNTHETIC · хибний код'})
+        assert response.status_code == 401
+        assert response.json()['code'] == 'UNLOCK_DENIED'
+        assert app.state.auth.code is not None
+
+
+def test_A07_non_ascii_csrf_is_forbidden_without_internal_error(client):
+    c, _ = client
+    c.headers.pop('X-CSRF-Token')
+    response = c.post('/api/v1/entries', json=body(), headers=[(b'X-CSRF-Token', b'\xff')])
+    assert response.status_code == 403
+    assert response.json()['code'] == 'CSRF_DENIED'
+
+
+@pytest.mark.parametrize('payload', [{'raw_text':'SYNTHETIC \ud800'}, {'tags':['SYNTHETIC \ud800']}])
+def test_A04_invalid_unicode_scalars_rejected_before_storage(client, payload):
+    c, app = client
+    encoded = json.dumps(body(**payload))
+    response = c.post('/api/v1/entries', content=encoded, headers={'Content-Type':'application/json'})
+    assert response.status_code == 422 and response.json()['code'] == 'SCHEMA_INVALID'
+    assert not app.state.journal.list()['items']
+
+
+@pytest.mark.parametrize('changes', [{'raw_text':'SYNTHETIC \ud800'}, {'tags':['SYNTHETIC \ud800']}])
+def test_A04_invalid_unicode_patch_is_schema_error_and_keeps_original(client, changes):
+    c, _ = client; b = body()
+    assert c.post('/api/v1/entries',json=b).status_code == 201
+    original = c.get('/api/v1/entries/'+b['entry_id']).json()
+    encoded = json.dumps({'operation_id':str(uuid4()),'base_revision':1,'changes':changes})
+    response = c.patch('/api/v1/entries/'+b['entry_id'],content=encoded,headers={'Content-Type':'application/json'})
+    assert response.status_code == 422
+    assert c.get('/api/v1/entries/'+b['entry_id']).json() == original
+    assert c.get('/api/v1/entries/'+b['entry_id']+'/revisions').json()['items'] == []

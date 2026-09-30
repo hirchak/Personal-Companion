@@ -34,6 +34,7 @@ class EntryInput(StrictModel):
     def nonblank(cls, value):
         if not value.strip():
             raise ValueError('blank')
+        value.encode('utf-8')  # invalid Unicode scalar sequences cannot be saved in SQLite
         return value
 
     @field_validator('tags')
@@ -41,6 +42,8 @@ class EntryInput(StrictModel):
     def valid_tags(cls, value):
         if len(set(value)) != len(value) or any(not x.strip() or len(x) > 64 for x in value):
             raise ValueError('tags')
+        for tag in value:
+            tag.encode('utf-8')
         return value
 
     @field_validator('timezone')

@@ -1,6 +1,6 @@
 # M1 contract — локальний щоденник без AI
 
-Дата: 2026-09-30. Версія контракту: 3. Статус: PROPOSED / AWAITING_REVIEW.
+Дата: 2026-09-30. Версія контракту: 4. Статус: PROPOSED / AWAITING_REVIEW.
 M1 execution authorized by owner goal M1_LOCAL_JOURNAL; M0 ACCEPT recorded externally.
 Acceptance evidence lives in the M1 report, not in this requirements document.
 
@@ -18,6 +18,12 @@ history exposes null instead of inventing a historic timestamp. DB schema remain
 Read/receipt/history response models are generated into the shared TS contract.
 Process-local deny-egress now covers datagram sends and alternative DNS APIs as well
 as TCP; it remains defense in depth, not a claimed OS sandbox.
+
+Change note v4: malformed Unicode scalar sequences are schema errors (JSON/SQLite UTF-8);
+invalid non-ASCII credentials are denied with 401/403, never a comparison TypeError.
+Each new deletion operation receives a committed receipt even when the entry is already
+tombstoned, preserving global operation-ID reuse protection. These enforce M1 invariants;
+DB schema remains 1, no private rollout or trust-boundary expansion.
 
 Baseline: [ARCHITECTURE.md](ARCHITECTURE.md), [DATA_MEMORY.md](DATA_MEMORY.md),
 [PRIVACY_SECURITY.md](PRIVACY_SECURITY.md), [TESTING.md](TESTING.md).
