@@ -39,7 +39,12 @@ def test_A01_crud_history_purge(journal, kind):
     assert original['raw_text'] == req.payload.raw_text
     edit = Patch(operation_id=uuid4(), base_revision=1, changes={'raw_text': 'SYNTHETIC · Змінено', 'type': 'creative', 'creative_kind': 'idea'})
     assert journal.write('edit', id, edit)['revision'] == 2
-    assert journal.history(id)['items'] == [original]
+    history = journal.history(id)['items']
+    assert len(history) == 1
+    recorded = history[0].pop('recorded_at_utc')
+    from datetime import datetime
+    assert datetime.fromisoformat(recorded).utcoffset().total_seconds() == 0
+    assert history == [original]
     assert len(journal.list(q='Змінено', type='creative', tag='Тег')['items']) == 1
     assert not journal.list(q="' OR 1=1 --")['items']
     delete = Delete(operation_id=uuid4(), base_revision=2)
@@ -175,10 +180,17 @@ def test_A04_time_unknown_zero_dst(journal):
 def test_A05_live_wal_backup_restore(journal, isolated):
     with journal.store.connect() as live:
         req, _ = create(journal, 'creative', creative_kind='scene')
+        journal.write('edit', req.entry_id, Patch(operation_id=uuid4(), base_revision=1, changes={'tags':['SYNTHETIC']}))
+        deleted, _ = create(journal)
+        journal.write('delete', deleted.entry_id, Delete(operation_id=uuid4(), base_revision=1))
         assert (journal.store.root / 'journal.sqlite3-wal').stat().st_size > 0
         journal.store.backup(isolated / 'backup')
         restored = Store.restore(isolated / 'backup', isolated / 'restored')
         assert Journal(restored).get(str(req.entry_id)) == journal.get(str(req.entry_id))
+        assert Journal(restored).history(str(req.entry_id)) == journal.history(str(req.entry_id))
+        with restored.connect() as c:
+            assert c.execute('SELECT count(*) FROM tombstones').fetchone()[0] == 1
+            assert c.execute('SELECT count(*) FROM operation_receipts').fetchone()[0] == 4
         assert restored.meta()['restore_epoch'] == 1
         assert restored.meta()['reconciliation'] == 'RESTORED_REQUIRES_RECONCILIATION'
         assert {p.name for p in (isolated / 'backup').iterdir()} == {'manifest.json','snapshot.sqlite3'}
@@ -294,3 +306,55 @@ def test_A05_logically_invalid_backup_rejected(journal,isolated):
     (backup/'manifest.json').write_text(encode(m))
     with pytest.raises(SafeError,match='DOMAIN_INTEGRITY'): Store.restore(backup,isolated/'logical-restore')
     assert not (isolated/'logical-restore').exists()
+
+
+def test_A01_revision_recording_time_immutable_and_legacy_unknown(journal, monkeypatch):
+    from apps.core import domain
+    req, _ = create(journal)
+    id = str(req.entry_id)
+    first_time = '2026-09-30T22:00:00+00:00'
+    monkeypatch.setattr(domain, 'now', lambda: first_time)
+    journal.write('edit', id, Patch(operation_id=uuid4(), base_revision=1, changes={'raw_text':'SYNTHETIC second'}))
+    first = journal.history(id)['items'][0]
+    assert first['recorded_at_utc'] == first_time
+    monkeypatch.setattr(domain, 'now', lambda: '2026-09-30T22:01:00+00:00')
+    journal.write('edit', id, Patch(operation_id=uuid4(), base_revision=2, changes={'tags':['SYNTHETIC']}))
+    assert journal.history(id)['items'][0] == first
+    assert journal.history(id)['items'][1]['recorded_at_utc'] == '2026-09-30T22:01:00+00:00'
+    # Emulate the earlier published synthetic development shape, not a real vault.
+    legacy = dict(first); legacy.pop('recorded_at_utc')
+    with journal.store.transaction() as c:
+        c.execute('UPDATE entry_revisions SET payload=? WHERE entry_id=? AND revision=1', (encode(legacy), id))
+    reopened = Journal(Store(journal.store.root))
+    assert reopened.history(id)['items'][0]['recorded_at_utc'] is None
+    plan = reopened.preview(Selector(ids=[req.entry_id], include_history=True), 'session')
+    assert validate_portable(reopened.export(plan['plan_id'], 'json', 'session'))['revisions'][0]['recorded_at_utc'] is None
+
+
+def test_A04_event_edit_and_system_zone_change(journal, monkeypatch):
+    import time
+    req, _ = create(journal, 'sleep', sleep_start_utc='2026-10-25T02:30:00+02:00',
+                    wake_at_utc='2026-10-25T02:30:00+01:00', occurred_at_utc='2026-10-25T02:30:00+01:00',
+                    local_date='2026-10-25', time_precision='instant')
+    id = str(req.entry_id); original = journal.get(id)
+    previous = os.environ.get('TZ')
+    try:
+        monkeypatch.setenv('TZ', 'America/Los_Angeles'); time.tzset()
+        assert journal.get(id) == original
+        # Editing wake also explicitly updates the event timestamp/day in the saved IANA zone.
+        edited_wake = '2026-10-26T00:30:00+01:00'
+        patch = Patch(operation_id=uuid4(), base_revision=1, changes={'wake_at_utc':edited_wake,
+                      'occurred_at_utc':edited_wake, 'local_date':'2026-10-26'})
+        journal.write('edit', id, patch)
+        edited = journal.get(id)
+        assert edited['timezone'] == 'Europe/Warsaw' and edited['local_date'] == '2026-10-26'
+        assert edited['wake_at_utc'] == '2026-10-25T23:30:00Z'
+        assert edited['reported_interval_seconds'] == 82800
+        historical = journal.history(id)['items'][0]; historical.pop('recorded_at_utc')
+        assert historical == original
+        monkeypatch.setenv('TZ', 'Asia/Tokyo'); time.tzset()
+        assert Journal(Store(journal.store.root)).get(id) == edited
+    finally:
+        if previous is None: os.environ.pop('TZ', None)
+        else: os.environ['TZ'] = previous
+        time.tzset()

@@ -250,6 +250,176 @@ export interface components {
             /** Creative Kind */
             creative_kind?: ("idea" | "scene" | "character" | "reference" | "other") | null;
         };
+        /**
+         * EntryOutput
+         * @description Server-managed fields shared with the generated TypeScript read contract.
+         */
+        EntryOutput: {
+            /**
+             * Type
+             * @default inbox
+             * @enum {string}
+             */
+            type: "inbox" | "daily" | "sleep" | "creative";
+            /** Raw Text */
+            raw_text: string;
+            /** Tags */
+            tags?: string[];
+            /**
+             * Timezone
+             * @default Europe/Warsaw
+             */
+            timezone: string;
+            /** Occurred At Utc */
+            occurred_at_utc?: string | null;
+            /** Local Date */
+            local_date?: string | null;
+            /**
+             * Time Precision
+             * @default unknown
+             * @enum {string}
+             */
+            time_precision: "instant" | "date" | "unknown";
+            /** Mood Rating */
+            mood_rating?: number | null;
+            /** Energy Rating */
+            energy_rating?: number | null;
+            /** Sleep Start Utc */
+            sleep_start_utc?: string | null;
+            /** Wake At Utc */
+            wake_at_utc?: string | null;
+            /** Sleep Quality */
+            sleep_quality?: number | null;
+            /** Creative Kind */
+            creative_kind?: ("idea" | "scene" | "character" | "reference" | "other") | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Owner Id
+             * Format: uuid
+             */
+            owner_id: string;
+            /** Revision */
+            revision: number;
+            /**
+             * Created At Utc
+             * Format: date-time
+             */
+            created_at_utc: string;
+            /**
+             * Updated At Utc
+             * Format: date-time
+             */
+            updated_at_utc: string;
+            /**
+             * Schema Version
+             * @constant
+             */
+            schema_version: 1;
+            /**
+             * Privacy Class
+             * @constant
+             */
+            privacy_class: "PRIVATE_PERSONAL";
+            /**
+             * Provenance Type
+             * @constant
+             */
+            provenance_type: "USER_REPORTED";
+            /** Reported Interval Seconds */
+            reported_interval_seconds?: number | null;
+        };
+        /** EntryPage */
+        EntryPage: {
+            /** Items */
+            items: components["schemas"]["EntryOutput"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** EntryRevisionOutput */
+        EntryRevisionOutput: {
+            /**
+             * Type
+             * @default inbox
+             * @enum {string}
+             */
+            type: "inbox" | "daily" | "sleep" | "creative";
+            /** Raw Text */
+            raw_text: string;
+            /** Tags */
+            tags?: string[];
+            /**
+             * Timezone
+             * @default Europe/Warsaw
+             */
+            timezone: string;
+            /** Occurred At Utc */
+            occurred_at_utc?: string | null;
+            /** Local Date */
+            local_date?: string | null;
+            /**
+             * Time Precision
+             * @default unknown
+             * @enum {string}
+             */
+            time_precision: "instant" | "date" | "unknown";
+            /** Mood Rating */
+            mood_rating?: number | null;
+            /** Energy Rating */
+            energy_rating?: number | null;
+            /** Sleep Start Utc */
+            sleep_start_utc?: string | null;
+            /** Wake At Utc */
+            wake_at_utc?: string | null;
+            /** Sleep Quality */
+            sleep_quality?: number | null;
+            /** Creative Kind */
+            creative_kind?: ("idea" | "scene" | "character" | "reference" | "other") | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Owner Id
+             * Format: uuid
+             */
+            owner_id: string;
+            /** Revision */
+            revision: number;
+            /**
+             * Created At Utc
+             * Format: date-time
+             */
+            created_at_utc: string;
+            /**
+             * Updated At Utc
+             * Format: date-time
+             */
+            updated_at_utc: string;
+            /**
+             * Schema Version
+             * @constant
+             */
+            schema_version: 1;
+            /**
+             * Privacy Class
+             * @constant
+             */
+            privacy_class: "PRIVATE_PERSONAL";
+            /**
+             * Provenance Type
+             * @constant
+             */
+            provenance_type: "USER_REPORTED";
+            /** Reported Interval Seconds */
+            reported_interval_seconds?: number | null;
+            /** Recorded At Utc */
+            recorded_at_utc?: string | null;
+        };
         /** Export */
         Export: {
             /**
@@ -286,6 +456,33 @@ export interface components {
              * @default false
              */
             confirm_type_change: boolean;
+        };
+        /** Receipt */
+        Receipt: {
+            /**
+             * Entry Id
+             * Format: uuid
+             */
+            entry_id: string;
+            /**
+             * Operation Id
+             * Format: uuid
+             */
+            operation_id: string;
+            /** Revision */
+            revision: number;
+            /**
+             * Result Code
+             * @enum {string}
+             */
+            result_code: "MAC_SAVED" | "DELETED";
+        };
+        /** RevisionPage */
+        RevisionPage: {
+            /** Items */
+            items: components["schemas"]["EntryRevisionOutput"][];
+            /** Next After */
+            next_after: number | null;
         };
         /** Selector */
         Selector: {
@@ -442,7 +639,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["EntryPage"];
                 };
             };
             /** @description Validation Error */
@@ -475,7 +672,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["Receipt"];
                 };
             };
             /** @description Validation Error */
@@ -506,7 +703,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["EntryOutput"];
                 };
             };
             /** @description Validation Error */
@@ -541,7 +738,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["Receipt"];
                 };
             };
             /** @description Validation Error */
@@ -576,7 +773,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["Receipt"];
                 };
             };
             /** @description Validation Error */
@@ -610,7 +807,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RevisionPage"];
                 };
             };
             /** @description Validation Error */

@@ -11,7 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse, Response, FileResponse
 from pydantic import ValidationError
-from .models import Create, Patch, Delete, Selector, Export, Unlock
+from .models import Create, Patch, Delete, Selector, Export, Unlock, EntryOutput, EntryPage, RevisionPage, Receipt
 from .storage import SafeError, Store
 from .domain import Journal
 
@@ -145,11 +145,11 @@ def create_app(root, port=8765, clock=time.monotonic, web=None):
     def status():
         return {'schema_version': 1, 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
 
-    @app.post('/api/v1/entries', status_code=201)
+    @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):
         return journal.write('create', body.entry_id, body)
 
-    @app.get('/api/v1/entries')
+    @app.get('/api/v1/entries', response_model=EntryPage, response_model_exclude_unset=True)
     def entries(q: str = Query('', max_length=200), type: str | None = None,
                 tag: str | None = Query(None, max_length=64), date_from: date | None = None,
                 date_to: date | None = None, limit: int = Query(50, ge=1, le=100), cursor: str | None = Query(None, max_length=1024)):
@@ -157,19 +157,19 @@ def create_app(root, port=8765, clock=time.monotonic, web=None):
             raise SafeError('SCHEMA_INVALID')
         return journal.list(q, type, tag, date_from.isoformat() if date_from else None, date_to.isoformat() if date_to else None, limit, cursor)
 
-    @app.get('/api/v1/entries/{entry_id}')
+    @app.get('/api/v1/entries/{entry_id}', response_model=EntryOutput, response_model_exclude_unset=True)
     def get(entry_id: UUID):
         return journal.get(str(entry_id))
 
-    @app.get('/api/v1/entries/{entry_id}/revisions')
+    @app.get('/api/v1/entries/{entry_id}/revisions', response_model=RevisionPage, response_model_exclude_unset=True)
     def revisions(entry_id: UUID, limit: int = Query(100, ge=1, le=100), after: int = Query(0, ge=0)):
         return journal.history(str(entry_id), limit, after)
 
-    @app.patch('/api/v1/entries/{entry_id}')
+    @app.patch('/api/v1/entries/{entry_id}', response_model=Receipt)
     def edit(entry_id: UUID, body: Patch):
         return journal.write('edit', entry_id, body)
 
-    @app.delete('/api/v1/entries/{entry_id}')
+    @app.delete('/api/v1/entries/{entry_id}', response_model=Receipt)
     def delete(entry_id: UUID, body: Delete):
         return journal.write('delete', entry_id, body)
 

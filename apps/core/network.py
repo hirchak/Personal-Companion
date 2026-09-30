@@ -2,6 +2,7 @@
 import ipaddress
 import sys
 
+
 def loopback(host):
     if host in {'localhost', None, ''}:
         return True
@@ -10,14 +11,22 @@ def loopback(host):
     except ValueError:
         return False
 
+
 def deny_egress():
     def audit(event, args):
-        if event in {'socket.connect', 'socket.bind'}:
+        if event in {'socket.connect', 'socket.bind', 'socket.sendto', 'socket.sendmsg'}:
             address = args[1]
-            if isinstance(address, tuple) and not loopback(address[0]):
-                raise PermissionError('M1_EGRESS_DENIED')
+            # sendmsg without an address uses an already-connected socket, whose
+            # destination was checked at connect. Unconnected sendmsg cannot send.
+            if address is None and event == 'socket.sendmsg':
+                return
             if not isinstance(address, tuple):
                 raise PermissionError('M1_NON_IP_SOCKET_DENIED')
-        if event == 'socket.getaddrinfo' and not loopback(args[0]):
+            if not loopback(address[0]):
+                raise PermissionError('M1_EGRESS_DENIED')
+        if event in {'socket.getaddrinfo', 'socket.gethostbyname', 'socket.gethostbyaddr'}:
+            if not loopback(args[0]):
+                raise PermissionError('M1_EGRESS_DENIED')
+        if event == 'socket.getnameinfo' and not loopback(args[0][0]):
             raise PermissionError('M1_EGRESS_DENIED')
     sys.addaudithook(audit)

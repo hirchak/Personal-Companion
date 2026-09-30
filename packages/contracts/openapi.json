@@ -108,7 +108,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
               }
             }
           },
@@ -241,7 +243,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/EntryPage"
+                }
               }
             }
           },
@@ -279,7 +283,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/EntryOutput"
+                }
               }
             }
           },
@@ -325,7 +331,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
               }
             }
           },
@@ -371,7 +379,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
               }
             }
           },
@@ -432,7 +442,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionPage"
+                }
               }
             }
           },
@@ -768,6 +780,478 @@
         ],
         "title": "EntryInput"
       },
+      "EntryOutput": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "inbox",
+              "daily",
+              "sleep",
+              "creative"
+            ],
+            "title": "Type",
+            "default": "inbox"
+          },
+          "raw_text": {
+            "type": "string",
+            "maxLength": 100000,
+            "minLength": 1,
+            "title": "Raw Text"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Tags"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "Europe/Warsaw"
+          },
+          "occurred_at_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurred At Utc"
+          },
+          "local_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Date"
+          },
+          "time_precision": {
+            "type": "string",
+            "enum": [
+              "instant",
+              "date",
+              "unknown"
+            ],
+            "title": "Time Precision",
+            "default": "unknown"
+          },
+          "mood_rating": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mood Rating"
+          },
+          "energy_rating": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy Rating"
+          },
+          "sleep_start_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sleep Start Utc"
+          },
+          "wake_at_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wake At Utc"
+          },
+          "sleep_quality": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sleep Quality"
+          },
+          "creative_kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "idea",
+                  "scene",
+                  "character",
+                  "reference",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Creative Kind"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "owner_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Owner Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Revision"
+          },
+          "created_at_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At Utc"
+          },
+          "updated_at_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At Utc"
+          },
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "privacy_class": {
+            "type": "string",
+            "const": "PRIVATE_PERSONAL",
+            "title": "Privacy Class"
+          },
+          "provenance_type": {
+            "type": "string",
+            "const": "USER_REPORTED",
+            "title": "Provenance Type"
+          },
+          "reported_interval_seconds": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reported Interval Seconds"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "raw_text",
+          "id",
+          "owner_id",
+          "revision",
+          "created_at_utc",
+          "updated_at_utc",
+          "schema_version",
+          "privacy_class",
+          "provenance_type"
+        ],
+        "title": "EntryOutput",
+        "description": "Server-managed fields shared with the generated TypeScript read contract."
+      },
+      "EntryPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EntryOutput"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "EntryPage"
+      },
+      "EntryRevisionOutput": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "inbox",
+              "daily",
+              "sleep",
+              "creative"
+            ],
+            "title": "Type",
+            "default": "inbox"
+          },
+          "raw_text": {
+            "type": "string",
+            "maxLength": 100000,
+            "minLength": 1,
+            "title": "Raw Text"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Tags"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "Europe/Warsaw"
+          },
+          "occurred_at_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurred At Utc"
+          },
+          "local_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Date"
+          },
+          "time_precision": {
+            "type": "string",
+            "enum": [
+              "instant",
+              "date",
+              "unknown"
+            ],
+            "title": "Time Precision",
+            "default": "unknown"
+          },
+          "mood_rating": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mood Rating"
+          },
+          "energy_rating": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy Rating"
+          },
+          "sleep_start_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sleep Start Utc"
+          },
+          "wake_at_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wake At Utc"
+          },
+          "sleep_quality": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sleep Quality"
+          },
+          "creative_kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "idea",
+                  "scene",
+                  "character",
+                  "reference",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Creative Kind"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "owner_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Owner Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Revision"
+          },
+          "created_at_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At Utc"
+          },
+          "updated_at_utc": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At Utc"
+          },
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "privacy_class": {
+            "type": "string",
+            "const": "PRIVATE_PERSONAL",
+            "title": "Privacy Class"
+          },
+          "provenance_type": {
+            "type": "string",
+            "const": "USER_REPORTED",
+            "title": "Provenance Type"
+          },
+          "reported_interval_seconds": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reported Interval Seconds"
+          },
+          "recorded_at_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recorded At Utc"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "raw_text",
+          "id",
+          "owner_id",
+          "revision",
+          "created_at_utc",
+          "updated_at_utc",
+          "schema_version",
+          "privacy_class",
+          "provenance_type"
+        ],
+        "title": "EntryRevisionOutput"
+      },
       "Export": {
         "properties": {
           "plan_id": {
@@ -836,6 +1320,71 @@
           "changes"
         ],
         "title": "Patch"
+      },
+      "Receipt": {
+        "properties": {
+          "entry_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Entry Id"
+          },
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Revision"
+          },
+          "result_code": {
+            "type": "string",
+            "enum": [
+              "MAC_SAVED",
+              "DELETED"
+            ],
+            "title": "Result Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "entry_id",
+          "operation_id",
+          "revision",
+          "result_code"
+        ],
+        "title": "Receipt"
+      },
+      "RevisionPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EntryRevisionOutput"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_after": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next After"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "next_after"
+        ],
+        "title": "RevisionPage"
       },
       "Selector": {
         "properties": {

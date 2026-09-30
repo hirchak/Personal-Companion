@@ -4,15 +4,11 @@ import "./style.css";
 import type { components } from "./api-schema";
 
 type Kind = "inbox" | "daily" | "sleep" | "creative";
-type Entry = components["schemas"]["EntryInput"] & {
-  id: string;
-  revision: number;
+type Entry = components["schemas"]["EntryOutput"] & {
   type: Kind;
   tags: string[];
   timezone: string;
   time_precision: "instant" | "date" | "unknown";
-  reported_interval_seconds?: number | null;
-  created_at_utc: string;
 };
 const names: Record<Kind, string> = {
   inbox: "Думки",

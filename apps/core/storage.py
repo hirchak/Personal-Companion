@@ -169,14 +169,14 @@ class Store:
         if not {'vault_meta', 'entries', 'entry_revisions', 'tombstones', 'operation_receipts', 'search_index'} <= tables:
             raise SafeError('INCOMPLETE_SCHEMA')
         # SQLite integrity alone cannot establish the typed domain schema.
-        from .models import EntryInput
+        from .models import EntryInput, EntryRevisionOutput
         from pydantic import ValidationError
         try:
             for row in c.execute('SELECT payload FROM entries'):
                 EntryInput.model_validate(json.loads(row[0]))
             for row in c.execute('SELECT payload FROM entry_revisions'):
                 entry = json.loads(row[0])
-                EntryInput.model_validate({k: v for k, v in entry.items() if k in EntryInput.model_fields})
+                EntryRevisionOutput.model_validate(entry)
         except (ValueError, TypeError, ValidationError):
             raise SafeError('DOMAIN_INTEGRITY') from None
 

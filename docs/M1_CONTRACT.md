@@ -1,6 +1,6 @@
 # M1 contract — локальний щоденник без AI
 
-Дата: 2026-09-30. Версія контракту: 2. Статус: PROPOSED / AWAITING_REVIEW.
+Дата: 2026-09-30. Версія контракту: 3. Статус: PROPOSED / AWAITING_REVIEW.
 M1 execution authorized by owner goal M1_LOCAL_JOURNAL; M0 ACCEPT recorded externally.
 Acceptance evidence lives in the M1 report, not in this requirements document.
 
@@ -11,6 +11,13 @@ API requires a session, writes/exports also CSRF. Canonical system temp parent i
 before fresh test root creation. Persistent explicitly SYNTHETIC demo root is allowed.
 Backup is consistent SQLite snapshot; restore only into a fresh empty root.
 UI drafts are memory-only and cleared at reload/lock. No trust-boundary changes.
+
+Change note v3: original `recorded_at_utc` requirement is stored inside immutable
+revision JSON in the same edit transaction; pre-correction synthetic development
+history exposes null instead of inventing a historic timestamp. DB schema remains 1.
+Read/receipt/history response models are generated into the shared TS contract.
+Process-local deny-egress now covers datagram sends and alternative DNS APIs as well
+as TCP; it remains defense in depth, not a claimed OS sandbox.
 
 Baseline: [ARCHITECTURE.md](ARCHITECTURE.md), [DATA_MEMORY.md](DATA_MEMORY.md),
 [PRIVACY_SECURITY.md](PRIVACY_SECURITY.md), [TESTING.md](TESTING.md).

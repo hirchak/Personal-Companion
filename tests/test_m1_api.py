@@ -135,6 +135,21 @@ for address in [('203.0.113.1',443), ('example.invalid',443)]:
  try: socket.create_connection(address,timeout=.1)
  except PermissionError: pass
  else: raise AssertionError('egress not blocked')
+actions=[
+ lambda:socket.gethostbyname('example.invalid'),
+ lambda:socket.gethostbyname_ex('example.invalid'),
+ lambda:socket.gethostbyaddr('203.0.113.1'),
+ lambda:socket.getnameinfo(('203.0.113.1',9),0),
+]
+udp=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+actions += [lambda:udp.sendto(b'SYNTHETIC',('203.0.113.1',9))]
+if hasattr(udp,'sendmsg'):
+ actions += [lambda:udp.sendmsg([b'SYNTHETIC'],[],0,('203.0.113.1',9))]
+for action in actions:
+ try: action()
+ except PermissionError: pass
+ else: raise AssertionError('UDP/DNS egress not blocked')
+udp.close()
 s=Store(root/'data'); j=Journal(s)
 r=Create(operation_id=uuid4(),entry_id=uuid4(),base_revision=0,payload={'raw_text':'SYNTHETIC offline'})
 assert j.write('create',r.entry_id,r)['result_code']=='MAC_SAVED'
@@ -152,3 +167,20 @@ def test_openapi_fixture_matches_actual_adapter(client):
     from apps.core.storage import REPO
     _,app=client
     assert json.loads((REPO/'packages/contracts/openapi.json').read_text())==app.openapi()
+
+
+def test_A01_response_and_recorded_history_contract(client):
+    c, app = client
+    b = body('sleep', sleep_start_utc='2026-10-25T02:30:00+02:00', wake_at_utc='2026-10-25T02:30:00+01:00',
+             occurred_at_utc='2026-10-25T02:30:00+01:00', local_date='2026-10-25', time_precision='instant')
+    assert c.post('/api/v1/entries', json=b).status_code == 201
+    id = b['entry_id']
+    original = c.get('/api/v1/entries/' + id).json()
+    assert original['reported_interval_seconds'] == 3600
+    assert 'mood_rating' not in original
+    assert c.patch('/api/v1/entries/' + id, json={'operation_id':str(uuid4()),'base_revision':1,'changes':{'tags':['SYNTHETIC']}}).status_code == 200
+    h = c.get('/api/v1/entries/' + id + '/revisions').json()['items'][0]
+    assert h.pop('recorded_at_utc').endswith('Z') and h == original
+    schema = app.openapi()['components']['schemas']
+    assert 'recorded_at_utc' in schema['EntryRevisionOutput']['properties']
+    assert 'revision' in schema['EntryOutput']['required']

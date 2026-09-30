@@ -128,3 +128,43 @@ class Export(StrictModel):
 
 class Unlock(StrictModel):
     code: str = Field(min_length=1, max_length=64)
+
+
+class EntryOutput(EntryInput):
+    """Server-managed fields shared with the generated TypeScript read contract."""
+    id: UUID
+    owner_id: UUID
+    revision: StrictInt = Field(ge=1)
+    created_at_utc: datetime
+    updated_at_utc: datetime
+    schema_version: Literal[1]
+    privacy_class: Literal['PRIVATE_PERSONAL']
+    provenance_type: Literal['USER_REPORTED']
+    reported_interval_seconds: float | None = Field(default=None, ge=0)
+
+
+class EntryRevisionOutput(EntryOutput):
+    # Unknown only for already existing pre-correction development history.
+    recorded_at_utc: datetime | None = None
+
+    @field_validator('recorded_at_utc')
+    @classmethod
+    def recorded_aware(cls, value):
+        return cls.aware(value)
+
+
+class EntryPage(StrictModel):
+    items: list[EntryOutput]
+    next_cursor: str | None
+
+
+class RevisionPage(StrictModel):
+    items: list[EntryRevisionOutput]
+    next_after: int | None
+
+
+class Receipt(StrictModel):
+    entry_id: UUID
+    operation_id: UUID
+    revision: StrictInt = Field(ge=1)
+    result_code: Literal['MAC_SAVED', 'DELETED']

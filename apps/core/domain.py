@@ -40,11 +40,18 @@ class Journal:
         with self.store.connect() as c:
             return self.view(self.row(c, entry_id))
 
+    @staticmethod
+    def revision_view(payload):
+        entry = json.loads(payload)
+        # Never invent recording times for pre-correction synthetic history.
+        entry.setdefault('recorded_at_utc', None)
+        return entry
+
     def history(self, entry_id, limit=100, after=0):
         with self.store.connect() as c:
             self.row(c, entry_id)
             rows = c.execute('SELECT payload FROM entry_revisions WHERE entry_id=? AND revision>? ORDER BY revision LIMIT ?', (entry_id, after, limit)).fetchall()
-            items = [json.loads(r[0]) for r in rows]
+            items = [self.revision_view(r[0]) for r in rows]
             return {'items': items, 'next_after': items[-1]['revision'] if len(items) == limit else None}
 
     def write(self, action, entry_id, request):
@@ -92,7 +99,7 @@ class Journal:
                         payload = EntryInput.model_validate(p).payload()
                     except ValidationError:
                         raise SafeError('SCHEMA_INVALID', 422) from None
-                    c.execute('INSERT INTO entry_revisions VALUES(?,?,?)', (entry_id, old['revision'], encode(self.view(old))))
+                    c.execute('INSERT INTO entry_revisions VALUES(?,?,?)', (entry_id, old['revision'], encode(dict(self.view(old), recorded_at_utc=timestamp))))
                     c.execute('UPDATE entries SET revision=?,payload=?,updated=? WHERE id=? AND owner_id=?', (rev, encode(payload), timestamp, entry_id, self.owner))
             if action != 'delete':
                 c.execute('INSERT OR REPLACE INTO search_index VALUES(?,?)', (entry_id, payload['raw_text']))
@@ -175,7 +182,7 @@ class Journal:
                     raise SafeError('EXPORT_CHANGED', 409)
                 items.append(entry)
                 if p['selector']['include_history']:
-                    history += [json.loads(r[0]) for r in c.execute('SELECT payload FROM entry_revisions WHERE entry_id=? ORDER BY revision', (entry['id'],))]
+                    history += [self.revision_view(r[0]) for r in c.execute('SELECT payload FROM entry_revisions WHERE entry_id=? ORDER BY revision', (entry['id'],))]
             vault_id = c.execute('SELECT vault_id FROM vault_meta').fetchone()[0]
         if format == 'json':
             content = {'entries': items, 'revisions': history}
