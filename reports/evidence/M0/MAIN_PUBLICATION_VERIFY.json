@@ -1,0 +1,35 @@
+{
+  "repository": "hirchak/Personal-Companion",
+  "visibility": "public",
+  "owner_direct_main_decision": "verified in R3/C3 records",
+  "c3_push": {
+    "command": "git push origin main",
+    "exit_code": 0,
+    "sha": "bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd"
+  },
+  "default_branch_update": {
+    "command": "gh repo edit hirchak/Personal-Companion --default-branch main",
+    "exit_code": 0,
+    "verification_command": "gh repo view hirchak/Personal-Companion --json name,isPrivate,defaultBranchRef",
+    "verification_exit_code": 0,
+    "actual_default_branch": "main"
+  },
+  "r4_push": {
+    "command": "git push origin main",
+    "exit_code": 0,
+    "sha": "7ecd3f025793213089b801947deb91c4c800d658"
+  },
+  "remote_ref_check": {
+    "github_branches_api_exit_code": 0,
+    "git_ls_remote_exit_code": 0,
+    "refs": {
+      "refs/heads/main": "7ecd3f025793213089b801947deb91c4c800d658",
+      "refs/heads/review/m0-bootstrap": "ca0e1fc3af42bcc31e4038a591f7356713718005"
+    }
+  },
+  "force_push": false,
+  "history_rewrite": false,
+  "merge": false,
+  "deploy": false,
+  "ci": "NOT_RUN"
+}

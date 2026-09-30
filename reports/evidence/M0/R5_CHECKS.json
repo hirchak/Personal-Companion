@@ -1,0 +1,45 @@
+{
+  "phase": "R5 post-publication status attestation",
+  "base_r4": "7ecd3f025793213089b801947deb91c4c800d658",
+  "commands": [
+    [
+      "python3",
+      "scripts/check_docs.py",
+      "--json"
+    ],
+    [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    [
+      "python3",
+      "scripts/build_chatgpt_context.py"
+    ],
+    {
+      "command": [
+        "python3",
+        "scripts/check_privacy.py",
+        "--include-generated"
+      ],
+      "exit_code": 0,
+      "status": "PASS",
+      "coverage": "worktree, staged index, all local Git objects and generated snapshots"
+    },
+    [
+      "git",
+      "diff",
+      "7ecd3f025793213089b801947deb91c4c800d658",
+      "--check"
+    ]
+  ],
+  "staged_privacy_scan": "PENDING",
+  "r4_publication": "PASS",
+  "actual_default_branch": "main",
+  "r5_push": "PENDING_FINAL_FAST_FORWARD",
+  "ci": "NOT_RUN"
+}

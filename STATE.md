@@ -41,5 +41,4 @@ Review branch optional; існуючий `review/m0-bootstrap` з C2/R2/R3 — �
 також OFF. Force-push/history rewrite заборонені.
 
 C3 `bc5cf13c3a3569edd0e0c9d9d157889471d0a0bd` is pushed to `origin/main`. GitHub actual
-default is now verified as `main`. Після staged privacy scan нормальним fast-forward пушити R4
-і перевірити точний фінальний remote SHA. CI NOT_RUN.
+default is now verified as `main`. C3/R4 are published on origin/main; GitHub actual default is main. R4 `7ecd3f025793213089b801947deb91c4c800d658` was verified by API and git ls-remote. R5 records that status; M0 awaits architect review. CI NOT_RUN; M1 remains unauthorized.
