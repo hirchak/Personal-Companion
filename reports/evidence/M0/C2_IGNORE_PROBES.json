@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "exit_code": 0,
+  "synthetic_private_runtime_paths": [
+    "synthetic/raw/sample.pdf",
+    "synthetic/raw/sample.docx",
+    "synthetic/raw/sample.xlsx",
+    "synthetic/raw/archive.zip",
+    "backups/sample.db",
+    "exports/sample.json",
+    "imports/sample.md",
+    "runtime-data/state.sqlite",
+    "local-data/settings.json",
+    "models/example.gguf",
+    "logs/example.log",
+    ".codex/session.json",
+    ".vercel/project.json",
+    "auth.json",
+    ".env.local",
+    "vault/example.md",
+    "private_context/example.md",
+    "user-data/example.json"
+  ],
+  "count": 18,
+  "env_example_exception": "NOT_IGNORED"
+}

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "base_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+  "tree": "C2 plus R2 overlay before commit",
+  "source_commit_in_manifest": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+  "sources_verified": 47,
+  "outputs_verified": 5,
+  "dynamic_sources": [
+    "prompts/M0_BOOTSTRAP.md",
+    "docs/M1_CONTRACT.md",
+    "reports/M0_BOOTSTRAP_REPORT.md"
+  ]
+}

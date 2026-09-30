@@ -1,0 +1,18 @@
+{
+  "phase": "EXACT_C2_REPOSITORY",
+  "status": "PASS",
+  "source_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+  "sources_verified": 47,
+  "outputs_verified": 5,
+  "snapshot_names": [
+    "01_PROJECT_CONTEXT.md",
+    "02_TECHNICAL_SPEC.md",
+    "03_RESEARCH_AND_SAFETY.md",
+    "04_DELIVERY_AND_CURRENT_STATE.md"
+  ],
+  "dynamic_sources": [
+    "prompts/M0_BOOTSTRAP.md",
+    "docs/M1_CONTRACT.md",
+    "reports/M0_BOOTSTRAP_REPORT.md"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "phase": "R2_FINAL_OVERLAY_BEFORE_COMMIT",
+  "base_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+  "executed_at_utc": "2026-09-30T20:00:23.175987+00:00",
+  "python": "3.13.2",
+  "records": [
+    {
+      "command": [
+        "python3",
+        "scripts/check_docs.py",
+        "--json"
+      ],
+      "tree": "C2 + R2 evidence overlay before commit",
+      "base_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout": "{\n  \"status\": \"PASS\",\n  \"errors\": [],\n  \"warnings\": [],\n  \"metrics\": {\n    \"files_checked\": 80,\n    \"json_checked\": 16,\n    \"local_links_checked\": 49,\n    \"research_prompts\": 16,\n    \"snapshot_source_files\": 43\n  },\n  \"scope\": \"Documentation structure only; not exhaustive privacy, security, clinical or app verification.\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "tree": "C2 + R2 evidence overlay before commit",
+      "base_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout": "",
+      "stderr": "test_broken_link (test_doc_tools.DocToolsTests.test_broken_link) ... ok\ntest_canonical_snapshot_names (test_doc_tools.DocToolsTests.test_canonical_snapshot_names) ... ok\ntest_canonical_starter_hash_pinned (test_doc_tools.DocToolsTests.test_canonical_starter_hash_pinned) ... ok\ntest_denied_content_never_read (test_doc_tools.DocToolsTests.test_denied_content_never_read) ... ok\ntest_dynamic_goal_and_report (test_doc_tools.DocToolsTests.test_dynamic_goal_and_report) ... ok\ntest_fake_secret_detected (test_doc_tools.DocToolsTests.test_fake_secret_detected) ... ok\ntest_goal_length (test_doc_tools.DocToolsTests.test_goal_length) ... ok\ntest_missing_pointer_denied (test_doc_tools.DocToolsTests.test_missing_pointer_denied) ... ok\ntest_missing_required (test_doc_tools.DocToolsTests.test_missing_required) ... ok\ntest_output_cannot_overwrite_repo (test_doc_tools.DocToolsTests.test_output_cannot_overwrite_repo) ... ok\ntest_output_symlink_escape_denied (test_doc_tools.DocToolsTests.test_output_symlink_escape_denied) ... ok\ntest_permission_mismatch (test_doc_tools.DocToolsTests.test_permission_mismatch) ... ok\ntest_pristine (test_doc_tools.DocToolsTests.test_pristine) ... ok\ntest_private_file_denied (test_doc_tools.DocToolsTests.test_private_file_denied) ... ok\ntest_project_authority_metadata_required (test_doc_tools.DocToolsTests.test_project_authority_metadata_required) ... ok\ntest_raw_research_archive_denied_before_fixture_copy (test_doc_tools.DocToolsTests.test_raw_research_archive_denied_before_fixture_copy) ... ok\ntest_snapshot_file_symlink_denied (test_doc_tools.DocToolsTests.test_snapshot_file_symlink_denied) ... ok\ntest_snapshot_integrity (test_doc_tools.DocToolsTests.test_snapshot_integrity) ... ok\ntest_symlink_source_denied (test_doc_tools.DocToolsTests.test_symlink_source_denied) ... ok\ntest_unknown_source (test_doc_tools.DocToolsTests.test_unknown_source) ... ok\ntest_denied_file_not_read (test_privacy_tools.PrivacyToolsTests.test_denied_file_not_read) ... ok\ntest_generated_snapshot_scanned (test_privacy_tools.PrivacyToolsTests.test_generated_snapshot_scanned) ... ok\ntest_history_and_staged_blob (test_privacy_tools.PrivacyToolsTests.test_history_and_staged_blob) ... ok\ntest_public_text (test_privacy_tools.PrivacyToolsTests.test_public_text) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 1.463s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/build_chatgpt_context.py"
+      ],
+      "tree": "C2 + R2 evidence overlay before commit",
+      "base_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout": "Built four Markdown snapshots + project instructions + hash manifest.\nSource commit: d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60\nDestination: repo//generated/chatgpt_context\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_privacy.py",
+        "--include-generated"
+      ],
+      "tree": "C2 + R2 evidence overlay before commit",
+      "base_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout": "{\n  \"status\": \"PASS\",\n  \"errors\": [],\n  \"metrics\": {\n    \"worktree_text_files\": 87,\n    \"git_objects\": 144,\n    \"git_text_objects\": 111\n  },\n  \"git_scope\": \"SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED\",\n  \"generated_included\": true,\n  \"limitations\": \"Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded.\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+        "--check"
+      ],
+      "tree": "C2 + R2 evidence overlay before commit",
+      "base_sha": "d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60",
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "source_output_hash_verification": "PASS",
+  "staged_privacy_scan": {
+    "status": "PASS",
+    "exit_code": 0,
+    "scope": "worktree + staged and all local Git objects + generated snapshots",
+    "recorded_after_initial_clean_stage": true
+  },
+  "push_status": "PENDING",
+  "c2_to_r2_path_whitelist": {
+    "status": "PASS",
+    "scope": "state/handoff/roadmap/devlog/report/evidence only"
+  }
+}

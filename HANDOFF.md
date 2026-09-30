@@ -1,27 +1,29 @@
 # Передача контексту — M0 corrective
 
-Дата: 2026-09-30. M0 corrective in progress; M1/app NOT_STARTED.
-Repository https://github.com/hirchak/Personal-Companion.git підтверджений public,
-default `main`; write permission доступний. Локальна branch `review/m0-bootstrap`;
-push branch дозволений. Main merge, deploy, provider calls, real data — OFF.
+Дата: 2026-09-30. M0 remediation AWAITING_REVIEW; M1/app NOT_STARTED.
+Repository https://github.com/hirchak/Personal-Companion.git — public, configured
+default `main`. Owner authorized normal push тільки у `review/m0-bootstrap`;
+merge/main/deploy/provider/private-data permission OFF.
 
-## Відновлення
+Base B: `c891a49f17af190b84e2b4d70e85597bf3e3b1ba`.
+Previous reviewed C/R: `18fefa8dd037fae1982dcc34a64f34325c10830c` /
+`2d267d17b45d8d873131181f5a52ff2601a6b2a0`.
+Corrective C2: `d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60`.
+Corrective evidence R2: determine after evidence commit; current Git history is intact.
 
-Прочитати AGENTS/STATE, canonical `.project/project.json`, `docs/WORKFLOW.md`,
-потім M0 report та `docs/M1_CONTRACT.md`. Перевірити branch/HEAD/status/diff.
+## Canonical recovery
 
-## Canonical source recovery
+Owner ZIP restored exact `.gitignore` and `.project/context_map.json`; original project
+JSON schema/authority/snapshot-policy preserved with only authorized values changed.
+All four canonical ChatGPT snapshot names restored. Source/archive and hash proof:
+`reports/evidence/M0/CANONICAL_STARTER_VERIFY.json`. No raw source research was opened or
+added; the ZIP had zero DOCX entries.
 
-Із owner ZIP вибірково прочитано тільки `.gitignore`, `.project/context_map.json`
-і `.project/project.json`. Перші два hashes збігаються з наданими очікуваннями;
-canonical project schema, authority/snapshot_policy збережено, застосовані лише
-owner-specified repo/default/review/permissions. Canonical snapshot names відновлено.
-В архіві не було DOCX; raw research content не відкривався і не додавався.
-Evidence: `reports/evidence/M0/CANONICAL_STARTER_VERIFY.json`.
+## Checks and boundaries
 
-## Межі і наступний крок
+Exact C2 docs checks, 24 synthetic tests, snapshot/source hashes and privacy scan pass.
+No M1/app changes, live provider calls, real-user data, deploy or main operations.
 
-M1 contract лишається proposal; окрема goal обов’язкова. App/real vault/research
-source documents/provider runtime/merge/deploy не чіпали. Після C2 пройти всі checks,
-створити evidence-only R2 і normal push тільки `review/m0-bootstrap`; перевірити remote
-ref. Історію не переписувати, main не створювати.
+Next: complete staged scan, create evidence-only R2, normal push to `origin/review/m0-bootstrap`,
+then check the ref. CI NOT_RUN. Main/merge/release remain off. A separate owner goal is
+required to start M1 after architecture review.
