@@ -10,9 +10,9 @@ M0 FIX_REQUIRED виправлено. M1/app NOT_STARTED; нової M1 goal н�
 | Base B | `c891a49f17af190b84e2b4d70e85597bf3e3b1ba` |
 | Previous reviewed C/R | `18fefa8dd037fae1982dcc34a64f34325c10830c` / `2d267d17b45d8d873131181f5a52ff2601a6b2a0` |
 | Corrective C2 | `d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60` |
-| Corrective report commit R2 | буде наведений у фінальному повідомленні; не посилається на власний SHA |
+| Evidence commit R2 | `6a17efbcfa1a941aa4afcd04e842cfacde8ce299` |
 | Push permission | Owner authorized normal push тільки review branch; main/merge/release/deploy OFF |
-| Push / CI | R2 буде commit-нуто до push; після push remote ref перевірити. CI NOT_RUN |
+| Push / CI | PUSHED: only `review/m0-bootstrap`; R2 branch tip was verified through GitHub and `git ls-remote`. CI NOT_RUN |
 
 GitHub connector підтвердив repository public і configured default branch `main`;
 перед corrective push repository був порожній. Через це default `main` branch/ref не
@@ -59,10 +59,11 @@ call, billing/auth edit, main/merge, deploy, or launchd action.
 | `git diff HEAD^ HEAD --check` | C2 | exit 0 |
 | Exact `git archive C2` docs/test/generator commands | C2 | all exit 0; archive has no `.git`, null generated source_commit is expected |
 | C2→R2 path whitelist | R2 staged diff | PASS; only state/handoff/roadmap/devlog/report/evidence |
-| Normal push and remote ref verification | post-R2 | authorized; result follows after push; never main |
+| R2 publication | `git push origin review/m0-bootstrap`, GitHub branch list, `git ls-remote` | exit 0; only `review/m0-bootstrap` exists at R2; main unchanged |
+| R3 post-publication refresh | state/handoff/report/evidence only | R2 publication attested; R3 SHA in final handoff |
 
 Detailed logs: `reports/evidence/M0/CANONICAL_STARTER_VERIFY.json`, `C2_CHECKS.json`,
-`C2_SNAPSHOT_HASHES.json`, `R2_CHECKS.json`, and `R2_SNAPSHOT_VERIFY.json`.
+`C2_SNAPSHOT_HASHES.json`, `R2_CHECKS.json`, `R2_SNAPSHOT_VERIFY.json`, and `PUBLISH_VERIFY.json`.
 Heuristic scan is not an exhaustive personal-data/copyright/security audit; no runtime
 network egress test was run. No real device, FileVault, wearable, ASR, clinical, private
 vault or user-consent verification is claimed. Active model/effort and hardware RAM remain

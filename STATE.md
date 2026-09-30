@@ -36,9 +36,9 @@ repo/default/review/permissions.
 
 GitHub connector підтвердив public repo і configured default `main`. Explicit normal
 push дозволений тільки в `review/m0-bootstrap`; merge/deploy/provider/real-data OFF.
-C2 `d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60`; R2 — evidence-only commit після C2.
+C2 `d4e651a43d93c6a5ed6cbd6c780b9f4d0b7c5c60`; R2 — `6a17efbcfa1a941aa4afcd04e842cfacde8ce299` — evidence-only commit після C2.
 M1/app NOT_STARTED та не дозволені окремою goal; протоколи DISABLED.
 
 Check/evidence звіт: `reports/M0_BOOTSTRAP_REPORT.md` і `reports/evidence/M0/`.
-Після R2 виконати лише нормальний push дозволеної гілки та перевірити remote ref;
-CI не запускали. Потім архітектор повторно розглядає виправлення.
+C2/R2 опубліковані через normal push лише у review branch; R2 ref перевірено через GitHub connector і git ls-remote. Main не змінювався.
+CI не запускали. Наступне — архітектурний review; M1 чекає окремої owner goal.

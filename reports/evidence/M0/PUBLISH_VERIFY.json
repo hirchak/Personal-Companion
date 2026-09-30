@@ -1,0 +1,36 @@
+{
+  "push_command": [
+    "git",
+    "push",
+    "origin",
+    "review/m0-bootstrap"
+  ],
+  "push_exit_code": 0,
+  "pushed_commit": "6a17efbcfa1a941aa4afcd04e842cfacde8ce299",
+  "verified_remote_ref": "refs/heads/review/m0-bootstrap",
+  "verified_remote_sha": "6a17efbcfa1a941aa4afcd04e842cfacde8ce299",
+  "verification": [
+    {
+      "source": "GitHub connector branches API",
+      "exit_code": 0,
+      "repository_visibility": "public",
+      "default_branch": "main",
+      "branches": [
+        {
+          "name": "review/m0-bootstrap",
+          "sha": "6a17efbcfa1a941aa4afcd04e842cfacde8ce299"
+        }
+      ]
+    },
+    {
+      "source": "git ls-remote --heads origin review/m0-bootstrap",
+      "exit_code": 0,
+      "ref": "refs/heads/review/m0-bootstrap",
+      "sha": "6a17efbcfa1a941aa4afcd04e842cfacde8ce299"
+    }
+  ],
+  "main_modified": false,
+  "merge_or_deploy": false,
+  "ci": "NOT_RUN",
+  "r3_followup_scope": "evidence/status only; no implementation changes"
+}

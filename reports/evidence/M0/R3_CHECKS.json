@@ -1,0 +1,47 @@
+{
+  "base_r2": "6a17efbcfa1a941aa4afcd04e842cfacde8ce299",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/check_docs.py",
+        "--json"
+      ],
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_privacy.py",
+        "--include-generated"
+      ],
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/build_chatgpt_context.py"
+      ],
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "r2_remote_publication": "PASS",
+  "r3_staged_privacy_scan": {
+    "status": "PASS",
+    "exit_code": 0,
+    "scope": "worktree + staged and all local Git objects + generated snapshots"
+  },
+  "r2_to_r3_whitelist": "PASS"
+}
