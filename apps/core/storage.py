@@ -3,12 +3,15 @@ import hashlib
 import json
 import os
 import sqlite3
+import threading
+import re
 from contextlib import contextmanager
 from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 3
+SCHEMA = 4
+_ROOT_LOCKS = {}
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
 
@@ -105,15 +108,23 @@ def ai_triggers(c):
 class Store:
     def __init__(self, root, fail_migration=False):
         self.root = safe_path(root)
+        self.attachment_lock = _ROOT_LOCKS.setdefault(str(self.root), threading.RLock())
         self.commit_error = None
         self.fail_commit = False  # controlled test injection, never an HTTP/config switch
         manifest = self.root / 'synthetic.json'
         if self.root.exists() and any(self.root.iterdir()):
             if not manifest.is_file() or json.loads(manifest.read_text()) != MARKER:
                 raise SafeError('UNKNOWN_ROOT')
-            allowed = {'synthetic.json', 'journal.sqlite3', 'journal.sqlite3-wal', 'journal.sqlite3-shm', 'preupgrade.sqlite3'}
+            allowed = {'synthetic.json', 'journal.sqlite3', 'journal.sqlite3-wal', 'journal.sqlite3-shm', 'preupgrade.sqlite3', 'audio', 'audio-staging'}
             if any(p.name not in allowed for p in self.root.iterdir()):
                 raise SafeError('UNKNOWN_ROOT_CONTENT')
+            for folder, pattern in [('audio', r'[0-9a-f-]{36}\.wav(?:\.writing)?'), ('audio-staging', r'[0-9a-f-]{36}')]:
+                path=self.root/folder
+                if path.exists():
+                    if not path.is_dir() or any(not re.fullmatch(pattern,x.name) for x in path.iterdir()):raise SafeError('UNKNOWN_ROOT_CONTENT')
+                    if folder=='audio-staging':
+                        for x in path.iterdir():
+                            if not x.is_dir() or any(not re.fullmatch(r'[0-9]{3}\.part(?:\.writing)?',y.name) or not y.is_file() for y in x.iterdir()):raise SafeError('UNKNOWN_ROOT_CONTENT')
             if not (self.root / 'journal.sqlite3').is_file():
                 raise SafeError('MISSING_DATABASE')
             # Version refusal precedes permission changes or migration transactions.
@@ -157,6 +168,9 @@ class Store:
                 for sql in SYNC_TABLES:
                     c.execute(sql)
                 for sql in AI_TABLES:
+                    c.execute(sql)
+                from .voice import VOICE_TABLES
+                for sql in VOICE_TABLES:
                     c.execute(sql)
                 columns = {r[1] for r in c.execute('PRAGMA table_info(devices)')}
                 if 'pair_state' not in columns:
@@ -221,7 +235,9 @@ class Store:
         from pydantic import ValidationError
         try:
             metadata = VaultMetadata.model_validate(dict(c.execute('SELECT * FROM vault_meta').fetchone()))
-            if metadata.schema_version == 3 and not {'ai_consents','ai_jobs','suggestions','memories'} <= tables:
+            if metadata.schema_version >= 3 and not {'ai_consents','ai_jobs','suggestions','memories'} <= tables:
+                raise SafeError('INCOMPLETE_SCHEMA')
+            if metadata.schema_version >= 4 and not {'audio','audio_chunks','transcripts'} <= tables:
                 raise SafeError('INCOMPLETE_SCHEMA')
             owner = str(metadata.owner_id)
             for table in ('entries', 'tombstones', 'operation_receipts'):
@@ -244,38 +260,85 @@ class Store:
         except (ValueError, TypeError, ValidationError):
             raise SafeError('DOMAIN_INTEGRITY') from None
 
+    @staticmethod
+    def check_audio(c):
+        from .voice_contracts import AudioBegin
+        from pydantic import ValidationError
+        tables = {r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        if 'audio' not in tables: return []
+        required = []
+        try:
+            for r in c.execute('SELECT * FROM audio'):
+                from uuid import UUID
+                if str(UUID(r['id'])) != r['id'] or not re.fullmatch(r'[0-9a-f]{64}',r['content_hash']): raise ValueError()
+                if r['state'] not in {'UPLOADING','MAC_AUDIO_CONFIRMED','CANCELLED','FAILED','DELETE_PENDING','DELETED'}: raise ValueError()
+                if r['state'] != 'DELETED':
+                    m=AudioBegin.model_validate(json.loads(r['metadata']))
+                    if str(m.audio_id)!=r['id'] or m.content_hash!=r['content_hash'] or m.byte_size!=r['byte_size']:raise ValueError()
+                if r['state']=='MAC_AUDIO_CONFIRMED':
+                    required.append({'audio_id':r['id'],'file':r['id']+'.wav','content_hash':r['content_hash'],'byte_size':r['byte_size']})
+            for t in c.execute('SELECT * FROM transcripts'):
+                audio=c.execute('SELECT * FROM audio WHERE id=?',(t['audio_id'],)).fetchone()
+                if not audio or audio['content_hash']!=t['audio_hash']:raise ValueError()
+                if t['state'] not in {'TRANSCRIPTION_QUEUED','TRANSCRIBING','TRANSCRIPT_READY','CONFIRMED','FAILED','CANCELLED'}:raise ValueError()
+                # A confirmed note can subsequently be edited/deleted normally; historical provenance
+                # must refer to its matching current/revision/tombstone, never an unrelated entry.
+                if t['state']=='CONFIRMED':
+                    entry=c.execute('SELECT revision FROM entries WHERE id=?',(t['entry_id'],)).fetchone()
+                    dead=c.execute('SELECT revision FROM tombstones WHERE entry_id=?',(t['entry_id'],)).fetchone()
+                    if not (entry or dead) or (entry or dead)[0]<t['entry_revision']:raise ValueError()
+            return sorted(required,key=lambda x:x['audio_id'])
+        except (ValueError,TypeError,ValidationError):raise SafeError('AUDIO_REFERENCE_INTEGRITY') from None
+
     def meta(self):
         with self.connect() as c:
             return dict(c.execute('SELECT * FROM vault_meta').fetchone())
 
     def backup(self, target):
+        with self.attachment_lock:
+            return self._backup(target)
+
+    def _backup(self, target):
         p = empty_target(target)
-        if p.exists():
-            raise SafeError('TARGET_MUST_BE_NEW')
+        if p.exists(): raise SafeError('TARGET_MUST_BE_NEW')
         temp = p.with_name(p.name + '.partial-' + str(uuid4()))
         temp.mkdir(mode=0o700)
         try:
             with self.connect() as source:
-                dest = sqlite3.connect(temp / 'snapshot.sqlite3')
-                dest.row_factory = sqlite3.Row
+                dest = sqlite3.connect(temp / 'snapshot.sqlite3');dest.row_factory = sqlite3.Row
                 try:
                     source.backup(dest)
                     dest.execute("UPDATE devices SET credential_hash='',revoked_at_utc=COALESCE(revoked_at_utc,?)", (now(),))
                     dest.execute('UPDATE ai_consents SET revoked=1')
                     dest.execute("UPDATE ai_jobs SET state='CANCELLED',error='BACKUP_REAPPROVAL_REQUIRED' WHERE state IN ('QUEUED','RUNNING')")
-                    dest.commit()
-                    dest.execute('PRAGMA journal_mode=DELETE')
-                    self.check(dest)
+                    dest.execute("UPDATE transcripts SET state='FAILED',error='ASR_RESTORE_RETRY_REQUIRED' WHERE state IN ('TRANSCRIPTION_QUEUED','TRANSCRIBING')")
+                    # Incomplete transfer is resumable on live Mac; a backup contains finalized originals.
+                    dest.execute("UPDATE audio SET state='CANCELLED' WHERE state='UPLOADING'")
+                    dest.execute('DELETE FROM audio_chunks')
+                    dest.commit();dest.execute('PRAGMA journal_mode=DELETE')
+                    self.check(dest);attachments=self.check_audio(dest)
                     meta = dict(dest.execute('SELECT * FROM vault_meta').fetchone())
-                finally:
-                    dest.close()
-            manifest = {'backup_format': 1, 'schema_version': meta['schema_version'], 'created_at_utc': now(),
-                        'attachments': [], 'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
-            (temp / 'manifest.json').write_text(encode(manifest))
-            private_files(temp)
-            temp.rename(p)
+                finally: dest.close()
+            if attachments:
+                folder=temp/'audio';folder.mkdir(mode=0o700)
+                for a in attachments:
+                    source=self.root/'audio'/a['file']
+                    if not source.is_file() or source.stat().st_size!=a['byte_size'] or digest(source.read_bytes())!=a['content_hash']:
+                        raise SafeError('AUDIO_CHECKSUM')
+                    import shutil
+                    shutil.copyfile(source,folder/a['file']);os.chmod(folder/a['file'],0o600)
+                    if (folder/a['file']).stat().st_size!=a['byte_size'] or digest((folder/a['file']).read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
+                    with (folder/a['file']).open('rb') as file:os.fsync(file.fileno())
+            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M4',
+                        'created_at_utc': now(), 'attachments': attachments,
+                        'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
+            (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
+            from .voice import fsync_dir
+            for file in (temp/'snapshot.sqlite3',temp/'manifest.json'):
+                with file.open('rb') as handle:os.fsync(handle.fileno())
+            if attachments:fsync_dir(temp/'audio')
+            fsync_dir(temp);temp.rename(p);fsync_dir(p.parent)
         except BaseException:
-            # Only the directory created by this operation is removed.
             import shutil
             shutil.rmtree(temp)
             raise
@@ -284,35 +347,47 @@ class Store:
     @classmethod
     def restore(cls, backup, target):
         b, p = safe_path(backup), empty_target(target)
-        if '.partial-' in b.name or not b.is_dir() or {x.name for x in b.iterdir()} != {'manifest.json', 'snapshot.sqlite3'}:
-            raise SafeError('INVALID_BACKUP')
+        if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
-            m = json.loads((b / 'manifest.json').read_text())
-            if m['backup_format'] != 1 or m['schema_version'] not in {2, SCHEMA} or m['attachments'] != [] or set(m['files']) != {'snapshot.sqlite3'}:
-                raise SafeError('UNSUPPORTED_BACKUP')
-            if m['files']['snapshot.sqlite3'] != digest((b / 'snapshot.sqlite3').read_bytes()):
-                raise SafeError('CHECKSUM_MISMATCH')
-            with sqlite3.connect(f'file:{b / "snapshot.sqlite3"}?mode=ro&immutable=1', uri=True) as source:
-                source.row_factory = sqlite3.Row
-                cls.check(source)
-                if source.execute('SELECT schema_version FROM vault_meta').fetchone()[0] != m['schema_version']:
-                    raise SafeError('UNSUPPORTED_SCHEMA')
-        except (KeyError, ValueError, sqlite3.Error):
-            raise SafeError('INVALID_BACKUP') from None
-        temp = p.with_name(p.name + '.partial-' + str(uuid4()))
-        temp.mkdir(mode=0o700)
+            m=json.loads((b/'manifest.json').read_text())
+            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            attachments=m['attachments']
+            if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
+            expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
+            if {x.name for x in b.iterdir()}!=expected:raise SafeError('INVALID_BACKUP')
+            if m['files']['snapshot.sqlite3']!=digest((b/'snapshot.sqlite3').read_bytes()):raise SafeError('CHECKSUM_MISMATCH')
+            with sqlite3.connect(f'file:{b / "snapshot.sqlite3"}?mode=ro&immutable=1',uri=True) as source:
+                source.row_factory=sqlite3.Row;cls.check(source)
+                if source.execute('SELECT schema_version FROM vault_meta').fetchone()[0]!=m['schema_version']:raise SafeError('UNSUPPORTED_SCHEMA')
+                required=cls.check_audio(source)
+                if attachments!=required:raise SafeError('AUDIO_REFERENCE_INTEGRITY')
+            if attachments:
+                if not (b/'audio').is_dir() or {x.name for x in (b/'audio').iterdir()}!={a['file'] for a in attachments}:raise SafeError('INVALID_BACKUP')
+                from .audio_format import PCMConverter
+                for a in attachments:
+                    # Filename is derived solely from typed DB UUIDs; manifest cannot select arbitrary paths.
+                    file=b/'audio'/a['file']
+                    if not file.is_file() or file.stat().st_size!=a['byte_size'] or digest(file.read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
+                    PCMConverter().normalize(file.read_bytes(),'audio/wav')
+        except (KeyError,ValueError,TypeError,sqlite3.Error,OSError):raise SafeError('INVALID_BACKUP') from None
+        temp=p.with_name(p.name+'.partial-'+str(uuid4()));temp.mkdir(mode=0o700)
         try:
             import shutil
-            shutil.copyfile(b / 'snapshot.sqlite3', temp / 'journal.sqlite3')
-            (temp / 'synthetic.json').write_text(encode(MARKER))
-            with sqlite3.connect(temp / 'journal.sqlite3') as c:
+            shutil.copyfile(b/'snapshot.sqlite3',temp/'journal.sqlite3')
+            if attachments:shutil.copytree(b/'audio',temp/'audio')
+            (temp/'synthetic.json').write_text(encode(MARKER))
+            with sqlite3.connect(temp/'journal.sqlite3') as c:
                 c.execute("UPDATE vault_meta SET restore_epoch=restore_epoch+1,reconciliation='RESTORED_REQUIRES_RECONCILIATION'")
             private_files(temp)
-            if p.exists():
-                p.rmdir()  # was verified empty; refuses if changed
-            temp.rename(p)
+            if attachments:
+                for f in (temp/'audio').iterdir():os.chmod(f,0o600)
+            from .voice import fsync_dir
+            for f in (temp/'journal.sqlite3',temp/'synthetic.json'):
+                with f.open('rb') as h:os.fsync(h.fileno())
+            fsync_dir(temp)
+            if p.exists():p.rmdir()
+            temp.rename(p);fsync_dir(p.parent)
         except BaseException:
             import shutil
-            shutil.rmtree(temp)
-            raise
+            shutil.rmtree(temp);raise
         return cls(p)

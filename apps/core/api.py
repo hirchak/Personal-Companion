@@ -17,6 +17,8 @@ from .domain import Journal
 from .runtime import Runtime
 from .ai_contracts import PreviewRequest, Approval, Enqueue, RuntimeMode, Empty, MemoryCreate, MemoryChange, SuggestionChange
 from .sync import SyncService, Pair, Packet, EpochReset
+from .voice import Voice
+from .voice_contracts import AudioBegin, AudioChunk, VoiceEmpty, ASRRequest, TranscriptEdit, TranscriptConfirm, AudioDelete
 
 CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
 
@@ -63,6 +65,8 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.sync, app.state.m2 = sync, m2
     runtime = Runtime(journal)
     app.state.runtime = runtime
+    voice = Voice(journal, sync)
+    app.state.voice = voice
     host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
@@ -88,11 +92,13 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                 chunks = []
                 async for chunk in request.stream():
                     length += len(chunk)
-                    if length > 1048576:
+                    if length > (400000 if '/voice/' in request.url.path else 1048576):
                         raise SafeError('BODY_LIMIT', 413)
                     chunks.append(chunk)
                 request._body = b''.join(chunks)
             path = request.url.path
+            if '/voice/' in path and request.url.query:
+                raise SafeError('VOICE_QUERY_DENIED',403)
             if path.startswith('/api/v1/device/'):
                 if not m2: raise SafeError('M2_DISABLED',403)
                 if path != '/api/v1/device/pair':
@@ -116,7 +122,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
             response = error('STORAGE_UNAVAILABLE', 503)
         response.headers.update({'Cache-Control': 'no-store', 'Content-Security-Policy': CSP,
                                  'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
-                                 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'})
+                                 'Permissions-Policy': 'camera=(), microphone=(self), geolocation=()'})
         return response
 
     @app.exception_handler(SafeError)
@@ -140,6 +146,33 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     @app.exception_handler(HTTPException)
     async def http_error(request, exc):
         return error('NOT_FOUND' if exc.status_code == 404 else 'REQUEST_DENIED', exc.status_code)
+
+    def voice_auth(request):
+        return (request.state.device_id,request.state.device_token,request.state.device_epoch) if request.url.path.startswith('/api/v1/device/') else None
+
+    # Same bounded domain boundary for owner session and already paired phone. No arbitrary paths.
+    for prefix in ('/api/v1/voice','/api/v1/device/voice'):
+        def voice_list(request: Request): return voice.list(voice_auth(request))
+        def voice_begin(body: AudioBegin,request: Request): return voice.begin(body,voice_auth(request))
+        def voice_get(audio_id: UUID,request: Request): return voice.get(audio_id,voice_auth(request))
+        def voice_chunk(audio_id: UUID,body: AudioChunk,request: Request):return voice.chunk(audio_id,body,voice_auth(request))
+        def voice_finish(audio_id: UUID,body: VoiceEmpty,request: Request):return voice.finalize(audio_id,voice_auth(request))
+        def voice_cancel(audio_id: UUID,body: VoiceEmpty,request: Request):return voice.cancel_upload(audio_id,voice_auth(request))
+        def voice_delete(audio_id: UUID,body: AudioDelete,request: Request):return voice.delete(audio_id,body,voice_auth(request))
+        def voice_asr(audio_id: UUID,body: ASRRequest,request: Request):
+            auth_args=voice_auth(request);result=voice.enqueue(audio_id,body,auth_args)
+            threading.Thread(target=voice.run,args=(result['transcript_id'],body.mode,auth_args),daemon=True).start()
+            return result
+        def voice_edit(transcript_id: UUID,body: TranscriptEdit,request: Request):return voice.edit(transcript_id,body,voice_auth(request))
+        def voice_discard(transcript_id: UUID,body: VoiceEmpty,request: Request):return voice.cancel_transcript(transcript_id,voice_auth(request))
+        def voice_confirm(transcript_id: UUID,body: TranscriptConfirm,request: Request):return voice.confirm(transcript_id,body,voice_auth(request))
+        for path,endpoint,methods in [
+            ('/audio',voice_list,['GET']),('/audio',voice_begin,['POST']),('/audio/{audio_id}',voice_get,['GET']),
+            ('/audio/{audio_id}/chunks',voice_chunk,['POST']),('/audio/{audio_id}/finalize',voice_finish,['POST']),
+            ('/audio/{audio_id}/cancel',voice_cancel,['POST']),('/audio/{audio_id}/delete',voice_delete,['POST']),
+            ('/audio/{audio_id}/transcribe',voice_asr,['POST']),('/transcripts/{transcript_id}/edit',voice_edit,['POST']),
+            ('/transcripts/{transcript_id}/cancel',voice_discard,['POST']),('/transcripts/{transcript_id}/confirm',voice_confirm,['POST'])]:
+            app.add_api_route(prefix+path,endpoint,methods=methods)
 
     @app.post('/api/v1/auth/unlock')
     def unlock(body: Unlock):
@@ -165,7 +198,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
 
     @app.get('/api/v1/status')
     def status():
-        return {'schema_version': 3, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
+        return {'schema_version': 4, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
 
     @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):

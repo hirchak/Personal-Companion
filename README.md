@@ -88,3 +88,19 @@ user-controlled provenance memory inside the Mac UI; pending/finalized pairing f
 `docs/M3_CONTRACT.md`, `docs/adr/ADR-003-M3-RUNTIME.md` and `reports/M3_SAFE_RUNTIME_REPORT.md`
 carry scope/evidence. AI starts OFF; actual Codex runtime calls remain PROVIDER_DISABLED/NOT_RUN.
 No real-data/hardware/clinical/deploy/M4+ approval. Run existing M2 demo script with a new synthetic root.
+
+## M4 local voice candidate
+
+[Contract](docs/M4_CONTRACT.md): synthetic microphone capture, encrypted offline phone audio,
+private Mac attachment/resume, editable ASR candidate and explicit journal confirmation/retention.
+Open «Голосовий запис» near the heading. Actual ASR model and Galaxy gate remain NOT_RUN;
+explicit synthetic fake ASR does not establish speech accuracy. No cloud speech/automatic M3 calls.
+
+```bash
+./scripts/m4_demo.sh /private/tmp/personal-companion-m4-synthetic-demo
+npm --prefix apps/web run build
+.venv/bin/python -m pytest -q tests/test_m4_browser.py
+```
+
+Use generated fake media only during M4 acceptance. [Follow-up ASR](docs/M4_LOCAL_ASR_RUNBOOK.md)
+and [Galaxy microphone](docs/M4_ANDROID_MIC_GATE.md) require their separately scoped permissions.

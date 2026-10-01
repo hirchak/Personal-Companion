@@ -16,6 +16,7 @@ import {
 import { EntryEditor } from "./EntryEditor";
 import { PhoneApp } from "./PhoneApp";
 import { AssistantPanel } from "./AssistantPanel";
+import { VoicePanel } from "./VoicePanel";
 import { MacSyncSettings } from "./MacSyncSettings";
 class ApiError extends Error {
   constructor(
@@ -497,6 +498,15 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
             <span aria-hidden="true">+</span> Додати запис
           </button>
         </header>
+        <details className="voice-disclosure">
+          <summary>Голосовий запис</summary>
+          <VoicePanel
+            csrf={csrf}
+            onJournalChange={() => {
+              void load();
+            }}
+          />
+        </details>
         <AssistantPanel csrf={csrf} selected={selected} onChanged={load} />
         <section className="filters" aria-label="Пошук і фільтри">
           <label className="search">

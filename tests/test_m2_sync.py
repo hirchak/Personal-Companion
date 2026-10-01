@@ -179,7 +179,7 @@ def test_M2_A08_mac_schema1_migration_rollback_and_preservation(isolated):
         assert c.execute('SELECT schema_version FROM vault_meta').fetchone()[0]==1
         assert c.execute("SELECT count(*) FROM sqlite_master WHERE name='devices'").fetchone()[0]==0
     store=Store(root)
-    assert store.meta()['schema_version']==3
+    assert store.meta()['schema_version']==4
     from apps.core.domain import Journal
     assert Journal(store).get(id)['raw_text']=='SYNTHETIC migrated'
     assert (root/'preupgrade.sqlite3').is_file()

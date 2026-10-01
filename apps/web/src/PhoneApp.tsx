@@ -6,6 +6,7 @@ import {
   type RecordItem,
 } from "./phone-store";
 import { blank, names, typed, fieldNames, type Draft } from "./journal-ui";
+import { VoicePanel } from "./VoicePanel";
 import { EntryEditor } from "./EntryEditor";
 import { draftPayload, validatePayload } from "./phone-validation";
 const labels: Record<string, string> = {
@@ -408,6 +409,15 @@ export function PhoneApp() {
             + Додати запис
           </button>
         </header>
+        <details className="voice-disclosure">
+          <summary>Голосовий запис</summary>
+          <VoicePanel
+            phone={store.current}
+            onJournalChange={() => {
+              void store.current.state().then(setData);
+            }}
+          />
+        </details>
         <div className="actions">
           <button onClick={() => setSettings(!settings)}>
             Налаштування телефону
@@ -514,7 +524,7 @@ export function PhoneApp() {
               onClick={async () => {
                 if (
                   !confirm(
-                    "Забути encrypted копію цього браузера? Unsynced дані буде втрачено; спочатку експортуйте recovery.",
+                    "Забути encrypted копію цього браузера? Unsynced записи й аудіо буде втрачено; спочатку експортуйте journal recovery і окремий encrypted audio export.",
                   )
                 )
                   return;
@@ -708,8 +718,8 @@ export function PhoneApp() {
           Phone-only data потребує encrypted recovery. Browser/OS storage
           best-effort; гарантованого background sync немає.
           <br />
-          Реальні приватні записи ще не дозволені. AI, health/ASR/deploy
-          вимкнено.
+          Реальні приватні записи ще не дозволені. Зовнішній AI, реальна
+          ASR-модель, health і deploy вимкнено.
         </footer>
       </main>
     </div>

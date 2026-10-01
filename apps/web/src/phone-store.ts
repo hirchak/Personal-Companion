@@ -1,3 +1,12 @@
+import {
+  AUDIO_CHUNK,
+  AUDIO_MAX,
+  audioHash,
+  audioBase64,
+  audioUnbase64,
+  audioBegin,
+  type PhoneAudio,
+} from "./audio-types";
 /** Synthetic encrypted phone data plane. Native WebCrypto, no durable plaintext key. */
 import { validatePayload } from "./phone-validation";
 import type { components } from "./api-schema";
@@ -60,7 +69,7 @@ type Envelope = {
   ciphertext: string;
 };
 const DB = "personal-companion-synthetic-phone";
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 const encoder = new TextEncoder();
 const b64 = (bytes: Uint8Array) =>
   btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join(""));
@@ -92,6 +101,9 @@ export function openPhoneDB(): Promise<IDBDatabase> {
     r.onupgradeneeded = () => {
       if (!r.result.objectStoreNames.contains("vault"))
         r.result.createObjectStore("vault");
+      for (const name of ["audio", "audioChunks"])
+        if (!r.result.objectStoreNames.contains(name))
+          r.result.createObjectStore(name);
       if (!r.result.objectStoreNames.contains("control"))
         r.result.createObjectStore("control");
     };
@@ -938,6 +950,361 @@ export class PhoneStore {
       }));
       s.sequence = Math.max(0, ...s.outbox.map((o) => o.local_sequence));
     });
+  }
+  private audioContext(id: string, revision: number) {
+    if (!this.config) throw new StoreError("LOCKED");
+    return `pc-audio:SYNTHETIC:1:${this.config.device_id}:${this.config.salt}:${id}:${revision}`;
+  }
+  private async audioReady() {
+    if (!this.key || !this.config) throw new StoreError("LOCKED");
+    // Missing/evicted journal config must not allow orphaned writes with a still-live key.
+    await this.state();
+    this.database ??= await openPhoneDB();
+    return { db: this.database, key: this.key, generation: this.generation };
+  }
+  async saveAudio(data: Uint8Array): Promise<PhoneAudio> {
+    if (!data.length || data.length > AUDIO_MAX)
+      throw new StoreError("AUDIO_SIZE_LIMIT");
+    data = data.slice(); // immutable snapshot binds the operation hash to all encrypted chunks
+    const { db, key, generation } = await this.audioReady();
+    const begin = { ...audioBegin(data), content_hash: await audioHash(data) };
+    const item: PhoneAudio = {
+      begin,
+      state: "LOCAL_AUDIO_SAVED",
+      uploaded: 0,
+      retention: "KEEP",
+      transcript: null,
+      receipt: null,
+      revision: 1,
+      cancelPending: false,
+    };
+    const metadata = await encrypt(
+      item,
+      key,
+      this.audioContext(begin.audio_id, 1),
+    );
+    const chunks = [];
+    for (let index = 0; index * AUDIO_CHUNK < data.length; index++) {
+      const bytes = data.slice(index * AUDIO_CHUNK, (index + 1) * AUDIO_CHUNK);
+      chunks.push(
+        await encrypt(
+          { data: audioBase64(bytes), content_hash: await audioHash(bytes) },
+          key,
+          this.audioContext(begin.audio_id, 0) +
+            `:${begin.content_hash}:${index}`,
+        ),
+      );
+    }
+    if (generation !== this.generation || !this.key)
+      throw new StoreError("LOCKED");
+    const tx = db.transaction(["audio", "audioChunks"], "readwrite"),
+      done = complete(tx);
+    try {
+      tx.objectStore("audio").add({ revision: 1, ...metadata }, begin.audio_id);
+      chunks.forEach((value, index) =>
+        tx.objectStore("audioChunks").add(value, `${begin.audio_id}:${index}`),
+      );
+    } catch (e) {
+      tx.abort();
+      await done.catch(() => {});
+      throw e;
+    }
+    await done; // exact local durability point; no caller may announce success before this.
+    if (generation !== this.generation) throw new StoreError("LOCKED");
+    return item;
+  }
+  async audios(): Promise<PhoneAudio[]> {
+    const { db, key } = await this.audioReady();
+    const tx = db.transaction("audio"),
+      done = complete(tx);
+    const rows = await request(tx.objectStore("audio").getAll()),
+      keys = await request(tx.objectStore("audio").getAllKeys());
+    await done;
+    const items: PhoneAudio[] = [];
+    for (let i = 0; i < rows.length; i++) {
+      const e = rows[i];
+      const item = (await decrypt(
+        e,
+        key,
+        this.audioContext(String(keys[i]), e.revision),
+      )) as PhoneAudio;
+      if (
+        item.begin.audio_id !== keys[i] ||
+        item.revision !== e.revision ||
+        !/^[a-f0-9]{64}$/.test(item.begin.content_hash) ||
+        !Number.isSafeInteger(item.begin.byte_size) ||
+        item.begin.byte_size < 44 ||
+        item.begin.byte_size > AUDIO_MAX ||
+        ![
+          "LOCAL_AUDIO_SAVED",
+          "UPLOADING",
+          "MAC_AUDIO_CONFIRMED",
+          "FAILED",
+          "CANCELLED",
+        ].includes(item.state)
+      )
+        throw new StoreError("AUDIO_INTEGRITY_FAILED");
+      items.push(item);
+    }
+    return items.sort((a, b) =>
+      b.begin.created_at_utc.localeCompare(a.begin.created_at_utc),
+    );
+  }
+  async audioData(id: string) {
+    const item = (await this.audios()).find((x) => x.begin.audio_id === id);
+    if (!item) throw new StoreError("AUDIO_NOT_FOUND");
+    const { db, key } = await this.audioReady();
+    const tx = db.transaction("audioChunks"),
+      done = complete(tx);
+    const count = Math.ceil(item.begin.byte_size / AUDIO_CHUNK);
+    const rows = await Promise.all(
+      Array.from({ length: count }, (_, i) =>
+        request(tx.objectStore("audioChunks").get(`${id}:${i}`)),
+      ),
+    );
+    await done;
+    const data = new Uint8Array(item.begin.byte_size);
+    for (let i = 0; i * AUDIO_CHUNK < data.length; i++) {
+      if (!rows[i]) throw new StoreError("AUDIO_INCOMPLETE");
+      const chunk = await decrypt(
+        rows[i],
+        key,
+        this.audioContext(id, 0) + `:${item.begin.content_hash}:${i}`,
+      );
+      const bytes = audioUnbase64(chunk.data);
+      if (
+        bytes.length !== Math.min(AUDIO_CHUNK, data.length - i * AUDIO_CHUNK) ||
+        (await audioHash(bytes)) !== chunk.content_hash
+      )
+        throw new StoreError("AUDIO_INTEGRITY_FAILED");
+      data.set(bytes, i * AUDIO_CHUNK);
+    }
+    if ((await audioHash(data)) !== item.begin.content_hash)
+      throw new StoreError("AUDIO_INTEGRITY_FAILED");
+    return data;
+  }
+  async mutateAudio(
+    id: string,
+    action: (item: PhoneAudio) => void,
+  ): Promise<PhoneAudio> {
+    const run = async () => {
+      const { db, key, generation } = await this.audioReady();
+      const item = (await this.audios()).find((x) => x.begin.audio_id === id);
+      if (!item) throw new StoreError("AUDIO_NOT_FOUND");
+      const old = item.revision;
+      action(item);
+      item.revision++;
+      const next = {
+        revision: item.revision,
+        ...(await encrypt(item, key, this.audioContext(id, item.revision))),
+      };
+      if (generation !== this.generation) throw new StoreError("LOCKED");
+      const tx = db.transaction("audio", "readwrite"),
+        done = complete(tx);
+      const target = tx.objectStore("audio");
+      const current = await request(target.get(id));
+      if (!current || current.revision !== old) {
+        tx.abort();
+        await done.catch(() => {});
+        throw new StoreError("LOCAL_WRITE_CONFLICT");
+      }
+      target.put(next, id);
+      await done;
+      return item;
+    };
+    const result = this.serial.then(run, run);
+    this.serial = result.then(
+      () => undefined,
+      () => undefined,
+    );
+    return result;
+  }
+  async voiceCall(path: string, method = "GET", body?: unknown) {
+    const state = await this.state();
+    if (!state.pairing || state.repair) throw new StoreError("REPAIR_REQUIRED");
+    const response = await this.call("/voice" + path, method, body);
+    if ([401, 403, 409].includes(response.status)) {
+      const error = await response.clone().json();
+      if (
+        ["DEVICE_REVOKED", "DEVICE_DENIED", "REPAIR_REQUIRED"].includes(
+          error.code,
+        )
+      ) {
+        await this.mutate((s) => {
+          s.repair = true;
+        });
+        throw new StoreError("REPAIR_REQUIRED");
+      }
+    }
+    if (!response.ok) {
+      const e = await response.json();
+      throw new StoreError(e.code ?? "AUDIO_TRANSFER_FAILED");
+    }
+    return response.json();
+  }
+  async uploadAudio(
+    id: string,
+    cancelled: () => boolean,
+    progress: () => void,
+  ) {
+    await this.finalizePairing();
+    const item = (await this.audios()).find((x) => x.begin.audio_id === id);
+    if (!item) throw new StoreError("AUDIO_NOT_FOUND");
+    if (item.cancelPending || item.state === "CANCELLED") {
+      await this.voiceCall(`/audio/${id}/cancel`, "POST", {});
+      await this.mutateAudio(id, (x) => {
+        x.cancelPending = false;
+      });
+      return;
+    }
+    const bytes = await this.audioData(id);
+    const remote = await this.voiceCall("/audio", "POST", item.begin);
+    if (
+      remote.content_hash !== item.begin.content_hash ||
+      remote.byte_size !== bytes.length
+    )
+      throw new StoreError("INVALID_MAC_RECEIPT");
+    await this.mutateAudio(id, (x) => {
+      x.state = "UPLOADING";
+    });
+    progress();
+    try {
+      if (remote.state !== "MAC_AUDIO_CONFIRMED") {
+        for (let index = 0; index * AUDIO_CHUNK < bytes.length; index++) {
+          if (cancelled()) throw new StoreError("CANCELLED");
+          if (!remote.received_chunks.includes(index)) {
+            const data = bytes.slice(
+              index * AUDIO_CHUNK,
+              (index + 1) * AUDIO_CHUNK,
+            );
+            const content_hash = await audioHash(data);
+            const receipt = await this.voiceCall(
+              `/audio/${id}/chunks`,
+              "POST",
+              { index, content_hash, data: audioBase64(data) },
+            );
+            if (
+              receipt.audio_id !== id ||
+              receipt.index !== index ||
+              receipt.content_hash !== content_hash ||
+              receipt.state !== "CHUNK_DURABLE"
+            )
+              throw new StoreError("INVALID_MAC_RECEIPT");
+          }
+          await this.mutateAudio(id, (x) => {
+            x.uploaded = Math.min(bytes.length, (index + 1) * AUDIO_CHUNK);
+          });
+          progress();
+        }
+      }
+      if (cancelled()) throw new StoreError("CANCELLED");
+      const result = await this.voiceCall(`/audio/${id}/finalize`, "POST", {});
+      if (
+        result.state !== "MAC_AUDIO_CONFIRMED" ||
+        result.content_hash !== item.begin.content_hash ||
+        result.byte_size !== bytes.length
+      )
+        throw new StoreError("INVALID_MAC_RECEIPT");
+      await this.mutateAudio(id, (x) => {
+        x.state = "MAC_AUDIO_CONFIRMED";
+        x.uploaded = bytes.length;
+        x.receipt = {
+          content_hash: result.content_hash,
+          byte_size: result.byte_size,
+          state: result.state,
+        };
+        x.transcript = result.transcript;
+      });
+    } catch (e) {
+      if (cancelled()) await this.cancelAudio(id);
+      else
+        await this.mutateAudio(id, (x) => {
+          x.state = "FAILED";
+        });
+      throw e;
+    } finally {
+      progress();
+    }
+  }
+  async cancelAudio(id: string) {
+    await this.mutateAudio(id, (x) => {
+      x.state = "CANCELLED";
+      x.cancelPending = true;
+    });
+    try {
+      await this.voiceCall(`/audio/${id}/cancel`, "POST", {});
+      await this.mutateAudio(id, (x) => {
+        x.cancelPending = false;
+      });
+    } catch {
+      /* durable cancellation intention remains; retry when paired Mac returns. */
+    }
+  }
+  async refreshAudio(id: string) {
+    const result = await this.voiceCall(`/audio/${id}`);
+    return this.mutateAudio(id, (x) => {
+      x.transcript = result.transcript;
+    });
+  }
+  async deleteAudio(id: string, afterConfirm = false) {
+    const item = (await this.audios()).find((x) => x.begin.audio_id === id);
+    if (!item) return;
+    if (
+      afterConfirm &&
+      (item.receipt?.state !== "MAC_AUDIO_CONFIRMED" ||
+        item.transcript?.state !== "CONFIRMED")
+    )
+      throw new StoreError("AUDIO_RETENTION_GATE");
+    const { db, generation } = await this.audioReady();
+    if (generation !== this.generation) throw new StoreError("LOCKED");
+    const tx = db.transaction(["audio", "audioChunks"], "readwrite"),
+      done = complete(tx);
+    tx.objectStore("audio").delete(id);
+    for (let i = 0; i * AUDIO_CHUNK < item.begin.byte_size; i++)
+      tx.objectStore("audioChunks").delete(`${id}:${i}`);
+    await done;
+  }
+  async restoreAudioDraft(pkg: any, passphrase: string) {
+    if (
+      pkg?.format !== "SYNTHETIC_AUDIO_RESCUE_V1" ||
+      !pkg.config ||
+      pkg.config.storage_schema !== 2
+    )
+      throw new StoreError("UNSUPPORTED_RECOVERY");
+    const key = await derive(passphrase, pkg.config);
+    const recovered = await decrypt(
+      pkg,
+      key,
+      `pc-audio-rescue:SYNTHETIC:1:${pkg.config.device_id}`,
+    );
+    if (
+      typeof recovered.data !== "string" ||
+      recovered.data.length > 4 * Math.ceil(AUDIO_MAX / 3)
+    )
+      throw new StoreError("AUDIO_SIZE_LIMIT");
+    const bytes = audioUnbase64(recovered.data);
+    if ((await audioHash(bytes)) !== recovered.content_hash)
+      throw new StoreError("AUDIO_INTEGRITY_FAILED");
+    return this.saveAudio(bytes);
+  }
+  async copyAudioForRepair(id: string) {
+    const state = await this.state();
+    if (state.repair || !state.pairing) throw new StoreError("REPAIR_REQUIRED");
+    // Explicit new ID/operation; old-epoch upload is never silently replayed or erased.
+    return this.saveAudio(await this.audioData(id));
+  }
+  async exportAudioDraft(data: Uint8Array) {
+    const { key } = await this.audioReady();
+    // Explicit encrypted rescue export for a failed save. Never a raw recording or credential.
+    return {
+      format: "SYNTHETIC_AUDIO_RESCUE_V1",
+      config: this.config,
+      ...(await encrypt(
+        { data: audioBase64(data), content_hash: await audioHash(data) },
+        key,
+        `pc-audio-rescue:SYNTHETIC:1:${this.config!.device_id}`,
+      )),
+    };
   }
   async forget() {
     this.lock();

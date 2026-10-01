@@ -136,3 +136,23 @@ no new dependencies, provider credentials or inference. Controlled fake subproce
 trusted test code; real OS/provider gate remains UNVERIFIED/NOT_RUN. See [M3 contract](M3_CONTRACT.md).
 Evidence collector sanitizes local source/Python paths; failed raw diagnostics remain ignored/local.
 CI NOT_RUN. Verify exact C before evidence-only R; final R docs/snapshot/privacy recheck separately.
+
+## M4 synthetic voice verification
+
+Generate no real-user voice fixtures. Tests create PCM tone/silence/noise WAV in temp directories
+and launch existing project-local Chromium with fake microphone. No engine/model/codec download.
+
+```bash
+npm --prefix apps/web run build
+npm --prefix apps/web test
+.venv/bin/python -m pytest -q tests/test_m4_browser.py
+.venv/bin/python -m pytest -q
+.venv/bin/python -m scripts.measure_m4 --output generated/m4-performance.json
+.venv/bin/python scripts/verify_m4.py --scope EXACT_C --output generated/m4-exact-c.json
+./scripts/m4_demo.sh /private/tmp/personal-companion-m4-synthetic-demo
+```
+
+Tests use actual SQLite/files, WebCrypto/IDB and built React. Use only synthetic/test microphone
+in this scope; never use a real person's voice as acceptance data. Actual-model benchmark and actual
+Galaxy microphone are separate NOT_RUN gates: [ASR runbook](M4_LOCAL_ASR_RUNBOOK.md),
+[Galaxy runbook](M4_ANDROID_MIC_GATE.md). Engineering mapping: [M4 contract](M4_CONTRACT.md).

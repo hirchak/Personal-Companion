@@ -24,7 +24,7 @@ EXCLUDED = {'.git', 'generated', '__pycache__', '.venv', 'node_modules', '.pytes
 FORBIDDEN_DIRS = {'private', 'vault', 'private_context', 'user-data', 'user_data', 'quarantine',
                   'raw', 'inbox'}
 FORBIDDEN_EXTENSIONS = {'.sqlite', '.sqlite3', '.db', '.key', '.pem', '.p12', '.wav', '.m4a',
-                        '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip'}
+                        '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.gguf', '.ggml', '.onnx', '.pt', '.safetensors'}
 CANONICAL_STARTER_HASHES = {
     '.gitignore':'92e8adf6bde8f43f9dcef971fc29e82f9722eb39c03cd917953c5bc1aa400545',
     '.project/context_map.json':'86fdc85997b35959450ed6e96008c6fa0c2e3d848b221b4e155814c07ab7107d',

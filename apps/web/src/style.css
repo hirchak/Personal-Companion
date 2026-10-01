@@ -591,3 +591,90 @@ footer {
     display: block;
   }
 }
+
+.voice-panel {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line, #d9ddd4);
+}
+.voice-panel > p,
+.voice-limit {
+  max-width: 70ch;
+}
+.voice-panel button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  white-space: normal;
+}
+.voice-item {
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--line, #d9ddd4);
+}
+.voice-panel .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.voice-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-block: 0.75rem;
+  min-width: 0;
+}
+.voice-panel label.check {
+  flex-direction: row;
+  align-items: center;
+  min-height: 44px;
+  white-space: normal;
+}
+.voice-panel label.check input {
+  flex: 0 0 1rem;
+}
+.voice-panel textarea {
+  min-height: 9rem;
+  resize: vertical;
+  width: 100%;
+}
+.voice-review {
+  max-width: 70ch;
+}
+.voice-limit,
+.voice-panel .metadata {
+  color: var(--muted, #4a574d);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.voice-panel select {
+  max-width: 100%;
+  min-height: 44px;
+}
+.voice-panel details {
+  margin-block: 1rem;
+}
+.voice-panel progress {
+  width: 100%;
+  max-width: 24rem;
+}
+.voice-recording p {
+  font-variant-numeric: tabular-nums;
+}
+
+.voice-disclosure {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line, #d9ddd4);
+}
+.voice-disclosure > summary {
+  min-height: 44px;
+  display: list-item;
+  padding-block: 0.75rem;
+  cursor: pointer;
+}
+.voice-disclosure > .voice-panel {
+  margin-top: 0;
+  padding-top: 0.5rem;
+  border-top: 0;
+}

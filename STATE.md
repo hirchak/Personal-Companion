@@ -9,16 +9,16 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: e437de0f41872cbb0c9b0e5b6b940dd781de0735
-implementation_sha: 5621d9b0fc090194be019b09fc31b2f90155ea13
-report_path: reports/M3_SAFE_RUNTIME_REPORT.md
-last_reviewed_sha: 67cb03969d344fe37f45f1d97d021405bea6b126
-current_milestone: M3
-current_goal: M3_SAFE_RUNTIME
-current_goal_path: prompts/M3_SAFE_RUNTIME.md
-current_contract_path: docs/M3_CONTRACT.md
-implementation_status: AWAITING_REVIEW
-review_status: AWAITING_REVIEW
+baseline_sha: 40b33a05248353b910acf733db99e21242ee0bd2
+implementation_sha: null
+report_path: reports/M4_LOCAL_VOICE_ASR_REPORT.md
+last_reviewed_sha: 5621d9b0fc090194be019b09fc31b2f90155ea13
+current_milestone: M4
+current_goal: M4_LOCAL_VOICE
+current_goal_path: prompts/M4_LOCAL_VOICE.md
+current_contract_path: docs/M4_CONTRACT.md
+implementation_status: IN_PROGRESS
+review_status: NOT_STARTED
 next_authorized_milestone: null
 research_status: NOT_STARTED
 clinical_protocols_enabled: false
@@ -30,14 +30,15 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M3 AWAITING_REVIEW — synthetic engineering candidate
+# M4 — final verification preparation
 
-M2 external ACCEPT: reports/M2_ARCHITECT_REVIEW.md; last reviewed implementation stays M2 C.
-M3 code/contract complete: data-only mock runtime, exact consent, bounded jobs, provenance memory,
-neutral reversible proposals/UI, pending/finalized pairing closes M2-N01 forward. Implementation C 5621d9b0fc090194be019b09fc31b2f90155ea13. R is the next evidence-only commit.
-Exact clean C full build + 198 Python (10 browser) + 13 web tests + docs/snapshot/privacy/diff PASS.
-No runtime credentials or paid/live inference; actual Codex candidate PROVIDER_DISABLED/NOT_RUN.
-Android/private route/Keystore A12 HARDWARE_UNVERIFIED/NOT_RUN, clinical/research/voice/health/M4+ OFF.
-Publication checkpoint: PRE_PUSH at evidence creation; exact R/push receipt in final handoff, verify origin/main.
-Next: independent architect review of pushed C/R. No M4+ authorized.
-Demo: ./scripts/m2_demo.sh /private/tmp/personal-companion-m3-synthetic-demo; loopback Mac / and desktop /phone/.
+All 29 owner sections received; historical missing-specification blocker resolved.
+Base/main verified at 40b33a05248353b910acf733db99e21242ee0bd2, initially clean.
+M3 synthetic external ACCEPT recorded; reviewed C preserved. Only M4 authorized.
+Pipeline implemented: PCM mic, AES-GCM phone chunks, private Mac attachments/resume/checksums,
+disabled/fake/process ASR, edit/confirm/retention, encrypted rescue and attachment backup/restore.
+Pre-final full suite 257 Python (18 browser) PASS; web 21 and build PASS. Latest edits/checks pending.
+Next: final code/contract/public-data review, implementation C, exact-C full verification, evidence-only R,
+normal fast-forward main push/remote receipt. M4 must end AWAITING_REVIEW, not self-ACCEPTED.
+Actual ASR/model/HUMAN_UA_QUALITY NOT_RUN; Galaxy HARDWARE_UNVERIFIED/NOT_RUN; all real private,
+cloud/provider/system install/rollout/clinical/Health/M5+ gates OFF. No downloads/builds of ASR.
