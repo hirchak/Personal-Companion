@@ -1,7 +1,8 @@
 # Roadmap і критерії переходу
 
 M0 engineering/bootstrap: ACCEPT за зовнішнім architect review. M1: external engineering/synthetic ACCEPT за M2 goal.
-M2: AWAITING_REVIEW за explicit M2_OFFLINE_PWA_SYNC; synthetic A01–A11 PASS. M3–M8 NOT_STARTED;
+M2: external ACCEPT for synthetic engineering (reports/M2_ARCHITECT_REVIEW.md).
+M3: AWAITING_REVIEW, synthetic runtime/memory/organization and forward M2-N01 fix. M4–M8 NOT_STARTED;
 реальний Android/private transport gate NOT_RUN/HARDWARE_UNVERIFIED, без прихованої активації.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 

@@ -15,6 +15,7 @@ import {
 } from "./journal-ui";
 import { EntryEditor } from "./EntryEditor";
 import { PhoneApp } from "./PhoneApp";
+import { AssistantPanel } from "./AssistantPanel";
 import { MacSyncSettings } from "./MacSyncSettings";
 class ApiError extends Error {
   constructor(
@@ -496,6 +497,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
             <span aria-hidden="true">+</span> Додати запис
           </button>
         </header>
+        <AssistantPanel csrf={csrf} selected={selected} onChanged={load} />
         <section className="filters" aria-label="Пошук і фільтри">
           <label className="search">
             Пошук
@@ -759,7 +761,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
           Чернетки живуть лише у відкритій вкладці. Reload або блокування
           прибирає незбережений текст.
           <br />
-          AI вимкнено · цей demo використовує лише вигадані записи.
+          Зовнішній AI вимкнено · цей demo використовує лише вигадані записи.
         </footer>
       </main>
     </div>

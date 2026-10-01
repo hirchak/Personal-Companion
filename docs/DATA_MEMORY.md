@@ -85,3 +85,12 @@ Portable JSON/Markdown + schema version + manifest + локальні вклад
 Вибірка за секціями/періодами/типами; preview. Немає прямого довільного SQL від агента.
 Майбутній MCP — read-only scoped tools за замовчуванням; recording/deletion/sharing
 окремі повноваження. Імпортована відповідь AI лишається зовнішньою пропозицією.
+
+## Implemented M3 memory
+
+See [M3 contract](M3_CONTRACT.md) and [runtime ADR](adr/ADR-003-M3-RUNTIME.md). SQLite memory now
+supports explicit user preferences and neutral model proposals; source/provenance/revisions, confirm,
+edit/reject/delete and downstream invalidation are working synthetic flows. Model confirmation keeps
+MODEL_SUGGESTED provenance with USER_CONFIRMED status. Explicit user correction becomes USER_EDITED,
+keeps originating job/suggestion but detaches obsolete active refs. Creative memory inference is denied.
+No embeddings, whole-journal profile or clinical label inference.

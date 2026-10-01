@@ -502,3 +502,92 @@ footer {
 .phone footer {
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+.assistant {
+  margin-block: 1.5rem 2rem;
+  border-block: 1px solid var(--line);
+}
+.assistant-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.8rem;
+}
+.assistant-head p {
+  margin: 0;
+}
+.assistant-content {
+  padding-block: 0.5rem 2rem;
+}
+.assistant-content h2 {
+  margin-block: 2rem 0.7rem;
+}
+.assistant-content h3 {
+  margin-block: 1.8rem 0.5rem;
+}
+.assistant-content fieldset {
+  margin-block: 1rem;
+  border: 1px solid var(--line);
+  padding: 0.8rem 1rem;
+}
+.assistant-content label {
+  display: block;
+  margin-block: 0.6rem;
+}
+.assistant-content label.check {
+  white-space: normal;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.assistant-content input[type="checkbox"] {
+  width: 1.2rem;
+  min-height: 1.2rem;
+  flex-shrink: 0;
+}
+.assistant-content .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-block: 0.8rem;
+}
+.context-preview {
+  padding-block: 0.5rem 1rem;
+  border-block: 1px solid var(--line);
+  margin-block: 1rem;
+}
+.context-preview pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.85rem;
+  max-height: 28rem;
+  overflow-y: auto;
+}
+.source-ref {
+  overflow-wrap: anywhere;
+  font-size: 0.82rem;
+}
+.runtime-row,
+.memory-row,
+.suggestion-row {
+  border-bottom: 1px solid var(--line);
+  padding-block: 1rem;
+}
+.runtime-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .assistant-head,
+  .runtime-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .assistant-content .field-row {
+    display: block;
+  }
+}

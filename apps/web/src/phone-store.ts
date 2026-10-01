@@ -521,12 +521,30 @@ export class PhoneStore {
       typeof paired.epoch !== "string"
     )
       throw new StoreError("INVALID_PAIR_RESPONSE");
-    return this.mutate((s) => {
+    await this.mutate((s) => {
       const previous = s.pairing;
       s.pairing = { credential: paired.credential, epoch: paired.epoch };
       if (s.repair || (previous && previous.epoch !== paired.epoch))
         s.repair = true;
     });
+    // Only activate the server credential after the encrypted transaction committed.
+    // If confirmation response is lost, sync repeats this idempotently after restart.
+    await this.finalizePairing();
+    return this.state();
+  }
+  private async finalizePairing() {
+    const response = await this.call("/finalize", "POST", {});
+    if ([401, 403, 409].includes(response.status)) {
+      await this.mutate((s) => {
+        s.repair = true;
+        s.outbox.forEach((o) => {
+          if (o.state !== "MAC_CONFIRMED")
+            o.state = "REVOKED_OR_REPAIR_REQUIRED";
+        });
+      });
+      throw new StoreError("REPAIR_REQUIRED");
+    }
+    if (!response.ok) throw new StoreError("PAIR_PENDING_RETRY_OR_REVOKE");
   }
   private async call(
     path: string,
@@ -564,6 +582,7 @@ export class PhoneStore {
   async sync() {
     let state = await this.state();
     if (!state.pairing || state.repair) throw new StoreError("REPAIR_REQUIRED");
+    await this.finalizePairing();
     for (const op of state.outbox
       .filter((o) => o.state !== "MAC_CONFIRMED" && o.state !== "CONFLICT")
       .sort((a, b) => a.local_sequence - b.local_sequence)) {

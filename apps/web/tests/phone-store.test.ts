@@ -45,3 +45,36 @@ it('M2-A09 logical migration failure rolls back encrypted state and config',asyn
 it('M2-A03 choosing Mac or phone is a new mutation from current revision, never local fake confirmation',async()=>{
  for(const choice of ['mac','phone'] as const){await clear();const a=local();await a.create(PASSPHRASE);const id=crypto.randomUUID();await a.capture('create',id,{raw_text:NOTE});await a.mutate(s=>{s.records[id].state='CONFLICT';s.records[id].current={id,revision:4,raw_text:'SYNTHETIC current Mac',type:'inbox',tags:[],timezone:'Europe/Warsaw',occurred_at_utc:null,local_date:null,time_precision:'unknown'};s.outbox[0].state='CONFLICT';});const old=(await a.state()).outbox[0].operation_id;const resolved=await a.resolve(id,choice);expect(resolved.outbox).toHaveLength(1);expect(resolved.outbox[0].operation_id).not.toBe(old);expect(resolved.outbox[0].base_revision).toBe(4);expect(resolved.records[id].state).toBe('QUEUED');expect(resolved.outbox[0].payload?.raw_text).toBe(choice==='mac'?'SYNTHETIC current Mac':NOTE);a.lock();}
 });
+
+it('M2-N01 successful server prepare + encrypted write failure never finalizes; fresh invite retry does',async()=>{
+ const a=local();await a.create(PASSPHRASE);
+ const originalFetch=globalThis.fetch,originalPut=IDBObjectStore.prototype.put;
+ let pending=true,active=false,finalizations=0,prepares=0;
+ globalThis.fetch=async(input,init)=>{
+  if(String(input).endsWith('/pair')){
+   prepares++;pending=true;active=false;
+   return new Response(JSON.stringify({device_id:(await a.state()).device_id,credential:'SYNTHETIC controlled credential '+prepares,epoch:'SYNTHETIC:0',state:'PENDING'}),{status:200});
+  }
+  if(String(input).endsWith('/finalize')){finalizations++;pending=false;active=true;return new Response(JSON.stringify({state:'ACTIVE'}),{status:200});}
+  throw new Error('unexpected fixture route');
+ };
+ IDBObjectStore.prototype.put=function(){throw new DOMException('SYNTHETIC pairing persistence failure','QuotaExceededError');};
+ try{await expect(a.pair('SYNTHETIC invite 1','SYNTHETIC phone')).rejects.toThrow();}
+ finally{IDBObjectStore.prototype.put=originalPut;}
+ expect(pending).toBe(true);expect(active).toBe(false);expect(finalizations).toBe(0);expect((await a.state()).pairing).toBe(null);
+ try{await a.pair('SYNTHETIC fresh owner invite','SYNTHETIC phone');expect(active).toBe(true);expect(finalizations).toBe(1);expect((await a.state()).pairing?.credential).toContain('2');expect(JSON.stringify(await persisted())).not.toContain('SYNTHETIC controlled credential');}
+ finally{globalThis.fetch=originalFetch;}
+});
+
+it('M2-N01 encrypted credential survives lost confirmation response; foreground sync repeats confirmation',async()=>{
+ const a=local();await a.create(PASSPHRASE);const originalFetch=globalThis.fetch;
+ let confirmations=0;
+ globalThis.fetch=async(input)=>{
+  if(String(input).endsWith('/pair'))return new Response(JSON.stringify({device_id:(await a.state()).device_id,credential:'SYNTHETIC retryable credential',epoch:'SYNTHETIC:0',state:'PENDING'}),{status:200});
+  if(String(input).endsWith('/finalize')){confirmations++;if(confirmations===1)throw new TypeError('SYNTHETIC lost response');return new Response(JSON.stringify({state:'ACTIVE'}),{status:200});}
+  if(String(input).endsWith('/snapshot'))return new Response(JSON.stringify({epoch:'SYNTHETIC:0',checkpoint:0,entries:[],tombstones:[],schema_version:2}),{status:200});
+  throw new Error('unexpected fixture route');
+ };
+ try{await expect(a.pair('SYNTHETIC invite','SYNTHETIC phone')).rejects.toThrow();a.lock();const b=local();await b.unlock(PASSPHRASE);expect((await b.state()).pairing).not.toBe(null);await b.sync();expect(confirmations).toBe(2);}
+ finally{globalThis.fetch=originalFetch;}
+});

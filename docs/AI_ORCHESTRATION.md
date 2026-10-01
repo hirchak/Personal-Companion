@@ -70,3 +70,11 @@ Tool — вузька функція ядра (`save_entry`, `read_selected_entr
 тривалість, usage при доступності, outcome, protocol version і trace IDs.
 Читабельне пояснення рішення можна зберігати; приховані міркування моделі не потрібні.
 Реальні logs, summaries і оцінки не включати в GitHub-репорти.
+
+## Implemented M3 scope
+
+The working synthetic foundation is [M3 contract](M3_CONTRACT.md) / [ADR-003](adr/ADR-003-M3-RUNTIME.md).
+Three neutral tasks, canonical selected context/approval, strict schemas, bounded jobs and user review
+are implemented. No general tool dispatcher, free assistant chat or active clinical protocol. No live
+provider, hidden files/network/tools or automatic phone-triggered AI. Future architecture above is not
+an activation authorization.

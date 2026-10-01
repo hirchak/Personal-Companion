@@ -8,7 +8,7 @@ from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 2
+SCHEMA = 3
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
 
@@ -74,6 +74,34 @@ SYNC_TABLES = (
     'CREATE TABLE IF NOT EXISTS sync_checkpoints(device_id TEXT PRIMARY KEY REFERENCES devices(id),epoch TEXT NOT NULL,change_seq INTEGER NOT NULL)',
 )
 
+AI_TABLES = (
+    'CREATE TABLE IF NOT EXISTS ai_consents(id TEXT PRIMARY KEY,session TEXT NOT NULL,package TEXT NOT NULL,context_hash TEXT NOT NULL,expires_at REAL NOT NULL,approved INTEGER NOT NULL,revoked INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS ai_jobs(id TEXT PRIMARY KEY,operation_id TEXT UNIQUE NOT NULL,consent_id TEXT UNIQUE NOT NULL REFERENCES ai_consents(id),task TEXT NOT NULL,provider TEXT NOT NULL,model TEXT,protocol TEXT NOT NULL,context_hash TEXT NOT NULL,source_refs TEXT NOT NULL,state TEXT NOT NULL,attempts INTEGER NOT NULL,created TEXT NOT NULL,updated TEXT NOT NULL,error TEXT,usage TEXT)',
+    'CREATE UNIQUE INDEX IF NOT EXISTS ai_one_foreground ON ai_jobs((1)) WHERE state IN ("QUEUED","RUNNING")',
+    'CREATE TABLE IF NOT EXISTS suggestions(id TEXT PRIMARY KEY,job_id TEXT UNIQUE NOT NULL REFERENCES ai_jobs(id),status TEXT NOT NULL,output TEXT NOT NULL,fingerprint TEXT NOT NULL,created TEXT NOT NULL,updated TEXT NOT NULL,accepted TEXT,before_structure TEXT)',
+    'CREATE TABLE IF NOT EXISTS memories(id TEXT PRIMARY KEY,scope TEXT NOT NULL,content TEXT NOT NULL,status TEXT NOT NULL,provenance TEXT NOT NULL,sources TEXT NOT NULL,revision INTEGER NOT NULL,created TEXT NOT NULL,updated TEXT NOT NULL,expires_at REAL,job_id TEXT REFERENCES ai_jobs(id),suggestion_id TEXT REFERENCES suggestions(id))',
+)
+
+def ai_triggers(c):
+    for table, refs in (('entries','entry_refs'), ('memories','memory_refs')):
+        for action in ('UPDATE','DELETE'):
+            c.execute(f"""CREATE TRIGGER IF NOT EXISTS ai_invalidate_{table}_{action.lower()} AFTER {action} ON {table}
+            BEGIN
+              UPDATE ai_consents SET revoked=1 WHERE EXISTS
+                (SELECT 1 FROM json_each(json_extract(package,'$.{refs}')) WHERE json_extract(value,'$.id')=OLD.id);
+              UPDATE ai_jobs SET state='CANCELLED',error='SOURCE_CHANGED',updated=strftime('%Y-%m-%dT%H:%M:%fZ','now')
+                WHERE state IN ('QUEUED','RUNNING') AND consent_id IN (SELECT id FROM ai_consents WHERE revoked=1);
+              UPDATE suggestions SET status='STALE' WHERE status='PENDING' AND job_id IN
+                (SELECT id FROM ai_jobs WHERE consent_id IN (SELECT id FROM ai_consents WHERE revoked=1));
+            END""")
+    for action in ('UPDATE','DELETE'):
+        c.execute(f"""CREATE TRIGGER IF NOT EXISTS ai_memory_source_{action.lower()} AFTER {action} ON entries
+        BEGIN
+          UPDATE memories SET status='REVIEW_REQUIRED',revision=revision+1,updated=strftime('%Y-%m-%dT%H:%M:%fZ','now')
+          WHERE status IN ('MODEL_SUGGESTED','USER_CONFIRMED') AND EXISTS
+            (SELECT 1 FROM json_each(sources) WHERE json_extract(value,'$.id')=OLD.id);
+        END""")
+
 class Store:
     def __init__(self, root, fail_migration=False):
         self.root = safe_path(root)
@@ -128,6 +156,13 @@ class Store:
                     c.execute(sql)
                 for sql in SYNC_TABLES:
                     c.execute(sql)
+                for sql in AI_TABLES:
+                    c.execute(sql)
+                columns = {r[1] for r in c.execute('PRAGMA table_info(devices)')}
+                if 'pair_state' not in columns:
+                    c.execute("ALTER TABLE devices ADD COLUMN pair_state TEXT NOT NULL DEFAULT 'ACTIVE'")
+                    c.execute('ALTER TABLE devices ADD COLUMN pending_until REAL')
+                ai_triggers(c)
                 c.execute('INSERT OR IGNORE INTO sync_meta VALUES(1,?,0)', (str(uuid4()),))
                 for table in ('entries','tombstones'):
                     for action in ('INSERT','UPDATE','DELETE'):
@@ -186,6 +221,8 @@ class Store:
         from pydantic import ValidationError
         try:
             metadata = VaultMetadata.model_validate(dict(c.execute('SELECT * FROM vault_meta').fetchone()))
+            if metadata.schema_version == 3 and not {'ai_consents','ai_jobs','suggestions','memories'} <= tables:
+                raise SafeError('INCOMPLETE_SCHEMA')
             owner = str(metadata.owner_id)
             for table in ('entries', 'tombstones', 'operation_receipts'):
                 if c.execute(f'SELECT count(*) FROM {table} WHERE owner_id IS NULL OR owner_id!=?', (owner,)).fetchone()[0]:
@@ -198,7 +235,7 @@ class Store:
                 EntryInput.model_validate(payload)
                 EntryOutput.model_validate(dict(payload, id=row['id'], owner_id=row['owner_id'],
                     revision=row['revision'], created_at_utc=row['created'], updated_at_utc=row['updated'],
-                    schema_version=SCHEMA, privacy_class='PRIVATE_PERSONAL', provenance_type='USER_REPORTED'))
+                    schema_version=2, privacy_class='PRIVATE_PERSONAL', provenance_type='USER_REPORTED'))
             for row in c.execute('SELECT entry_id,revision,payload FROM entry_revisions'):
                 entry = json.loads(row['payload'])
                 historical = EntryRevisionOutput.model_validate(entry)
@@ -224,6 +261,8 @@ class Store:
                 try:
                     source.backup(dest)
                     dest.execute("UPDATE devices SET credential_hash='',revoked_at_utc=COALESCE(revoked_at_utc,?)", (now(),))
+                    dest.execute('UPDATE ai_consents SET revoked=1')
+                    dest.execute("UPDATE ai_jobs SET state='CANCELLED',error='BACKUP_REAPPROVAL_REQUIRED' WHERE state IN ('QUEUED','RUNNING')")
                     dest.commit()
                     dest.execute('PRAGMA journal_mode=DELETE')
                     self.check(dest)
@@ -249,14 +288,14 @@ class Store:
             raise SafeError('INVALID_BACKUP')
         try:
             m = json.loads((b / 'manifest.json').read_text())
-            if m['backup_format'] != 1 or m['schema_version'] != SCHEMA or m['attachments'] != [] or set(m['files']) != {'snapshot.sqlite3'}:
+            if m['backup_format'] != 1 or m['schema_version'] not in {2, SCHEMA} or m['attachments'] != [] or set(m['files']) != {'snapshot.sqlite3'}:
                 raise SafeError('UNSUPPORTED_BACKUP')
             if m['files']['snapshot.sqlite3'] != digest((b / 'snapshot.sqlite3').read_bytes()):
                 raise SafeError('CHECKSUM_MISMATCH')
             with sqlite3.connect(f'file:{b / "snapshot.sqlite3"}?mode=ro&immutable=1', uri=True) as source:
                 source.row_factory = sqlite3.Row
                 cls.check(source)
-                if source.execute('SELECT schema_version FROM vault_meta').fetchone()[0] != SCHEMA:
+                if source.execute('SELECT schema_version FROM vault_meta').fetchone()[0] != m['schema_version']:
                     raise SafeError('UNSUPPORTED_SCHEMA')
         except (KeyError, ValueError, sqlite3.Error):
             raise SafeError('INVALID_BACKUP') from None

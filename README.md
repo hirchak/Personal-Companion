@@ -12,9 +12,10 @@ fast-forward development pushes у `main` для явно виданих goals �
 основний приватний vault; телефон може накопичувати власні локальні записи до синхронізації.
 AI — додаткова можливість, а не умова збереження запису.
 
-**M1 engineering/synthetic ACCEPT за зовнішнім review; M2 offline-first synthetic PWA у реалізації.**
-CRUD чотирьох типів, історія, пошук/фільтри, захищений same-origin API, selected export,
-WAL backup/restore. M0 ACCEPT записаний із зовнішнього ТЗ. M2 стане AWAITING_REVIEW після exact checks. AI, deploy, реальні записи та M3+ OFF.
+**M1/M2 engineering/synthetic ACCEPT за зовнішнім review; M3 AWAITING_REVIEW.**
+CRUD чотирьох типів, історія, пошук/фільтри, selected export/backup, encrypted offline PWA/sync
+та локальний mock runtime із exact consent, jobs, memory й reversible suggestions. Зовнішній AI,
+deploy, реальні записи, клінічні протоколи та M4+ OFF. AI mode починає роботу OFF.
 
 ```bash
 ./scripts/setup_demo.sh
@@ -78,3 +79,12 @@ recovery and storage warnings. Це desktop localhost simulation, не real Andr
 [Contract](docs/M2_CONTRACT.md), [crypto ADR](docs/adr/ADR-001-M2-PHONE-CRYPTO.md),
 [transport candidate](docs/adr/ADR-002-M2-TRANSPORT.md), [hardware gate](docs/M2_ANDROID_GATE.md).
 `reports/M2_OFFLINE_PWA_SYNC_REPORT.md` містить актуальні evidence/limitations.
+
+## M3 synthetic runtime candidate
+
+M2 external ACCEPT is recorded in `reports/M2_ARCHITECT_REVIEW.md` (synthetic engineering only).
+M3 adds working local mock/explicit exact-context consent, bounded jobs, reversible proposals and
+user-controlled provenance memory inside the Mac UI; pending/finalized pairing fixes M2-N01.
+`docs/M3_CONTRACT.md`, `docs/adr/ADR-003-M3-RUNTIME.md` and `reports/M3_SAFE_RUNTIME_REPORT.md`
+carry scope/evidence. AI starts OFF; actual Codex runtime calls remain PROVIDER_DISABLED/NOT_RUN.
+No real-data/hardware/clinical/deploy/M4+ approval. Run existing M2 demo script with a new synthetic root.

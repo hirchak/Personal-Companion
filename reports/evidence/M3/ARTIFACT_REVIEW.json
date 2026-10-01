@@ -1,0 +1,43 @@
+{
+  "scope": "Manual source/diff and synthetic screenshot inspection plus heuristic scan; no exhaustive absence claim",
+  "allowed_materials": "Original code/docs, deterministic synthetic fixtures, captured synthetic app UI; no research/third-party media added",
+  "not_accessed": [
+    "real private vault",
+    "provider auth credentials",
+    "R01_RAW.docx",
+    "R02_RAW.docx",
+    "R03_RAW.docx"
+  ],
+  "live_provider": "NOT_RUN / PROVIDER_DISABLED",
+  "private_android": "HARDWARE_UNVERIFIED / NOT_RUN",
+  "screenshots": [
+    {
+      "path": "reports/evidence/M3/ui/assistant-desktop.png",
+      "sha256": "aaa0866dd669cdbfa95d0837987a45d5dc6f8b29280230130c3f294d67f6da48",
+      "scope": "Allowed synthetic product UI only, no owner terminal/code/credential",
+      "review": "UI material fixes resolved; desktop/mobile and 390px long-memory/pending state inspected"
+    },
+    {
+      "path": "reports/evidence/M3/ui/assistant-mobile.png",
+      "sha256": "c325cf6a6eac5e532d368cac14de9047e3658b28f6e0e7e2ab76757a55b8429f",
+      "scope": "Allowed synthetic product UI only, no owner terminal/code/credential",
+      "review": "UI material fixes resolved; desktop/mobile and 390px long-memory/pending state inspected"
+    },
+    {
+      "path": "reports/evidence/M3/ui/assistant-mobile-pending.png",
+      "sha256": "d8c179ae1a64b3af4822b99c45f76118a3c9bdc82ee95c85a6f04fd8f1d95b20",
+      "scope": "Allowed synthetic product UI only, no owner terminal/code/credential",
+      "review": "UI material fixes resolved; desktop/mobile and 390px long-memory/pending state inspected"
+    }
+  ],
+  "ui_detector_findings": [],
+  "ui_review": {
+    "initial": "fix",
+    "final": "ship for two resolved material fixes",
+    "fixed": [
+      "External AI OFF truthful footer",
+      "assistant checkbox wrapping and 44px target"
+    ],
+    "scope": "UI only; no architect ACCEPT"
+  }
+}

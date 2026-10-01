@@ -12,8 +12,10 @@ from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse, Response, FileResponse
 from pydantic import ValidationError
 from .models import Create, Patch, Delete, Selector, Export, Unlock, EntryOutput, EntryPage, RevisionPage, Receipt
-from .storage import SafeError, Store
+from .storage import SafeError, Store, digest
 from .domain import Journal
+from .runtime import Runtime
+from .ai_contracts import PreviewRequest, Approval, Enqueue, RuntimeMode, Empty, MemoryCreate, MemoryChange, SuggestionChange
 from .sync import SyncService, Pair, Packet, EpochReset
 
 CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
@@ -59,6 +61,8 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.store, app.state.journal, app.state.auth = store, journal, auth
     sync = SyncService(journal, clock)
     app.state.sync, app.state.m2 = sync, m2
+    runtime = Runtime(journal)
+    app.state.runtime = runtime
     host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
@@ -95,7 +99,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                     bearer = request.headers.get('authorization','')
                     if not bearer.startswith('Bearer '): raise SafeError('DEVICE_DENIED',401)
                     with store.connect() as connection:
-                        sync.authenticate(connection,request.headers.get('x-device-id',''),bearer[7:],request.headers.get('x-sync-epoch',''))
+                        sync.authenticate(connection,request.headers.get('x-device-id',''),bearer[7:],request.headers.get('x-sync-epoch',''), allow_pending=path=='/api/v1/device/finalize')
                     request.state.device_token = bearer[7:]
                     request.state.device_id = request.headers['x-device-id']
                     request.state.device_epoch = request.headers.get('x-sync-epoch','')
@@ -152,13 +156,16 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     @app.post('/api/v1/auth/lock')
     def lock(request: Request):
         auth.sessions.pop(request.state.session, None)
+        runtime.set_mode('OFF')
+        with store.transaction() as c:
+            c.execute('UPDATE ai_consents SET revoked=1 WHERE session=?',(digest(request.state.session.encode()),))
         journal.plans = {k: v for k, v in journal.plans.items() if v['session'] != request.state.session}
         r = JSONResponse({'code': 'LOCKED'}); r.delete_cookie('m1_session', path='/')
         return r
 
     @app.get('/api/v1/status')
     def status():
-        return {'schema_version': 2, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
+        return {'schema_version': 3, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
 
     @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):
@@ -220,6 +227,49 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     @app.post('/api/v1/device/pair')
     def pair(body: Pair):
         return sync.pair(body)
+
+    @app.post('/api/v1/device/finalize')
+    def finalize(body: Empty, request: Request):
+        return sync.finalize(request.state.device_id, request.state.device_token, request.state.device_epoch)
+
+    @app.get('/api/v1/ai/status')
+    def ai_status(): return runtime.status()
+
+    @app.post('/api/v1/ai/mode')
+    def ai_mode(body: RuntimeMode): return runtime.set_mode(body.mode)
+
+    @app.post('/api/v1/ai/preview')
+    def ai_preview(body: PreviewRequest, request: Request): return runtime.preview(body, request.state.session)
+
+    @app.post('/api/v1/ai/consents/{id}/approve')
+    def ai_approve(id: UUID, body: Approval, request: Request): return runtime.approve(id, body.context_hash, request.state.session)
+
+    @app.post('/api/v1/ai/consents/{id}/revoke')
+    def ai_revoke(id: UUID, body: Empty, request: Request): return runtime.revoke(id, request.state.session)
+
+    @app.get('/api/v1/ai/jobs')
+    def ai_jobs(): return runtime.jobs()
+
+    @app.post('/api/v1/ai/jobs', status_code=201)
+    def ai_enqueue(body: Enqueue, request: Request): return runtime.enqueue(body, request.state.session)
+
+    @app.post('/api/v1/ai/jobs/{id}/cancel')
+    def ai_cancel(id: UUID, body: Empty): return runtime.cancel(id)
+
+    @app.get('/api/v1/ai/memories')
+    def ai_memories(q: str = Query('', max_length=200)): return runtime.memories(q)
+
+    @app.post('/api/v1/ai/memories', status_code=201)
+    def ai_memory_create(body: MemoryCreate): return runtime.create_memory(body)
+
+    @app.post('/api/v1/ai/memories/{id}')
+    def ai_memory_change(id: UUID, body: MemoryChange): return runtime.change_memory(id, body)
+
+    @app.get('/api/v1/ai/suggestions')
+    def ai_suggestions(): return runtime.suggestions()
+
+    @app.post('/api/v1/ai/suggestions/{id}')
+    def ai_suggestion_change(id: UUID, body: SuggestionChange): return runtime.change_suggestion(id, body)
 
     @app.get('/api/v1/device/snapshot')
     def pull(request: Request):

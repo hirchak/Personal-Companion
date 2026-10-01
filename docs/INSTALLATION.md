@@ -157,3 +157,17 @@ Local IDB structural upgrade is additive; encrypted 1→2 needs explicit confirm
 rewrite. Newer unknown schema refuses safely. Waiting service worker activates explicitly and
 never resets outbox. Browser persistence is best effort even if granted; all storage may be
 cleared/evicted. Uncommitted draft remains only in current unlocked memory on write failure.
+
+## M3 synthetic organization and memory
+
+The existing `./scripts/m2_demo.sh /private/tmp/personal-companion-m3-synthetic-demo` starts both Mac
+journal and phone shell. No real vault or private transport: loopback desktop synthetic harness only.
+AI starts OFF. On Mac select notes, expand «Помічник і пам’ять», enable local synthetic mock and
+preview exact context before approving a task. Review proposals, edit/confirm/delete preferences in
+«Що система пам’ятає». Codex option is disabled, never invokes a model. Nothing runs AI on phone sync.
+Only mock job activity polls the UI; no background browser guarantee. Restart returns AI to OFF.
+
+Schema 3 migration applies only to explicit synthetic roots. M2 schema-2 backup restores then migrates;
+preupgrade copy/transaction failure preserve source. No downgrade into old code. Pending phone pairing
+becomes active only after encrypted credential commit; on local failure use a fresh owner invitation
+or revoke the visible PENDING device. Lost finalize response retries on foreground sync.

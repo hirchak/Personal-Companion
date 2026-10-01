@@ -19,7 +19,9 @@ def app(isolated): return create_app(isolated/'mac',m2=True)
 
 def pairing(app,label='SYNTHETIC phone'):
     invitation=app.state.sync.invite()
-    return app.state.sync.pair(Pair(invitation=invitation['invitation'],device_id=uuid4(),label=label))
+    p = app.state.sync.pair(Pair(invitation=invitation['invitation'],device_id=uuid4(),label=label))
+    app.state.sync.finalize(p['device_id'],p['credential'],p['epoch'])
+    return p
 
 
 def packet(p, kind='create', id=None, revision=0, text='SYNTHETIC offline note', **changes):
@@ -91,6 +93,7 @@ def test_M2_A05_wrong_clock_not_authoritative_and_newest_cursor(app,monkeypatch)
 def test_M2_A06_invitation_ttl_rate_replay_revocation_identity(app):
     invite=app.state.sync.invite(); r=Pair(invitation=invite['invitation'],device_id=uuid4(),label='SYNTHETIC')
     p=app.state.sync.pair(r)
+    app.state.sync.finalize(p['device_id'],p['credential'],p['epoch'])
     with pytest.raises(SafeError,match='PAIR_DENIED'):app.state.sync.pair(r)
     with app.state.store.connect() as c:
         with pytest.raises(SafeError,match='DEVICE_DENIED'):app.state.sync.authenticate(c,str(uuid4()),p['credential'],p['epoch'])
@@ -176,7 +179,7 @@ def test_M2_A08_mac_schema1_migration_rollback_and_preservation(isolated):
         assert c.execute('SELECT schema_version FROM vault_meta').fetchone()[0]==1
         assert c.execute("SELECT count(*) FROM sqlite_master WHERE name='devices'").fetchone()[0]==0
     store=Store(root)
-    assert store.meta()['schema_version']==2
+    assert store.meta()['schema_version']==3
     from apps.core.domain import Journal
     assert Journal(store).get(id)['raw_text']=='SYNTHETIC migrated'
     assert (root/'preupgrade.sqlite3').is_file()

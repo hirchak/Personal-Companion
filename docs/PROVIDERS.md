@@ -76,3 +76,11 @@ timeout, retry policy, allowed tools і consent ID. Adapter не вирішує,
 Лише bounded retries для transient errors. Exhausted quota → QUEUED/WAITING_QUOTA,
 видиме пояснення. No automatic provider failover: потрібні згода на новий destination
 і фінансові умови. Нульові автоматичні PAYG top-ups. Немає оцінки витрат «на око» як факту.
+
+## M3 implemented gate
+
+[ADR-003](adr/ADR-003-M3-RUNTIME.md) records the actual implementation: local deterministic mock and
+unconditionally disabled Codex candidate, unknown real model/auth/quota/retention/OS isolation.
+No real CLI command flags are assumed or invoked; no login/auth credentials inspected.
+Trusted fake subprocess tests do not authorize or prove real provider isolation/retention. M3-A14
+NOT_RUN / PROVIDER_DISABLED. Runtime starts OFF; owner UI enables mock only. No MiniMax/PAYG/fallback.

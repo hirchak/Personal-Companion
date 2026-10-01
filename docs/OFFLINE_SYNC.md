@@ -77,3 +77,12 @@ receipt можна запропонувати прибрати телефонн�
 На реальному/допустимому тестовому Android: створення offline → перезапуск → sync →
 повтор пакета → конфлікт → delete → reconnect старого клієнта → оновлення PWA без втрати outbox.
 Усі ці сценарії проходять на synthetic data до реального vault.
+
+## M3 forward pairing correction (M2-N01)
+
+Invitation response commits PENDING only; phone commits encrypted credential before authenticated
+idempotent finalize. Pending cannot sync and expires after five minutes; owner can revoke it.
+Local write failure: fresh owner invite explicitly replaces credential; lost finalize response after
+local commit: foreground sync repeats confirmation. Invitation replay/revocation/epoch still enforced.
+See [M3 contract](M3_CONTRACT.md). Synthetic browser regression includes actual SQLite server commit
+and actual IndexedDB write failure. Phone capture/sync remains independent of AI and never enqueues it.

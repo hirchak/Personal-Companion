@@ -1,0 +1,41 @@
+{
+  "scope": "30 synthetic local iterations on actual SQLite; no external provider or hardware performance evidence",
+  "environment": {
+    "python": "3.13.2",
+    "os": "Darwin 27.0.0",
+    "architecture": "arm64"
+  },
+  "N": 30,
+  "milliseconds": {
+    "context_build": {
+      "median": 1.5176,
+      "max": 3.0956
+    },
+    "enqueue": {
+      "median": 1.5645,
+      "max": 4.8379
+    },
+    "mock_execute_validate_commit": {
+      "median": 4.432,
+      "max": 15.4366
+    },
+    "memory_list_search": {
+      "median": 1.0648,
+      "max": 2.5557
+    },
+    "structured_validation": {
+      "median": 0.0264,
+      "max": 0.1319
+    }
+  },
+  "empty_schema3_db_bytes": 139264,
+  "after_30_jobs_db_bytes": 229376,
+  "allocated_growth_bytes": 90112,
+  "logical_context_refs_suggestion_memory_bytes": 48818,
+  "idle_sample_seconds": 0.25,
+  "own_process_idle_cpu_percent": 0.005,
+  "idle_worker_count": 0,
+  "mode_on_restart": "OFF",
+  "provider_tokens_latency_cost": "NOT_RUN",
+  "measured_at_utc": "2026-10-01T11:18:24Z"
+}

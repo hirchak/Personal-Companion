@@ -500,6 +500,12 @@ export function PhoneApp() {
             >
               З’єднати з Mac
             </button>
+            <p className="hint">
+              Якщо локальне збереження pairing не вдалося, Mac залишає зв’язок
+              PENDING без доступу до sync. Створіть нове запрошення на Mac і
+              повторіть або відкличте pending пристрій. Якщо credential
+              збережено, наступна синхронізація повторить підтвердження.
+            </p>
             <button onClick={() => void exportRecovery()}>
               Encrypted recovery для unsynced
             </button>

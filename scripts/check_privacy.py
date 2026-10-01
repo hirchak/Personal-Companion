@@ -26,6 +26,12 @@ def scan(root: Path, include_generated: bool = False) -> dict:
             files.extend(extra); errors.extend(denied)
         else:
             errors.append('Requested generated snapshots are missing')
+        built = root/'apps/web/dist'
+        if built.is_symlink():
+            errors.append('Built UI directory is a symlink (not read)')
+        elif built.is_dir():
+            extra, denied = public_files(built)
+            files.extend(extra); errors.extend(denied)
     metrics = {'worktree_text_files':0, 'git_objects':0, 'git_text_objects':0}
     def inspect(blob: bytes, locator: str):
         text = blob.decode('utf-8', errors='replace')

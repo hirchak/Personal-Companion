@@ -9,14 +9,14 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: b4c8af5f975e1a92c6d06fd023b82155cae6fc73
-implementation_sha: 67cb03969d344fe37f45f1d97d021405bea6b126
-report_path: reports/M2_OFFLINE_PWA_SYNC_REPORT.md
-last_reviewed_sha: fd056cc4e91b826a032a871381dbf3a64180bd44
-current_milestone: M2
-current_goal: M2_OFFLINE_PWA_SYNC
-current_goal_path: prompts/M2_OFFLINE_PWA_SYNC.md
-current_contract_path: docs/M2_CONTRACT.md
+baseline_sha: e437de0f41872cbb0c9b0e5b6b940dd781de0735
+implementation_sha: null
+report_path: reports/M3_SAFE_RUNTIME_REPORT.md
+last_reviewed_sha: 67cb03969d344fe37f45f1d97d021405bea6b126
+current_milestone: M3
+current_goal: M3_SAFE_RUNTIME
+current_goal_path: prompts/M3_SAFE_RUNTIME.md
+current_contract_path: docs/M3_CONTRACT.md
 implementation_status: AWAITING_REVIEW
 review_status: AWAITING_REVIEW
 next_authorized_milestone: null
@@ -30,17 +30,13 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M2 AWAITING_REVIEW — synthetic engineering candidate
+# M3 AWAITING_REVIEW — synthetic engineering candidate
 
-M1 external ACCEPT durable record: reports/M1_ARCHITECT_REVIEW.md; reviewed M1 C unchanged.
-M2 final C 67cb03969d344fe37f45f1d97d021405bea6b126: encrypted offline PWA/outbox,
-shared domain sync/pairing/revocation/epoch/conflict/update/storage/recovery gates implemented.
-Exact clean C: build, 120 Python tests + 11 crypto/IDB tests, browser/docs/snapshot/privacy PASS.
-R next evidence-only commit; checkpoint PRE_PUSH; final remote receipt returned in handoff.
-M2-A12 Galaxy S24 Ultra actual device NOT_RUN/HARDWARE_UNVERIFIED. Private HTTPS candidate
-in ADR-002, not activated. Real-data/hardware-security gate NOT_APPROVED, no system trust changes.
-AI/health/watch/ASR/deploy/remote access/M3+ OFF; CI NOT_RUN. Next: independent architect review.
-
-Demo: ./scripts/setup_demo.sh; ./scripts/m2_demo.sh /private/tmp/personal-companion-m2-synthetic-demo.
-Mac /, desktop synthetic PWA /phone/ at http://127.0.0.1:8765. Terminal Mac unlock, local
-phone passphrase + one-use invitation from Mac settings; stop Ctrl+C. This is not a phone route.
+M2 external ACCEPT: reports/M2_ARCHITECT_REVIEW.md; last reviewed implementation stays M2 C.
+M3 code/contract complete: data-only mock runtime, exact consent, bounded jobs, provenance memory,
+neutral reversible proposals/UI, pending/finalized pairing closes M2-N01 forward. C SHA recorded in next R.
+PRE_C full build + 198 Python (10 browser) + 13 web tests + docs/snapshot/privacy/diff PASS.
+No runtime credentials or paid/live inference; actual Codex candidate PROVIDER_DISABLED/NOT_RUN.
+Android/private route/Keystore A12 HARDWARE_UNVERIFIED/NOT_RUN, clinical/research/voice/health/M4+ OFF.
+Next: exact C check, evidence-only R and authorized fast-forward main push; then independent architect review.
+Demo: ./scripts/m2_demo.sh /private/tmp/personal-companion-m3-synthetic-demo; loopback Mac / and desktop /phone/.

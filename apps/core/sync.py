@@ -87,13 +87,13 @@ class SyncService:
                 if plan['epoch'] != epoch: raise SafeError('REPAIR_REQUIRED', 409)
                 id = str(request.device_id)
                 # Re-pair requires a new owner-issued invitation; old token is replaced.
-                c.execute('INSERT INTO devices VALUES(?,?,?,?,?,?,NULL) ON CONFLICT(id) DO UPDATE SET label=excluded.label,credential_hash=excluded.credential_hash,epoch=excluded.epoch,created_at_utc=excluded.created_at_utc,revoked_at_utc=NULL',
-                          (id,self.journal.owner,request.label,digest(token.encode()),epoch,now()))
+                c.execute("INSERT INTO devices(id,owner_id,label,credential_hash,epoch,created_at_utc,revoked_at_utc,pair_state,pending_until) VALUES(?,?,?,?,?,?,NULL,'PENDING',?) ON CONFLICT(id) DO UPDATE SET label=excluded.label,credential_hash=excluded.credential_hash,epoch=excluded.epoch,created_at_utc=excluded.created_at_utc,revoked_at_utc=NULL,pair_state='PENDING',pending_until=excluded.pending_until",
+                          (id,self.journal.owner,request.label,digest(token.encode()),epoch,now(),time.time()+300))
                 c.execute('INSERT OR REPLACE INTO sync_checkpoints VALUES(?,?,0)', (id,epoch))
             self.invitations.pop(key, None)  # only after committed pairing
-        return {'device_id':id,'credential':token,'epoch':epoch,'scope':'JOURNAL_SYNC_SYNTHETIC'}
+        return {'device_id':id,'credential':token,'epoch':epoch,'scope':'JOURNAL_SYNC_SYNTHETIC','state':'PENDING','expires_in':300}
 
-    def authenticate(self, c, device, token, expected_epoch):
+    def authenticate(self, c, device, token, expected_epoch, allow_pending=False):
         try: id = str(UUID(device))
         except (ValueError, TypeError): raise SafeError('DEVICE_DENIED',401) from None
         d = c.execute('SELECT * FROM devices WHERE id=? AND owner_id=?',(id,self.journal.owner)).fetchone()
@@ -102,12 +102,20 @@ class SyncService:
         if d['revoked_at_utc']: raise SafeError('DEVICE_REVOKED',403)
         if d['epoch'] != self.epoch(c) or expected_epoch != self.epoch(c):
             raise SafeError('REPAIR_REQUIRED',409)
+        if d['pair_state'] == 'PENDING':
+            if not allow_pending or d['pending_until'] <= time.time(): raise SafeError('PAIR_PENDING_RETRY_OR_REVOKE',409)
         return id
+
+    def finalize(self, device, token, epoch):
+        with self.store.transaction() as c:
+            id = self.authenticate(c,device,token,epoch,allow_pending=True)
+            c.execute("UPDATE devices SET pair_state='ACTIVE',pending_until=NULL WHERE id=?",(id,))
+        return {'device_id':id,'state':'ACTIVE'}
 
     def devices(self):
         with self.store.connect() as c:
             return {'items':[{'device_id':r['id'],'label':r['label'],'created_at_utc':r['created_at_utc'],
-                             'state':'REVOKED' if r['revoked_at_utc'] else 'ACTIVE' if r['epoch']==self.epoch(c) else 'REPAIR_REQUIRED'}
+                             'state':'REVOKED' if r['revoked_at_utc'] else ('PENDING_EXPIRED' if r['pending_until'] <= time.time() else 'PENDING') if r['pair_state']=='PENDING' else 'ACTIVE' if r['epoch']==self.epoch(c) else 'REPAIR_REQUIRED'}
                             for r in c.execute('SELECT * FROM devices WHERE owner_id=? ORDER BY created_at_utc,id',(self.journal.owner,))],
                     'warning':'Відкликання не видаляє офлайн копію на пристрої.'}
 

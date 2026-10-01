@@ -121,3 +121,18 @@ logical rules (type/zone/date/null) have parity regressions. No runtime eval und
 Collector: `python scripts/verify_m2.py --scope '<exact C or honest tree scope>' --output '<evidence path>'`.
 Sources/snapshot pointers are tested independent of milestone; no weakening raw/secrets/private deny rules.
 M2-A12 real Galaxy S24 Ultra and hardware-secure/private rollout are HARDWARE_UNVERIFIED/NOT_RUN.
+
+## M3 full synthetic target
+
+```bash
+.venv/bin/python scripts/verify_m3.py --scope PRE_C --output reports/evidence/M3/PRE_C_CHECKS.json
+PYTHONPATH=. .venv/bin/python scripts/measure_m3.py
+```
+
+Collector includes frontend build, Vitest, entire Python suite (all M1/M2 and M3 real-browser tests),
+docs, regenerated context, heuristic privacy scan of all local Git objects/snapshots/built UI and
+`git diff --check`. M3 browser fixtures use loopback 8769 and synthetic SQLite/IndexedDB only;
+no new dependencies, provider credentials or inference. Controlled fake subprocess is hash-pinned
+trusted test code; real OS/provider gate remains UNVERIFIED/NOT_RUN. See [M3 contract](M3_CONTRACT.md).
+Evidence collector sanitizes local source/Python paths; failed raw diagnostics remain ignored/local.
+CI NOT_RUN. Verify exact C before evidence-only R; final R docs/snapshot/privacy recheck separately.
