@@ -10,7 +10,7 @@ actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: e437de0f41872cbb0c9b0e5b6b940dd781de0735
-implementation_sha: null
+implementation_sha: 5621d9b0fc090194be019b09fc31b2f90155ea13
 report_path: reports/M3_SAFE_RUNTIME_REPORT.md
 last_reviewed_sha: 67cb03969d344fe37f45f1d97d021405bea6b126
 current_milestone: M3
@@ -34,9 +34,10 @@ paid_or_subscription_calls_authorized: false
 
 M2 external ACCEPT: reports/M2_ARCHITECT_REVIEW.md; last reviewed implementation stays M2 C.
 M3 code/contract complete: data-only mock runtime, exact consent, bounded jobs, provenance memory,
-neutral reversible proposals/UI, pending/finalized pairing closes M2-N01 forward. C SHA recorded in next R.
-PRE_C full build + 198 Python (10 browser) + 13 web tests + docs/snapshot/privacy/diff PASS.
+neutral reversible proposals/UI, pending/finalized pairing closes M2-N01 forward. Implementation C 5621d9b0fc090194be019b09fc31b2f90155ea13. R is the next evidence-only commit.
+Exact clean C full build + 198 Python (10 browser) + 13 web tests + docs/snapshot/privacy/diff PASS.
 No runtime credentials or paid/live inference; actual Codex candidate PROVIDER_DISABLED/NOT_RUN.
 Android/private route/Keystore A12 HARDWARE_UNVERIFIED/NOT_RUN, clinical/research/voice/health/M4+ OFF.
-Next: exact C check, evidence-only R and authorized fast-forward main push; then independent architect review.
+Publication checkpoint: PRE_PUSH at evidence creation; exact R/push receipt in final handoff, verify origin/main.
+Next: independent architect review of pushed C/R. No M4+ authorized.
 Demo: ./scripts/m2_demo.sh /private/tmp/personal-companion-m3-synthetic-demo; loopback Mac / and desktop /phone/.

@@ -3,7 +3,7 @@
 Status: **AWAITING_REVIEW**, synthetic engineering candidate. External M2 ACCEPT source is owner M3 goal;
 reviewed M2 C `67cb03969d344fe37f45f1d97d021405bea6b126`, reviewed R/base/main
 `e437de0f41872cbb0c9b0e5b6b940dd781de0735`. Actual initial local/remote main matched; clean worktree.
-Implementation C: pending creation; evidence-only R will record exact C. Report commit: next evidence-only R,
+Implementation C: `5621d9b0fc090194be019b09fc31b2f90155ea13`. Report commit: this evidence-only R,
 resolved by final user receipt (no recursive self-hash). Push checkpoint: PRE_PUSH; CI: NOT_RUN.
 Owner permits normal fast-forward main push; permissions.push_main=true separately from merge_main=false.
 
@@ -66,7 +66,13 @@ Environment: Python3.13.2, Node v26.8.2, npm11.19.1, Darwin27.0.0 arm64. One exi
 DeprecationWarning; no failing/skipped acceptance test. Collector records timestamps/exits/versions/durations.
 M3-A01…A13 assertions synthetic PASS at contract scope. **M3-A14 NOT_RUN / PROVIDER_DISABLED**, not mock PASS.
 Actual Galaxy/Tailscale/private rollout A12 HARDWARE_UNVERIFIED / NOT_RUN. CI NOT_RUN.
-Exact C full target and final R evidence/checks will be appended before authorized publication.
+Exact clean C target `.venv/bin/python scripts/verify_m3.py --scope EXACT_C --output reports/evidence/M3/EXACT_C_CHECKS.json`
+exit0, same 198 Python/13 web tests and all seven checks. Clean worktree confirmed immediately after C
+before collector. C code has not changed. R contains STATE/HANDOFF/report/devlog/evidence only; its exact
+SHA and actual push result are returned in final receipt. Report push status is the **PRE_PUSH checkpoint**
+at evidence creation; it is not a claim the subsequent authorized push failed or has not occurred.
+Final R docs/snapshot/privacy/diff/remote confirmation run after commit; no redundant application suite
+for evidence-only R. The report cannot include its own verified hash/result recursively.
 
 UI bounded inspection: desktop1440 and mobile390, real keyboard/consent/jobs/cancel/suggestions/memory/phone
 flows, no unexpected browser errors or external requests. Independent Impeccable UI review requested two fixes:
@@ -98,3 +104,12 @@ Mac context/suggestion data live in private synthetic SQLite; backup retains con
 credentials/revokes approvals. No browser storage as Android hardware-security claim. Deterministic mock only;
 real provider activation requires separate scoped gate. M3 is not accepted by Codex; next is external architect
 review of exact pushed C/R. No next milestone authorized.
+
+## Final review/publication audit
+
+All staged implementation paths were explicitly reviewed: original local code, public docs and synthetic
+fixtures/screenshots only; no dependency/auth/provider/network/deploy configuration change. Standing owner
+push authorization and project permission were rechecked independently of merge_main. Base is ancestor
+of C; origin/main remained base before publication. Updated snapshot generated through project script.
+R−C must be evidence-only; reject any code/contract change before push. Normal origin/main push only,
+no force or history rewrite. CI remains NOT_RUN at C/R; no workflow triggered by this task.
