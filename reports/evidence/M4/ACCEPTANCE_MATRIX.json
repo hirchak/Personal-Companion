@@ -1,0 +1,142 @@
+{
+  "implementation_sha": "021961c27a455dbc4c75710f7b700cff24c8017c",
+  "base_sha": "40b33a05248353b910acf733db99e21242ee0bd2",
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "architect_review": "AWAITING_REVIEW",
+  "gates": {
+    "M4-A01": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_browser.py",
+        "apps/web/tests/phone-audio.test.ts"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A02": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_browser.py",
+        "apps/web/tests/phone-audio.test.ts"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A03": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_browser.py",
+        "apps/web/tests/phone-audio.test.ts"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A04": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_api.py",
+        "apps/web/tests/phone-audio.test.ts"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A05": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_api.py",
+        "apps/web/tests/phone-audio.test.ts"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A06": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_process.py",
+        "tests/test_m4_voice.py"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A07": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_api.py",
+        "tests/test_m4_browser.py"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A08": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_browser.py"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A09": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_process.py",
+        "tests/test_m4_browser.py",
+        "apps/web/tests/phone-audio.test.ts"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A10": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m4_browser.py",
+        "apps/web/tests/phone-audio.test.ts"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A11": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_voice.py",
+        "tests/test_m1_domain.py",
+        "tests/test_m3_runtime.py"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A12": {
+      "status": "PASS",
+      "evidence": [
+        "tests/test_m4_api.py",
+        "tests/test_m4_browser.py",
+        "scripts/check_privacy.py",
+        "UI_INSPECTION.json"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A13": {
+      "status": "PASS",
+      "evidence": [
+        "EXACT_C_CHECKS.json"
+      ],
+      "proof": "Exact-C full suite plus explicit contract/test-case coverage; no actual speech-model/hardware inference claim"
+    },
+    "M4-A14": {
+      "status": "LOCAL_ASR_BACKEND_NOT_RUN",
+      "actual_model_executed": false,
+      "real_model": "NOT_RUN / PERMISSION_REQUIRED",
+      "human_UA_quality": "NOT_RUN",
+      "runbook": "docs/M4_LOCAL_ASR_RUNBOOK.md"
+    },
+    "M4-A15": {
+      "status": "HARDWARE_UNVERIFIED / NOT_RUN",
+      "device": "Galaxy S24 Ultra",
+      "runbook": "docs/M4_ANDROID_MIC_GATE.md"
+    }
+  },
+  "test_counts": {
+    "python": 257,
+    "browser_in_python": 18,
+    "M4_browser_in_python": 8,
+    "web": 23
+  },
+  "CI": "NOT_RUN"
+}

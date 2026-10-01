@@ -1,0 +1,27 @@
+{
+  "scope": "SYNTHETIC_GENERATED_TONE_LOOPBACK_HTTP_FAKE_ASR_ONLY",
+  "audio_seconds": 19,
+  "audio_bytes": 608044,
+  "loopback_chunk_latency_ms": [
+    5.467,
+    4.943,
+    3.275
+  ],
+  "loopback_upload_seconds": 0.013702,
+  "loopback_payload_bytes_per_second": 44376564,
+  "finalize_checksum_parse_fsync_db_ms": 17.008,
+  "fake_asr_lifecycle_http_ms": 15.895,
+  "fake_asr_worker_ms": 4.835,
+  "attachment_disk_bytes": 608044,
+  "db_bytes_before": 172032,
+  "db_bytes_after": 172032,
+  "db_growth_bytes": 0,
+  "voice_logical_metadata_utf8_bytes": 2079,
+  "idle_observation_seconds": 0.401,
+  "idle_process_cpu_seconds": 0.000578,
+  "harness_max_rss_bytes": 93372416,
+  "real_model": "LOCAL_ASR_BACKEND_NOT_RUN",
+  "UA_accuracy": "NOT_RUN",
+  "Galaxy": "NOT_RUN",
+  "limitations": "One synthetic local harness observation, not real inference latency, hardware quality, accuracy or a cross-version idle regression guarantee."
+}

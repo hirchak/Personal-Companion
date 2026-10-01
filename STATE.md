@@ -10,15 +10,15 @@ actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: 40b33a05248353b910acf733db99e21242ee0bd2
-implementation_sha: null
+implementation_sha: 021961c27a455dbc4c75710f7b700cff24c8017c
 report_path: reports/M4_LOCAL_VOICE_ASR_REPORT.md
 last_reviewed_sha: 5621d9b0fc090194be019b09fc31b2f90155ea13
 current_milestone: M4
 current_goal: M4_LOCAL_VOICE
 current_goal_path: prompts/M4_LOCAL_VOICE.md
 current_contract_path: docs/M4_CONTRACT.md
-implementation_status: IN_PROGRESS
-review_status: NOT_STARTED
+implementation_status: AWAITING_REVIEW
+review_status: AWAITING_REVIEW
 next_authorized_milestone: null
 research_status: NOT_STARTED
 clinical_protocols_enabled: false
@@ -30,15 +30,17 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M4 — final verification preparation
+# M4 — AWAITING_REVIEW, synthetic engineering candidate
 
-All 29 owner sections received; historical missing-specification blocker resolved.
-Base/main verified at 40b33a05248353b910acf733db99e21242ee0bd2, initially clean.
-M3 synthetic external ACCEPT recorded; reviewed C preserved. Only M4 authorized.
-Pipeline implemented: PCM mic, AES-GCM phone chunks, private Mac attachments/resume/checksums,
-disabled/fake/process ASR, edit/confirm/retention, encrypted rescue and attachment backup/restore.
-Pre-final full suite 257 Python (18 browser) PASS; web 21 and build PASS. Latest edits/checks pending.
-Next: final code/contract/public-data review, implementation C, exact-C full verification, evidence-only R,
-normal fast-forward main push/remote receipt. M4 must end AWAITING_REVIEW, not self-ACCEPTED.
-Actual ASR/model/HUMAN_UA_QUALITY NOT_RUN; Galaxy HARDWARE_UNVERIFIED/NOT_RUN; all real private,
-cloud/provider/system install/rollout/clinical/Health/M5+ gates OFF. No downloads/builds of ASR.
+All29 owner sections implemented; M3 external synthetic ACCEPT durable, reviewed C preserved.
+Base 40b33a05248353b910acf733db99e21242ee0bd2; final M4 C 021961c27a455dbc4c75710f7b700cff24c8017c. R is this evidence-only commit, resolve from Git/final receipt.
+Exact clean C: build,257 Python (18 browser including8 M4),23 web, docs/snapshot/privacy/diff PASS.
+Evidence: reports/evidence/M4/EXACT_C_CHECKS.json; A01–A13 synthetic PASS, independent review pending.
+Working PCM mic → encrypted offline audio → paired resumable private Mac attachment → editable
+candidate → explicit journal confirmation/retention, quota rescue/recovery and attachment backups.
+Publication checkpoint PRE_PUSH at evidence creation; authorized normal main fast-forward follows.
+Actual model/UA benchmark/HUMAN_UA_QUALITY NOT_RUN; A14 LOCAL_ASR_BACKEND_NOT_RUN.
+A15 Galaxy S24 Ultra HARDWARE_UNVERIFIED/NOT_RUN. Cloud/provider/private data/clinical/Health/
+system installs/rollout/deploy/M5+ OFF. Trusted fake process is not OS sandbox proof.
+Next: independent architect review of pushed C/R; no next milestone authorized.
+Demo: ./scripts/m4_demo.sh /private/tmp/personal-companion-m4-synthetic-demo, loopback / and /phone/.

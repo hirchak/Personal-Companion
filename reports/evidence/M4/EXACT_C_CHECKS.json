@@ -1,0 +1,83 @@
+{
+  "scope": "EXACT_C",
+  "head_sha": "021961c27a455dbc4c75710f7b700cff24c8017c",
+  "base_sha": "40b33a05248353b910acf733db99e21242ee0bd2",
+  "actual_local_model": "LOCAL_ASR_BACKEND_NOT_RUN",
+  "human_UA_quality": "NOT_RUN",
+  "Galaxy": "HARDWARE_UNVERIFIED / NOT_RUN",
+  "live_provider": "OFF / NOT_RUN",
+  "CI": "NOT_RUN",
+  "environment": {
+    "python": "3.13.2",
+    "node": "v26.8.2",
+    "npm": "11.19.1",
+    "os": "Darwin 27.0.0",
+    "architecture": "arm64"
+  },
+  "records": [
+    {
+      "command": "npm --prefix apps/web run build",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:06:12Z",
+      "duration_seconds": 1.622,
+      "exit_code": 0,
+      "output": "\n> personal-companion-local@1.0.0 build\n> tsc --noEmit && vite build\n\nvite v6.4.3 building for production...\ntransforming...\n✓ 45 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.52 kB │ gzip:  0.35 kB\ndist/assets/index-CWkn1aTd.css    8.79 kB │ gzip:  2.60 kB\ndist/assets/index-BetLFG-J.js   312.42 kB │ gzip: 93.10 kB\n✓ built in 430ms\n"
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:06:14Z",
+      "duration_seconds": 3.297,
+      "exit_code": 0,
+      "output": "\n> personal-companion-local@1.0.0 test\n> vitest run\n\n\n RUN  v4.1.11 <source-root>/apps/web\n\n\n Test Files  2 passed (2)\n      Tests  23 passed (23)\n   Start at  16:06:14\n   Duration  3.00s (transform 136ms, setup 0ms, import 192ms, tests 4.60s, environment 0ms)\n\n"
+    },
+    {
+      "command": "python -m pytest -q",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:06:17Z",
+      "duration_seconds": 62.631,
+      "exit_code": 0,
+      "output": "........................................................................ [ 28%]\n........................................................................ [ 56%]\n........................................................................ [ 84%]\n.........................................                                [100%]\n=============================== warnings summary ===============================\n.venv/lib/python3.13/site-packages/starlette/testclient.py:37\n  <source-root>/.venv/lib/python3.13/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n257 passed, 1 warning in 62.37s (0:01:02)\n"
+    },
+    {
+      "command": "python -m scripts.measure_m4 --output generated/m4-performance.json",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:07:20Z",
+      "duration_seconds": 1.064,
+      "exit_code": 0,
+      "output": "{\n  \"scope\": \"SYNTHETIC_GENERATED_TONE_LOOPBACK_HTTP_FAKE_ASR_ONLY\",\n  \"audio_seconds\": 19,\n  \"audio_bytes\": 608044,\n  \"loopback_chunk_latency_ms\": [\n    5.467,\n    4.943,\n    3.275\n  ],\n  \"loopback_upload_seconds\": 0.013702,\n  \"loopback_payload_bytes_per_second\": 44376564,\n  \"finalize_checksum_parse_fsync_db_ms\": 17.008,\n  \"fake_asr_lifecycle_http_ms\": 15.895,\n  \"fake_asr_worker_ms\": 4.835,\n  \"attachment_disk_bytes\": 608044,\n  \"db_bytes_before\": 172032,\n  \"db_bytes_after\": 172032,\n  \"db_growth_bytes\": 0,\n  \"voice_logical_metadata_utf8_bytes\": 2079,\n  \"idle_observation_seconds\": 0.401,\n  \"idle_process_cpu_seconds\": 0.000578,\n  \"harness_max_rss_bytes\": 93372416,\n  \"real_model\": \"LOCAL_ASR_BACKEND_NOT_RUN\",\n  \"UA_accuracy\": \"NOT_RUN\",\n  \"Galaxy\": \"NOT_RUN\",\n  \"limitations\": \"One synthetic local harness observation, not real inference latency, hardware quality, accuracy or a cross-version idle regression guarantee.\"\n}\n"
+    },
+    {
+      "command": "python scripts/check_docs.py",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:07:21Z",
+      "duration_seconds": 0.126,
+      "exit_code": 0,
+      "output": "PASS — documentation checks\n{\"files_checked\": 232, \"json_checked\": 63, \"local_links_checked\": 125, \"research_prompts\": 16, \"snapshot_source_files\": 43}\nDocumentation structure only; not exhaustive privacy, security, clinical or app verification.\n"
+    },
+    {
+      "command": "python scripts/build_chatgpt_context.py",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:07:21Z",
+      "duration_seconds": 0.119,
+      "exit_code": 0,
+      "output": "Built four Markdown snapshots + project instructions + hash manifest.\nSource commit: 021961c27a455dbc4c75710f7b700cff24c8017c\nDestination: <source-root>/generated/chatgpt_context\n"
+    },
+    {
+      "command": "python scripts/check_privacy.py --include-generated",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:07:21Z",
+      "duration_seconds": 6.653,
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"errors\": [],\n  \"metrics\": {\n    \"worktree_text_files\": 234,\n    \"git_objects\": 649,\n    \"git_text_objects\": 462\n  },\n  \"git_scope\": \"SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED\",\n  \"generated_included\": true,\n  \"limitations\": \"Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded.\"\n}\n"
+    },
+    {
+      "command": "git diff --check",
+      "scope": "EXACT_C",
+      "run_at_utc": "2026-10-01T14:07:28Z",
+      "duration_seconds": 0.014,
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

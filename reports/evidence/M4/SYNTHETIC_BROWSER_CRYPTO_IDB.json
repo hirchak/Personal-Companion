@@ -1,0 +1,11 @@
+{
+  "scope": "SYNTHETIC_CHROMIUM_FAKE_MIC_NATIVE_WEBCRYPTO_INDEXEDDB",
+  "encryption_ms": [
+    0,
+    0.19999992847442627
+  ],
+  "atomic_audio_write_ms": [
+    5.600000023841858
+  ],
+  "limitations": "One browser recording, bounded AES-GCM timing and IDB transaction timing. No Galaxy or real speech inference."
+}

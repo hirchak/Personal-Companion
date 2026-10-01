@@ -1,0 +1,31 @@
+{
+  "implementation_sha": "021961c27a455dbc4c75710f7b700cff24c8017c",
+  "scope": "SYNTHETIC_ONLY",
+  "rounds": 2,
+  "images": [
+    {
+      "file": "ui/voice-desktop-review.png",
+      "sha256": "7a020f04bb7e3b3873bf3f204355ec277b18c122c1c3fd9bd63cf0b96f16aa23",
+      "bytes": 162902,
+      "scope": "SYNTHETIC_BUILT_UI_FAKE_MIC_ONLY",
+      "manual_visual_and_privacy_review": "PASS"
+    },
+    {
+      "file": "ui/voice-mobile-review.png",
+      "sha256": "7ebb4df331e3db4b21afd7c2718be23ac69f2e71e5243a82382b38d48daee136",
+      "bytes": 143207,
+      "scope": "SYNTHETIC_BUILT_UI_FAKE_MIC_ONLY",
+      "manual_visual_and_privacy_review": "PASS"
+    },
+    {
+      "file": "ui/phone-offline-audio.png",
+      "sha256": "05688581fe1e7f9287ee730e146baae49228c0680fb32a5a39078882a522825c",
+      "bytes": 146598,
+      "scope": "SYNTHETIC_BUILT_UI_FAKE_MIC_ONLY",
+      "manual_visual_and_privacy_review": "PASS"
+    }
+  ],
+  "viewport_and_touch_tests": "Actual Chromium desktop1440 and mobile390, no horizontal overflow, voice controls >=44px, keyboard Enter capture",
+  "privacy": "All retained images personally inspected in this run: only synthetic fixture text and product UI; no unlock/auth/device endpoint/private recording.",
+  "design_detector": "No findings on changed UI targets; informational, not product acceptance."
+}
