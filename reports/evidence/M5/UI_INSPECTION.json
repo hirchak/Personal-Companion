@@ -1,0 +1,86 @@
+{
+  "implementation_sha": "7585005d42ff7211b543fe63e443ece92f92a2ae",
+  "captures": [
+    {
+      "file": "library-desktop-off.png",
+      "sha256": "d8a754033ea072318d557a04f8f9a06984f1cc68fb4cd9807f85029767f4d5dd",
+      "width": 1440,
+      "height": 1258,
+      "scope": "SYNTHETIC_ONLY",
+      "inspection": "INDIVIDUALLY_VIEWED",
+      "observations": "Correct surface and synthetic content; no blank/black capture, unwrapped title/consent overflow or private/account/credential fields."
+    },
+    {
+      "file": "library-mobile-off.png",
+      "sha256": "4a7d6ffda7cc2827e3d19428e0ac6be7e405b4fa0bf91f6b07e765cdabfc0877",
+      "width": 390,
+      "height": 2172,
+      "scope": "SYNTHETIC_ONLY",
+      "inspection": "INDIVIDUALLY_VIEWED",
+      "observations": "Correct surface and synthetic content; no blank/black capture, unwrapped title/consent overflow or private/account/credential fields."
+    },
+    {
+      "file": "feedback-exact-approved.png",
+      "sha256": "ed695d92c79063121aa98f1afe9fc154e4ae89b6da7537b2777fa3e319c3bdf4",
+      "width": 1440,
+      "height": 3541,
+      "scope": "SYNTHETIC_ONLY",
+      "inspection": "INDIVIDUALLY_VIEWED",
+      "observations": "Correct surface and synthetic content; no blank/black capture, unwrapped title/consent overflow or private/account/credential fields."
+    },
+    {
+      "file": "space-on-mobile.png",
+      "sha256": "a7218fa75da53ab40340b1534092fc820f534adf79640c3681dc9fe410cab8d8",
+      "width": 390,
+      "height": 4353,
+      "scope": "SYNTHETIC_ONLY",
+      "inspection": "INDIVIDUALLY_VIEWED",
+      "observations": "Correct surface and synthetic content; no blank/black capture, unwrapped title/consent overflow or private/account/credential fields."
+    },
+    {
+      "file": "feedback-mobile-private.png",
+      "sha256": "300c8699a82883b56518b6343064d1f8bb71fc86460b4242cbcae70ff125b3e4",
+      "width": 390,
+      "height": 4189,
+      "scope": "SYNTHETIC_ONLY",
+      "inspection": "INDIVIDUALLY_VIEWED",
+      "observations": "Correct surface and synthetic content; no blank/black capture, unwrapped title/consent overflow or private/account/credential fields."
+    },
+    {
+      "file": "phone-offline-library.png",
+      "sha256": "3016863babe1de8eafc776cd095530cdc59989224c5a447f587aeda711d176c9",
+      "width": 390,
+      "height": 3665,
+      "scope": "SYNTHETIC_ONLY",
+      "inspection": "INDIVIDUALLY_VIEWED",
+      "observations": "Correct surface and synthetic content; no blank/black capture, unwrapped title/consent overflow or private/account/credential fields."
+    }
+  ],
+  "automated_checks": [
+    "desktop1440/mobile390",
+    "visible controls >=44px",
+    "no document horizontal overflow",
+    "keyboard Enter export preview",
+    "reduced-motion context",
+    "no page errors/external requests"
+  ],
+  "fresh_skill_reviewer": {
+    "disposition": "VISUAL_DIRECTION_OK_ASYNC_FIX_REQUIRED",
+    "finding": "Async save/preview response could replace draft/selection edited during pending operation.",
+    "remediation": "Native disabled fieldsets cover complete creative and feedback action surfaces; stale list reply guarded by generation.",
+    "verification": "test_M5_browser_delayed_save_and_preview_cannot_replace_new_draft_or_selection PASS on exact C",
+    "optional_polish": "NONE"
+  },
+  "detector": {
+    "runs": 1,
+    "warning": "border-accent-on-rounded at geometric vase top rim",
+    "resolution": "Geometry-specific vase lip; not a rounded card accent. No fix required."
+  },
+  "contrast_review": {
+    "body": 11.63,
+    "secondary": 5.84,
+    "placeholder": 5.06,
+    "primary": 7.91
+  },
+  "limitations": "Screenshots support UI review; behavior, storage and privacy rely on separate tests/scans. This is not architect M5 ACCEPT."
+}

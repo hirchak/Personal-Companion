@@ -1,0 +1,113 @@
+{
+  "scope": "SYNTHETIC_ENGINEERING_EXECUTOR_CHECKS",
+  "implementation_sha": "7585005d42ff7211b543fe63e443ece92f92a2ae",
+  "matrix": [
+    {
+      "id": "M5-A01",
+      "status": "PASS",
+      "proof": "Creative original/metadata durability, all kinds, promotion/archive/reopen",
+      "evidence": "tests/test_m5_domain.py; apps/web/tests/m5.test.ts; library browser"
+    },
+    {
+      "id": "M5-A02",
+      "status": "PASS",
+      "proof": "Single journal original, metadata/proposals cannot silently rewrite raw text",
+      "evidence": "domain original/history; M3 selected creative organization"
+    },
+    {
+      "id": "M5-A03",
+      "status": "PASS",
+      "proof": "Literal search, tags, collections, bounded related IDs, missing/deleted links",
+      "evidence": "domain literal/pagination/relations; UI filter/archive/removal"
+    },
+    {
+      "id": "M5-A04",
+      "status": "PASS",
+      "proof": "Offline phone create/edit/full browser restart/receipt sync/CAS conflict/delete",
+      "evidence": "real persistent Chromium offline+sync; M2 shared metadata/delete/epoch; Vitest local CAS"
+    },
+    {
+      "id": "M5-A05",
+      "status": "PASS",
+      "proof": "Explicit selected fields/IDs only; exact Markdown/JSON; changed source denied",
+      "evidence": "domain source/edit/delete/hash/session/TTL; phone minimized hash export; browser downloads"
+    },
+    {
+      "id": "M5-A06",
+      "status": "PASS",
+      "proof": "Private journal/creative/voice-like source never automatically becomes feedback",
+      "evidence": "domain adversarial cases; API no references/attachments; browser source exclusion"
+    },
+    {
+      "id": "M5-A07",
+      "status": "PASS",
+      "proof": "Approval binds exact version/hash/destination/visibility/epoch; edits invalidate",
+      "evidence": "domain CAS/destination/visibility; browser exact copy/edit/reload/delayed save"
+    },
+    {
+      "id": "M5-A08",
+      "status": "PASS",
+      "proof": "Correct local-only approved artifact; network/process/publication routes denied",
+      "evidence": "domain monkeypatched network/process denial; API route denial; browser request audit/download"
+    },
+    {
+      "id": "M5-A09",
+      "status": "PASS",
+      "proof": "Post/send/read-secret text remains inert and never auto-approves",
+      "evidence": "synthetic adversarial domain/API/phone cases; literal fenced Markdown; no runtime publisher"
+    },
+    {
+      "id": "M5-A10",
+      "status": "PASS",
+      "proof": "OFF retains every capability at its existing device scope and cosmetic state",
+      "evidence": "browser creative/export/journal/voice/memory OFF; feedback OFF; domain/Vitest no data loss"
+    },
+    {
+      "id": "M5-A11",
+      "status": "PASS",
+      "proof": "No pressure/streak/penalty/health/symptom/secret/disclosure mechanics",
+      "evidence": "strict allowlist and invariant tests plus source/design review; all cosmetics immediately owned"
+    },
+    {
+      "id": "M5-A12",
+      "status": "PASS",
+      "proof": "Device-local cosmetics persist/reopen/CAS/restore without fake sync claim",
+      "evidence": "SQLite reopening/idempotency; encrypted IDB/recovery; browser phone restart/Mac independent"
+    },
+    {
+      "id": "M5-A13",
+      "status": "PASS",
+      "proof": "Only explicit selected creative context; no inferred personal/psychological memory",
+      "evidence": "M3 creative memory denial/exact selected organization/accepted suggestion stale; full M3 suite"
+    },
+    {
+      "id": "M5-A14",
+      "status": "PASS",
+      "proof": "Public source/evidence/privacy/asset boundary",
+      "evidence": "all local Git objects incl staged/unreachable + generated/built scan; individually reviewed synthetic PNGs; explicit diff/rights audit"
+    },
+    {
+      "id": "M5-A15",
+      "status": "PASS",
+      "proof": "M1–M4 regressions and schema5 feedback/cosmetics/audio backup/migration",
+      "evidence": "314 Python including24 browser;31 web; build; typed corrupt-state restore refusal and approval epoch invalidation"
+    }
+  ],
+  "review_status": "AWAITING_REVIEW",
+  "counts": {
+    "python": 314,
+    "web": 31,
+    "browser_in_python": 24,
+    "M5_browser": 6
+  },
+  "limits": [
+    "actual ASR NOT_RUN",
+    "human Ukrainian ASR NOT_RUN",
+    "Galaxy HARDWARE_UNVERIFIED/NOT_RUN",
+    "private HTTPS/Tailscale NOT_RUN",
+    "historical backups/offline copies can retain earlier content; fresh-root restore is not a current-vault merge",
+    "feedback references/attachments unsupported; manually authored exact local copy only",
+    "cosmetics intentionally device-local; Mac owner-session feedback/M3 retain their existing scope",
+    "live/private/Health/clinical/deploy/runtime publication/M6+ OFF"
+  ]
+}

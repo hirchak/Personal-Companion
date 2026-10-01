@@ -1,0 +1,23 @@
+{
+  "implementation_sha": "7585005d42ff7211b543fe63e443ece92f92a2ae",
+  "scope": "BASE_TO_C_EXPLICIT_DIFF_AND_RETAINED_R_ARTIFACTS",
+  "reviewed_paths": 44,
+  "new_dependencies": 0,
+  "assets": "Original code-authored CSS/SVG geometry only",
+  "fixtures": "All new domain/browser/WebCrypto content synthetic",
+  "private_preference_files_read": "NONE",
+  "raw_research_or_real_recordings_read": "NONE",
+  "runtime_network_publishers": "NONE",
+  "runtime_git_tools": "NONE",
+  "personal_data_exports_committed": "NONE",
+  "screenshots": "Six individually inspected synthetic UI PNGs; no unlock/pairing/password screens",
+  "permission_check": {
+    "push_main": true,
+    "merge_main": false,
+    "deploy": false,
+    "live_provider_calls": false,
+    "access_real_user_data": false
+  },
+  "status": "PASS",
+  "limitations": "Source/rights/manual evidence review plus heuristic scans, not a claim of exhaustive security or forensic privacy."
+}

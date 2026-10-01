@@ -1,0 +1,82 @@
+{
+  "scope": "SYNTHETIC_LOCAL_ONLY",
+  "N": 300,
+  "metrics": {
+    "library_list_50": {
+      "runs": 20,
+      "median_ms": 1.531,
+      "min_ms": 1.492,
+      "max_ms": 1.735
+    },
+    "literal_search": {
+      "runs": 20,
+      "median_ms": 1.355,
+      "min_ms": 1.297,
+      "max_ms": 1.481
+    },
+    "collection_filter": {
+      "runs": 20,
+      "median_ms": 1.724,
+      "min_ms": 1.51,
+      "max_ms": 2.473
+    },
+    "metadata_update_commit_plus_receipt_read": {
+      "runs": 20,
+      "median_ms": 2.462,
+      "min_ms": 2.192,
+      "max_ms": 6.779
+    },
+    "creative_preview_20": {
+      "runs": 20,
+      "median_ms": 1.072,
+      "min_ms": 1.001,
+      "max_ms": 1.203
+    },
+    "creative_markdown_export_20": {
+      "runs": 20,
+      "median_ms": 1.054,
+      "min_ms": 1.01,
+      "max_ms": 1.1
+    },
+    "feedback_hash_preview": {
+      "runs": 20,
+      "median_ms": 0.831,
+      "min_ms": 0.786,
+      "max_ms": 1.24
+    },
+    "feedback_approval_commit": {
+      "runs": 20,
+      "median_ms": 0.836,
+      "min_ms": 0.802,
+      "max_ms": 0.991
+    },
+    "feedback_markdown_export": {
+      "runs": 20,
+      "median_ms": 0.817,
+      "min_ms": 0.77,
+      "max_ms": 0.918
+    },
+    "space_load": {
+      "runs": 20,
+      "median_ms": 0.764,
+      "min_ms": 0.743,
+      "max_ms": 1.237
+    },
+    "space_update_commit": {
+      "runs": 20,
+      "median_ms": 0.933,
+      "min_ms": 0.884,
+      "max_ms": 1.221
+    }
+  },
+  "db_bytes": {
+    "baseline": 184354,
+    "after_capture": 479266,
+    "after_metadata_feedback_space": 499746,
+    "capture_growth": 294912
+  },
+  "provider_metrics": "NOT_RUN",
+  "Galaxy_metrics": "NOT_RUN",
+  "engagement_KPIs": "NOT_COLLECTED",
+  "limitations": "Single local machine, bounded synthetic data, includes safe path checks and journal transaction overhead. Not a device/provider forecast."
+}

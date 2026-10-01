@@ -4,7 +4,8 @@ M0 engineering/bootstrap: ACCEPT за зовнішнім architect review. M1: e
 M2: external ACCEPT for synthetic engineering (reports/M2_ARCHITECT_REVIEW.md).
 M3: external ACCEPT for synthetic engineering (reports/M3_ARCHITECT_REVIEW.md).
 M4: external ACCEPT for synthetic engineering (reports/M4_ARCHITECT_REVIEW.md); A14/A15 NOT_RUN.
-M5: IN_PROGRESS under explicit owner goal; M6–M8 NOT_STARTED;
+M5: AWAITING_REVIEW, complete synthetic creative/feedback/device-local optional-space candidate;
+M6–M8 NOT_STARTED;
 реальний Android/private transport gate NOT_RUN/HARDWARE_UNVERIFIED, без прихованої активації.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
