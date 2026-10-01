@@ -117,7 +117,7 @@ def test_malformed_records(change):
     with pytest.raises(ValidationError):HealthRecord.model_validate(r)
 
 def test_stage_validation_duplicates_partial_permissions_and_batch_bounds():
-    with pytest.raises(ValidationError):batch(record(),record())
+    with pytest.raises(ValidationError):batch(record(),record(fields={'count':43,'unit':'count'}))
     with pytest.raises(ValidationError):batch(record(),permissions={'steps':'PERMISSION_DENIED'})
     with pytest.raises(ValidationError):batch(*[record(id=f'SYNTHETIC-{i}') for i in range(1001)])
     r=record('sleep',fields={'stages':[],'stages_state':'VALUE'})
@@ -136,3 +136,9 @@ def test_deletion_id_only_preserves_last_known_origin(health):
     health.apply(batch({'type':'steps','source_id':record()['source_id'],'origin':'','status':'SOURCE_DELETED'},epoch=b.epoch,sequence=2))
     assert health.records()[0]['origin']=='synthetic.origin'
     assert HealthImport(Store(health.store.root)).records()[0]['status']=='SOURCE_DELETED'
+
+
+def test_identical_duplicates_in_one_batch_normalize_without_extra_rows(health):
+    b=batch(record(),record());assert len(b.scopes[1].records)==1
+    health.apply(b);assert len(health.records())==1
+    assert health.apply(b)['result']=='IDEMPOTENT_REPLAY'

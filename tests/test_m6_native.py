@@ -13,6 +13,7 @@ def test_android_manifest_minimal_and_no_source_write_api():
         assert forbidden not in code
     assert 'getChangesToken(' in code and 'getChanges(' in code and 'getGrantedPermissions()' in code
     assert 'filesDir' in code
+    assert 'importJob?.cancel();stateFile.delete();exportFile.delete();probeFile.delete()' in code
 
 def probe():return {'schema_version':1,'api_level':36,'health_connect':'AVAILABLE','bridge_version':'0.6.0-debug','permissions':{k:'GRANTED' for k in ('sleep','steps','exercise')}}
 @pytest.mark.parametrize('key,value',[('record_id','SYNTHETIC-PRIVATE'),('count',42),('sleep_start','2025-01-01T01:00:00Z'),('device_serial','SYNTHETIC-PRIVATE'),('payload_hash','SYNTHETIC-private'),('record_availability',{'sleep':42,'steps':'YES','exercise':'NO'}),('source_classes',['synthetic.private.package']),('health_connect','2025-01-01T01:00:00Z'),('bridge_version','SYNTHETIC-private')])

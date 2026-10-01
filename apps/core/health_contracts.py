@@ -66,10 +66,16 @@ class Scope(Strict):
     @model_validator(mode='after')
     def consistent(self):
         if self.permission!='GRANTED' and self.records:raise ValueError('UNAUTHORIZED_RECORDS')
-        seen=set()
+        seen={}
+        unique=[]
         for r in self.records:
-            if r.type!=self.type or r.source_id in seen:raise ValueError('DUPLICATE_OR_TYPE')
-            seen.add(r.source_id)
+            if r.type!=self.type:raise ValueError('SCOPE_TYPE')
+            if r.source_id in seen:
+                if r!=seen[r.source_id]:raise ValueError('CONFLICTING_DUPLICATE')
+                continue
+            seen[r.source_id]=r
+            unique.append(r)
+        self.records=unique
         return self
 class HealthBatch(Strict):
     schema_version:Literal[1]

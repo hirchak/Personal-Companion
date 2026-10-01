@@ -61,6 +61,10 @@ Exercise with real records, Watch firmware/hardware identity, real source change
 
 ## Checks and next step
 
+Previous local C57d30d64d592c70a4c4b8e8a937ffbb27cabdb82 exact checks passed and remain in
+[evidence](evidence/M6/PREVIOUS_C_CHECKS.json). Forward fix C adds identical in-batch normalization
+and cancellation before bridge-copy deletion; final exact-C evidence supersedes that candidate.
+
 Pre-C working candidate: full Python372 PASS (including27 Chromium tests/3 M6), web35 PASS,
 Android10 unit tests and debug build PASS. Counts may increase with final tests; exact-C evidence
 supersedes this checkpoint. One upstream Starlette deprecation warning, no project failure.

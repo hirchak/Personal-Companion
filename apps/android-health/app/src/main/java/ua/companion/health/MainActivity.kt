@@ -47,7 +47,7 @@ class MainActivity: ComponentActivity() {
         button("Дозволити читання трьох типів") { if (HealthConnectClient.getSdkStatus(this)==HealthConnectClient.SDK_AVAILABLE) request.launch(permissions) else status.text="Health Connect потребує встановлення або оновлення власником." }
         button("Перевірити доступ / імпортувати") { launchImport() }
         button("Керувати дозволами Health Connect") { try { startActivity(Intent(HealthConnectClient.ACTION_HEALTH_CONNECT_SETTINGS)) } catch (_: Exception) { status.text="Відкрийте Health Connect у системних налаштуваннях." } }
-        button("Видалити локальні файли bridge") { android.app.AlertDialog.Builder(this).setMessage("Видалити лише копії bridge? Health Connect originals залишаться. Для нового читання потрібна явна дія імпорту.").setPositiveButton("Видалити") { _,_->stateFile.delete();exportFile.delete();probeFile.delete();status.text="Локальні копії bridge видалено. Оригінали збережено." }.setNegativeButton("Скасувати",null).show() }
+        button("Видалити локальні файли bridge") { android.app.AlertDialog.Builder(this).setMessage("Видалити лише копії bridge? Health Connect originals залишаться. Для нового читання потрібна явна дія імпорту.").setPositiveButton("Видалити") { _,_->importJob?.cancel();stateFile.delete();exportFile.delete();probeFile.delete();status.text="Локальні копії bridge видалено. Оригінали збережено." }.setNegativeButton("Скасувати",null).show() }
         setContentView(ScrollView(this).apply { addView(layout) })
         lifecycleScope.launch { capability();if(intent.action=="ua.companion.health.IMPORT")launchImport() }
     }
