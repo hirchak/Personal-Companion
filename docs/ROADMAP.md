@@ -5,7 +5,8 @@ M2: external ACCEPT for synthetic engineering (reports/M2_ARCHITECT_REVIEW.md).
 M3: external ACCEPT for synthetic engineering (reports/M3_ARCHITECT_REVIEW.md).
 M4: external ACCEPT for synthetic engineering (reports/M4_ARCHITECT_REVIEW.md); A14/A15 NOT_RUN.
 M5: external ACCEPT for synthetic engineering (reports/M5_ARCHITECT_REVIEW.md).
-M6: IN_PROGRESS — read-only health import/bridge, early actual Galaxy gate recorded.
+M6: AWAITING_REVIEW — read-only import/bridge complete; exact synthetic checks PASS, early actual
+Galaxy gate PASS with Exercise NO_RECORDS; final native reinstall/later hardware paths NOT_RUN.
 M7–M8 NOT_STARTED;
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.

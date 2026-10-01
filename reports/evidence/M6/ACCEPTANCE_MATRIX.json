@@ -1,0 +1,103 @@
+{
+  "implementation_sha": "1d30db9677f2c7b6f07145e8c0c5263969f39d3e",
+  "items": [
+    {
+      "id": "M6-A01",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A02",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A03",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A04",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A05",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A06",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A07",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A08",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A09",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A10",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A11",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A12",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A13",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A14",
+      "status": "PASS",
+      "scope": "FINAL_EXACT_C_SYNTHETIC"
+    },
+    {
+      "id": "M6-A15",
+      "status": "PASS",
+      "scope": "EARLY_REAL_0.6.0_INSTALLED_RUNNING_FINAL_0.6.1_NOT_REINSTALLED"
+    },
+    {
+      "id": "M6-A16",
+      "status": "PASS",
+      "scope": "REAL_SLEEP_STEPS_STRUCTURAL_PRIVATE_IMPORT_EXERCISE_NO_RECORDS"
+    },
+    {
+      "id": "M6-A17",
+      "status": "PASS",
+      "scope": "OWNER_PERSONAL_SLEEP_REVOKE_ACTUAL_DENIED_READ"
+    },
+    {
+      "id": "M6-A18",
+      "status": "PASS",
+      "scope": "ACTUAL_EARLY_INSTALLED_PERMISSION_MINIMIZATION_AND_FINAL_STATIC_NO_SOURCE_WRITES"
+    }
+  ],
+  "verdict": "AWAITING_INDEPENDENT_REVIEW_NO_SELF_ACCEPT",
+  "hardware_scope_limits": [
+    "Final 0.6.1 reinstall/run NOT_RUN after owner phone release",
+    "Real source mutations deliberately NOT_RUN",
+    "Real expiry/recovery/background-cancellation NOT_RUN; synthetic policy/cache/filesystem tests PASS",
+    "Exercise real records NO_RECORDS",
+    "Physical Watch7 origin and firmware NOT_VERIFIED"
+  ]
+}

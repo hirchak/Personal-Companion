@@ -1,0 +1,98 @@
+{
+  "implementation_sha": "1d30db9677f2c7b6f07145e8c0c5263969f39d3e",
+  "clean_worktree_at_start": true,
+  "environment": {
+    "python": "3.13.2",
+    "node": "v26.8.2",
+    "platform": "Darwin",
+    "architecture": "arm64"
+  },
+  "fixture_provenance": "SYNTHETIC_ONLY_NO_REAL_HEALTH_ROOT",
+  "hardware_scope": "EARLY_ACTUAL_0.6.0_SEPARATE_FROM_FINAL_0.6.1_SYNTHETIC",
+  "checks": [
+    {
+      "name": "web_build",
+      "command": "npm --prefix apps/web run build",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 12.701,
+      "full_log": "generated/m6-exact/web_build.log"
+    },
+    {
+      "name": "web_tests",
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 12.787,
+      "full_log": "generated/m6-exact/web_tests.log",
+      "passed_tests": 35
+    },
+    {
+      "name": "python",
+      "command": ".venv/bin/python -m pytest -q",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 151.052,
+      "full_log": "generated/m6-exact/python.log",
+      "passed_tests": 380
+    },
+    {
+      "name": "android",
+      "command": "apps/android-health/gradlew --offline :app:assembleDebug :app:testDebugUnitTest",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 7.975,
+      "full_log": "generated/m6-exact/android.log",
+      "passed_tests": 17
+    },
+    {
+      "name": "benchmark",
+      "command": ".venv/bin/python -m scripts.measure_m6",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.309,
+      "full_log": "generated/m6-exact/benchmark.log"
+    },
+    {
+      "name": "hardware_sanitizer",
+      "command": ".venv/bin/python scripts/m6_evidence.py",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.033,
+      "full_log": "generated/m6-exact/hardware_sanitizer.log"
+    },
+    {
+      "name": "docs",
+      "command": ".venv/bin/python scripts/check_docs.py",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.168,
+      "full_log": "generated/m6-exact/docs.log"
+    },
+    {
+      "name": "snapshot",
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.189,
+      "full_log": "generated/m6-exact/snapshot.log"
+    },
+    {
+      "name": "privacy",
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 11.987,
+      "full_log": "generated/m6-exact/privacy.log"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.022,
+      "full_log": "generated/m6-exact/diff.log"
+    }
+  ],
+  "status": "PASS"
+}
