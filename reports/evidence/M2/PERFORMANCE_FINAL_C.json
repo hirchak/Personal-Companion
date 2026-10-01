@@ -1,0 +1,34 @@
+{
+  "scope": "Real built synthetic desktop Chromium PWA + loopback Mac API, not actual Android or target M2/16GB benchmark",
+  "N": 20,
+  "environment": {
+    "python": "3.13.2",
+    "os": "Darwin 27.0.0",
+    "architecture": "arm64",
+    "chromium": "140.0.7339.16"
+  },
+  "method": "20 UI save completions include encryption+atomic entry/outbox; one pairing+20-op reconnect batch; encoded IDB envelope, estimate and Cache API response bytes; own Mac harness 0.5s idle/process RSS",
+  "local_save_enqueue_ms": {
+    "median": 136.7023959173821,
+    "max": 149.120542104356
+  },
+  "reconnect_pair_and_sync_20_ms": 399.98016704339534,
+  "idb_envelope_bytes": 23420,
+  "browser_origin_estimate": {
+    "quota": 465876113,
+    "usage": 893126,
+    "usageDetails": {
+      "caches": 779469,
+      "indexedDB": 112409,
+      "serviceWorkerRegistrations": 1248
+    }
+  },
+  "shell_cache_bytes": 279713,
+  "sqlite_db_bytes": 94208,
+  "mac_harness_idle_cpu_percent": 0.1619468124334216,
+  "mac_harness_rss_kib": 45088,
+  "measured_at_utc": "2026-10-01T10:05:40Z",
+  "sha": "67cb03969d344fe37f45f1d97d021405bea6b126",
+  "command": "python -m scripts.measure_m2",
+  "exit_code": 0
+}

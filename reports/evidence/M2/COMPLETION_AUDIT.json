@@ -1,0 +1,135 @@
+{
+  "scope": "Exact final C 67cb03969d344fe37f45f1d97d021405bea6b126 plus evidence-only R worktree",
+  "status": "LOCAL_REQUIREMENTS_PROVED_PRE_PUSH",
+  "command": "Manual goal-section/source/evidence audit + Python existence/actual-exit/count assertions",
+  "environment": {
+    "python": "3.13.2"
+  },
+  "run_at_utc": "2026-10-01T10:12:15Z",
+  "exit_code": 0,
+  "goal_sections": {
+    "1": "Offline-first synthetic scope implemented, no M3+; no scope reduction.",
+    "2": "Actual main/base b4c8af5 verified; M1 external ACCEPT record, newest-first regression and M2 contract.",
+    "3": "Current state/workflow/goal/spec/code read; no raw DOCX/corpus ingest.",
+    "4A": "Real manifest/static SW/standalone PWA + online-first/offline/browser reopen tested.",
+    "4B": "Encrypted atomic state/outbox CAS, per-op device/id/base/time/zone/schema/sequence, committed local/Mac statuses.",
+    "4C": "Native WebCrypto AES-GCM/PBKDF2, random salt/IV, memory-only key, no plaintext credentials persisted; real security gate not approved.",
+    "4D": "One Journal transaction for sync effect/receipts/checkpoint, epoch generation, no clock LWW.",
+    "4E": "Owner one-use/rate/TTL pairing, scoped credential hash/device binding, revoke and no remote-erase claim.",
+    "4F": "Two variants/explicit Mac-phone-manual new mutation; completion audit fixed Mac-choice branch.",
+    "4G": "Tombstones, offline delete, retention invalidation/restore epoch; explicit re-pair/reconciliation, no naive replay.",
+    "4H": "Waiting/interrupted SW update, additive physical and explicit encrypted schema migration/rollback/future refusal.",
+    "4I": "Persistence request results/warnings, open/quota/migration failure and retained draft, cleared-store recovery.",
+    "4J": "Encrypted unsynced recovery artifact/checksum/GCM/schema, empty-target import, no credential/Mac auto merge.",
+    "5": "Primary-source transport/security comparison and future private HTTPS candidate; actual localhost HTTPS test only, no trust/route changes.",
+    "6": "Known Galaxy S24 Ultra runbook, actual hardware unavailable/not run; health/watch untouched.",
+    "7": "Default LOCAL_ONLY deny-egress/loopback retained; explicit M2 harness port/origin, no provider/external scripts.",
+    "8": "Neutral shared editor/UI preserved, responsive/touch/labels, truthful states/conflicts/settings/storage actions.",
+    "9": "A01-A11 mapped tests/scope PASS; A12 HARDWARE_UNVERIFIED/NOT_RUN.",
+    "10": "Real persistent profiles/IDB/SW/SQLite/two devices/dropped response/restart/update/TLS/viewport/network tests.",
+    "11": "Exact-C bounded N20 save+enqueue/reconnect/DB-IDB/cache/idle-RSS measurement; no S24/target-machine benchmark claim.",
+    "12": "Project-local pinned dependencies; audit patched issues, zero current npm findings; no global/system/account/deploy/spend.",
+    "13": "Synthetic only, deny paths/secret scans unchanged; no real vault/research/AI/health/voice/trust/LAN activation.",
+    "14": "Exact final C verified; source unchanged. Evidence-only R, whitelist/privacy, normal-main push/remote receipt remain authorized final steps.",
+    "15": "Local implementation and A01-A11 proved, A12 documented NOT_RUN allowed by goal; publication pending R.",
+    "16": "No ordinary engineering blocker left; hardware/real-route portions gated, independent work completed.",
+    "17": "Final response will include C/R/base/remote, counts/privacy, exact demos and hardware/transport limitations."
+  },
+  "gates": {
+    "A01": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_browser.py::test_M2_A01_A02_A03_A04_A07_A09_offline_sync_conflict_and_storage",
+        "tests/test_m2_browser.py::test_M2_A09_evicted_store_and_offline_delete_restart"
+      ]
+    },
+    "A02": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_sync.py::test_M2_A02_commit_retry_and_transaction_failure",
+        "tests/test_m2_sync.py::test_M2_A02_restart_and_cross_device_operation_reuse",
+        "tests/test_m2_browser.py"
+      ]
+    },
+    "A03": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_sync.py::test_M2_A03_two_devices_and_resolution_new_operation",
+        "tests/test_m2_browser.py",
+        "apps/web/tests/phone-store.test.ts"
+      ]
+    },
+    "A04": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_sync.py::test_M2_A04_mac_delete_stale_packet_and_phone_delete_retry",
+        "tests/test_m2_browser.py"
+      ]
+    },
+    "A05": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_sync.py::test_M2_A05_wrong_clock_not_authoritative_and_newest_cursor",
+        "tests/test_m1_domain.py"
+      ]
+    },
+    "A06": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_sync.py::test_M2_A06_invitation_ttl_rate_replay_revocation_identity",
+        "tests/test_m2_sync.py::test_M2_A06_pair_failure_never_consumes_invite_or_persists_credential",
+        "tests/test_m2_ui.py"
+      ]
+    },
+    "A07": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "apps/web/tests/phone-store.test.ts",
+        "tests/test_m2_browser.py",
+        "docs/adr/ADR-001-M2-PHONE-CRYPTO.md"
+      ]
+    },
+    "A08": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_browser.py::test_M2_A08_waiting_worker_interrupted_update_preserves_outbox",
+        "tests/test_m2_sync.py::test_M2_A08_mac_schema1_migration_rollback_and_preservation",
+        "apps/web/tests/phone-store.test.ts"
+      ]
+    },
+    "A09": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_browser.py::test_M2_A09_evicted_store_and_offline_delete_restart",
+        "apps/web/tests/phone-store.test.ts",
+        "tests/test_m2_browser.py"
+      ]
+    },
+    "A10": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_sync.py::test_M2_A10_backup_restore_epoch_and_retention",
+        "tests/test_m2_browser.py::test_M2_A10_browser_epoch_mismatch_requires_explicit_repair"
+      ]
+    },
+    "A11": {
+      "status": "PASS_SYNTHETIC",
+      "evidence": [
+        "tests/test_m2_sync.py::test_M2_A11_device_routes_host_origin_owner_csrf_default_off",
+        "tests/test_m2_ui.py",
+        "tests/test_m1_api.py::test_A10_process_egress_denial",
+        "scripts/check_privacy.py",
+        "reports/evidence/M2/ARTIFACT_REVIEW.json"
+      ]
+    },
+    "A12": {
+      "status": "HARDWARE_UNVERIFIED/NOT_RUN",
+      "evidence": [
+        "docs/M2_ANDROID_GATE.md",
+        "docs/adr/ADR-002-M2-TRANSPORT.md"
+      ]
+    }
+  },
+  "actual_run_evidence": "reports/evidence/M2/EXACT_FINAL_C_CHECKS.json",
+  "remaining_authorized_action": "Evidence R normal-main push and final remote equality verification; no R+1 attestation"
+}

@@ -1,0 +1,45 @@
+{
+  "scope": "M2 final C 67cb03969d344fe37f45f1d97d021405bea6b126 plus R evidence-only staged paths; this record staged after execution",
+  "environment": {
+    "python": "3.13.2"
+  },
+  "staged_paths": [
+    "HANDOFF.md",
+    "STATE.md",
+    "devlog/2026-10-01-M2.md",
+    "docs/ROADMAP.md",
+    "reports/M1_ARCHITECT_REVIEW.md",
+    "reports/M2_OFFLINE_PWA_SYNC_REPORT.md",
+    "reports/evidence/M2/ARTIFACT_REVIEW.json",
+    "reports/evidence/M2/COMPLETION_AUDIT.json",
+    "reports/evidence/M2/EXACT_C_CHECKS.json",
+    "reports/evidence/M2/EXACT_FINAL_C_CHECKS.json",
+    "reports/evidence/M2/PERFORMANCE_FINAL_C.json",
+    "reports/evidence/M2/PERFORMANCE_WORKTREE.json",
+    "reports/evidence/M2/PRE_C_CHECKS.json",
+    "reports/evidence/M2/PRIVACY_FINAL_R.json",
+    "reports/evidence/M2/ui/desktop-phone.png",
+    "reports/evidence/M2/ui/phone-offline.png"
+  ],
+  "snapshot_sources_verified": 47,
+  "records": [
+    {
+      "command": "python scripts/check_docs.py",
+      "run_at_utc": "2026-10-01T10:22:07Z",
+      "exit_code": 0,
+      "output": "PASS — documentation checks\n{\"files_checked\": 182, \"json_checked\": 57, \"local_links_checked\": 93, \"research_prompts\": 16, \"snapshot_source_files\": 43}\nDocumentation structure only; not exhaustive privacy, security, clinical or app verification.\n"
+    },
+    {
+      "command": "python scripts/check_privacy.py --include-generated",
+      "run_at_utc": "2026-10-01T10:22:08Z",
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"errors\": [],\n  \"metrics\": {\n    \"worktree_text_files\": 181,\n    \"git_objects\": 493,\n    \"git_text_objects\": 357\n  },\n  \"git_scope\": \"SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED\",\n  \"generated_included\": true,\n  \"limitations\": \"Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded.\"\n}\n"
+    },
+    {
+      "command": "git diff --cached --check",
+      "run_at_utc": "2026-10-01T10:22:13Z",
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

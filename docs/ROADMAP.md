@@ -1,8 +1,8 @@
 # Roadmap і критерії переходу
 
-M0 engineering/bootstrap: ACCEPT за зовнішнім architect review. M1: AWAITING_REVIEW
-за явно виданою goal M1_LOCAL_JOURNAL; exact C local checks PASS.
-M2–M8: NOT_STARTED; переходу без нової owner goal немає.
+M0 engineering/bootstrap: ACCEPT за зовнішнім architect review. M1: external engineering/synthetic ACCEPT за M2 goal.
+M2: AWAITING_REVIEW за explicit M2_OFFLINE_PWA_SYNC; synthetic A01–A11 PASS. M3–M8 NOT_STARTED;
+реальний Android/private transport gate NOT_RUN/HARDWARE_UNVERIFIED, без прихованої активації.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
 | ID | Результат | Залежності | Основна модель |

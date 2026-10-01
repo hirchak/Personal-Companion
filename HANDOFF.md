@@ -1,25 +1,24 @@
-# M1 handoff — AWAITING_REVIEW
+# M2 handoff — AWAITING_REVIEW
 
-Owner goal: prompts/M1_LOCAL_JOURNAL.md. Synthetic only.
-Base M1 R5: 175fc934ad16552759273d2ed6770835b6f28786.
-Correction base R1: 56a29e8912b39bdb20687a4f8b6bf23824956607.
-Final C: fd056cc4e91b826a032a871381dbf3a64180bd44. R2 next evidence-only commit; exact R/remote receipt in final handoff.
-Standing push_main=true; this file PRE_PUSH. M0 external ACCEPT C3 preserved. CI NOT_RUN.
+Base main/M1 R b4c8af5f975e1a92c6d06fd023b82155cae6fc73.
+Final C 67cb03969d344fe37f45f1d97d021405bea6b126; R next evidence-only commit, exact R/remote
+receipt final message (PRE_PUSH here). M1 external ACCEPT recorded, last_reviewed_sha=M1 C.
+Goal prompts/M2_OFFLINE_PWA_SYNC.md; contract docs/M2_CONTRACT.md; report reports/M2_OFFLINE_PWA_SYNC_REPORT.md.
 
-Full SQLite/API/Ukrainian UI/export/backup/restore remains in M1. Completion audit fixes
-revision recorded_at_utc and generated read/history/receipt schemas, expands TCP/UDP/DNS
-network guard, verifies TZ/event editing, keyboard and documented setup/launcher/restart/stop.
-Legacy synthetic history has null recording time, never a fabricated historical value.
-Exact final C clean source build + 104 tests/docs/privacy PASS. No code changes after final C.
-Evidence/report: reports/M1_LOCAL_JOURNAL_REPORT.md, reports/evidence/M1/EXACT_FINAL_C_CHECKS.json,
-reports/evidence/M1/COMPLETION_AUDIT.json. No implementation blocker; independent review pending.
+Encrypted IDB/PWA/outbox/foreground sync, scoped pairing/revoke, conflicts as new revision
+mutations, tombstones/restore epoch/re-pair, safe updates, pressure/eviction/recovery implemented.
+One Journal domain shared transaction. MAC schema2 migration, no real vault touched.
+Exact C clean source: 120 Python + 11 crypto/store tests and full build/browser/docs/privacy PASS.
+No runtime payload/credential/API cache or plaintext durable key. No OS/hardware security claim.
 
-Launch: ./scripts/setup_demo.sh, then
-./scripts/demo.sh /private/tmp/personal-companion-m1-synthetic-demo.
-Open http://127.0.0.1:8765; terminal one-time code, stop Ctrl+C.
-Unknown root refused; no reseed on restart. Lock/reload clears unsaved text; save failure
-keeps memory draft. Runbook: docs/INSTALLATION.md; contract v4 docs/M1_CONTRACT.md.
+Actual Galaxy S24 Ultra route/Chrome/install/wake/Keystore HARDWARE_UNVERIFIED/NOT_RUN;
+ADR-002 private Serve/MagicDNS HTTPS candidate needs separate route/client/account permissions.
+No cert trust/router/tunnel/remote activation/deploy/accounts/paid/provider calls. AI/health/voice/M3+ OFF.
+M2-A01…A11 synthetic PASS; A12 NOT_RUN. CI NOT_RUN. Independent review remains pending.
 
-AI/deploy/private vault/M2+/phone/clinical/watch/ASR/game/autostart/release OFF.
-Galaxy Watch7 metadata only, compatibility NOT_VERIFIED. Research DOCX not opened/ingested.
-Next: architect review published C/R2; fixes forward only, new milestone requires owner goal.
+Start: ./scripts/setup_demo.sh; ./scripts/m2_demo.sh /private/tmp/personal-companion-m2-synthetic-demo.
+Open http://127.0.0.1:8765/ for Mac (terminal unlock), /phone/ for desktop PWA (local passphrase).
+Mac settings issue one-use invitation; stop Ctrl+C. /phone/ localhost is not a Galaxy-to-Mac route.
+Synthetic browser suite: .venv/bin/python -m pytest tests/test_m2_browser.py tests/test_m2_ui.py -q.
+Manual Android/recovery/transport runbooks and caveats in docs/M2_ANDROID_GATE.md and INSTALLATION.
+Next: architect review exact pushed C/R, forward fixes only. No next milestone without owner goal.

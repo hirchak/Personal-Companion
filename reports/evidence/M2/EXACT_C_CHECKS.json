@@ -1,0 +1,68 @@
+{
+  "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+  "environment": {
+    "python": "3.13.2",
+    "node": "v26.8.2",
+    "npm": "11.19.1",
+    "os": "Darwin 27.0.0",
+    "architecture": "arm64"
+  },
+  "records": [
+    {
+      "command": "npm --prefix apps/web run build",
+      "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+      "run_at_utc": "2026-10-01T09:32:47Z",
+      "duration_seconds": 2.132,
+      "exit_code": 0,
+      "output": "\n> personal-companion-local@1.0.0 build\n> tsc --noEmit && vite build\n\nvite v6.4.3 building for production...\ntransforming...\n✓ 41 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.52 kB │ gzip:  0.34 kB\ndist/assets/index-Yy8kjw33.css    6.15 kB │ gzip:  2.04 kB\ndist/assets/index-TVLcm5ri.js   265.61 kB │ gzip: 80.55 kB\n✓ built in 416ms\n"
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+      "run_at_utc": "2026-10-01T09:32:49Z",
+      "duration_seconds": 1.741,
+      "exit_code": 0,
+      "output": "\n> personal-companion-local@1.0.0 test\n> vitest run\n\n\n RUN  v4.1.11 <source-root>/apps/web\n\n\n Test Files  1 passed (1)\n      Tests  10 passed (10)\n   Start at  11:32:49\n   Duration  1.45s (transform 49ms, setup 0ms, import 73ms, tests 1.30s, environment 0ms)\n\n"
+    },
+    {
+      "command": "python -m pytest -q",
+      "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+      "run_at_utc": "2026-10-01T09:32:51Z",
+      "duration_seconds": 24.179,
+      "exit_code": 0,
+      "output": "........................................................................ [ 60%]\n................................................                         [100%]\n=============================== warnings summary ===============================\n../../../../../../../..<python-env>/lib/python3.13/site-packages/starlette/testclient.py:37\n  <python-env>/lib/python3.13/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n120 passed, 1 warning in 23.94s\n"
+    },
+    {
+      "command": "python scripts/check_docs.py",
+      "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+      "run_at_utc": "2026-10-01T09:33:15Z",
+      "duration_seconds": 0.11,
+      "exit_code": 0,
+      "output": "PASS — documentation checks\n{\"files_checked\": 169, \"json_checked\": 49, \"local_links_checked\": 76, \"research_prompts\": 16, \"snapshot_source_files\": 43}\nDocumentation structure only; not exhaustive privacy, security, clinical or app verification.\n"
+    },
+    {
+      "command": "python scripts/build_chatgpt_context.py",
+      "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+      "run_at_utc": "2026-10-01T09:33:15Z",
+      "duration_seconds": 0.109,
+      "exit_code": 0,
+      "output": "Built four Markdown snapshots + project instructions + hash manifest.\nSource commit: 7097643466a11ed382045daf8bfb0c200d43b3eb\nDestination: <source-root>/generated/chatgpt_context\n"
+    },
+    {
+      "command": "python scripts/check_privacy.py --include-generated",
+      "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+      "run_at_utc": "2026-10-01T09:33:15Z",
+      "duration_seconds": 4.767,
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"errors\": [],\n  \"metrics\": {\n    \"worktree_text_files\": 169,\n    \"git_objects\": 469,\n    \"git_text_objects\": 338\n  },\n  \"git_scope\": \"SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED\",\n  \"generated_included\": true,\n  \"limitations\": \"Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded.\"\n}\n"
+    },
+    {
+      "command": "git diff --check",
+      "scope": "Exact M2 C 7097643466a11ed382045daf8bfb0c200d43b3eb clean detached clone; pinned Python/Node dependencies reused",
+      "run_at_utc": "2026-10-01T09:33:20Z",
+      "duration_seconds": 0.022,
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

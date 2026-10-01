@@ -1,0 +1,21 @@
+{
+  "command": "python scripts/check_privacy.py --include-generated",
+  "scope": "Final M2 C 67cb03969d344fe37f45f1d97d021405bea6b126 + R status/evidence worktree, all local Git objects",
+  "environment": {
+    "python": "3.13.2"
+  },
+  "run_at_utc": "2026-10-01T10:19:01Z",
+  "exit_code": 0,
+  "result": {
+    "status": "PASS",
+    "errors": [],
+    "metrics": {
+      "worktree_text_files": 180,
+      "git_objects": 477,
+      "git_text_objects": 341
+    },
+    "git_scope": "SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED",
+    "generated_included": true,
+    "limitations": "Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded."
+  }
+}

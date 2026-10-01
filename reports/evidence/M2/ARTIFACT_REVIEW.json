@@ -1,0 +1,33 @@
+{
+  "command": "Python inventory SHA256 + synthetic viewport/material/source inspection",
+  "scope": "Exact final M2 C 67cb03969d344fe37f45f1d97d021405bea6b126 built assets and synthetic UI only",
+  "environment": {
+    "python": "3.13.2"
+  },
+  "run_at_utc": "2026-10-01T10:12:15Z",
+  "exit_code": 0,
+  "files": {
+    "apps/web/dist/index.html": "918db6ec51e173cc36f94aed9a04fbba1dd9cc364c46c4af65885b14f483047f",
+    "apps/web/dist/manifest.webmanifest": "aba20bdfc480bffe01a7969ff487e94c945bac9a95d38f46b60a6aa1cab90558",
+    "apps/web/dist/icons/journal-512.png": "34a6286204a78cb9d0b307f50db849f9062ea06a7050cb698396b5fb23e97fab",
+    "apps/web/dist/icons/journal-192.png": "2333f8a71767ca67f489efb34a13ec8936dc60ff64cc8bb14b3c29d679f1e7bd",
+    "apps/web/dist/phone/index.html": "918db6ec51e173cc36f94aed9a04fbba1dd9cc364c46c4af65885b14f483047f",
+    "apps/web/dist/phone/shell-version.json": "63be93e365e66536f0173abaa36bc3bdeb2bc3a5f630e8ddf3ea7d1d76b3d0ad",
+    "apps/web/dist/phone/sw.js": "62519da726330fbcb8730f84e9448606b715313b924efc8a7fa15f8e4e3d2dc3",
+    "apps/web/dist/assets/index-t8C_46fD.js": "977679aab655fa53aa91785aed047ac3e9e238312312945c106ddb08c8e1b1e1",
+    "apps/web/dist/assets/index-Yy8kjw33.css": "5915de6130821b515bd67802887e0e51a4827b48a820570bfe65ba7346f5a089",
+    "reports/evidence/M2/ui/desktop-phone.png": "b6ea3cbedc090fc0f4bdc1f8f1a6a11bead74ab7ccdf6bf40ca5db6274b5b1a8",
+    "reports/evidence/M2/ui/phone-offline.png": "730a38cde18de7d8de554428c0b4ec6102e6d299a94c80f2cd8112811457a038"
+  },
+  "material_review": "Original geometric icons and neutral inherited UI, fictional SYNTHETIC notes; no research/media/private profile ingest",
+  "screenshot_review": "Offline phone/desktop PWA viewport without desktop, terminal, invitation/device credential/passphrase/private path; inspect rendered PNGs before push",
+  "npm_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "hardware": "S24 NOT_RUN; desktop Chromium only"
+}
