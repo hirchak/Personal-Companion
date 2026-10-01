@@ -22,6 +22,7 @@ const states: Record<string, string> = {
   LOCAL_AUDIO_SAVED: "Аудіо збережено на телефоні · очікує Mac",
   UPLOADING: "Передаємо на Mac",
   MAC_AUDIO_CONFIRMED: "Аудіо збережено на Mac",
+  MAC_AUDIO_DELETED: "Mac видалив аудіо · телефонна копія збережена",
   FAILED: "Потрібна повторна спроба",
   CANCELLED: "Передавання скасовано · телефонна копія збережена",
   TRANSCRIPTION_QUEUED: "Очікує транскрипції",
@@ -38,6 +39,8 @@ function failure(e: unknown) {
     code.includes("permission")
   )
     return "Доступ до мікрофона не надано. Дозвольте його для цього сайту й повторіть.";
+  if (code === "CANCELLED")
+    return "Передавання скасовано. Телефонна копія збережена; стан Mac можна перевірити окремо.";
   if (code.includes("NOTHING_RECOGNIZED"))
     return "Нічого не розпізнано. Перевірте запис або запишіть ще раз.";
   if (code.includes("LOCAL_ASR_BACKEND"))
@@ -678,20 +681,23 @@ export function VoicePanel({
               </div>
             )}
             <div className="actions">
-              {phone && item.state === "MAC_AUDIO_CONFIRMED" && (
-                <button
-                  disabled={Boolean(busy)}
-                  onClick={() =>
-                    void action(item.id, async () => {
-                      await phone.refreshAudio(item.id);
-                      await phone.pull();
-                      onJournalChange?.();
-                    })
-                  }
-                >
-                  Перевірити стан аудіо на Mac
-                </button>
-              )}
+              {phone &&
+                ["MAC_AUDIO_CONFIRMED", "FAILED", "CANCELLED"].includes(
+                  item.state,
+                ) && (
+                  <button
+                    disabled={Boolean(busy)}
+                    onClick={() =>
+                      void action(item.id, async () => {
+                        await phone.refreshAudio(item.id);
+                        await phone.pull();
+                        onJournalChange?.();
+                      })
+                    }
+                  >
+                    Перевірити стан аудіо на Mac
+                  </button>
+                )}
               {phone && (
                 <button
                   disabled={Boolean(busy)}

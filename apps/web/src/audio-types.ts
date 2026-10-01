@@ -31,6 +31,7 @@ export type PhoneAudio = {
     | "LOCAL_AUDIO_SAVED"
     | "UPLOADING"
     | "MAC_AUDIO_CONFIRMED"
+    | "MAC_AUDIO_DELETED"
     | "FAILED"
     | "CANCELLED";
   uploaded: number;

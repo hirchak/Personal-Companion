@@ -59,7 +59,10 @@ client destination paths/extra fields. At most 100 active uploading/finalized re
 no LAN/Tailscale/certificate/deploy change. Cancellation persists a terminal server state and removes
 staging. A finalize that already committed precedes cancellation; it remains a saved attachment
 requiring explicit deletion. Phone upload fails/retries with its original encrypted bytes retained;
-no silent deletion after receipt. A local offline cancellation cannot guarantee remote erasure.
+no silent deletion after receipt. A late finalize response after local cancellation does not automatically
+apply to phone state; an explicit Mac status check can reconcile a finalize that committed first.
+An explicit check also shows Mac deletion while preserving the phone copy. A local offline cancellation
+cannot guarantee remote erasure.
 
 ## ASR and journal authority
 

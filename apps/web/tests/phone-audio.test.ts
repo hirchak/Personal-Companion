@@ -243,3 +243,76 @@ it("M4 audio copy after re-pair is explicit and never silently replays old IDs",
   expect(copy.begin.operation_id).not.toBe(old.begin.operation_id);
   expect(await s.audios()).toHaveLength(2);
 });
+
+it("M4 cancelled final receipt never applies late to phone state", async () => {
+  const s = make();
+  await s.create(PASSWORD);
+  await s.mutate((x) => {
+    x.pairing = {
+      credential: "SYNTHETIC fixture token",
+      epoch: "SYNTHETIC epoch",
+    };
+  });
+  const item = await s.saveAudio(data());
+  let cancelled = false;
+  vi.stubGlobal("fetch", async (url: string, options: any) => {
+    const body = options.body ? JSON.parse(options.body) : null;
+    let result: any = {};
+    if (url.endsWith("/voice/audio"))
+      result = { ...item.begin, state: "UPLOADING", received_chunks: [] };
+    else if (url.endsWith("/chunks"))
+      result = {
+        audio_id: item.begin.audio_id,
+        index: body.index,
+        content_hash: body.content_hash,
+        state: "CHUNK_DURABLE",
+      };
+    else if (url.includes("/voice/") && url.endsWith("/finalize")) {
+      cancelled = true;
+      result = {
+        ...item.begin,
+        state: "MAC_AUDIO_CONFIRMED",
+        transcript: null,
+      };
+    } else if (url.endsWith("/cancel"))
+      return new Response(JSON.stringify({ code: "AUDIO_ALREADY_SAVED" }), {
+        status: 409,
+      });
+    return new Response(JSON.stringify(result), { status: 200 });
+  });
+  await expect(
+    s.uploadAudio(
+      item.begin.audio_id,
+      () => cancelled,
+      () => {},
+    ),
+  ).rejects.toThrow("CANCELLED");
+  expect((await s.audios())[0].state).toBe("CANCELLED");
+  expect((await s.audios())[0].receipt).toBeNull();
+  expect(await s.audioData(item.begin.audio_id)).toEqual(data());
+});
+it("M4 explicit remote status check reflects deleted Mac audio while retaining phone bytes", async () => {
+  const s = make();
+  await s.create(PASSWORD);
+  await s.mutate((x) => {
+    x.pairing = { credential: "SYNTHETIC fixture", epoch: "SYNTHETIC epoch" };
+  });
+  const item = await s.saveAudio(data());
+  vi.stubGlobal(
+    "fetch",
+    async () =>
+      new Response(
+        JSON.stringify({
+          id: item.begin.audio_id,
+          content_hash: item.begin.content_hash,
+          byte_size: item.begin.byte_size,
+          state: "DELETED",
+          transcript: null,
+        }),
+        { status: 200 },
+      ),
+  );
+  await s.refreshAudio(item.begin.audio_id);
+  expect((await s.audios())[0].state).toBe("MAC_AUDIO_DELETED");
+  expect(await s.audioData(item.begin.audio_id)).toEqual(data());
+});

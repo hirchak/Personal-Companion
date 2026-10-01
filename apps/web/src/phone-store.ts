@@ -1039,6 +1039,7 @@ export class PhoneStore {
           "LOCAL_AUDIO_SAVED",
           "UPLOADING",
           "MAC_AUDIO_CONFIRMED",
+          "MAC_AUDIO_DELETED",
           "FAILED",
           "CANCELLED",
         ].includes(item.state)
@@ -1199,6 +1200,7 @@ export class PhoneStore {
       }
       if (cancelled()) throw new StoreError("CANCELLED");
       const result = await this.voiceCall(`/audio/${id}/finalize`, "POST", {});
+      if (cancelled()) throw new StoreError("CANCELLED");
       if (
         result.state !== "MAC_AUDIO_CONFIRMED" ||
         result.content_hash !== item.begin.content_hash ||
@@ -1243,7 +1245,22 @@ export class PhoneStore {
   async refreshAudio(id: string) {
     const result = await this.voiceCall(`/audio/${id}`);
     return this.mutateAudio(id, (x) => {
+      if (
+        result.id !== id ||
+        result.content_hash !== x.begin.content_hash ||
+        result.byte_size !== x.begin.byte_size
+      )
+        throw new StoreError("INVALID_MAC_RECEIPT");
       x.transcript = result.transcript;
+      if (result.state === "DELETED") x.state = "MAC_AUDIO_DELETED";
+      else if (result.state === "MAC_AUDIO_CONFIRMED") {
+        x.state = "MAC_AUDIO_CONFIRMED";
+        x.receipt = {
+          state: "MAC_AUDIO_CONFIRMED",
+          content_hash: result.content_hash,
+          byte_size: result.byte_size,
+        };
+      }
     });
   }
   async deleteAudio(id: string, afterConfirm = false) {
