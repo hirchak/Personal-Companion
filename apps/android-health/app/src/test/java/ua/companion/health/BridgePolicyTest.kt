@@ -2,6 +2,7 @@ package ua.companion.health
 import org.junit.Assert.*
 import org.junit.Test
 class BridgePolicyTest {
+    @Test fun oldImportIntentCannotReplayAfterActivityRestore() { assertTrue(BridgePolicy.coldImport(BridgePolicy.importAction,false));assertFalse(BridgePolicy.coldImport(BridgePolicy.importAction,true));assertFalse(BridgePolicy.coldImport("android.intent.action.MAIN",false));assertFalse(BridgePolicy.coldImport(null,false)) }
     @Test fun onlyThreeReads() { assertEquals(3,BridgePolicy.permissions.size);assertTrue(BridgePolicy.permissions.all { it.startsWith("android.permission.health.READ_") });assertEquals(listOf("sleep","steps","exercise"),BridgePolicy.types) }
     @Test fun absentIsNotZero() { assertEquals("PERMISSION_DENIED",BridgePolicy.status(false,false));assertEquals("MISSING",BridgePolicy.status(true,false));assertEquals("VALUE",BridgePolicy.status(true,true)) }
     @Test fun unknownStagesStayUnknown() { assertEquals("SOURCE_UNKNOWN",BridgePolicy.knownSleep(999));assertEquals("SDK_KNOWN",BridgePolicy.knownSleep(2)) }

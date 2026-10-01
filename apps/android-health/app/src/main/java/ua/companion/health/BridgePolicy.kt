@@ -1,6 +1,8 @@
 package ua.companion.health
 
 object BridgePolicy {
+    const val importAction = "ua.companion.health.IMPORT"
+    fun coldImport(action:String?,restoring:Boolean) = action==importAction && !restoring
     val types = listOf("sleep", "steps", "exercise")
     val permissions = setOf("android.permission.health.READ_SLEEP", "android.permission.health.READ_STEPS", "android.permission.health.READ_EXERCISE")
     const val maxRecords = 1000

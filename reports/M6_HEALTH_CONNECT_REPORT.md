@@ -63,7 +63,10 @@ Exercise with real records, Watch firmware/hardware identity, real source change
 
 Previous local C57d30d64d592c70a4c4b8e8a937ffbb27cabdb82 exact checks passed and remain in
 [evidence](evidence/M6/PREVIOUS_C_CHECKS.json). Forward fix C adds identical in-batch normalization
-and cancellation before bridge-copy deletion; final exact-C evidence supersedes that candidate.
+and cancellation before bridge-copy deletion. C803ef003ebfcd9e895a8f2813d1744fecf1e27ed
+exact checks also passed ([evidence](evidence/M6/PREVIOUS_FORWARD_C_CHECKS.json)). Final forward
+cleanup handles committed and interrupted owned staging files with filesystem tests; final exact-C
+evidence supersedes these candidates.
 
 Pre-C working candidate: full Python372 PASS (including27 Chromium tests/3 M6), web35 PASS,
 Android10 unit tests and debug build PASS. Counts may increase with final tests; exact-C evidence

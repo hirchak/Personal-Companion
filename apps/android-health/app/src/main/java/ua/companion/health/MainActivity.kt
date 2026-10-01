@@ -47,18 +47,21 @@ class MainActivity: ComponentActivity() {
         button("Дозволити читання трьох типів") { if (HealthConnectClient.getSdkStatus(this)==HealthConnectClient.SDK_AVAILABLE) request.launch(permissions) else status.text="Health Connect потребує встановлення або оновлення власником." }
         button("Перевірити доступ / імпортувати") { launchImport() }
         button("Керувати дозволами Health Connect") { try { startActivity(Intent(HealthConnectClient.ACTION_HEALTH_CONNECT_SETTINGS)) } catch (_: Exception) { status.text="Відкрийте Health Connect у системних налаштуваннях." } }
-        button("Видалити локальні файли bridge") { android.app.AlertDialog.Builder(this).setMessage("Видалити лише копії bridge? Health Connect originals залишаться. Для нового читання потрібна явна дія імпорту.").setPositiveButton("Видалити") { _,_->importJob?.cancel();stateFile.delete();exportFile.delete();probeFile.delete();status.text="Локальні копії bridge видалено. Оригінали збережено." }.setNegativeButton("Скасувати",null).show() }
+        button("Видалити локальні файли bridge") { android.app.AlertDialog.Builder(this).setMessage("Видалити лише копії bridge? Health Connect originals залишаться. Для нового читання потрібна явна дія імпорту.").setPositiveButton("Видалити") { _,_->importJob?.cancel();val cleared=BridgeFiles.clear(filesDir);status.text=if(cleared) "Локальні копії bridge видалено. Оригінали збережено." else "Не всі локальні копії видалено. Повторіть очищення." }.setNegativeButton("Скасувати",null).show() }
         setContentView(ScrollView(this).apply { addView(layout) })
-        lifecycleScope.launch { capability();if(intent.action=="ua.companion.health.IMPORT")launchImport() }
+        val coldImport=BridgePolicy.coldImport(intent.action,savedInstanceState!=null)
+        intent.action=Intent.ACTION_MAIN
+        if(coldImport)launchImport() else lifecycleScope.launch { capability() }
     }
-    override fun onResume() { super.onResume();if (::status.isInitialized) lifecycleScope.launch { capability() } }
-    override fun onNewIntent(intent: Intent) { super.onNewIntent(intent);setIntent(intent);if(intent.action=="ua.companion.health.IMPORT")launchImport() }
+    override fun onResume() { super.onResume();if (::status.isInitialized && importJob?.isActive!=true) lifecycleScope.launch { capability() } }
+    override fun onNewIntent(intent: Intent) { super.onNewIntent(intent);setIntent(intent);if(intent.action==BridgePolicy.importAction)launchImport();intent.action=Intent.ACTION_MAIN }
     private suspend fun safeSync() { try { sync() } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { status.text="Імпорт не завершено. Локальну копію збережено; повторіть вручну." } }
-    private fun atomic(file: File, text: String) { require(text.toByteArray().size<=BridgePolicy.maxBytes);val temp=File(filesDir,file.name+".writing");temp.outputStream().use { it.write(text.toByteArray());it.fd.sync() };check(temp.renameTo(file)) }
+    private fun atomic(file:File,text:String) { BridgeFiles.atomic(filesDir,file.name,text) }
     private suspend fun capability(): Set<String> {
+        BridgeFiles.discardInterrupted(filesDir)
         if(exportFile.exists() && BridgePolicy.exportExpired(exportFile.lastModified(),System.currentTimeMillis()))exportFile.delete()
         val available=HealthConnectClient.getSdkStatus(this)
-        val granted=if (available==HealthConnectClient.SDK_AVAILABLE) try { HealthConnectClient.getOrCreate(this).permissionController.getGrantedPermissions() } catch (_: Exception) { emptySet() } else emptySet()
+        val granted=if (available==HealthConnectClient.SDK_AVAILABLE) try { HealthConnectClient.getOrCreate(this).permissionController.getGrantedPermissions() } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { emptySet() } else emptySet()
         val probe=JSONObject().put("schema_version",1).put("health_connect",if(available==HealthConnectClient.SDK_AVAILABLE) "AVAILABLE" else if(available==HealthConnectClient.SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED) "UPDATE_REQUIRED" else "UNAVAILABLE").put("api_level",android.os.Build.VERSION.SDK_INT).put("bridge_version","0.6.1-debug").put("write_permissions","NONE").put("background_history_location_permissions","NONE")
         val states=JSONObject();for ((type,record) in recordTypes) states.put(type,if(granted.contains(HealthPermission.getReadPermission(record))) "GRANTED" else "PERMISSION_DENIED")
         probe.put("permissions",states);atomic(probeFile,probe.toString())
