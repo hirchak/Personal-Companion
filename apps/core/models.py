@@ -140,7 +140,7 @@ class EntryOutput(EntryInput):
     revision: StrictInt = Field(ge=1)
     created_at_utc: datetime
     updated_at_utc: datetime
-    schema_version: Literal[1]
+    schema_version: Literal[2]
     privacy_class: Literal['PRIVATE_PERSONAL']
     provenance_type: Literal['USER_REPORTED']
     reported_interval_seconds: float | None = Field(default=None, ge=0)
@@ -154,6 +154,7 @@ class EntryOutput(EntryInput):
 
 
 class EntryRevisionOutput(EntryOutput):
+    schema_version: Literal[1, 2]
     # Unknown only for already existing pre-correction development history.
     recorded_at_utc: datetime | None = None
 
@@ -183,7 +184,7 @@ class Receipt(StrictModel):
 class VaultMetadata(StrictModel):
     vault_id: UUID
     owner_id: UUID
-    schema_version: Literal[1]
+    schema_version: Literal[2]
     restore_epoch: StrictInt = Field(ge=0)
     created_at_utc: datetime
     reconciliation: Literal['NONE', 'RESTORED_REQUIRES_RECONCILIATION']

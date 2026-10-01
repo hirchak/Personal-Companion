@@ -100,8 +100,7 @@ class DocToolsTests(unittest.TestCase):
         self.assertTrue(any('symlink' in e for e in validate(self.root)[0]))
     def test_missing_pointer_denied(self):
         p=self.root/'STATE.md'
-        p.write_text(p.read_text().replace('current_contract_path: docs/M1_CONTRACT.md',
-                                         'current_contract_path: docs/MISSING.md'))
+        p.write_text(re.sub(r'^current_contract_path:.*$', 'current_contract_path: docs/MISSING.md', p.read_text(), flags=re.MULTILINE))
         self.assertTrue(any('STATE pointer' in e for e in validate(self.root)[0]))
     def test_fake_secret_detected(self):
         (self.root/'synthetic-test.txt').write_text('ghp_'+'Z'*40)

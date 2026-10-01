@@ -28,7 +28,7 @@ class Journal:
     def view(self, row):
         p = json.loads(row['payload'])
         result = dict(p, id=row['id'], owner_id=row['owner_id'], revision=row['revision'],
-                      created_at_utc=row['created'], updated_at_utc=row['updated'], schema_version=1,
+                      created_at_utc=row['created'], updated_at_utc=row['updated'], schema_version=2,
                       privacy_class='PRIVATE_PERSONAL', provenance_type='USER_REPORTED')
         if p['type'] == 'sleep':
             from datetime import datetime
@@ -62,58 +62,66 @@ class Journal:
         except (ValueError, TypeError):
             raise SafeError('SCHEMA_INVALID', 422) from None
         with self.store.transaction() as c:
-            dead = c.execute('SELECT * FROM tombstones WHERE entry_id=? AND owner_id=?', (entry_id, self.owner)).fetchone()
-            existing = c.execute('SELECT * FROM operation_receipts WHERE operation_id=?', (op,)).fetchone()
-            if dead and action != 'delete':
-                raise SafeError('DELETED', 410)
-            if existing:
-                if existing['owner_id'] != self.owner or existing['entry_id'] != entry_id or existing['action'] != action or existing['fingerprint'] != fp:
-                    raise SafeError('OPERATION_REUSE', 409)
-                return {'entry_id': entry_id, 'revision': existing['revision'], 'result_code': existing['result_code'], 'operation_id': op}
-            if dead:
-                # A new operation on an already deleted entry still needs a receipt:
-                # otherwise its operation ID could be reused for another action.
-                c.execute('INSERT INTO operation_receipts VALUES(?,?,?,?,?,?,?)',
-                          (op, self.owner, entry_id, action, fp, dead['revision'], 'DELETED'))
-                return {'entry_id': entry_id, 'revision': dead['revision'], 'result_code': 'DELETED', 'operation_id': op}
-            timestamp = now()
-            if action == 'create':
-                if c.execute('SELECT 1 FROM entries WHERE id=?', (entry_id,)).fetchone():
-                    raise SafeError('REVISION_CONFLICT', 409)
-                rev, payload = 1, request.payload.payload()
-                c.execute('INSERT INTO entries VALUES(?,?,?,?,?,?)', (entry_id, self.owner, rev, encode(payload), timestamp, timestamp))
+            result = self.write_in(c, action, entry_id, request, fp)
+        return result  # only after commit
+
+    def write_in(self, c, action, entry_id, request, fingerprint=None):
+        """Caller owns transaction; used by authenticated device sync, never commits here."""
+        entry_id, op = str(entry_id), str(request.operation_id)
+        fp = fingerprint or digest(encode({'entry_id': entry_id, 'action': action, 'request': request.model_dump(mode='json')}).encode())
+        dead = c.execute('SELECT * FROM tombstones WHERE entry_id=? AND owner_id=?', (entry_id, self.owner)).fetchone()
+        existing = c.execute('SELECT * FROM operation_receipts WHERE operation_id=?', (op,)).fetchone()
+        if dead and action != 'delete':
+            raise SafeError('DELETED', 410)
+        if existing:
+            if existing['owner_id'] != self.owner or existing['entry_id'] != entry_id or existing['action'] != action or existing['fingerprint'] != fp:
+                raise SafeError('OPERATION_REUSE', 409)
+            return {'entry_id': entry_id, 'revision': existing['revision'], 'result_code': existing['result_code'], 'operation_id': op}
+        if dead:
+            # A new operation on an already deleted entry still needs a receipt:
+            # otherwise its operation ID could be reused for another action.
+            c.execute('INSERT INTO operation_receipts VALUES(?,?,?,?,?,?,?)',
+                      (op, self.owner, entry_id, action, fp, dead['revision'], 'DELETED'))
+            return {'entry_id': entry_id, 'revision': dead['revision'], 'result_code': 'DELETED', 'operation_id': op}
+        timestamp = now()
+        if action == 'create':
+            if c.execute('SELECT 1 FROM entries WHERE id=?', (entry_id,)).fetchone():
+                raise SafeError('REVISION_CONFLICT', 409)
+            rev, payload = 1, request.payload.payload()
+            c.execute('INSERT INTO entries VALUES(?,?,?,?,?,?)', (entry_id, self.owner, rev, encode(payload), timestamp, timestamp))
+        else:
+            old = self.row(c, entry_id)
+            if old['revision'] != request.base_revision:
+                raise SafeError('REVISION_CONFLICT', 409)
+            rev = old['revision'] + 1
+            if action == 'delete':
+                c.execute('DELETE FROM entries WHERE id=? AND owner_id=?', (entry_id, self.owner))
+                c.execute('UPDATE operation_receipts SET fingerprint=NULL WHERE entry_id=?', (entry_id,))
+                c.execute("UPDATE sync_receipts SET fingerprint=NULL WHERE entry_id=? AND action!='delete'", (entry_id,))
+                c.execute('INSERT INTO tombstones VALUES(?,?,?,?,?)', (entry_id, self.owner, rev, timestamp, self.store.meta()['restore_epoch']))
             else:
-                old = self.row(c, entry_id)
-                if old['revision'] != request.base_revision:
-                    raise SafeError('REVISION_CONFLICT', 409)
-                rev = old['revision'] + 1
-                if action == 'delete':
-                    c.execute('DELETE FROM entries WHERE id=? AND owner_id=?', (entry_id, self.owner))
-                    c.execute('UPDATE operation_receipts SET fingerprint=NULL WHERE entry_id=?', (entry_id,))
-                    c.execute('INSERT INTO tombstones VALUES(?,?,?,?,?)', (entry_id, self.owner, rev, timestamp, self.store.meta()['restore_epoch']))
-                else:
-                    p = json.loads(old['payload'])
-                    target = request.changes.get('type', p['type'])
-                    if not isinstance(target, str) or target not in FIELDS:
-                        raise SafeError('SCHEMA_INVALID', 422)
-                    if target != p['type']:
-                        removed = {k for k in FIELDS[p['type']] if p.get(k) is not None}
-                        if removed and not request.confirm_type_change:
-                            raise SafeError('TYPE_CHANGE_CONFIRMATION_REQUIRED', 409)
-                        p = {k: v for k, v in p.items() if k not in TYPED}
-                    p.update(request.changes)
-                    try:
-                        payload = EntryInput.model_validate(p).payload()
-                    except ValidationError:
-                        raise SafeError('SCHEMA_INVALID', 422) from None
-                    c.execute('INSERT INTO entry_revisions VALUES(?,?,?)', (entry_id, old['revision'], encode(dict(self.view(old), recorded_at_utc=timestamp))))
-                    c.execute('UPDATE entries SET revision=?,payload=?,updated=? WHERE id=? AND owner_id=?', (rev, encode(payload), timestamp, entry_id, self.owner))
-            if action != 'delete':
-                c.execute('INSERT OR REPLACE INTO search_index VALUES(?,?)', (entry_id, payload['raw_text']))
-            code = 'DELETED' if action == 'delete' else 'MAC_SAVED'
-            c.execute('INSERT INTO operation_receipts VALUES(?,?,?,?,?,?,?)', (op, self.owner, entry_id, action, fp, rev, code))
-            result = {'entry_id': entry_id, 'revision': rev, 'result_code': code, 'operation_id': op}
-        return result  # reached only AFTER successful commit
+                p = json.loads(old['payload'])
+                target = request.changes.get('type', p['type'])
+                if not isinstance(target, str) or target not in FIELDS:
+                    raise SafeError('SCHEMA_INVALID', 422)
+                if target != p['type']:
+                    removed = {k for k in FIELDS[p['type']] if p.get(k) is not None}
+                    if removed and not request.confirm_type_change:
+                        raise SafeError('TYPE_CHANGE_CONFIRMATION_REQUIRED', 409)
+                    p = {k: v for k, v in p.items() if k not in TYPED}
+                p.update(request.changes)
+                try:
+                    payload = EntryInput.model_validate(p).payload()
+                except ValidationError:
+                    raise SafeError('SCHEMA_INVALID', 422) from None
+                c.execute('INSERT INTO entry_revisions VALUES(?,?,?)', (entry_id, old['revision'], encode(dict(self.view(old), recorded_at_utc=timestamp))))
+                c.execute('UPDATE entries SET revision=?,payload=?,updated=? WHERE id=? AND owner_id=?', (rev, encode(payload), timestamp, entry_id, self.owner))
+        if action != 'delete':
+            c.execute('INSERT OR REPLACE INTO search_index VALUES(?,?)', (entry_id, payload['raw_text']))
+        code = 'DELETED' if action == 'delete' else 'MAC_SAVED'
+        c.execute('INSERT INTO operation_receipts VALUES(?,?,?,?,?,?,?)', (op, self.owner, entry_id, action, fp, rev, code))
+        result = {'entry_id': entry_id, 'revision': rev, 'result_code': code, 'operation_id': op}
+        return result
 
     def rebuild(self):
         with self.store.transaction() as c:
@@ -142,11 +150,11 @@ class Journal:
                 created, id, bound = json.loads(base64.urlsafe_b64decode(body))
                 if bound != filters:
                     raise ValueError()
-                where.append('(e.created,e.id)>(?,?)'); params.extend([created, id])
+                where.append('(e.created,e.id)<(?,?)'); params.extend([created, id])
             except (ValueError, TypeError):
                 raise SafeError('INVALID_CURSOR') from None
         with self.store.connect() as c:
-            rows = c.execute('SELECT e.* FROM entries e JOIN search_index s ON s.entry_id=e.id WHERE ' + ' AND '.join(where) + ' ORDER BY e.created,e.id LIMIT ?', [*params, limit + 1]).fetchall()
+            rows = c.execute('SELECT e.* FROM entries e JOIN search_index s ON s.entry_id=e.id WHERE ' + ' AND '.join(where) + ' ORDER BY e.created DESC,e.id DESC LIMIT ?', [*params, limit + 1]).fetchall()
             page = rows[:limit]
             token = None
             if len(rows) > limit:

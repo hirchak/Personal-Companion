@@ -8,7 +8,7 @@ from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 1
+SCHEMA = 2
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
 
@@ -67,6 +67,13 @@ TABLES = (
     'CREATE TABLE IF NOT EXISTS search_index(entry_id TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,raw_text TEXT NOT NULL)',
 )
 
+SYNC_TABLES = (
+    'CREATE TABLE IF NOT EXISTS devices(id TEXT PRIMARY KEY,owner_id TEXT NOT NULL,label TEXT NOT NULL,credential_hash TEXT NOT NULL,epoch TEXT NOT NULL,created_at_utc TEXT NOT NULL,revoked_at_utc TEXT)',
+    'CREATE TABLE IF NOT EXISTS sync_meta(id INTEGER PRIMARY KEY CHECK(id=1),generation TEXT NOT NULL,change_seq INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS sync_receipts(operation_id TEXT PRIMARY KEY,device_id TEXT NOT NULL REFERENCES devices(id),entry_id TEXT NOT NULL,action TEXT NOT NULL,fingerprint TEXT,state TEXT NOT NULL,revision INTEGER)',
+    'CREATE TABLE IF NOT EXISTS sync_checkpoints(device_id TEXT PRIMARY KEY REFERENCES devices(id),epoch TEXT NOT NULL,change_seq INTEGER NOT NULL)',
+)
+
 class Store:
     def __init__(self, root, fail_migration=False):
         self.root = safe_path(root)
@@ -119,6 +126,12 @@ class Store:
                     c.execute('INSERT INTO vault_meta VALUES(?,?,?,0,?,?)', (str(uuid4()), str(uuid4()), SCHEMA, now(), 'NONE'))
                 for sql in TABLES:
                     c.execute(sql)
+                for sql in SYNC_TABLES:
+                    c.execute(sql)
+                c.execute('INSERT OR IGNORE INTO sync_meta VALUES(1,?,0)', (str(uuid4()),))
+                for table in ('entries','tombstones'):
+                    for action in ('INSERT','UPDATE','DELETE'):
+                        c.execute(f'CREATE TRIGGER IF NOT EXISTS seq_{table}_{action.lower()} AFTER {action} ON {table} BEGIN UPDATE sync_meta SET change_seq=change_seq+1 WHERE id=1; END')
                 if fail_migration:
                     raise sqlite3.OperationalError('synthetic migration failure')
                 c.execute('UPDATE vault_meta SET schema_version=?', (SCHEMA,))
@@ -166,7 +179,7 @@ class Store:
         if c.execute('SELECT count(*) FROM vault_meta').fetchone()[0] != 1:
             raise SafeError('INVALID_METADATA')
         tables = {row[0] for row in c.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        if not {'vault_meta', 'entries', 'entry_revisions', 'tombstones', 'operation_receipts', 'search_index'} <= tables:
+        if not {'vault_meta', 'entries', 'entry_revisions', 'tombstones', 'operation_receipts', 'search_index', 'devices', 'sync_meta', 'sync_receipts', 'sync_checkpoints'} <= tables:
             raise SafeError('INCOMPLETE_SCHEMA')
         # SQLite integrity alone cannot establish the typed domain schema.
         from .models import EntryInput, EntryOutput, EntryRevisionOutput, VaultMetadata
@@ -185,7 +198,7 @@ class Store:
                 EntryInput.model_validate(payload)
                 EntryOutput.model_validate(dict(payload, id=row['id'], owner_id=row['owner_id'],
                     revision=row['revision'], created_at_utc=row['created'], updated_at_utc=row['updated'],
-                    schema_version=1, privacy_class='PRIVATE_PERSONAL', provenance_type='USER_REPORTED'))
+                    schema_version=SCHEMA, privacy_class='PRIVATE_PERSONAL', provenance_type='USER_REPORTED'))
             for row in c.execute('SELECT entry_id,revision,payload FROM entry_revisions'):
                 entry = json.loads(row['payload'])
                 historical = EntryRevisionOutput.model_validate(entry)
@@ -210,6 +223,8 @@ class Store:
                 dest.row_factory = sqlite3.Row
                 try:
                     source.backup(dest)
+                    dest.execute("UPDATE devices SET credential_hash='',revoked_at_utc=COALESCE(revoked_at_utc,?)", (now(),))
+                    dest.commit()
                     dest.execute('PRAGMA journal_mode=DELETE')
                     self.check(dest)
                     meta = dict(dest.execute('SELECT * FROM vault_meta').fetchone())

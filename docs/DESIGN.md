@@ -11,3 +11,7 @@ optional fields use disclosure. No scores, streaks, game cosmetics or AI control
 Desktop has generous reading space; narrow screens move sections above the journal.
 Plain text wraps without execution. Focus rings, 44px actions, labels, visible committed
 save feedback and recoverable errors. Auto-lock unmounts all journal state.
+
+M2 inherits the neutral journal world and shared EntryEditor; phone status/pairing/settings,
+conflict variants, encrypted recovery/storage warnings and explicit update are additions.
+Mobile safe-area padding and large controls; no new theme or AI/health/game placeholders.

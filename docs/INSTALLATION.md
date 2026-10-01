@@ -106,3 +106,54 @@ Deletion purges current/history/search and prior write fingerprints; minimal ope
 and tombstones remain to prevent replay. SQLite free pages/WAL, previous backups/exports/OS
 snapshots may retain older bytes. This is not forensic erase. Keep/delete entire backups by
 explicit owner choice; no automatic cleanup of unknown artifacts.
+
+## M2 synthetic PWA
+
+M1/local-only remains `./scripts/demo.sh`; it does not enable device transport. M2 is explicit:
+
+```bash
+./scripts/setup_demo.sh
+./scripts/m2_demo.sh /private/tmp/personal-companion-m2-synthetic-demo
+```
+
+Mac UI: `http://127.0.0.1:8765/`, one-time terminal unlock. Phone simulation on the same desktop
+browser/origin: `http://127.0.0.1:8765/phone/`. Create a local passphrase (12+ characters), then
+Mac «Пристрої та PWA» → «Створити запрошення»; enter it in phone settings. It expires in 5 min.
+No passphrase/token in URL or plaintext durable browser storage. Pairing material stays inside
+AES-GCM state. Lock/reload clears key; reopen with passphrase. Stop server with Ctrl+C.
+
+This localhost flow is **not a Galaxy phone route**. Real private-origin HTTPS and Android
+remain OFF/NOT_RUN. For controlled TLS testing only:
+
+```bash
+.venv/bin/python -m apps.core.cli serve --root /private/tmp/personal-companion-m2-synthetic-demo --port 8765 --mode m2-synthetic --test-tls
+```
+
+Generates short-lived cert/key in a new private temp path, never installs trust. Automated tests
+use ephemeral browser flags; do not tell real users to ignore TLS warnings. See
+[transport ADR](adr/ADR-002-M2-TRANSPORT.md) and [Android gate](M2_ANDROID_GATE.md).
+
+Verification:
+
+```bash
+npm --prefix apps/web run build
+npm --prefix apps/web test
+.venv/bin/python -m pytest -q
+.venv/bin/python -m scripts.measure_m2
+```
+
+Offline/PWA: first online shell load is required. After that the service worker caches only
+static resources. Capture/edit/delete store entry+outbox as one encrypted transaction; queued
+text is canonical on phone until committed Mac receipt. Conflicts show two variants and need
+explicit choice. Revocation does not remote erase. Restore/epoch rotation block old queue until
+re-pair and explicit reconciliation; phone-copy choice creates new IDs rather than replaying old
+IDs/deletes. Recovery is an encrypted file of unsynced data, not Mac backup. Import only into an
+empty store, validate checksum/decryption/schema and require pairing/reconciliation. No lost-
+passphrase bypass. Forget browser requires an explicit warning; export pending data first.
+
+Mac DB schema 2 upgrades synthetic schema 1 transactionally after backup; no unknown/private
+roots. Owner backup sanitizes device credential verifiers; restored vault requires new pairing.
+Local IDB structural upgrade is additive; encrypted 1→2 needs explicit confirmation and atomic
+rewrite. Newer unknown schema refuses safely. Waiting service worker activates explicitly and
+never resets outbox. Browser persistence is best effort even if granted; all storage may be
+cleared/evicted. Uncommitted draft remains only in current unlocked memory on write failure.

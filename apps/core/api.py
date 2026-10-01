@@ -14,6 +14,7 @@ from pydantic import ValidationError
 from .models import Create, Patch, Delete, Selector, Export, Unlock, EntryOutput, EntryPage, RevisionPage, Receipt
 from .storage import SafeError, Store
 from .domain import Journal
+from .sync import SyncService, Pair, Packet, EpochReset
 
 CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
 
@@ -50,12 +51,15 @@ class Auth:
             return s
 
 
-def create_app(root, port=8765, clock=time.monotonic, web=None):
+def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http"):
+    if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
     store = Store(root)
     journal, auth = Journal(store, clock), Auth(clock)
     app = FastAPI(title='M1 Local Journal', version='1.0.0', docs_url=None, redoc_url=None, openapi_url=None)
     app.state.store, app.state.journal, app.state.auth = store, journal, auth
-    host, origin = f'127.0.0.1:{port}', f'http://127.0.0.1:{port}'
+    sync = SyncService(journal, clock)
+    app.state.sync, app.state.m2 = sync, m2
+    host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
     def error(code, status):
@@ -84,7 +88,18 @@ def create_app(root, port=8765, clock=time.monotonic, web=None):
                         raise SafeError('BODY_LIMIT', 413)
                     chunks.append(chunk)
                 request._body = b''.join(chunks)
-            if request.url.path.startswith('/api/') and request.url.path != '/api/v1/auth/unlock':
+            path = request.url.path
+            if path.startswith('/api/v1/device/'):
+                if not m2: raise SafeError('M2_DISABLED',403)
+                if path != '/api/v1/device/pair':
+                    bearer = request.headers.get('authorization','')
+                    if not bearer.startswith('Bearer '): raise SafeError('DEVICE_DENIED',401)
+                    with store.connect() as connection:
+                        sync.authenticate(connection,request.headers.get('x-device-id',''),bearer[7:],request.headers.get('x-sync-epoch',''))
+                    request.state.device_token = bearer[7:]
+                    request.state.device_id = request.headers['x-device-id']
+                    request.state.device_epoch = request.headers.get('x-sync-epoch','')
+            elif path.startswith('/api/') and path != '/api/v1/auth/unlock':
                 token = request.cookies.get('m1_session', '')
                 s = auth.session(token)
                 request.state.session = token
@@ -126,7 +141,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None):
     def unlock(body: Unlock):
         token, s = auth.unlock(body.code)
         r = JSONResponse({'csrf_token': s['csrf'], 'idle_seconds': 900, 'absolute_seconds': 28800})
-        r.set_cookie('m1_session', token, httponly=True, samesite='strict', path='/', max_age=28800)
+        r.set_cookie('m1_session', token, httponly=True, samesite='strict', path='/', max_age=28800, secure=scheme=='https')
         return r
 
     @app.get('/api/v1/auth/session')
@@ -143,7 +158,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None):
 
     @app.get('/api/v1/status')
     def status():
-        return {'schema_version': 1, 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
+        return {'schema_version': 2, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
 
     @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):
@@ -183,11 +198,43 @@ def create_app(root, port=8765, clock=time.monotonic, web=None):
         ext = 'json' if body.format == 'json' else 'md'
         return Response(text, media_type='application/json' if ext == 'json' else 'text/markdown', headers={'Content-Disposition': f'attachment; filename="selected-journal.{ext}"'})
 
+    def require_m2():
+        if not m2: raise SafeError('M2_DISABLED',403)
+
+    @app.post('/api/v1/sync/invitations')
+    def invitation(body: EpochReset):
+        require_m2(); return sync.invite()
+
+    @app.get('/api/v1/sync/devices')
+    def devices():
+        require_m2(); return sync.devices()
+
+    @app.post('/api/v1/sync/devices/{device_id}/revoke')
+    def revoke(device_id: UUID, body: EpochReset):
+        require_m2(); return sync.revoke(device_id)
+
+    @app.post('/api/v1/sync/epoch')
+    def reset_epoch(body: EpochReset):
+        require_m2(); return sync.rotate(body.prune_tombstones)
+
+    @app.post('/api/v1/device/pair')
+    def pair(body: Pair):
+        return sync.pair(body)
+
+    @app.get('/api/v1/device/snapshot')
+    def pull(request: Request):
+        return sync.snapshot(request.state.device_id,request.state.device_token,request.state.device_epoch)
+
+    @app.post('/api/v1/device/operations')
+    def apply(body: Packet, request: Request):
+        return sync.apply(body,request.state.device_id,request.state.device_token,request.state.device_epoch)
+
     @app.get('/{path:path}')
     def shell(path: str):
         if path.startswith('api/'):
             raise SafeError('NOT_FOUND', 404)
-        target = web / (path or 'index.html')
+        if path.startswith('phone') and not m2: raise SafeError('M2_DISABLED',403)
+        target = web / ('phone/index.html' if path in ('phone/','phone') else path or 'index.html')
         if not target.resolve().is_relative_to(web.resolve()) or not target.is_file():
             raise SafeError('NOT_FOUND', 404)
         return FileResponse(target)

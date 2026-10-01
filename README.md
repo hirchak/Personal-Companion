@@ -12,10 +12,9 @@ fast-forward development pushes у `main` для явно виданих goals �
 основний приватний vault; телефон може накопичувати власні локальні записи до синхронізації.
 AI — додаткова можливість, а не умова збереження запису.
 
-**M1 — працюючий локальний synthetic щоденник, кандидат для незалежного review.**
+**M1 engineering/synthetic ACCEPT за зовнішнім review; M2 offline-first synthetic PWA у реалізації.**
 CRUD чотирьох типів, історія, пошук/фільтри, захищений same-origin API, selected export,
-WAL backup/restore. M0 ACCEPT записаний із зовнішнього ТЗ. M1 AWAITING_REVIEW після
-фінальних перевірок. AI, deploy, реальні записи та M2+ OFF.
+WAL backup/restore. M0 ACCEPT записаний із зовнішнього ТЗ. M2 стане AWAITING_REVIEW після exact checks. AI, deploy, реальні записи та M3+ OFF.
 
 ```bash
 ./scripts/setup_demo.sh
@@ -69,3 +68,13 @@ WAL backup/restore. M0 ACCEPT записаний із зовнішнього Т�
 
 Ліцензію коду ще не обрано. Public repository сам по собі не означає open-source ліцензію.
 Не додавати чужі платні PDF, книги, шкали, ігрові ассети чи повні тексти без перевірки прав.
+
+## M2 synthetic PWA
+
+`./scripts/m2_demo.sh /private/tmp/personal-companion-m2-synthetic-demo` після setup.
+Mac UI `/`, PWA `/phone/` на `http://127.0.0.1:8765`; local passphrase + one-use Mac invitation.
+Offline encrypted entry/outbox, explicit sync/conflicts/reconciliation, safe shell updates,
+recovery and storage warnings. Це desktop localhost simulation, не real Android transport.
+[Contract](docs/M2_CONTRACT.md), [crypto ADR](docs/adr/ADR-001-M2-PHONE-CRYPTO.md),
+[transport candidate](docs/adr/ADR-002-M2-TRANSPORT.md), [hardware gate](docs/M2_ANDROID_GATE.md).
+`reports/M2_OFFLINE_PWA_SYNC_REPORT.md` містить актуальні evidence/limitations.

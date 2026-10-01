@@ -463,3 +463,42 @@ footer {
     font-size: 12px;
   }
 }
+.phone .journal {
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+}
+.phone .sidebar {
+  padding-top: calc(24px + env(safe-area-inset-top));
+}
+.sync-settings {
+  margin: 32px 0;
+  padding: 24px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.sync-settings .actions {
+  margin: 16px 0;
+}
+.pair-code {
+  display: block;
+  font: inherit;
+  overflow-wrap: anywhere;
+  margin: 16px 0;
+}
+.conflict {
+  margin: 24px 0;
+  padding: 20px;
+  background: #f3e8df;
+}
+.conflict .entry-text {
+  font-size: 15px;
+}
+.phone .search {
+  margin: 24px 0;
+}
+.outbox {
+  margin-top: 24px;
+}
+.phone footer {
+  padding-bottom: env(safe-area-inset-bottom);
+}
