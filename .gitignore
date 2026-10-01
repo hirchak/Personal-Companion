@@ -56,3 +56,10 @@ dist/
 build/
 generated/
 # Add licensed media fixtures only by an explicit narrowly scoped exception + review.
+# M6 Android generated/debug build artifacts and local machine configuration.
+.gradle/
+local.properties
+*.apk
+*.aab
+*.jks
+*.keystore

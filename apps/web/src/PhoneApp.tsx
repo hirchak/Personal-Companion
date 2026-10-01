@@ -6,6 +6,7 @@ import {
   type RecordItem,
 } from "./phone-store";
 import { blank, names, typed, fieldNames, type Draft } from "./journal-ui";
+import { PhoneHealthPanel } from "./PhoneHealthPanel";
 import { VoicePanel } from "./VoicePanel";
 import { CreativePanel } from "./CreativePanel";
 import { SpacePanel } from "./SpacePanel";
@@ -413,6 +414,7 @@ export function PhoneApp() {
             </button>
           ))}
           <button onClick={() => setSurface("creative")}>Творча полиця</button>
+          <button onClick={() => setSurface("health")}>Дані з годинника</button>
         </nav>
         <div className="sidebar-bottom">
           <p>
@@ -444,6 +446,7 @@ export function PhoneApp() {
             })}
           />
         )}
+        {surface === "health" && <PhoneHealthPanel online={online} status={() => store.current.healthStatus()} />}
         <div hidden={surface !== "journal"}>
           <header>
             <div>

@@ -1,0 +1,76 @@
+# M6 — IN_PROGRESS, review candidate preparation
+
+Base: `2edf0995d6d996200d9502484deb7bb557259b7e`; main fetched/verified clean before work.
+Final C: pending; R: evidence-only successor after exact-C checks; no recursive self-hash.
+M5 external synthetic ACCEPT recorded in [review](M5_ARCHITECT_REVIEW.md). No M6 self-ACCEPT.
+
+[Contract](../docs/M6_CONTRACT.md), [ADR](../docs/adr/ADR-006-M6-HEALTH-BRIDGE.md),
+[hardware runbook](../docs/M6_GALAXY_HEALTH_GATE.md), [owner goal](../prompts/M6_HEALTH_CONNECT.md).
+
+## Implementation
+
+Minimal Kotlin bridge, Health Connect 1.1.0, compile API36, project-local JDK/SDK/Gradle/Maven
+caches, no global installation. Exactly three health READ permissions, no INTERNET/network handoff,
+write, Heart Rate, routes/location/background/history, WorkManager, cloud or source mutation.
+Manual foreground app-private staging, per-type tokens, before-read token reservation,
+full cumulative replayable cache/tombstones and bounded incremental/recovery behavior.
+Owner-controlled USB handoff only of two fixed bridge-produced files; no other app scraping.
+
+Mac schema6 health tables preserve source/provenance/identity/time/unknown offsets/fields/units,
+seen/imported timestamps, local revisions and deletion tombstones separately from journal/AI/memory.
+Strict byte/schema/type/version/unit/time/duplicate/permission validation; atomic batch/checkpoint,
+origin conflict/stale sequence/epoch and generation guards, explicit re-import after deletion/restore.
+Steps totals unresolved, overlapping origins never summed. No clinical interpretation. Backup includes
+normalized records, not HC tokens; restore UNKNOWN/reconnect required, previous schemas supported.
+
+Mac Ukrainian health section provides permissions/availability/imported copy/provenance/local file
+import/view/disconnect/delete. PWA read-only paired status/help is truthful offline and never claims
+native Health Connect access or another health outbox. Journal/voice/creative remain independent.
+
+## Actual early Galaxy gate — sanitized only
+
+Owner-priority early 0.6.0-debug APK installed/opened on authorized Galaxy S24 Ultra.
+Android16/API36; One UI build80500; Samsung Health7.00.6.011; HC system version17.
+Personal USB grant and Health Connect three-type grant were confirmed by owner in this chat.
+Health Connect AVAILABLE. Sleep GRANTED / real records YES; Steps GRANTED / YES;
+Exercise GRANTED / NO_RECORDS in permitted recent read window. Samsung Health source class observed;
+Watch7 physical origin/firmware NOT_VERIFIED, never inferred.
+
+Private health-only import PASS; same batch replay PASS; actual foreground incremental refresh
+OBSERVED; durable checkpoint/restart check PASS. Owner personally disabled Sleep; next read yielded
+Sleep PERMISSION_DENIED/NOT_READ while Steps/Exercise remained allowed. Local prior copy retained.
+No source writes or real source update/delete mutations. Installed manifest exactly allowlisted,
+WRITE/background/history/location/INTERNET NONE. Own bridge PID log check found no payload markers;
+raw logs never persisted. All public hardware artifacts passed the structural allowlist sanitizer.
+
+[Early snapshots](evidence/M6/EARLY_REAL_IMPORT.json),
+[incremental](evidence/M6/EARLY_INCREMENTAL_IMPORT.json),
+[revoke](evidence/M6/EARLY_REVOKE.json),
+[manifest](evidence/M6/EARLY_INSTALLED_MANIFEST.json),
+[log check](evidence/M6/EARLY_LOG_REDACTION_CHECK.json).
+Real payloads were never sent to AI/terminal/public evidence/Git/screenshots or reused as fixtures.
+Private verification uses a dedicated M6_PRIVATE_HEALTH_TEST root outside repository, not a real journal.
+Phone declared disconnectable after actual owner interactions; no subsequent phone requirement imposed.
+
+Final 0.6.1-debug adds tested pure-cache refactoring, invalid-token recovery, stop-cancellation and bounded staging expiry.
+Final build/unit verification is synthetic; reinstall/run of 0.6.1 after phone release NOT_RUN.
+Real token expiry/recovery/app-background-cancellation/source update/delete remain NOT_RUN;
+synthetic coverage does not masquerade as device evidence. No full real-phone PWA/M4/Tailscale gate.
+Real launch/query/memory metrics NOT_MEASURED; early import duration bucket LT_1S only.
+Exercise with real records, Watch firmware/hardware identity, real source changes not manufactured.
+
+## Checks and next step
+
+Pre-C working candidate: full Python372 PASS (including27 Chromium tests/3 M6), web35 PASS,
+Android10 unit tests and debug build PASS. Counts may increase with final tests; exact-C evidence
+supersedes this checkpoint. One upstream Starlette deprecation warning, no project failure.
+Synthetic 100/1000 records benchmark: [operational metrics](evidence/M6/SYNTHETIC_BENCHMARK.json).
+Impeccable review scored both grouping/copy fixes resolved; incumbent design preserved, detector's
+old shelf warning left outside M6 scope. No new raster assets/private screenshots.
+
+Next: final implementation C, complete exact-C checks/privacy including Git objects/generated UI,
+evidence-only R, inspect exact C→R paths, normal fast-forward push main, verify origin/main==R.
+CI NOT_RUN (no repo workflow). M7+ OFF. Private remote/clinical/provider/deploy/releases remain OFF.
+Demo `./scripts/m6_demo.sh /private/tmp/personal-companion-m6-synthetic-demo`.
+Tests `.venv/bin/python -m pytest -q tests/test_m6_health.py tests/test_m6_api.py tests/test_m6_native.py tests/test_m6_browser.py`.
+Hardware command/runbook above; owner interaction only on future explicitly scheduled short reconnection.

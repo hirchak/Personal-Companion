@@ -14,7 +14,7 @@
 | ADR-006 | USER_REQUIREMENT | Початковий AI route — власна Codex-підписка | Без автоматичного PAYG |
 | ADR-007 | PROPOSED_BASELINE | MiniMax optional, public research first | Перевірка plan/seat/credits/consent |
 | ADR-008 | PROPOSED_BASELINE | Один agent voice, typed skills і deterministic gates | Немає autonomous treatment swarm |
-| ADR-009 | PROPOSED_BASELINE | Native Android bridge для автоматичного Health Connect | PWA не обіцяє прямий доступ |
+| ADR-009 | M6_IMPLEMENTED_AWAITING_REVIEW | Minimal foreground/manual read-only Health Connect bridge | See [ADR-006-M6](adr/ADR-006-M6-HEALTH-BRIDGE.md); PWA remains primary, no background sync |
 | ADR-010 | PROPOSED_BASELINE | Локальний ASR на Mac, phone audio queue | Mac asleep → transcript later |
 | ADR-011 | PROPOSED_BASELINE | Private ideas ≠ public product feedback | Exact-payload approval перед export/publication |
 | ADR-012 | PROPOSED_BASELINE | Reviewed self-help і optional game layer | Без medical claims, штрафів і dependence design |

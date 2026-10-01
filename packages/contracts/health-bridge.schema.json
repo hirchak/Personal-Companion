@@ -1,0 +1,324 @@
+{
+  "$defs": {
+    "ExerciseFields": {
+      "additionalProperties": false,
+      "properties": {
+        "exercise_type": {
+          "maximum": 2147483647,
+          "minimum": 0,
+          "title": "Exercise Type",
+          "type": "integer"
+        },
+        "classification": {
+          "const": "SOURCE_CODE",
+          "title": "Classification",
+          "type": "string"
+        }
+      },
+      "required": [
+        "exercise_type",
+        "classification"
+      ],
+      "title": "ExerciseFields",
+      "type": "object"
+    },
+    "HealthRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "sleep",
+            "steps",
+            "exercise"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "origin": {
+          "maxLength": 256,
+          "title": "Origin",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "VALUE",
+            "SOURCE_DELETED",
+            "UNKNOWN"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "modified": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Modified"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start"
+        },
+        "end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End"
+        },
+        "start_offset": {
+          "anyOf": [
+            {
+              "maximum": 64800,
+              "minimum": -64800,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Offset"
+        },
+        "end_offset": {
+          "anyOf": [
+            {
+              "maximum": 64800,
+              "minimum": -64800,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Offset"
+        },
+        "fields": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SleepFields"
+            },
+            {
+              "$ref": "#/$defs/StepsFields"
+            },
+            {
+              "$ref": "#/$defs/ExerciseFields"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fields"
+        }
+      },
+      "required": [
+        "type",
+        "source_id",
+        "origin",
+        "status"
+      ],
+      "title": "HealthRecord",
+      "type": "object"
+    },
+    "Scope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "sleep",
+            "steps",
+            "exercise"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "permission": {
+          "enum": [
+            "GRANTED",
+            "PERMISSION_DENIED",
+            "READ_FAILED",
+            "NOT_AVAILABLE",
+            "NOT_REQUESTED"
+          ],
+          "title": "Permission",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "INCREMENTAL",
+            "INITIAL_OR_RECOVERY"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "records": {
+          "items": {
+            "$ref": "#/$defs/HealthRecord"
+          },
+          "maxItems": 1000,
+          "title": "Records",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "permission",
+        "mode",
+        "records"
+      ],
+      "title": "Scope",
+      "type": "object"
+    },
+    "SleepFields": {
+      "additionalProperties": false,
+      "properties": {
+        "stages": {
+          "items": {
+            "$ref": "#/$defs/Stage"
+          },
+          "maxItems": 500,
+          "title": "Stages",
+          "type": "array"
+        },
+        "stages_state": {
+          "enum": [
+            "VALUE",
+            "MISSING"
+          ],
+          "title": "Stages State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "stages",
+        "stages_state"
+      ],
+      "title": "SleepFields",
+      "type": "object"
+    },
+    "Stage": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "title": "End",
+          "type": "string"
+        },
+        "stage": {
+          "maximum": 2147483647,
+          "minimum": 0,
+          "title": "Stage",
+          "type": "integer"
+        },
+        "classification": {
+          "enum": [
+            "SDK_KNOWN",
+            "SOURCE_UNKNOWN"
+          ],
+          "title": "Classification",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "stage",
+        "classification"
+      ],
+      "title": "Stage",
+      "type": "object"
+    },
+    "StepsFields": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "maximum": 1000000000,
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "unit": {
+          "const": "count",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "count",
+        "unit"
+      ],
+      "title": "StepsFields",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_system": {
+      "const": "HEALTH_CONNECT",
+      "title": "Source System",
+      "type": "string"
+    },
+    "epoch": {
+      "title": "Epoch",
+      "type": "string"
+    },
+    "sequence": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "title": "Sequence",
+      "type": "integer"
+    },
+    "scopes": {
+      "items": {
+        "$ref": "#/$defs/Scope"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "title": "Scopes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "source_system",
+    "epoch",
+    "sequence",
+    "scopes"
+  ],
+  "title": "HealthBatch",
+  "type": "object"
+}

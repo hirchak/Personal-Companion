@@ -80,3 +80,13 @@ Telegram не є основним offline vault. Не маршрутизуват
 Перший шлях — scoped export вибраних нотаток з preview. Пізніше локальний MCP API
 з pairing, read-only за замовчуванням, вузькими scopes і явним записом provenance.
 Жодна стороння AI не отримує весь vault через «підключення до папки» автоматично.
+
+## M6 implemented Health Connect bridge
+
+Minimal native debug bridge + existing PWA, manual foreground read-only Sleep/Steps/Exercise.
+Explicit app-private USB handoff; no network listener, INTERNET, write/location/background/history
+permission, Samsung private API or AI integration. Imported copies live in schema6 health tables,
+separate from self-report and memory; Steps overlap totals unresolved. Real verification uses only a
+fresh private health-only root. [M6 contract](M6_CONTRACT.md), [ADR](adr/ADR-006-M6-HEALTH-BRIDGE.md),
+[hardware runbook](M6_GALAXY_HEALTH_GATE.md). Early Galaxy read/import/replay/incremental/revoke verified;
+Exercise NO_RECORDS. Physical Watch7 source/firmware and later native hardware paths remain unverified.

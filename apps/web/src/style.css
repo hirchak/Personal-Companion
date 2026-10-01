@@ -913,3 +913,14 @@ footer {
   margin: 0;
   min-width: 0;
 }
+
+.health-panel .health-status > div { padding: 1rem 0; border-bottom: 1px solid var(--line, #ddd8cb); }
+.health-panel dt { font-weight: 600; }
+.health-panel dd { margin: .5rem 0 0; overflow-wrap: anywhere; }
+.health-panel form { margin: 2rem 0; }
+.health-panel form label { display: block; margin: 1rem 0; }
+.health-panel input[type="file"] { display: block; max-width: 100%; min-height: 44px; margin-top: .5rem; }
+.health-panel details { margin: 1.5rem 0; }
+.health-panel li { overflow-wrap: anywhere; margin-bottom: 1.5rem; }
+.health-panel form label.check { display: flex; align-items: center; gap: .75rem; min-height: 44px; }
+.health-panel .button-row { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0; }

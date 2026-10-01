@@ -177,3 +177,27 @@ All earlier M1–M4 tests stay active. Feedback source references/attachments ar
 no external publication routes or providers. Metrics bounded N300, local latency and SQLite growth only.
 Exact acceptance contract: [M5](M5_CONTRACT.md). Full raw failure logs stay ignored/local; collector
 records command/exit/environment/C and sanitized passing summaries. CI and real hardware stay NOT_RUN.
+
+## M6 Health Connect
+
+All M1–M5 tests remain active; M6 adds strict schema, actual SQLite import/provenance/dedup/updates/
+tombstones/restart/CAS/partial permission/DST/overlap/restore/AI isolation tests, API boundaries,
+Chromium Mac/mobile/PWA flows, Android cache/policy tests and public probe sanitizer assertions.
+
+```bash
+npm --prefix apps/web run build
+npm --prefix apps/web test
+.venv/bin/python -m pytest -q
+apps/android-health/gradlew :app:assembleDebug :app:testDebugUnitTest
+.venv/bin/python -m scripts.measure_m6
+.venv/bin/python scripts/m6_evidence.py
+.venv/bin/python scripts/check_docs.py
+.venv/bin/python scripts/build_chatgpt_context.py
+.venv/bin/python scripts/check_privacy.py --include-generated
+```
+
+Browser checks bind only loopback and use project-local Chromium; sandbox may require bounded
+execution permission. Full logs are ignored under generated/. Hardware-only real root is never a
+fixture/input to pytest. See [Galaxy gate](M6_GALAXY_HEALTH_GATE.md); early actual hardware evidence
+must not be described as testing later native changes. Kotlin/XML/Gradle/properties are privacy-scanned;
+standard Android build/cache outputs are excluded, source/manifest and Git objects remain scanned.

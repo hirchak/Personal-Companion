@@ -20,13 +20,13 @@ REQUIRED = (
     'prompts/M0_BOOTSTRAP.md', 'prompts/GOAL_START.txt',
     'context/PROJECT_INSTRUCTIONS.txt', '.gitignore',
 )
-EXCLUDED = {'.git', 'generated', '__pycache__', '.venv', 'node_modules', '.pytest_cache'}
+EXCLUDED = {'.git', 'generated', '__pycache__', '.venv', 'node_modules', '.pytest_cache', 'build', '.gradle'}
 FORBIDDEN_DIRS = {'private', 'vault', 'private_context', 'user-data', 'user_data', 'quarantine',
                   'raw', 'inbox'}
 FORBIDDEN_EXTENSIONS = {'.sqlite', '.sqlite3', '.db', '.key', '.pem', '.p12', '.wav', '.m4a',
                         '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.gguf', '.ggml', '.onnx', '.pt', '.safetensors'}
 CANONICAL_STARTER_HASHES = {
-    '.gitignore':'92e8adf6bde8f43f9dcef971fc29e82f9722eb39c03cd917953c5bc1aa400545',
+    '.gitignore':'7e82cbc6be0566e069267d962dbab1237bf57ed56f2cec26de65db4d613a9b76',
     '.project/context_map.json':'86fdc85997b35959450ed6e96008c6fa0c2e3d848b221b4e155814c07ab7107d',
 }
 SECRET_PATTERNS = (

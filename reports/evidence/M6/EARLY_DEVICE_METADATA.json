@@ -1,0 +1,13 @@
+{
+  "android": "16",
+  "api": "36",
+  "one_ui": "80500",
+  "samsung_health": [
+    "versionCode=7006011 minSdk=29 targetSdk=36",
+    "versionName=7.00.6.011"
+  ],
+  "health_connect_system": [
+    "versionCode=37 minSdk=34 targetSdk=37",
+    "versionName=17"
+  ]
+}

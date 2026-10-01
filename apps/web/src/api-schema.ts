@@ -346,6 +346,108 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/health/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health Status */
+        get: operations["health_status_api_v1_health_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/device/health/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Phone Health Status */
+        get: operations["phone_health_status_api_v1_device_health_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/health/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health Records */
+        get: operations["health_records_api_v1_health_records_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/health/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Health Import */
+        post: operations["health_import_api_v1_health_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/health/disconnect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Health Disconnect */
+        post: operations["health_disconnect_api_v1_health_disconnect_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/health/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Health Delete */
+        post: operations["health_delete_api_v1_health_delete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/unlock": {
         parameters: {
             query?: never;
@@ -1375,6 +1477,16 @@ export interface components {
              */
             prune_tombstones: boolean;
         };
+        /** ExerciseFields */
+        ExerciseFields: {
+            /** Exercise Type */
+            exercise_type: number;
+            /**
+             * Classification
+             * @constant
+             */
+            classification: "SOURCE_CODE";
+        };
         /** Export */
         Export: {
             /**
@@ -1469,6 +1581,70 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** HealthAction */
+        HealthAction: {
+            /** Generation */
+            generation: string;
+        };
+        /** HealthApply */
+        HealthApply: {
+            batch: components["schemas"]["HealthBatch"];
+            /** Generation */
+            generation: string;
+            /**
+             * Reconnect
+             * @default false
+             */
+            reconnect: boolean;
+        };
+        /** HealthBatch */
+        HealthBatch: {
+            /**
+             * Schema Version
+             * @constant
+             */
+            schema_version: 1;
+            /**
+             * Source System
+             * @constant
+             */
+            source_system: "HEALTH_CONNECT";
+            /** Epoch */
+            epoch: string;
+            /** Sequence */
+            sequence: number;
+            /** Scopes */
+            scopes: components["schemas"]["Scope"][];
+        };
+        /** HealthRecord */
+        HealthRecord: {
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "sleep" | "steps" | "exercise";
+            /** Source Id */
+            source_id: string;
+            /** Origin */
+            origin: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "VALUE" | "SOURCE_DELETED" | "UNKNOWN";
+            /** Modified */
+            modified?: string | null;
+            /** Start */
+            start?: string | null;
+            /** End */
+            end?: string | null;
+            /** Start Offset */
+            start_offset?: number | null;
+            /** End Offset */
+            end_offset?: number | null;
+            /** Fields */
+            fields?: components["schemas"]["SleepFields"] | components["schemas"]["StepsFields"] | components["schemas"]["ExerciseFields"] | null;
         };
         /** MemoryChange */
         MemoryChange: {
@@ -1637,6 +1813,26 @@ export interface components {
              */
             mode: "OFF" | "MOCK";
         };
+        /** Scope */
+        Scope: {
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "sleep" | "steps" | "exercise";
+            /**
+             * Permission
+             * @enum {string}
+             */
+            permission: "GRANTED" | "PERMISSION_DENIED" | "READ_FAILED" | "NOT_AVAILABLE" | "NOT_REQUESTED";
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "INCREMENTAL" | "INITIAL_OR_RECOVERY";
+            /** Records */
+            records: components["schemas"]["HealthRecord"][];
+        };
         /** Selector */
         Selector: {
             /** Ids */
@@ -1652,6 +1848,16 @@ export interface components {
              * @default false
              */
             include_history: boolean;
+        };
+        /** SleepFields */
+        SleepFields: {
+            /** Stages */
+            stages: components["schemas"]["Stage"][];
+            /**
+             * Stages State
+             * @enum {string}
+             */
+            stages_state: "VALUE" | "MISSING";
         };
         /** SpaceState */
         SpaceState: {
@@ -1676,6 +1882,30 @@ export interface components {
             /** Base Version */
             base_version: number;
             state: components["schemas"]["SpaceState"];
+        };
+        /** Stage */
+        Stage: {
+            /** Start */
+            start: string;
+            /** End */
+            end: string;
+            /** Stage */
+            stage: number;
+            /**
+             * Classification
+             * @enum {string}
+             */
+            classification: "SDK_KNOWN" | "SOURCE_UNKNOWN";
+        };
+        /** StepsFields */
+        StepsFields: {
+            /** Count */
+            count: number;
+            /**
+             * Unit
+             * @constant
+             */
+            unit: "count";
         };
         /** SuggestionChange */
         SuggestionChange: {
@@ -2453,6 +2683,165 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["TranscriptConfirm"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    health_status_api_v1_health_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    phone_health_status_api_v1_device_health_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    health_records_api_v1_health_records_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    health_import_api_v1_health_import_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HealthApply"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    health_disconnect_api_v1_health_disconnect_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HealthAction"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    health_delete_api_v1_health_delete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HealthAction"];
             };
         };
         responses: {

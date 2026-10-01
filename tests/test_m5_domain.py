@@ -164,7 +164,7 @@ def test_M5_A15_migration4_preserves_metadata_audio_schema_and_rolls_back(domain
         c.execute('DROP TABLE feedback_drafts');c.execute('DROP TABLE personal_space');c.execute('UPDATE vault_meta SET schema_version=4')
     with pytest.raises(sqlite3.OperationalError):Store(j.store.root,fail_migration=True)
     with j.store.connect() as c:assert c.execute('SELECT schema_version FROM vault_meta').fetchone()[0]==4
-    migrated=Store(j.store.root);assert migrated.meta()['schema_version']==5;assert Journal(migrated).get(e['id'])==e
+    migrated=Store(j.store.root);assert migrated.meta()['schema_version']==6;assert Journal(migrated).get(e['id'])==e
 
 
 def test_M5_A04_A15_shared_M2_metadata_conflict_delete_and_old_backup_epoch(isolated):

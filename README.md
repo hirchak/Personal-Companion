@@ -110,4 +110,14 @@ M5 synthetic candidate: [contract](docs/M5_CONTRACT.md), [report](reports/M5_CRE
 After `npm --prefix apps/web run build`, run
 `./scripts/m5_demo.sh /private/tmp/personal-companion-m5-synthetic-demo` and open loopback Mac `/`
 or encrypted phone `/phone/`. Use «Творча полиця», «Відгук» and optional device-local cosmetics.
-Feedback produces exact-approved local files only. Real data/providers/Health/clinical/deploy/M6+ OFF.
+Feedback produces exact-approved local files only. At the M5 checkpoint Health was OFF; M6 scoped
+read-only verification is described below. Providers/clinical/deploy and M7+ remain OFF.
+
+## M6 Health Connect
+
+Read-only Sleep/Steps/Exercise bridge + separate imported-health copy, neutral Mac controls and
+truthful PWA status. No source writes, health AI, background/history/location permissions or clinical
+inference. Early real Galaxy debug gate verified private import/replay/incremental and Sleep revoke;
+Exercise NO_RECORDS. Later native recovery/cancellation changes are build/unit checked, hardware
+follow-up NOT_RUN. [Contract](docs/M6_CONTRACT.md), [Galaxy runbook](docs/M6_GALAXY_HEALTH_GATE.md),
+[report](reports/M6_HEALTH_CONNECT_REPORT.md). Synthetic demo: `./scripts/m6_demo.sh`.

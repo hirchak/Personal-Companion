@@ -10,7 +10,7 @@ from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 5
+SCHEMA = 6
 _ROOT_LOCKS = {}
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
@@ -172,6 +172,9 @@ class Store:
                 from .voice import VOICE_TABLES
                 for sql in VOICE_TABLES:
                     c.execute(sql)
+                from .health import HEALTH_TABLES
+                for sql in HEALTH_TABLES:
+                    c.execute(sql)
                 from .feedback import M5_TABLES
                 for sql in M5_TABLES:
                     c.execute(sql)
@@ -248,6 +251,10 @@ class Store:
                 if not {'feedback_drafts','personal_space'} <= tables: raise SafeError('INCOMPLETE_SCHEMA')
                 from .feedback import check_m5
                 check_m5(c)
+            if metadata.schema_version >= 6:
+                if not {'health_records','health_revisions','health_state'} <= tables:raise SafeError('INCOMPLETE_SCHEMA')
+                from .health import check_health
+                check_health(c)
             owner = str(metadata.owner_id)
             for table in ('entries', 'tombstones', 'operation_receipts'):
                 if c.execute(f'SELECT count(*) FROM {table} WHERE owner_id IS NULL OR owner_id!=?', (owner,)).fetchone()[0]:
@@ -320,6 +327,7 @@ class Store:
                     dest.execute("UPDATE devices SET credential_hash='',revoked_at_utc=COALESCE(revoked_at_utc,?)", (now(),))
                     dest.execute('UPDATE ai_consents SET revoked=1')
                     dest.execute('UPDATE feedback_drafts SET approval=NULL')
+                    dest.execute("UPDATE health_state SET generation=?,epoch=NULL,sequence=0,batch_hash=NULL,connection='SOURCE_RECONNECT_REQUIRED',blocked=1,permissions=?",(str(uuid4()),encode({k:'NOT_REQUESTED' for k in ('sleep','steps','exercise')})))
                     dest.execute("UPDATE ai_jobs SET state='CANCELLED',error='BACKUP_REAPPROVAL_REQUIRED' WHERE state IN ('QUEUED','RUNNING')")
                     dest.execute("UPDATE transcripts SET state='FAILED',error='ASR_RESTORE_RETRY_REQUIRED' WHERE state IN ('TRANSCRIPTION_QUEUED','TRANSCRIBING')")
                     # Incomplete transfer is resumable on live Mac; a backup contains finalized originals.
@@ -339,7 +347,7 @@ class Store:
                     shutil.copyfile(source,folder/a['file']);os.chmod(folder/a['file'],0o600)
                     if (folder/a['file']).stat().st_size!=a['byte_size'] or digest((folder/a['file']).read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
                     with (folder/a['file']).open('rb') as file:os.fsync(file.fileno())
-            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M5',
+            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M6',
                         'created_at_utc': now(), 'attachments': attachments,
                         'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
             (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
@@ -360,7 +368,7 @@ class Store:
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
             m=json.loads((b/'manifest.json').read_text())
-            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
             attachments=m['attachments']
             if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
             expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
@@ -390,6 +398,9 @@ class Store:
                 c.execute("UPDATE vault_meta SET restore_epoch=restore_epoch+1,reconciliation='RESTORED_REQUIRES_RECONCILIATION'")
             with sqlite3.connect(temp/'journal.sqlite3') as c:
                 if m['schema_version']>=5:c.execute('UPDATE feedback_drafts SET approval=NULL')
+                if m['schema_version']>=6:
+                    c.execute("UPDATE health_records SET status='UNKNOWN',payload=json_set(payload,'$.status','UNKNOWN') WHERE status='VALUE'")
+                    c.execute("UPDATE health_state SET generation=?,epoch=NULL,sequence=0,batch_hash=NULL,connection='SOURCE_RECONNECT_REQUIRED',blocked=1,permissions=?",(str(uuid4()),encode({k:'NOT_REQUESTED' for k in ('sleep','steps','exercise')})))
             private_files(temp)
             if attachments:
                 for f in (temp/'audio').iterdir():os.chmod(f,0o600)

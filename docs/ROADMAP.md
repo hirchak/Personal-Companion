@@ -4,9 +4,10 @@ M0 engineering/bootstrap: ACCEPT за зовнішнім architect review. M1: e
 M2: external ACCEPT for synthetic engineering (reports/M2_ARCHITECT_REVIEW.md).
 M3: external ACCEPT for synthetic engineering (reports/M3_ARCHITECT_REVIEW.md).
 M4: external ACCEPT for synthetic engineering (reports/M4_ARCHITECT_REVIEW.md); A14/A15 NOT_RUN.
-M5: AWAITING_REVIEW, complete synthetic creative/feedback/device-local optional-space candidate;
-M6–M8 NOT_STARTED;
-реальний Android/private transport gate NOT_RUN/HARDWARE_UNVERIFIED, без прихованої активації.
+M5: external ACCEPT for synthetic engineering (reports/M5_ARCHITECT_REVIEW.md).
+M6: IN_PROGRESS — read-only health import/bridge, early actual Galaxy gate recorded.
+M7–M8 NOT_STARTED;
+M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
 | ID | Результат | Залежності | Основна модель |

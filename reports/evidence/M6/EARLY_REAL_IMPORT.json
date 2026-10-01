@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "health_connect": "AVAILABLE",
+  "api_level": 36,
+  "bridge_version": "0.6.0-debug",
+  "write_permissions": "NONE",
+  "background_history_location_permissions": "NONE",
+  "permissions": {
+    "sleep": "GRANTED",
+    "steps": "GRANTED",
+    "exercise": "GRANTED"
+  },
+  "record_availability": {
+    "sleep": "YES",
+    "steps": "YES",
+    "exercise": "NO"
+  },
+  "source_classes": [
+    "SOURCE_APP_SAMSUNG_HEALTH"
+  ],
+  "hardware_origin": "NOT_VERIFIED",
+  "import_duration_bucket": "LT_1S",
+  "export_ready": true,
+  "private_import": "PASS",
+  "idempotent_reimport": "PASS",
+  "checkpoint_persisted": "PASS",
+  "incremental_mode": "NOT_YET_RUN",
+  "read_only_code": "NO_SOURCE_WRITE_CAPABILITY"
+}

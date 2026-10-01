@@ -949,6 +949,162 @@
         }
       }
     },
+    "/api/v1/health/status": {
+      "get": {
+        "summary": "Health Status",
+        "operationId": "health_status_api_v1_health_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/device/health/status": {
+      "get": {
+        "summary": "Phone Health Status",
+        "operationId": "phone_health_status_api_v1_device_health_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/records": {
+      "get": {
+        "summary": "Health Records",
+        "operationId": "health_records_api_v1_health_records_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/import": {
+      "post": {
+        "summary": "Health Import",
+        "operationId": "health_import_api_v1_health_import_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HealthApply"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/disconnect": {
+      "post": {
+        "summary": "Health Disconnect",
+        "operationId": "health_disconnect_api_v1_health_disconnect_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HealthAction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/delete": {
+      "post": {
+        "summary": "Health Delete",
+        "operationId": "health_delete_api_v1_health_delete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HealthAction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/unlock": {
       "post": {
         "summary": "Unlock",
@@ -3728,6 +3884,28 @@
         "type": "object",
         "title": "EpochReset"
       },
+      "ExerciseFields": {
+        "properties": {
+          "exercise_type": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 0.0,
+            "title": "Exercise Type"
+          },
+          "classification": {
+            "type": "string",
+            "const": "SOURCE_CODE",
+            "title": "Classification"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "exercise_type",
+          "classification"
+        ],
+        "title": "ExerciseFields"
+      },
       "Export": {
         "properties": {
           "plan_id": {
@@ -3919,6 +4097,204 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "HealthAction": {
+        "properties": {
+          "generation": {
+            "type": "string",
+            "title": "Generation"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "generation"
+        ],
+        "title": "HealthAction"
+      },
+      "HealthApply": {
+        "properties": {
+          "batch": {
+            "$ref": "#/components/schemas/HealthBatch"
+          },
+          "generation": {
+            "type": "string",
+            "title": "Generation"
+          },
+          "reconnect": {
+            "type": "boolean",
+            "title": "Reconnect",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "batch",
+          "generation"
+        ],
+        "title": "HealthApply"
+      },
+      "HealthBatch": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "source_system": {
+            "type": "string",
+            "const": "HEALTH_CONNECT",
+            "title": "Source System"
+          },
+          "epoch": {
+            "type": "string",
+            "title": "Epoch"
+          },
+          "sequence": {
+            "type": "integer",
+            "maximum": 9007199254740991.0,
+            "minimum": 1.0,
+            "title": "Sequence"
+          },
+          "scopes": {
+            "items": {
+              "$ref": "#/components/schemas/Scope"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Scopes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "source_system",
+          "epoch",
+          "sequence",
+          "scopes"
+        ],
+        "title": "HealthBatch"
+      },
+      "HealthRecord": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "sleep",
+              "steps",
+              "exercise"
+            ],
+            "title": "Type"
+          },
+          "source_id": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Source Id"
+          },
+          "origin": {
+            "type": "string",
+            "maxLength": 256,
+            "title": "Origin"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "VALUE",
+              "SOURCE_DELETED",
+              "UNKNOWN"
+            ],
+            "title": "Status"
+          },
+          "modified": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modified"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "start_offset": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 64800.0,
+                "minimum": -64800.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Offset"
+          },
+          "end_offset": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 64800.0,
+                "minimum": -64800.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Offset"
+          },
+          "fields": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SleepFields"
+              },
+              {
+                "$ref": "#/components/schemas/StepsFields"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseFields"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "source_id",
+          "origin",
+          "status"
+        ],
+        "title": "HealthRecord"
       },
       "MemoryChange": {
         "properties": {
@@ -4288,6 +4664,55 @@
         ],
         "title": "RuntimeMode"
       },
+      "Scope": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "sleep",
+              "steps",
+              "exercise"
+            ],
+            "title": "Type"
+          },
+          "permission": {
+            "type": "string",
+            "enum": [
+              "GRANTED",
+              "PERMISSION_DENIED",
+              "READ_FAILED",
+              "NOT_AVAILABLE",
+              "NOT_REQUESTED"
+            ],
+            "title": "Permission"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "INCREMENTAL",
+              "INITIAL_OR_RECOVERY"
+            ],
+            "title": "Mode"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/HealthRecord"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Records"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "permission",
+          "mode",
+          "records"
+        ],
+        "title": "Scope"
+      },
       "Selector": {
         "properties": {
           "ids": {
@@ -4360,6 +4785,33 @@
         "type": "object",
         "title": "Selector"
       },
+      "SleepFields": {
+        "properties": {
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "title": "Stages"
+          },
+          "stages_state": {
+            "type": "string",
+            "enum": [
+              "VALUE",
+              "MISSING"
+            ],
+            "title": "Stages State"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "stages",
+          "stages_state"
+        ],
+        "title": "SleepFields"
+      },
       "SpaceState": {
         "properties": {
           "enabled": {
@@ -4428,6 +4880,63 @@
           "state"
         ],
         "title": "SpaceUpdate"
+      },
+      "Stage": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "title": "End"
+          },
+          "stage": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 0.0,
+            "title": "Stage"
+          },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "SDK_KNOWN",
+              "SOURCE_UNKNOWN"
+            ],
+            "title": "Classification"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "start",
+          "end",
+          "stage",
+          "classification"
+        ],
+        "title": "Stage"
+      },
+      "StepsFields": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "maximum": 1000000000.0,
+            "minimum": 0.0,
+            "title": "Count"
+          },
+          "unit": {
+            "type": "string",
+            "const": "count",
+            "title": "Unit"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "count",
+          "unit"
+        ],
+        "title": "StepsFields"
       },
       "SuggestionChange": {
         "properties": {

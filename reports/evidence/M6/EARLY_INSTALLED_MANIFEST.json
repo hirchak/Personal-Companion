@@ -1,0 +1,8 @@
+{
+  "installed_health_permissions_exact": true,
+  "health_write_permissions": "NONE",
+  "background_history_location_permissions": "NONE",
+  "internet_permission": "NONE",
+  "command": ".venv/bin/python scripts/m6_probe_permissions.py",
+  "exit_code": 0
+}

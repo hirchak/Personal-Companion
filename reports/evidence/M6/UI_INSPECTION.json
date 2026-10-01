@@ -1,0 +1,17 @@
+{
+  "fixture_provenance": "SYNTHETIC_ONLY",
+  "viewports": [
+    "1440",
+    "390",
+    "390_PWA_OFFLINE"
+  ],
+  "browser_workflows": "5_PASS_PRE_C",
+  "review": "IMPECCABLE_FINISH_REVIEWER_VERDICT_SHIP_SCORED_TWO_FIXES",
+  "resolved": [
+    "Reconnect checkbox grouping and button gaps",
+    "Ukrainian local transfer/privacy copy"
+  ],
+  "documenter": "NO_CHANGES_INCUMBENT_DESIGN_PRESERVED",
+  "detector": "One existing shelf border warning outside M6 scope",
+  "no_real_health_screenshots": true
+}

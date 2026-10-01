@@ -1,0 +1,24 @@
+{
+  "source": "ACTUAL_EARLY_NORMALIZED_API_SUBSET",
+  "observed_field_types": {
+    "sleep": {
+      "modified": "string",
+      "start": "string",
+      "end": "string",
+      "start_offset": "integer",
+      "end_offset": "integer",
+      "fields.stages": "array",
+      "fields.stages_state": "string"
+    },
+    "steps": {
+      "modified": "string",
+      "start": "string",
+      "end": "string",
+      "start_offset": "integer",
+      "end_offset": "integer",
+      "fields.count": "integer",
+      "fields.unit": "string"
+    },
+    "exercise": {}
+  }
+}

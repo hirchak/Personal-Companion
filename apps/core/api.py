@@ -17,6 +17,8 @@ from .domain import Journal
 from .creative import CreativeLibrary
 from .feedback import Feedback, PersonalSpace
 from .m5_contracts import CreativeSelection, CreativeDownload, FeedbackSave, FeedbackExact, FeedbackExport, SpaceUpdate
+from .health import HealthImport
+from .health_contracts import HealthApply, HealthAction
 from .runtime import Runtime
 from .ai_contracts import PreviewRequest, Approval, Enqueue, RuntimeMode, Empty, MemoryCreate, MemoryChange, SuggestionChange
 from .sync import SyncService, Pair, Packet, EpochReset
@@ -72,6 +74,8 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.voice = voice
     creative, feedback, space = CreativeLibrary(journal), Feedback(store), PersonalSpace(store)
     app.state.creative, app.state.feedback, app.state.space = creative, feedback, space
+    health = HealthImport(store)
+    app.state.health = health
     host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
@@ -178,6 +182,24 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
             ('/audio/{audio_id}/transcribe',voice_asr,['POST']),('/transcripts/{transcript_id}/edit',voice_edit,['POST']),
             ('/transcripts/{transcript_id}/cancel',voice_discard,['POST']),('/transcripts/{transcript_id}/confirm',voice_confirm,['POST'])]:
             app.add_api_route(prefix+path,endpoint,methods=methods)
+
+    @app.get('/api/v1/health/status')
+    def health_status():return health.status()
+
+    @app.get('/api/v1/device/health/status')
+    def phone_health_status():return health.status()
+
+    @app.get('/api/v1/health/records')
+    def health_records():return {'items':health.records()}
+
+    @app.post('/api/v1/health/import')
+    def health_import(body:HealthApply):return health.apply(body.batch,body.reconnect,body.generation)
+
+    @app.post('/api/v1/health/disconnect')
+    def health_disconnect(body:HealthAction):return health.disconnect(generation=body.generation)
+
+    @app.post('/api/v1/health/delete')
+    def health_delete(body:HealthAction):return health.disconnect(delete=True,generation=body.generation)
 
     @app.post('/api/v1/auth/unlock')
     def unlock(body: Unlock):

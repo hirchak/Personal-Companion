@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
+TOOLS="$ROOT/generated/android-tools"
+export JAVA_HOME="$TOOLS/jdk/Contents/Home"
+export ANDROID_HOME="$TOOLS/sdk"
+export ANDROID_USER_HOME="$TOOLS/android-user"
+export GRADLE_USER_HOME="$TOOLS/gradle-cache"
+export PATH="$JAVA_HOME/bin:$PATH"
+exec "$TOOLS/gradle-8.13/bin/gradle" -p "$ROOT/apps/android-health" --project-cache-dir "$TOOLS/project-cache" --no-daemon "$@"

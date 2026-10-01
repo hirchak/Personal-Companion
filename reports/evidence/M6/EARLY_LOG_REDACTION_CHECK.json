@@ -1,0 +1,6 @@
+{
+  "own_bridge_pid_logcat_only": true,
+  "health_payload_markers_found": false,
+  "raw_logs_persisted": false,
+  "source_mutations_performed": false
+}

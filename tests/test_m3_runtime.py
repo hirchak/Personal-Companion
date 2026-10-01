@@ -317,9 +317,9 @@ def test_M3_schema2_migration_atomic_and_legacy_backup_restore(rt,isolated):
         dest=sqlite3.connect(b/'snapshot.sqlite3');source.backup(dest);dest.execute('PRAGMA journal_mode=DELETE');dest.close()
     from apps.core.storage import digest
     (b/'manifest.json').write_text(encode({'backup_format':1,'schema_version':2,'created_at_utc':'2099-01-01T00:00:00Z','attachments':[],'files':{'snapshot.sqlite3':digest((b/'snapshot.sqlite3').read_bytes())}}))
-    restored=Store.restore(b,isolated/'legacy-restored');assert restored.meta()['schema_version']==5
+    restored=Store.restore(b,isolated/'legacy-restored');assert restored.meta()['schema_version']==6
     assert Journal(restored).get(ref['id'])['raw_text']=='SYNTHETIC neutral entry'
-    migrated=Store(rt.store.root);assert migrated.meta()['schema_version']==5
+    migrated=Store(rt.store.root);assert migrated.meta()['schema_version']==6
     assert Journal(migrated).get(ref['id'])['raw_text']=='SYNTHETIC neutral entry'
 
 

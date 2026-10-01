@@ -624,6 +624,13 @@ export class PhoneStore {
       clearTimeout(timer);
     }
   }
+  async healthStatus(): Promise<import("./health-model").HealthStatus> {
+    const state = await this.state();
+    if (!state.pairing || state.repair) throw new StoreError("REPAIR_REQUIRED");
+    const response = await this.call("/health/status");
+    if (!response.ok) throw new StoreError("HEALTH_STATUS_UNAVAILABLE");
+    return response.json();
+  }
   async sync() {
     let state = await this.state();
     if (!state.pairing || state.repair) throw new StoreError("REPAIR_REQUIRED");

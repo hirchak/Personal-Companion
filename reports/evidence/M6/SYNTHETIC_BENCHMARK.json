@@ -1,0 +1,24 @@
+{
+  "fixture_provenance": "ORIGINAL_SYNTHETIC",
+  "unit": "milliseconds",
+  "runs": [
+    {
+      "synthetic_records": 100,
+      "initial_import_ms": 3.976,
+      "idempotent_replay_ms": 1.391,
+      "incremental_update_ms": 4.546,
+      "bounded_lookup_ms": 2.709,
+      "restart_checkpoint_ms": 5.455,
+      "db_bytes": 368640
+    },
+    {
+      "synthetic_records": 1000,
+      "initial_import_ms": 25.619,
+      "idempotent_replay_ms": 4.551,
+      "incremental_update_ms": 4.2,
+      "bounded_lookup_ms": 5.378,
+      "restart_checkpoint_ms": 21.573,
+      "db_bytes": 1310720
+    }
+  ]
+}
