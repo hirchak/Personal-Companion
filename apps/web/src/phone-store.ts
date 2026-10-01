@@ -18,6 +18,7 @@ export type RecordItem = {
   localOrder: number;
   current?: any;
   conflictCode?: string;
+  conflictRevision?: number;
 };
 export type Operation = {
   operation_id: string;
@@ -610,6 +611,7 @@ export class PhoneStore {
             r.state = "CONFLICT";
             r.current = result.current;
             r.conflictCode = result.code ?? "REVISION_CONFLICT";
+            r.conflictRevision = result.revision ?? result.current?.revision;
             s.outbox
               .filter((o) => o.entry_id === r.id && o.state !== "MAC_CONFIRMED")
               .forEach((o) => (o.state = "CONFLICT"));
@@ -686,6 +688,7 @@ export class PhoneStore {
           record.state = "CONFLICT";
           record.current = null;
           record.conflictCode = "DELETED";
+          record.conflictRevision = dead.revision;
           pending.forEach((o) => (o.state = "CONFLICT"));
         } else {
           delete s.records[dead.id];
@@ -713,17 +716,35 @@ export class PhoneStore {
         );
       s.outbox = s.outbox.filter((o) => o.entry_id !== id);
       if (choice === "mac") {
-        if (r.current)
-          s.records[id] = {
-            ...r,
-            payload: fromMac(r.current),
-            revision: r.current.revision,
-            state: "MAC_CONFIRMED",
-            deleted: false,
-            current: undefined,
-            conflictCode: undefined,
-          };
-        else delete s.records[id];
+        const current = r.current;
+        const revision = current?.revision ?? r.conflictRevision;
+        if (!Number.isSafeInteger(revision) || revision < 1)
+          throw new StoreError("REFRESH_CONFLICT_REQUIRED");
+        s.sequence++;
+        const payload = current ? fromMac(current) : null;
+        s.outbox.push({
+          operation_id: crypto.randomUUID(),
+          device_id: s.device_id,
+          entry_id: id,
+          base_revision: revision,
+          operation_type: current ? "edit" : "delete",
+          created_at_utc: new Date().toISOString(),
+          timezone: payload?.timezone ?? r.payload.timezone ?? "Europe/Warsaw",
+          schema_version: 2,
+          local_sequence: s.sequence,
+          payload,
+          confirm_type_change: true,
+          state: "QUEUED",
+        });
+        s.records[id] = {
+          ...r,
+          payload: payload ?? r.payload,
+          revision,
+          state: "QUEUED",
+          deleted: !current,
+          current: undefined,
+          conflictCode: undefined,
+        };
         return;
       }
       const payload =
