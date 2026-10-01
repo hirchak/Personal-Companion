@@ -10,7 +10,7 @@ from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 4
+SCHEMA = 5
 _ROOT_LOCKS = {}
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
@@ -94,7 +94,7 @@ def ai_triggers(c):
                 (SELECT 1 FROM json_each(json_extract(package,'$.{refs}')) WHERE json_extract(value,'$.id')=OLD.id);
               UPDATE ai_jobs SET state='CANCELLED',error='SOURCE_CHANGED',updated=strftime('%Y-%m-%dT%H:%M:%fZ','now')
                 WHERE state IN ('QUEUED','RUNNING') AND consent_id IN (SELECT id FROM ai_consents WHERE revoked=1);
-              UPDATE suggestions SET status='STALE' WHERE status='PENDING' AND job_id IN
+              UPDATE suggestions SET status='STALE' WHERE status IN ('PENDING','ACCEPTED') AND job_id IN
                 (SELECT id FROM ai_jobs WHERE consent_id IN (SELECT id FROM ai_consents WHERE revoked=1));
             END""")
     for action in ('UPDATE','DELETE'):
@@ -172,10 +172,15 @@ class Store:
                 from .voice import VOICE_TABLES
                 for sql in VOICE_TABLES:
                     c.execute(sql)
+                from .feedback import M5_TABLES
+                for sql in M5_TABLES:
+                    c.execute(sql)
                 columns = {r[1] for r in c.execute('PRAGMA table_info(devices)')}
                 if 'pair_state' not in columns:
                     c.execute("ALTER TABLE devices ADD COLUMN pair_state TEXT NOT NULL DEFAULT 'ACTIVE'")
                     c.execute('ALTER TABLE devices ADD COLUMN pending_until REAL')
+                for trigger in ('ai_invalidate_entries_update','ai_invalidate_entries_delete','ai_invalidate_memories_update','ai_invalidate_memories_delete'):
+                    c.execute(f'DROP TRIGGER IF EXISTS {trigger}')
                 ai_triggers(c)
                 c.execute('INSERT OR IGNORE INTO sync_meta VALUES(1,?,0)', (str(uuid4()),))
                 for table in ('entries','tombstones'):
@@ -239,6 +244,10 @@ class Store:
                 raise SafeError('INCOMPLETE_SCHEMA')
             if metadata.schema_version >= 4 and not {'audio','audio_chunks','transcripts'} <= tables:
                 raise SafeError('INCOMPLETE_SCHEMA')
+            if metadata.schema_version >= 5:
+                if not {'feedback_drafts','personal_space'} <= tables: raise SafeError('INCOMPLETE_SCHEMA')
+                from .feedback import check_m5
+                check_m5(c)
             owner = str(metadata.owner_id)
             for table in ('entries', 'tombstones', 'operation_receipts'):
                 if c.execute(f'SELECT count(*) FROM {table} WHERE owner_id IS NULL OR owner_id!=?', (owner,)).fetchone()[0]:
@@ -310,6 +319,7 @@ class Store:
                     source.backup(dest)
                     dest.execute("UPDATE devices SET credential_hash='',revoked_at_utc=COALESCE(revoked_at_utc,?)", (now(),))
                     dest.execute('UPDATE ai_consents SET revoked=1')
+                    dest.execute('UPDATE feedback_drafts SET approval=NULL')
                     dest.execute("UPDATE ai_jobs SET state='CANCELLED',error='BACKUP_REAPPROVAL_REQUIRED' WHERE state IN ('QUEUED','RUNNING')")
                     dest.execute("UPDATE transcripts SET state='FAILED',error='ASR_RESTORE_RETRY_REQUIRED' WHERE state IN ('TRANSCRIPTION_QUEUED','TRANSCRIBING')")
                     # Incomplete transfer is resumable on live Mac; a backup contains finalized originals.
@@ -329,7 +339,7 @@ class Store:
                     shutil.copyfile(source,folder/a['file']);os.chmod(folder/a['file'],0o600)
                     if (folder/a['file']).stat().st_size!=a['byte_size'] or digest((folder/a['file']).read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
                     with (folder/a['file']).open('rb') as file:os.fsync(file.fileno())
-            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M4',
+            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M5',
                         'created_at_utc': now(), 'attachments': attachments,
                         'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
             (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
@@ -350,7 +360,7 @@ class Store:
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
             m=json.loads((b/'manifest.json').read_text())
-            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
             attachments=m['attachments']
             if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
             expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
@@ -378,6 +388,8 @@ class Store:
             (temp/'synthetic.json').write_text(encode(MARKER))
             with sqlite3.connect(temp/'journal.sqlite3') as c:
                 c.execute("UPDATE vault_meta SET restore_epoch=restore_epoch+1,reconciliation='RESTORED_REQUIRES_RECONCILIATION'")
+            with sqlite3.connect(temp/'journal.sqlite3') as c:
+                if m['schema_version']>=5:c.execute('UPDATE feedback_drafts SET approval=NULL')
             private_files(temp)
             if attachments:
                 for f in (temp/'audio').iterdir():os.chmod(f,0o600)

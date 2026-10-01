@@ -7,6 +7,10 @@ import {
 } from "./phone-store";
 import { blank, names, typed, fieldNames, type Draft } from "./journal-ui";
 import { VoicePanel } from "./VoicePanel";
+import { CreativePanel } from "./CreativePanel";
+import { SpacePanel } from "./SpacePanel";
+import { defaultSpace } from "./space-model";
+import { phoneCreativeAdapter } from "./phone-creative";
 import { EntryEditor } from "./EntryEditor";
 import { draftPayload, validatePayload } from "./phone-validation";
 const labels: Record<string, string> = {
@@ -34,6 +38,7 @@ function errorText(e: unknown) {
 }
 export function PhoneApp() {
   const store = useRef(new PhoneStore());
+  const [surface, setSurface] = useState("journal");
   const [data, setData] = useState<LocalState | null>(null),
     [exists, setExists] = useState<boolean | null>(null),
     [pass, setPass] = useState(""),
@@ -58,6 +63,7 @@ export function PhoneApp() {
     opened = useRef(Date.now()),
     syncing = useRef(false);
   const unlockGeneration = useRef(0);
+  const creativeGeneration = unlockGeneration.current;
   useEffect(() => {
     store.current
       .exists()
@@ -96,6 +102,7 @@ export function PhoneApp() {
     unlockGeneration.current++;
     store.current.lock();
     setData(null);
+    setSurface("journal");
     setPass("");
     setDraft(blank());
     setEditing(null);
@@ -224,20 +231,31 @@ export function PhoneApp() {
     const g = unlockGeneration.current;
     try {
       const payload = draftPayload(draft);
+      if (
+        draft.type === "creative" &&
+        editing &&
+        editing !== "new" &&
+        editing.payload.type === "creative"
+      )
+        payload.creative_meta = editing.payload.creative_meta ?? null;
       let confirmType = false;
       if (
         editing &&
         editing !== "new" &&
         editing.payload.type !== draft.type &&
-        typed[editing.payload.type ?? "inbox"].some(
+        (typed[editing.payload.type ?? "inbox"].some(
           (k) => (editing.payload as any)[k] != null,
-        )
+        ) ||
+          editing.payload.creative_meta != null)
       ) {
         confirmType = confirm(
           "Прибрати поля " +
             typed[editing.payload.type ?? "inbox"]
               .map((k) => fieldNames[k])
               .join(", ") +
+            (editing.payload.creative_meta
+              ? " та організацію творчої полиці"
+              : "") +
             "? Попередня Mac версія залишиться в історії після sync.",
         );
         if (!confirmType) return;
@@ -375,12 +393,26 @@ export function PhoneApp() {
       <aside className="sidebar">
         <span className="wordmark">Особистий простір</span>
         <nav aria-label="Розділи щоденника">
-          <button onClick={() => setFilter("")}>Усі записи</button>
+          <button
+            onClick={() => {
+              setSurface("journal");
+              setFilter("");
+            }}
+          >
+            Усі записи
+          </button>
           {Object.entries(names).map(([k, v]) => (
-            <button key={k} onClick={() => setFilter(k)}>
+            <button
+              key={k}
+              onClick={() => {
+                setSurface("journal");
+                setFilter(k);
+              }}
+            >
               {v}
             </button>
           ))}
+          <button onClick={() => setSurface("creative")}>Творча полиця</button>
         </nav>
         <div className="sidebar-bottom">
           <p>
@@ -392,335 +424,357 @@ export function PhoneApp() {
         </div>
       </aside>
       <main className="journal">
-        <header>
-          <div>
-            <h1>Ваш щоденник</h1>
-            <p>
-              {online
-                ? "Mac може бути недоступний; local save не залежить від sync."
-                : "Офлайн. Записи зберігаються на телефоні; Mac ще не підтвердив чергу."}
-            </p>
+        <SpacePanel
+          value={data.space ?? { version: 0, state: defaultSpace() }}
+          save={async (base, state) => {
+            const g = unlockGeneration.current;
+            const s = await store.current.updateSpace(base, state);
+            if (g === unlockGeneration.current) setData(s);
+          }}
+        />
+        {surface === "creative" && (
+          <CreativePanel
+            phone
+            adapter={phoneCreativeAdapter(store.current, (s) => {
+              if (
+                alive.current &&
+                creativeGeneration === unlockGeneration.current
+              )
+                setData(s);
+            })}
+          />
+        )}
+        <div hidden={surface !== "journal"}>
+          <header>
+            <div>
+              <h1>Ваш щоденник</h1>
+              <p>
+                {online
+                  ? "Mac може бути недоступний; local save не залежить від sync."
+                  : "Офлайн. Записи зберігаються на телефоні; Mac ще не підтвердив чергу."}
+              </p>
+            </div>
+            <button
+              className="primary add"
+              onClick={() => open("new")}
+              disabled={data.repair}
+            >
+              + Додати запис
+            </button>
+          </header>
+          <details className="voice-disclosure">
+            <summary>Голосовий запис</summary>
+            <VoicePanel
+              phone={store.current}
+              onJournalChange={() => {
+                void store.current.state().then(setData);
+              }}
+            />
+          </details>
+          <div className="actions">
+            <button onClick={() => setSettings(!settings)}>
+              Налаштування телефону
+            </button>
+            <button
+              disabled={!data.pairing || data.repair || syncing.current}
+              onClick={() => void sync()}
+            >
+              Синхронізувати з Mac
+            </button>
+            <span>{pending.length} очікують</span>
           </div>
-          <button
-            className="primary add"
-            onClick={() => open("new")}
-            disabled={data.repair}
-          >
-            + Додати запис
-          </button>
-        </header>
-        <details className="voice-disclosure">
-          <summary>Голосовий запис</summary>
-          <VoicePanel
-            phone={store.current}
-            onJournalChange={() => {
-              void store.current.state().then(setData);
-            }}
-          />
-        </details>
-        <div className="actions">
-          <button onClick={() => setSettings(!settings)}>
-            Налаштування телефону
-          </button>
-          <button
-            disabled={!data.pairing || data.repair || syncing.current}
-            onClick={() => void sync()}
-          >
-            Синхронізувати з Mac
-          </button>
-          <span>{pending.length} очікують</span>
-        </div>
-        {waiting && (
-          <div className="notice">
-            <p>
-              Оновлення shell готове. Unsynced черга лишиться encrypted; storage
-              schema не змінюється автоматично.
-            </p>
-            <button
-              onClick={() => {
-                if (
-                  !confirm(
-                    "Оновити shell? Чернетка без local receipt буде втрачена.",
-                  )
-                )
-                  return;
-                waiting.postMessage({ type: "ACTIVATE_WAITING" });
-                navigator.serviceWorker.addEventListener(
-                  "controllerchange",
-                  () => location.reload(),
-                  { once: true },
-                );
-              }}
-            >
-              Оновити PWA
-            </button>
-          </div>
-        )}
-        {settings && (
-          <section className="sync-settings">
-            <h2>Пристрій і локальна копія</h2>
-            <p>{storage}</p>
-            <button
-              onClick={async () => {
-                const persisted = navigator.storage?.persist
-                  ? await navigator.storage.persist()
-                  : false;
-                setStorage(
-                  persisted
-                    ? "Persistence надано браузером. Користувач/OS все одно може видалити дані."
-                    : "Persistence не надано. Потрібен encrypted recovery для phone-only даних.",
-                );
-              }}
-            >
-              Запросити persistent storage
-            </button>
-            <p>
-              At-rest encryption — synthetic scope. Hardware/real-data security
-              не затверджені.
-            </p>
-            <label>
-              Одноразове запрошення Mac
-              <input
-                type="password"
-                autoComplete="off"
-                value={invitation}
-                onChange={(e) => setInvitation(e.target.value)}
-              />
-            </label>
-            <label>
-              Назва synthetic пристрою
-              <input
-                value={label}
-                onChange={(e) => setLabel(e.target.value)}
-                maxLength={64}
-              />
-            </label>
-            <button
-              onClick={async () => {
-                try {
-                  const s = await store.current.pair(invitation, label);
-                  setInvitation("");
-                  setData(s);
-                  setNotice("Pairing збережено encrypted.");
-                  if (!s.repair) void sync();
-                } catch (e) {
-                  setError(errorText(e));
-                }
-              }}
-            >
-              З’єднати з Mac
-            </button>
-            <p className="hint">
-              Якщо локальне збереження pairing не вдалося, Mac залишає зв’язок
-              PENDING без доступу до sync. Створіть нове запрошення на Mac і
-              повторіть або відкличте pending пристрій. Якщо credential
-              збережено, наступна синхронізація повторить підтвердження.
-            </p>
-            <button onClick={() => void exportRecovery()}>
-              Encrypted recovery для unsynced
-            </button>
-            <p>Це не Mac backup. Відкликання не стирає офлайн копію.</p>
-            <button
-              onClick={async () => {
-                if (
-                  !confirm(
-                    "Забути encrypted копію цього браузера? Unsynced записи й аудіо буде втрачено; спочатку експортуйте journal recovery і окремий encrypted audio export.",
-                  )
-                )
-                  return;
-                try {
-                  await store.current.forget();
-                  lock();
-                  setExists(false);
-                } catch (e) {
-                  setError(errorText(e));
-                }
-              }}
-            >
-              Забути цей браузер
-            </button>
-          </section>
-        )}
-        {data.repair && (
-          <section className="error">
-            <h2>Потрібне явне узгодження</h2>
-            <p>
-              Стара черга не відправляється. Створіть нове запрошення Mac,
-              виконайте pairing, потім оберіть варіант.
-            </p>
-            <button
-              onClick={async () => {
-                if (
-                  !confirm(
-                    "Обрати актуальний Mac і відкинути локальні pending changes?",
-                  )
-                )
-                  return;
-                try {
-                  setData(await store.current.reconcile("mac"));
-                } catch (e) {
-                  setError(errorText(e));
-                }
-              }}
-            >
-              Обрати Mac після re-pair
-            </button>
-            <button
-              onClick={async () => {
-                if (
-                  !confirm(
-                    "Зберегти unsynced живі нотатки окремими новими IDs після re-pair? Старі delete не replay-яться.",
-                  )
-                )
-                  return;
-                try {
-                  setData(await store.current.reconcile("phone_copy"));
-                } catch (e) {
-                  setError(errorText(e));
-                }
-              }}
-            >
-              Зберегти локальні новими копіями
-            </button>
-            <button onClick={() => void exportRecovery()}>
-              Encrypted recovery
-            </button>
-          </section>
-        )}
-        <label className="search">
-          Пошук
-          <input
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            maxLength={200}
-          />
-        </label>
-        {error && (
-          <p className="error" role="alert">
-            {error}
-          </p>
-        )}
-        {notice && (
-          <p className="notice" role="status">
-            {notice}
-          </p>
-        )}
-        {editing && (
-          <EntryEditor
-            title={editing === "new" ? "Нова нотатка" : "Редагувати запис"}
-            draft={draft}
-            change={(k, v) => setDraft((d) => ({ ...d, [k]: v }))}
-            save={save}
-            cancel={() => {
-              setEditing(null);
-              setDraft(blank());
-            }}
-            busy={busy}
-            saveLabel="Зберегти на телефоні"
-          />
-        )}
-        <h2 className="list-heading">Записи цього браузера</h2>
-        {!records.length && (
-          <p>
-            Почніть із кількох слів. До Mac receipt єдиною копією може бути цей
-            браузер.
-          </p>
-        )}
-        {records.map((r) => (
-          <article className="entry" key={r.id}>
-            <p className="metadata">
-              {names[r.payload.type ?? "inbox"]} · {labels[r.state]}
-            </p>
-            <p className="entry-text">{r.payload.raw_text}</p>
-            <div className="entry-actions">
+          {waiting && (
+            <div className="notice">
+              <p>
+                Оновлення shell готове. Unsynced черга лишиться encrypted;
+                storage schema не змінюється автоматично.
+              </p>
               <button
-                disabled={r.state === "CONFLICT" || data.repair}
-                onClick={() => open(r)}
+                onClick={() => {
+                  if (
+                    !confirm(
+                      "Оновити shell? Чернетка без local receipt буде втрачена.",
+                    )
+                  )
+                    return;
+                  waiting.postMessage({ type: "ACTIVATE_WAITING" });
+                  navigator.serviceWorker.addEventListener(
+                    "controllerchange",
+                    () => location.reload(),
+                    { once: true },
+                  );
+                }}
               >
-                Редагувати
-              </button>
-              <button disabled={data.repair} onClick={() => void remove(r)}>
-                Видалити
+                Оновити PWA
               </button>
             </div>
-            {r.state === "CONFLICT" && (
-              <section className="conflict">
-                <h3>Дві версії — потрібен ваш вибір</h3>
-                <p>На телефоні</p>
-                <p className="entry-text">{r.payload.raw_text}</p>
-                <p>
-                  {r.current
-                    ? "Поточна Mac версія"
-                    : "Mac видалив цей ID; повернення під тим самим ID заборонене."}
-                </p>
-                {r.current && (
-                  <p className="entry-text">{r.current.raw_text}</p>
-                )}
-                <label>
-                  Об’єднаний текст
-                  <textarea
-                    value={merge[r.id] ?? r.payload.raw_text}
-                    onChange={(e) =>
-                      setMerge((m) => ({ ...m, [r.id]: e.target.value }))
-                    }
-                  />
-                </label>
-                <div className="actions">
-                  {(["mac", "phone", "manual"] as const).map((choice) => (
-                    <button
-                      key={choice}
-                      onClick={async () => {
-                        try {
-                          if (choice === "manual")
-                            validatePayload({
-                              ...r.payload,
-                              raw_text: merge[r.id] ?? r.payload.raw_text,
-                            });
-                          setData(
-                            await store.current.resolve(
-                              r.id,
-                              choice,
-                              merge[r.id] ?? r.payload.raw_text,
-                            ),
-                          );
-                          setNotice(
-                            "Рішення збережено локально як нова mutation; потрібен sync.",
-                          );
-                        } catch (e) {
-                          setError(errorText(e));
-                        }
-                      }}
-                    >
-                      {choice === "mac"
-                        ? "Обрати Mac"
-                        : choice === "phone"
-                          ? r.current
-                            ? "Обрати телефон"
-                            : "Зберегти новою окремою нотаткою"
-                          : "Зберегти об’єднаний текст"}
-                    </button>
-                  ))}
-                </div>
-              </section>
-            )}
-          </article>
-        ))}
-        <details className="outbox">
-          <summary>Черга: {pending.length} операцій</summary>
-          {pending.map((o) => (
-            <p key={o.operation_id}>
-              {o.operation_type} · {labels[o.state]}
+          )}
+          {settings && (
+            <section className="sync-settings">
+              <h2>Пристрій і локальна копія</h2>
+              <p>{storage}</p>
+              <button
+                onClick={async () => {
+                  const persisted = navigator.storage?.persist
+                    ? await navigator.storage.persist()
+                    : false;
+                  setStorage(
+                    persisted
+                      ? "Persistence надано браузером. Користувач/OS все одно може видалити дані."
+                      : "Persistence не надано. Потрібен encrypted recovery для phone-only даних.",
+                  );
+                }}
+              >
+                Запросити persistent storage
+              </button>
+              <p>
+                At-rest encryption — synthetic scope. Hardware/real-data
+                security не затверджені.
+              </p>
+              <label>
+                Одноразове запрошення Mac
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={invitation}
+                  onChange={(e) => setInvitation(e.target.value)}
+                />
+              </label>
+              <label>
+                Назва synthetic пристрою
+                <input
+                  value={label}
+                  onChange={(e) => setLabel(e.target.value)}
+                  maxLength={64}
+                />
+              </label>
+              <button
+                onClick={async () => {
+                  try {
+                    const s = await store.current.pair(invitation, label);
+                    setInvitation("");
+                    setData(s);
+                    setNotice("Pairing збережено encrypted.");
+                    if (!s.repair) void sync();
+                  } catch (e) {
+                    setError(errorText(e));
+                  }
+                }}
+              >
+                З’єднати з Mac
+              </button>
+              <p className="hint">
+                Якщо локальне збереження pairing не вдалося, Mac залишає зв’язок
+                PENDING без доступу до sync. Створіть нове запрошення на Mac і
+                повторіть або відкличте pending пристрій. Якщо credential
+                збережено, наступна синхронізація повторить підтвердження.
+              </p>
+              <button onClick={() => void exportRecovery()}>
+                Encrypted recovery для unsynced
+              </button>
+              <p>Це не Mac backup. Відкликання не стирає офлайн копію.</p>
+              <button
+                onClick={async () => {
+                  if (
+                    !confirm(
+                      "Забути encrypted копію цього браузера? Unsynced записи й аудіо буде втрачено; спочатку експортуйте journal recovery і окремий encrypted audio export.",
+                    )
+                  )
+                    return;
+                  try {
+                    await store.current.forget();
+                    lock();
+                    setExists(false);
+                  } catch (e) {
+                    setError(errorText(e));
+                  }
+                }}
+              >
+                Забути цей браузер
+              </button>
+            </section>
+          )}
+          {data.repair && (
+            <section className="error">
+              <h2>Потрібне явне узгодження</h2>
+              <p>
+                Стара черга не відправляється. Створіть нове запрошення Mac,
+                виконайте pairing, потім оберіть варіант.
+              </p>
+              <button
+                onClick={async () => {
+                  if (
+                    !confirm(
+                      "Обрати актуальний Mac і відкинути локальні pending changes?",
+                    )
+                  )
+                    return;
+                  try {
+                    setData(await store.current.reconcile("mac"));
+                  } catch (e) {
+                    setError(errorText(e));
+                  }
+                }}
+              >
+                Обрати Mac після re-pair
+              </button>
+              <button
+                onClick={async () => {
+                  if (
+                    !confirm(
+                      "Зберегти unsynced живі нотатки окремими новими IDs після re-pair? Старі delete не replay-яться.",
+                    )
+                  )
+                    return;
+                  try {
+                    setData(await store.current.reconcile("phone_copy"));
+                  } catch (e) {
+                    setError(errorText(e));
+                  }
+                }}
+              >
+                Зберегти локальні новими копіями
+              </button>
+              <button onClick={() => void exportRecovery()}>
+                Encrypted recovery
+              </button>
+            </section>
+          )}
+          <label className="search">
+            Пошук
+            <input
+              type="search"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              maxLength={200}
+            />
+          </label>
+          {error && (
+            <p className="error" role="alert">
+              {error}
             </p>
+          )}
+          {notice && (
+            <p className="notice" role="status">
+              {notice}
+            </p>
+          )}
+          {editing && (
+            <EntryEditor
+              title={editing === "new" ? "Нова нотатка" : "Редагувати запис"}
+              draft={draft}
+              change={(k, v) => setDraft((d) => ({ ...d, [k]: v }))}
+              save={save}
+              cancel={() => {
+                setEditing(null);
+                setDraft(blank());
+              }}
+              busy={busy}
+              saveLabel="Зберегти на телефоні"
+            />
+          )}
+          <h2 className="list-heading">Записи цього браузера</h2>
+          {!records.length && (
+            <p>
+              Почніть із кількох слів. До Mac receipt єдиною копією може бути
+              цей браузер.
+            </p>
+          )}
+          {records.map((r) => (
+            <article className="entry" key={r.id}>
+              <p className="metadata">
+                {names[r.payload.type ?? "inbox"]} · {labels[r.state]}
+              </p>
+              <p className="entry-text">{r.payload.raw_text}</p>
+              <div className="entry-actions">
+                <button
+                  disabled={r.state === "CONFLICT" || data.repair}
+                  onClick={() => open(r)}
+                >
+                  Редагувати
+                </button>
+                <button disabled={data.repair} onClick={() => void remove(r)}>
+                  Видалити
+                </button>
+              </div>
+              {r.state === "CONFLICT" && (
+                <section className="conflict">
+                  <h3>Дві версії — потрібен ваш вибір</h3>
+                  <p>На телефоні</p>
+                  <p className="entry-text">{r.payload.raw_text}</p>
+                  <p>
+                    {r.current
+                      ? "Поточна Mac версія"
+                      : "Mac видалив цей ID; повернення під тим самим ID заборонене."}
+                  </p>
+                  {r.current && (
+                    <p className="entry-text">{r.current.raw_text}</p>
+                  )}
+                  <label>
+                    Об’єднаний текст
+                    <textarea
+                      value={merge[r.id] ?? r.payload.raw_text}
+                      onChange={(e) =>
+                        setMerge((m) => ({ ...m, [r.id]: e.target.value }))
+                      }
+                    />
+                  </label>
+                  <div className="actions">
+                    {(["mac", "phone", "manual"] as const).map((choice) => (
+                      <button
+                        key={choice}
+                        onClick={async () => {
+                          try {
+                            if (choice === "manual")
+                              validatePayload({
+                                ...r.payload,
+                                raw_text: merge[r.id] ?? r.payload.raw_text,
+                              });
+                            setData(
+                              await store.current.resolve(
+                                r.id,
+                                choice,
+                                merge[r.id] ?? r.payload.raw_text,
+                              ),
+                            );
+                            setNotice(
+                              "Рішення збережено локально як нова mutation; потрібен sync.",
+                            );
+                          } catch (e) {
+                            setError(errorText(e));
+                          }
+                        }}
+                      >
+                        {choice === "mac"
+                          ? "Обрати Mac"
+                          : choice === "phone"
+                            ? r.current
+                              ? "Обрати телефон"
+                              : "Зберегти новою окремою нотаткою"
+                            : "Зберегти об’єднаний текст"}
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
+            </article>
           ))}
-        </details>
-        <footer>
-          Phone-only data потребує encrypted recovery. Browser/OS storage
-          best-effort; гарантованого background sync немає.
-          <br />
-          Реальні приватні записи ще не дозволені. Зовнішній AI, реальна
-          ASR-модель, health і deploy вимкнено.
-        </footer>
+          <details className="outbox">
+            <summary>Черга: {pending.length} операцій</summary>
+            {pending.map((o) => (
+              <p key={o.operation_id}>
+                {o.operation_type} · {labels[o.state]}
+              </p>
+            ))}
+          </details>
+          <footer>
+            Phone-only data потребує encrypted recovery. Browser/OS storage
+            best-effort; гарантованого background sync немає.
+            <br />
+            Реальні приватні записи ще не дозволені. Зовнішній AI, реальна
+            ASR-модель, health і deploy вимкнено.
+          </footer>
+        </div>
       </main>
     </div>
   );

@@ -1477,6 +1477,455 @@
         }
       }
     },
+    "/api/v1/creative": {
+      "get": {
+        "summary": "Creative List",
+        "operationId": "creative_list_api_v1_creative_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tag"
+            }
+          },
+          {
+            "name": "collection",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Collection"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Archived"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "recent",
+              "title": "Order"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/creative/preview": {
+      "post": {
+        "summary": "Creative Preview",
+        "operationId": "creative_preview_api_v1_creative_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreativeSelection"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/creative/export": {
+      "post": {
+        "summary": "Creative Export",
+        "operationId": "creative_export_api_v1_creative_export_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreativeDownload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback": {
+      "get": {
+        "summary": "Feedback List",
+        "operationId": "feedback_list_api_v1_feedback_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Feedback Save",
+        "operationId": "feedback_save_api_v1_feedback_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackSave"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback/{draft_id}/approve": {
+      "post": {
+        "summary": "Feedback Approve",
+        "operationId": "feedback_approve_api_v1_feedback__draft_id__approve_post",
+        "parameters": [
+          {
+            "name": "draft_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Draft Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackExact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback/{draft_id}/export": {
+      "post": {
+        "summary": "Feedback Export",
+        "operationId": "feedback_export_api_v1_feedback__draft_id__export_post",
+        "parameters": [
+          {
+            "name": "draft_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Draft Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackExport"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback/{draft_id}/delete": {
+      "post": {
+        "summary": "Feedback Delete",
+        "operationId": "feedback_delete_api_v1_feedback__draft_id__delete_post",
+        "parameters": [
+          {
+            "name": "draft_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Draft Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackExact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/personal-space": {
+      "get": {
+        "summary": "Space Get",
+        "operationId": "space_get_api_v1_personal_space_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Space Update",
+        "operationId": "space_update_api_v1_personal_space_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpaceUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/sync/invitations": {
       "post": {
         "summary": "Invitation",
@@ -2431,6 +2880,122 @@
         ],
         "title": "Create"
       },
+      "CreativeDownload": {
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Plan Id"
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Content Hash"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "json"
+            ],
+            "title": "Format"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan_id",
+          "content_hash",
+          "format"
+        ],
+        "title": "CreativeDownload"
+      },
+      "CreativeMetadata": {
+        "properties": {
+          "library": {
+            "type": "boolean",
+            "const": true,
+            "title": "Library",
+            "default": true
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 160,
+            "title": "Title",
+            "default": ""
+          },
+          "collections": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Collections"
+          },
+          "related_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Related Ids"
+          },
+          "archived": {
+            "type": "boolean",
+            "title": "Archived",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CreativeMetadata"
+      },
+      "CreativeSelection": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/Ref"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Entries"
+          },
+          "fields": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "raw_text",
+                "title",
+                "creative_kind",
+                "tags",
+                "collections",
+                "related_ids",
+                "timestamps",
+                "provenance"
+              ]
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Fields"
+          },
+          "include_related": {
+            "type": "boolean",
+            "const": false,
+            "title": "Include Related",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "entries",
+          "fields"
+        ],
+        "title": "CreativeSelection"
+      },
       "Delete": {
         "properties": {
           "operation_id": {
@@ -2616,6 +3181,10 @@
                   "idea",
                   "scene",
                   "character",
+                  "theme",
+                  "phrase",
+                  "shot",
+                  "list",
                   "reference",
                   "other"
                 ]
@@ -2625,6 +3194,16 @@
               }
             ],
             "title": "Creative Kind"
+          },
+          "creative_meta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CreativeMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -2771,6 +3350,10 @@
                   "idea",
                   "scene",
                   "character",
+                  "theme",
+                  "phrase",
+                  "shot",
+                  "list",
                   "reference",
                   "other"
                 ]
@@ -2780,6 +3363,16 @@
               }
             ],
             "title": "Creative Kind"
+          },
+          "creative_meta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CreativeMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "id": {
             "type": "string",
@@ -3016,6 +3609,10 @@
                   "idea",
                   "scene",
                   "character",
+                  "theme",
+                  "phrase",
+                  "shot",
+                  "list",
                   "reference",
                   "other"
                 ]
@@ -3025,6 +3622,16 @@
               }
             ],
             "title": "Creative Kind"
+          },
+          "creative_meta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CreativeMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "id": {
             "type": "string",
@@ -3144,6 +3751,161 @@
           "format"
         ],
         "title": "Export"
+      },
+      "FeedbackExact": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Version"
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Content Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version",
+          "content_hash"
+        ],
+        "title": "FeedbackExact"
+      },
+      "FeedbackExport": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Version"
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Content Hash"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "json"
+            ],
+            "title": "Format",
+            "default": "markdown"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version",
+          "content_hash"
+        ],
+        "title": "FeedbackExport"
+      },
+      "FeedbackInput": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "bug",
+              "feature",
+              "design",
+              "other"
+            ],
+            "title": "Type",
+            "default": "other"
+          },
+          "expected": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Expected",
+            "default": ""
+          },
+          "actual": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Actual",
+            "default": ""
+          },
+          "steps": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Steps",
+            "default": ""
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 12000,
+            "title": "Description",
+            "default": ""
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "private",
+              "intended_share"
+            ],
+            "title": "Visibility",
+            "default": "private"
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 240,
+            "minLength": 1,
+            "title": "Destination",
+            "default": "Локальний файл"
+          },
+          "attachments": {
+            "items": {},
+            "type": "array",
+            "maxItems": 0,
+            "title": "Attachments"
+          },
+          "references": {
+            "items": {},
+            "type": "array",
+            "maxItems": 0,
+            "title": "References"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "FeedbackInput"
+      },
+      "FeedbackSave": {
+        "properties": {
+          "draft_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Draft Id"
+          },
+          "base_version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Base Version"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/FeedbackInput"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "draft_id",
+          "base_version",
+          "payload"
+        ],
+        "title": "FeedbackSave"
       },
       "HTTPValidationError": {
         "properties": {
@@ -3597,6 +4359,75 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Selector"
+      },
+      "SpaceState": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
+          },
+          "theme": {
+            "type": "string",
+            "enum": [
+              "paper",
+              "sage",
+              "clay"
+            ],
+            "title": "Theme",
+            "default": "paper"
+          },
+          "owned_ids": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "vase",
+                "books",
+                "print"
+              ]
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Owned Ids"
+          },
+          "layout": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "vase",
+                "books",
+                "print"
+              ]
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Layout"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SpaceState"
+      },
+      "SpaceUpdate": {
+        "properties": {
+          "base_version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Base Version"
+          },
+          "state": {
+            "$ref": "#/components/schemas/SpaceState"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "base_version",
+          "state"
+        ],
+        "title": "SpaceUpdate"
       },
       "SuggestionChange": {
         "properties": {

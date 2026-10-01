@@ -678,3 +678,238 @@ footer {
   padding-top: 0.5rem;
   border-top: 0;
 }
+/* M5 extends the established paper/ink/sage world. Original geometric cosmetics only. */
+.m5-surface,
+.m5-inset,
+.space-panel {
+  min-width: 0;
+}
+.m5-surface {
+  margin-bottom: 32px;
+}
+.m5-surface h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.m5-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 20px;
+  margin: 28px 0;
+}
+.m5-inset {
+  margin: 32px 0;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.m5-wrap,
+.creative-item,
+.m5-preview,
+.m5-surface button {
+  overflow-wrap: anywhere;
+}
+.m5-preview pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  line-height: 1.65;
+  padding: 20px;
+  background: var(--paper);
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.m5-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 20px;
+}
+.m5-empty {
+  padding: 32px 0;
+  color: var(--muted);
+  max-width: 65ch;
+}
+.m5-delete {
+  margin-top: 24px;
+}
+.creative-heading {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.creative-heading .check {
+  margin-bottom: 8px;
+}
+.m5-surface .check input,
+.space-panel .check input {
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  accent-color: var(--accent);
+  margin: 0;
+  flex: 0 0 auto;
+}
+.m5-surface .check,
+.space-panel .check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 16px;
+}
+.space-panel {
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 28px;
+  padding: 0 0 16px;
+}
+.space-toggle {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 24px;
+}
+.space-toggle p {
+  margin-bottom: 0;
+}
+.studio {
+  background: #ede8db;
+  border-radius: 12px;
+  margin: 20px 0;
+  padding: 36px 24px 28px;
+  max-width: 620px;
+}
+.studio-sage {
+  background: #e2e9db;
+}
+.studio-clay {
+  background: #eee0d2;
+}
+.studio-shelf {
+  display: flex;
+  align-items: end;
+  justify-content: space-around;
+  gap: 16px;
+  border-bottom: 8px solid #756246;
+  padding-bottom: 2px;
+}
+.studio-object {
+  flex: 0 1 100px;
+  height: 100px;
+}
+.object-vase {
+  background: #637c67;
+  height: 70px;
+  max-width: 60px;
+  border-radius: 12px 12px 24px 24px;
+  border-top: 8px solid #405644;
+}
+.object-books {
+  display: flex;
+  align-items: end;
+  gap: 4px;
+}
+.object-books i {
+  background: #56684d;
+  width: 24px;
+  height: 88px;
+  border-top: 5px solid #bdcca9;
+}
+.object-books i:nth-child(2) {
+  background: #886850;
+  height: 73px;
+  border-color: #d7b596;
+}
+.object-books i:nth-child(3) {
+  background: #726f55;
+  height: 95px;
+  border-color: #d3ceb2;
+}
+.object-print {
+  background: var(--paper);
+  border: 6px solid #7c674c;
+  padding: 4px;
+}
+.object-print svg {
+  width: 100%;
+  height: 100%;
+  fill: #637c67;
+}
+.object-print path {
+  fill: #ac795d;
+}
+::selection {
+  background: #cad8b8;
+  color: #28372f;
+}
+@media (max-width: 640px) {
+  .m5-filters,
+  .m5-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .m5-surface header {
+    align-items: start;
+  }
+  .m5-surface .actions,
+  .m5-surface .entry-actions {
+    gap: 10px;
+  }
+  .m5-surface button {
+    max-width: 100%;
+  }
+  .m5-preview pre {
+    padding: 14px;
+  }
+  .studio {
+    padding: 24px 14px 20px;
+  }
+  .studio-object {
+    height: 80px;
+    flex-basis: 80px;
+  }
+  .object-vase {
+    height: 60px;
+  }
+  .object-books i {
+    max-height: 78px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .m5-surface *,
+  .space-panel * {
+    scroll-behavior: auto;
+    transition: none;
+    animation: none;
+  }
+}
+
+.m5-surface select,
+.m5-surface input:not([type="checkbox"]),
+.space-panel select {
+  min-height: 44px;
+}
+.m5-surface .field-row > label {
+  min-width: 0;
+  flex: 1 1 200px;
+}
+.m5-surface .field-row {
+  flex-wrap: wrap;
+}
+.m5-surface .editor,
+.m5-surface form {
+  max-width: 100%;
+}
+.m5-surface details > p > button {
+  white-space: normal;
+}
+.m5-surface .check,
+.space-panel .check {
+  white-space: normal;
+}
+.m5-action-surface {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}

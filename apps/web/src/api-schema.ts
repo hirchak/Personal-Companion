@@ -502,6 +502,144 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/creative": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Creative List */
+        get: operations["creative_list_api_v1_creative_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/creative/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Creative Preview */
+        post: operations["creative_preview_api_v1_creative_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/creative/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Creative Export */
+        post: operations["creative_export_api_v1_creative_export_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Feedback List */
+        get: operations["feedback_list_api_v1_feedback_get"];
+        put?: never;
+        /** Feedback Save */
+        post: operations["feedback_save_api_v1_feedback_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/{draft_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Feedback Approve */
+        post: operations["feedback_approve_api_v1_feedback__draft_id__approve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/{draft_id}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Feedback Export */
+        post: operations["feedback_export_api_v1_feedback__draft_id__export_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/feedback/{draft_id}/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Feedback Delete */
+        post: operations["feedback_delete_api_v1_feedback__draft_id__delete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/personal-space": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Space Get */
+        get: operations["space_get_api_v1_personal_space_get"];
+        put?: never;
+        /** Space Update */
+        post: operations["space_update_api_v1_personal_space_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/sync/invitations": {
         parameters: {
             query?: never;
@@ -940,6 +1078,57 @@ export interface components {
             base_revision: 0;
             payload: components["schemas"]["EntryInput"];
         };
+        /** CreativeDownload */
+        CreativeDownload: {
+            /**
+             * Plan Id
+             * Format: uuid
+             */
+            plan_id: string;
+            /** Content Hash */
+            content_hash: string;
+            /**
+             * Format
+             * @enum {string}
+             */
+            format: "markdown" | "json";
+        };
+        /** CreativeMetadata */
+        CreativeMetadata: {
+            /**
+             * Library
+             * @default true
+             * @constant
+             */
+            library: true;
+            /**
+             * Title
+             * @default
+             */
+            title: string;
+            /** Collections */
+            collections?: string[];
+            /** Related Ids */
+            related_ids?: string[];
+            /**
+             * Archived
+             * @default false
+             */
+            archived: boolean;
+        };
+        /** CreativeSelection */
+        CreativeSelection: {
+            /** Entries */
+            entries: components["schemas"]["Ref"][];
+            /** Fields */
+            fields: ("raw_text" | "title" | "creative_kind" | "tags" | "collections" | "related_ids" | "timestamps" | "provenance")[];
+            /**
+             * Include Related
+             * @default false
+             * @constant
+             */
+            include_related: false;
+        };
         /** Delete */
         Delete: {
             /**
@@ -1003,7 +1192,8 @@ export interface components {
             /** Sleep Quality */
             sleep_quality?: number | null;
             /** Creative Kind */
-            creative_kind?: ("idea" | "scene" | "character" | "reference" | "other") | null;
+            creative_kind?: ("idea" | "scene" | "character" | "theme" | "phrase" | "shot" | "list" | "reference" | "other") | null;
+            creative_meta?: components["schemas"]["CreativeMetadata"] | null;
         };
         /**
          * EntryOutput
@@ -1046,7 +1236,8 @@ export interface components {
             /** Sleep Quality */
             sleep_quality?: number | null;
             /** Creative Kind */
-            creative_kind?: ("idea" | "scene" | "character" | "reference" | "other") | null;
+            creative_kind?: ("idea" | "scene" | "character" | "theme" | "phrase" | "shot" | "list" | "reference" | "other") | null;
+            creative_meta?: components["schemas"]["CreativeMetadata"] | null;
             /**
              * Id
              * Format: uuid
@@ -1132,7 +1323,8 @@ export interface components {
             /** Sleep Quality */
             sleep_quality?: number | null;
             /** Creative Kind */
-            creative_kind?: ("idea" | "scene" | "character" | "reference" | "other") | null;
+            creative_kind?: ("idea" | "scene" | "character" | "theme" | "phrase" | "shot" | "list" | "reference" | "other") | null;
+            creative_meta?: components["schemas"]["CreativeMetadata"] | null;
             /**
              * Id
              * Format: uuid
@@ -1195,6 +1387,83 @@ export interface components {
              * @enum {string}
              */
             format: "json" | "markdown";
+        };
+        /** FeedbackExact */
+        FeedbackExact: {
+            /** Version */
+            version: number;
+            /** Content Hash */
+            content_hash: string;
+        };
+        /** FeedbackExport */
+        FeedbackExport: {
+            /** Version */
+            version: number;
+            /** Content Hash */
+            content_hash: string;
+            /**
+             * Format
+             * @default markdown
+             * @enum {string}
+             */
+            format: "markdown" | "json";
+        };
+        /** FeedbackInput */
+        FeedbackInput: {
+            /** Title */
+            title: string;
+            /**
+             * Type
+             * @default other
+             * @enum {string}
+             */
+            type: "bug" | "feature" | "design" | "other";
+            /**
+             * Expected
+             * @default
+             */
+            expected: string;
+            /**
+             * Actual
+             * @default
+             */
+            actual: string;
+            /**
+             * Steps
+             * @default
+             */
+            steps: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Visibility
+             * @default private
+             * @enum {string}
+             */
+            visibility: "private" | "intended_share";
+            /**
+             * Destination
+             * @default Локальний файл
+             */
+            destination: string;
+            /** Attachments */
+            attachments?: unknown[];
+            /** References */
+            references?: unknown[];
+        };
+        /** FeedbackSave */
+        FeedbackSave: {
+            /**
+             * Draft Id
+             * Format: uuid
+             */
+            draft_id: string;
+            /** Base Version */
+            base_version: number;
+            payload: components["schemas"]["FeedbackInput"];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1383,6 +1652,30 @@ export interface components {
              * @default false
              */
             include_history: boolean;
+        };
+        /** SpaceState */
+        SpaceState: {
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Theme
+             * @default paper
+             * @enum {string}
+             */
+            theme: "paper" | "sage" | "clay";
+            /** Owned Ids */
+            owned_ids?: ("vase" | "books" | "print")[];
+            /** Layout */
+            layout?: ("vase" | "books" | "print")[];
+        };
+        /** SpaceUpdate */
+        SpaceUpdate: {
+            /** Base Version */
+            base_version: number;
+            state: components["schemas"]["SpaceState"];
         };
         /** SuggestionChange */
         SuggestionChange: {
@@ -2524,6 +2817,321 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["Export"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    creative_list_api_v1_creative_get: {
+        parameters: {
+            query?: {
+                q?: string;
+                kind?: string | null;
+                tag?: string | null;
+                collection?: string | null;
+                archived?: boolean;
+                order?: string;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    creative_preview_api_v1_creative_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreativeSelection"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    creative_export_api_v1_creative_export_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreativeDownload"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    feedback_list_api_v1_feedback_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    feedback_save_api_v1_feedback_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackSave"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    feedback_approve_api_v1_feedback__draft_id__approve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackExact"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    feedback_export_api_v1_feedback__draft_id__export_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackExport"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    feedback_delete_api_v1_feedback__draft_id__delete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackExact"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    space_get_api_v1_personal_space_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    space_update_api_v1_personal_space_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SpaceUpdate"];
             };
         };
         responses: {

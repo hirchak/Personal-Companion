@@ -117,6 +117,15 @@ class Journal:
                 c.execute('INSERT INTO entry_revisions VALUES(?,?,?)', (entry_id, old['revision'], encode(dict(self.view(old), recorded_at_utc=timestamp))))
                 c.execute('UPDATE entries SET revision=?,payload=?,updated=? WHERE id=? AND owner_id=?', (rev, encode(payload), timestamp, entry_id, self.owner))
         if action != 'delete':
+            meta = payload.get('creative_meta') or {}
+            previous = (json.loads(old['payload']).get('creative_meta') or {}) if action != 'create' else {}
+            for related in meta.get('related_ids', []):
+                if related == entry_id: raise SafeError('CREATIVE_SELF_LINK', 422)
+                if related not in previous.get('related_ids', []):
+                    linked = self.row(c, related)
+                    lp = json.loads(linked['payload'])
+                    if lp['type'] != 'creative' or not lp.get('creative_meta'):
+                        raise SafeError('CREATIVE_LINK_REQUIRED', 422)
             c.execute('INSERT OR REPLACE INTO search_index VALUES(?,?)', (entry_id, payload['raw_text']))
         code = 'DELETED' if action == 'delete' else 'MAC_SAVED'
         c.execute('INSERT INTO operation_receipts VALUES(?,?,?,?,?,?,?)', (op, self.owner, entry_id, action, fp, rev, code))

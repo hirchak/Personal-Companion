@@ -37,6 +37,10 @@ export type Draft = ReturnType<typeof blank>;
 export const creativeNames: Record<string, string> = {
   idea: "Ідея",
   scene: "Сцена",
+  theme: "Тема",
+  phrase: "Фраза / діалог",
+  shot: "Кадр",
+  list: "Список",
   character: "Персонаж",
   reference: "Референс",
   other: "Інше",

@@ -4,6 +4,7 @@ const require=createRequire(new URL('../apps/web/package.json',import.meta.url))
 const Ajv=require('ajv/dist/2020');const formats=require('ajv-formats');const standalone=require('ajv/dist/standalone').default;
 const spec=JSON.parse(readFileSync(new URL('../packages/contracts/openapi.json',import.meta.url),'utf8'));
 const schema=structuredClone(spec.components.schemas.EntryInput);
+schema.components={schemas:{CreativeMetadata:spec.components.schemas.CreativeMetadata}};
 const ajv=new Ajv({code:{source:true,esm:true},strict:false,allErrors:true});formats(ajv);
 const validate=ajv.compile(schema);
 let code=standalone(ajv,validate);

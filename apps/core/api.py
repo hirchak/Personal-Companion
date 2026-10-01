@@ -14,6 +14,9 @@ from pydantic import ValidationError
 from .models import Create, Patch, Delete, Selector, Export, Unlock, EntryOutput, EntryPage, RevisionPage, Receipt
 from .storage import SafeError, Store, digest
 from .domain import Journal
+from .creative import CreativeLibrary
+from .feedback import Feedback, PersonalSpace
+from .m5_contracts import CreativeSelection, CreativeDownload, FeedbackSave, FeedbackExact, FeedbackExport, SpaceUpdate
 from .runtime import Runtime
 from .ai_contracts import PreviewRequest, Approval, Enqueue, RuntimeMode, Empty, MemoryCreate, MemoryChange, SuggestionChange
 from .sync import SyncService, Pair, Packet, EpochReset
@@ -67,6 +70,8 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.runtime = runtime
     voice = Voice(journal, sync)
     app.state.voice = voice
+    creative, feedback, space = CreativeLibrary(journal), Feedback(store), PersonalSpace(store)
+    app.state.creative, app.state.feedback, app.state.space = creative, feedback, space
     host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
@@ -193,12 +198,13 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
         with store.transaction() as c:
             c.execute('UPDATE ai_consents SET revoked=1 WHERE session=?',(digest(request.state.session.encode()),))
         journal.plans = {k: v for k, v in journal.plans.items() if v['session'] != request.state.session}
+        creative.plans = {k: v for k, v in creative.plans.items() if v['session'] != request.state.session}
         r = JSONResponse({'code': 'LOCKED'}); r.delete_cookie('m1_session', path='/')
         return r
 
     @app.get('/api/v1/status')
     def status():
-        return {'schema_version': 4, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
+        return {'schema_version': 5, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
 
     @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):
@@ -240,6 +246,45 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
 
     def require_m2():
         if not m2: raise SafeError('M2_DISABLED',403)
+
+    @app.get('/api/v1/creative')
+    def creative_list(q: str = Query('', max_length=200), kind: str | None = None,
+                      tag: str | None = Query(None,max_length=64), collection: str | None = Query(None,max_length=64),
+                      archived: bool = False, order: str = 'recent', limit: int = Query(50,ge=1,le=100), offset: int = Query(0,ge=0,le=100000)):
+        return creative.list(q,kind,tag,collection,archived,order,limit,offset)
+
+    @app.post('/api/v1/creative/preview')
+    def creative_preview(body: CreativeSelection, request: Request): return creative.preview(body,request.state.session)
+
+    @app.post('/api/v1/creative/export')
+    def creative_export(body: CreativeDownload, request: Request):
+        ext='md' if body.format=='markdown' else 'json'
+        return Response(creative.export(body,request.state.session),media_type='text/markdown' if ext=='md' else 'application/json',
+                        headers={'Content-Disposition':f'attachment; filename="selected-creative.{ext}"'})
+
+    @app.get('/api/v1/feedback')
+    def feedback_list(): return feedback.list()
+
+    @app.post('/api/v1/feedback')
+    def feedback_save(body: FeedbackSave): return feedback.save(body)
+
+    @app.post('/api/v1/feedback/{draft_id}/approve')
+    def feedback_approve(draft_id: UUID,body: FeedbackExact): return feedback.approve(draft_id,body)
+
+    @app.post('/api/v1/feedback/{draft_id}/export')
+    def feedback_export(draft_id: UUID,body: FeedbackExport):
+        ext='md' if body.format=='markdown' else 'json'
+        return Response(feedback.export(draft_id,body),media_type='text/markdown' if ext=='md' else 'application/json',
+                        headers={'Content-Disposition':f'attachment; filename="approved-feedback.{ext}"'})
+
+    @app.post('/api/v1/feedback/{draft_id}/delete')
+    def feedback_delete(draft_id: UUID,body: FeedbackExact): return feedback.delete(draft_id,body)
+
+    @app.get('/api/v1/personal-space')
+    def space_get(): return space.get()
+
+    @app.post('/api/v1/personal-space')
+    def space_update(body: SpaceUpdate): return space.update(body)
 
     @app.post('/api/v1/sync/invitations')
     def invitation(body: EpochReset):

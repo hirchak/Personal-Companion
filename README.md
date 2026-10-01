@@ -104,3 +104,10 @@ npm --prefix apps/web run build
 
 Use generated fake media only during M4 acceptance. [Follow-up ASR](docs/M4_LOCAL_ASR_RUNBOOK.md)
 and [Galaxy microphone](docs/M4_ANDROID_MIC_GATE.md) require their separately scoped permissions.
+
+
+M5 synthetic candidate: [contract](docs/M5_CONTRACT.md), [report](reports/M5_CREATIVE_FEEDBACK_SPACE_REPORT.md).
+After `npm --prefix apps/web run build`, run
+`./scripts/m5_demo.sh /private/tmp/personal-companion-m5-synthetic-demo` and open loopback Mac `/`
+or encrypted phone `/phone/`. Use «Творча полиця», «Відгук» and optional device-local cosmetics.
+Feedback produces exact-approved local files only. Real data/providers/Health/clinical/deploy/M6+ OFF.

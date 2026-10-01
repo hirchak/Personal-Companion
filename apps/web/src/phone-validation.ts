@@ -5,6 +5,25 @@ export function validatePayload(p: Payload) {
   if (!validateSchema(p)) throw new Error("SCHEMA_INVALID");
   const type = p.type ?? "inbox";
   if (!(type in typed)) throw new Error("SCHEMA_INVALID");
+  if (type !== "creative" && "creative_meta" in p)
+    throw new Error("SCHEMA_INVALID");
+  if (p.creative_meta) {
+    const m = p.creative_meta;
+    if (
+      new Set(m.collections ?? []).size !== (m.collections ?? []).length ||
+      (m.collections ?? []).some((x) => !x.trim()) ||
+      new Set(m.related_ids ?? []).size !== (m.related_ids ?? []).length
+    )
+      throw new Error("SCHEMA_INVALID");
+    for (const value of [m.title ?? "", ...(m.collections ?? [])])
+      for (const ch of value)
+        if (
+          ch.length === 1 &&
+          ch.charCodeAt(0) >= 0xd800 &&
+          ch.charCodeAt(0) <= 0xdfff
+        )
+          throw new Error("SCHEMA_INVALID");
+  }
   const text = p.raw_text;
   if (typeof text !== "string" || !text.trim() || [...text].length > 100000)
     throw new Error("SCHEMA_INVALID");

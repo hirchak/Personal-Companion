@@ -8,11 +8,40 @@ from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator, m
 Kind = Literal['inbox', 'daily', 'sleep', 'creative']
 Rating = StrictInt | None
 FIELDS = {'inbox': set(), 'daily': {'mood_rating', 'energy_rating'},
-          'sleep': {'sleep_start_utc', 'wake_at_utc', 'sleep_quality'}, 'creative': {'creative_kind'}}
+          'sleep': {'sleep_start_utc', 'wake_at_utc', 'sleep_quality'}, 'creative': {'creative_kind', 'creative_meta'}}
 TYPED = set.union(*FIELDS.values())
 
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra='forbid', allow_inf_nan=False)
+
+CreativeKind = Literal['idea', 'scene', 'character', 'theme', 'phrase', 'shot', 'list', 'reference', 'other']
+
+class CreativeMetadata(StrictModel):
+    library: Literal[True] = True
+    title: str = Field(default='', max_length=160)
+    collections: list[str] = Field(default_factory=list, max_length=8)
+    related_ids: list[UUID] = Field(default_factory=list, max_length=8)
+    archived: bool = False
+
+    @field_validator('title')
+    @classmethod
+    def title_utf8(cls, value):
+        value.encode('utf-8')
+        return value
+
+    @field_validator('collections')
+    @classmethod
+    def collections_valid(cls, value):
+        if len(set(value)) != len(value) or any(not x.strip() or len(x) > 64 for x in value):
+            raise ValueError('collections')
+        for x in value: x.encode('utf-8')
+        return value
+
+    @field_validator('related_ids')
+    @classmethod
+    def relations_valid(cls, value):
+        if len(set(value)) != len(value): raise ValueError('duplicate relations')
+        return value
 
 class EntryInput(StrictModel):
     type: Kind = 'inbox'
@@ -27,7 +56,8 @@ class EntryInput(StrictModel):
     sleep_start_utc: datetime | None = None
     wake_at_utc: datetime | None = None
     sleep_quality: Rating = Field(default=None, ge=0, le=10)
-    creative_kind: Literal['idea', 'scene', 'character', 'reference', 'other'] | None = None
+    creative_kind: CreativeKind | None = None
+    creative_meta: CreativeMetadata | None = None
 
     @field_validator('raw_text')
     @classmethod
@@ -184,7 +214,7 @@ class Receipt(StrictModel):
 class VaultMetadata(StrictModel):
     vault_id: UUID
     owner_id: UUID
-    schema_version: Literal[2, 3, 4]
+    schema_version: Literal[2, 3, 4, 5]
     restore_epoch: StrictInt = Field(ge=0)
     created_at_utc: datetime
     reconciliation: Literal['NONE', 'RESTORED_REQUIRES_RECONCILIATION']

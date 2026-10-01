@@ -8,6 +8,7 @@ import {
   type PhoneAudio,
 } from "./audio-types";
 /** Synthetic encrypted phone data plane. Native WebCrypto, no durable plaintext key. */
+import { checkSpace, type Space } from "./space-model";
 import { validatePayload } from "./phone-validation";
 import type { components } from "./api-schema";
 export type Payload = components["schemas"]["EntryInput"];
@@ -25,6 +26,8 @@ export type RecordItem = {
   state: SyncState;
   deleted: boolean;
   localOrder: number;
+  createdAt?: string;
+  updatedAt?: string;
   current?: any;
   conflictCode?: string;
   conflictRevision?: number;
@@ -44,6 +47,7 @@ export type Operation = {
   state: SyncState;
 };
 export type LocalState = {
+  space?: { version: number; state: Space };
   format: 2;
   device_id: string;
   sequence: number;
@@ -217,6 +221,12 @@ function checkState(state: LocalState, config: Config) {
     !Array.isArray(state.history)
   )
     throw new StoreError("INVALID_LOCAL_SCHEMA");
+  if ("space" in state) {
+    if (!state.space) throw new StoreError("INVALID_LOCAL_SCHEMA");
+    if (!Number.isSafeInteger(state.space.version) || state.space.version < 1)
+      throw new StoreError("INVALID_LOCAL_SCHEMA");
+    checkSpace(state.space.state);
+  }
   for (const [id, r] of Object.entries(state.records)) {
     if (
       !uuid(id) ||
@@ -288,6 +298,7 @@ const payloadKeys = [
   "wake_at_utc",
   "sleep_quality",
   "creative_kind",
+  "creative_meta",
 ];
 export function fromMac(entry: any): Payload {
   return Object.fromEntries(
@@ -479,9 +490,14 @@ export class PhoneStore {
     id: string,
     payload: Payload | null,
     confirm = false,
+    expected?: string,
   ) {
     return this.mutate((s) => {
       const record = s.records[id];
+      if (expected !== undefined && JSON.stringify(record) !== expected)
+        throw new StoreError("LOCAL_WRITE_CONFLICT");
+      if (kind === "create" && record) throw new StoreError("ALREADY_EXISTS");
+      if (record?.deleted && kind !== "delete") throw new StoreError("DELETED");
       if (kind !== "create" && !record) throw new StoreError("NOT_FOUND");
       const pending = s.outbox.filter(
         (o) => o.entry_id === id && o.state !== "MAC_CONFIRMED",
@@ -514,7 +530,24 @@ export class PhoneStore {
         state: "QUEUED",
         deleted: kind === "delete",
         localOrder: record?.localOrder ?? s.sequence,
+        createdAt: record?.createdAt ?? operation.created_at_utc,
+        updatedAt: operation.created_at_utc,
       };
+    });
+  }
+  async updateSpace(baseVersion: number, state: Space) {
+    checkSpace(state);
+    return this.mutate((s) => {
+      const old = s.space;
+      if ((old?.version ?? 0) !== baseVersion) {
+        if (
+          old?.version === baseVersion + 1 &&
+          JSON.stringify(old.state) === JSON.stringify(state)
+        )
+          return;
+        throw new StoreError("LOCAL_WRITE_CONFLICT");
+      }
+      s.space = { version: baseVersion + 1, state };
     });
   }
   async pair(invitation: string, label: string) {
@@ -703,6 +736,8 @@ export class PhoneStore {
           s.records[entry.id] = {
             id: entry.id,
             payload: fromMac(entry),
+            createdAt: entry.created_at_utc,
+            updatedAt: entry.updated_at_utc,
             revision: entry.revision,
             state: "MAC_CONFIRMED",
             deleted: false,
@@ -835,6 +870,8 @@ export class PhoneStore {
         s.records[e.id] = {
           id: e.id,
           payload: fromMac(e),
+          createdAt: e.created_at_utc,
+          updatedAt: e.updated_at_utc,
           revision: e.revision,
           state: "MAC_CONFIRMED",
           deleted: false,
@@ -880,6 +917,7 @@ export class PhoneStore {
       format: 1,
       records,
       outbox: state.outbox.filter((o) => o.state !== "MAC_CONFIRMED"),
+      ...(state.space ? { space: state.space } : {}),
     };
     const protectedData = await encrypt(
       content,
@@ -930,6 +968,7 @@ export class PhoneStore {
           recovered.records.map((r: RecordItem) => [r.id, r]),
         ),
         outbox: recovered.outbox,
+        ...("space" in recovered ? { space: recovered.space } : {}),
         pairing: null,
         checkpoint: 0,
         repair: true,
@@ -941,6 +980,7 @@ export class PhoneStore {
     await this.create(passphrase);
     return this.mutate((s) => {
       s.repair = true;
+      if ("space" in recovered) s.space = recovered.space;
       for (const r of recovered.records)
         s.records[r.id] = { ...r, state: "REVOKED_OR_REPAIR_REQUIRED" };
       s.outbox = recovered.outbox.map((o: Operation) => ({

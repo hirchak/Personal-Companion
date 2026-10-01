@@ -156,3 +156,24 @@ Tests use actual SQLite/files, WebCrypto/IDB and built React. Use only synthetic
 in this scope; never use a real person's voice as acceptance data. Actual-model benchmark and actual
 Galaxy microphone are separate NOT_RUN gates: [ASR runbook](M4_LOCAL_ASR_RUNBOOK.md),
 [Galaxy runbook](M4_ANDROID_MIC_GATE.md). Engineering mapping: [M4 contract](M4_CONTRACT.md).
+
+## M5 synthetic verification
+
+```bash
+npm --prefix apps/web run build
+npm --prefix apps/web test
+.venv/bin/python -m pytest -q tests/test_m5_domain.py tests/test_m5_api.py tests/test_m5_browser.py
+.venv/bin/python -m pytest -q
+.venv/bin/python -m scripts.measure_m5 --output generated/m5-performance.json
+.venv/bin/python scripts/verify_m5.py --scope EXACT_C --output generated/m5-exact-c.json
+./scripts/m5_demo.sh /private/tmp/personal-companion-m5-synthetic-demo
+```
+
+M5 browser runs existing project-local Chromium on loopback8771 with disposable synthetic Mac roots
+and encrypted persistent phone profiles, actual offline/restart/sync/conflict and file download checks.
+Synthetic screenshots under generated/m5-ui are inspected separately and never proof of privacy.
+Vitest adds real WebCrypto/fake-IDB tests for creative metadata/CAS/export/recovery/device cosmetics.
+All earlier M1–M4 tests stay active. Feedback source references/attachments are deliberately empty-only;
+no external publication routes or providers. Metrics bounded N300, local latency and SQLite growth only.
+Exact acceptance contract: [M5](M5_CONTRACT.md). Full raw failure logs stay ignored/local; collector
+records command/exit/environment/C and sanitized passing summaries. CI and real hardware stay NOT_RUN.

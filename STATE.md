@@ -9,16 +9,16 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: 40b33a05248353b910acf733db99e21242ee0bd2
-implementation_sha: 021961c27a455dbc4c75710f7b700cff24c8017c
-report_path: reports/M4_LOCAL_VOICE_ASR_REPORT.md
-last_reviewed_sha: 5621d9b0fc090194be019b09fc31b2f90155ea13
-current_milestone: M4
-current_goal: M4_LOCAL_VOICE
-current_goal_path: prompts/M4_LOCAL_VOICE.md
-current_contract_path: docs/M4_CONTRACT.md
-implementation_status: AWAITING_REVIEW
-review_status: AWAITING_REVIEW
+baseline_sha: dc6d6d80ed3f47046331432b446cf5c4081c3319
+implementation_sha: null
+report_path: reports/M5_CREATIVE_FEEDBACK_SPACE_REPORT.md
+last_reviewed_sha: 021961c27a455dbc4c75710f7b700cff24c8017c
+current_milestone: M5
+current_goal: M5_CREATIVE_SPACE
+current_goal_path: prompts/M5_CREATIVE_SPACE.md
+current_contract_path: docs/M5_CONTRACT.md
+implementation_status: IN_PROGRESS
+review_status: NOT_STARTED
 next_authorized_milestone: null
 research_status: NOT_STARTED
 clinical_protocols_enabled: false
@@ -30,17 +30,13 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M4 — AWAITING_REVIEW, synthetic engineering candidate
+# M5 — IN_PROGRESS, synthetic only
 
-All29 owner sections implemented; M3 external synthetic ACCEPT durable, reviewed C preserved.
-Base 40b33a05248353b910acf733db99e21242ee0bd2; final M4 C 021961c27a455dbc4c75710f7b700cff24c8017c. R is this evidence-only commit, resolve from Git/final receipt.
-Exact clean C: build,257 Python (18 browser including8 M4),23 web, docs/snapshot/privacy/diff PASS.
-Evidence: reports/evidence/M4/EXACT_C_CHECKS.json; A01–A13 synthetic PASS, independent review pending.
-Working PCM mic → encrypted offline audio → paired resumable private Mac attachment → editable
-candidate → explicit journal confirmation/retention, quota rescue/recovery and attachment backups.
-Publication checkpoint PRE_PUSH at evidence creation; authorized normal main fast-forward follows.
-Actual model/UA benchmark/HUMAN_UA_QUALITY NOT_RUN; A14 LOCAL_ASR_BACKEND_NOT_RUN.
-A15 Galaxy S24 Ultra HARDWARE_UNVERIFIED/NOT_RUN. Cloud/provider/private data/clinical/Health/
-system installs/rollout/deploy/M5+ OFF. Trusted fake process is not OS sandbox proof.
-Next: independent architect review of pushed C/R; no next milestone authorized.
-Demo: ./scripts/m4_demo.sh /private/tmp/personal-companion-m4-synthetic-demo, loopback / and /phone/.
+Base/current main dc6d6d80ed3f47046331432b446cf5c4081c3319 verified clean against origin/main.
+External M4 ACCEPT preserved in reports/M4_ARCHITECT_REVIEW.md; reviewed C/R retained.
+Active owner goal: prompts/M5_CREATIVE_SPACE.md, all34 sections received.
+Implement creative entry metadata using existing journal revisions/M2 sync; separate exact-approved
+local feedback exports; optional original cosmetic space, no progression or inference.
+Current checks: implementation pending. M4 actual ASR/human UA/Galaxy/private rollout NOT_RUN.
+Live providers, private data, clinical, Health, deploy, external publication and M6+ OFF.
+Next: implement M5 and synthetic tests, exact-C evidence then evidence-only R and normal main push.

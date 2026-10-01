@@ -116,6 +116,10 @@ export function EntryEditor({
                     ["idea", "Ідея"],
                     ["scene", "Сцена"],
                     ["character", "Персонаж"],
+                    ["theme", "Тема"],
+                    ["phrase", "Фраза / діалог"],
+                    ["shot", "Кадр"],
+                    ["list", "Список"],
                     ["reference", "Референс"],
                     ["other", "Інше"],
                   ].map(([k, v]) => (
