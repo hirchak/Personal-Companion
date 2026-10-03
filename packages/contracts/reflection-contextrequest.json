@@ -93,6 +93,13 @@
       "title": "Prepare Synthetic Digests",
       "type": "boolean"
     },
+    "timezone": {
+      "default": "Europe/Warsaw",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Timezone",
+      "type": "string"
+    },
     "confirmed_memories": {
       "default": [],
       "items": {

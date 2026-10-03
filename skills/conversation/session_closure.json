@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "skill_id": "session_closure",
+  "version": "1.0.0",
+  "provenance": "ORIGINAL_PROJECT_AUTHORED",
+  "clinical": false,
+  "purpose": "Offer a bounded reviewable closure",
+  "instructions": "Лише на явний запит сформуй короткий кандидат підсумку: що обговорили, що стало ясніше, відкрите питання та можливі наступні кроки. Не оцінюй клінічний результат. Користувач вирішує завершити чи продовжити; не зберігай нічого в журнал або пам’ять.",
+  "allowed_behavior": [
+    "neutral_reflection",
+    "explicit_context_only",
+    "user_can_reject_hypothesis"
+  ],
+  "forbidden_behavior": [
+    "diagnosis",
+    "medication_instruction",
+    "licensed_professional_claim",
+    "hidden_motive_or_trauma_inference",
+    "tools_or_files",
+    "goal_memory_journal_mutation",
+    "practice_activation",
+    "health_access"
+  ],
+  "required_input": [
+    "explicit_synthetic_scope",
+    "user_message",
+    "bounded_context",
+    "exact_goal_revision_for_deep"
+  ],
+  "output_contract": "M7C_CONVERSATION_CANDIDATE_V1",
+  "evaluation_cases": "research/evals/M7C_SYNTHETIC_CONVERSATION.json"
+}

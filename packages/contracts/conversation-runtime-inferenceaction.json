@@ -1,0 +1,30 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "base_revision": {
+      "minimum": 1,
+      "title": "Base Revision",
+      "type": "integer"
+    },
+    "action": {
+      "enum": [
+        "cancel",
+        "retry"
+      ],
+      "title": "Action",
+      "type": "string"
+    }
+  },
+  "required": [
+    "operation_id",
+    "base_revision",
+    "action"
+  ],
+  "title": "InferenceAction",
+  "type": "object"
+}

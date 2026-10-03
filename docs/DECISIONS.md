@@ -37,3 +37,8 @@ measured retrieval-gap ADR required later. One Conversation Controller + typed s
 no swarm, no automatic conversation→journal/memory. Live provider OFF, clinical active0,
 real private data OFF; M7C/M8 NOT_STARTED. Earlier M7B checkpoints are interim; late addenda
 belong to the same goal and require new final C/full regression before evidence-only R.
+
+
+## M7C owner scope — 2026-10-04
+
+[ADR-009-M7C-CONVERSATION-RUNTIME](adr/ADR-009-M7C-CONVERSATION-RUNTIME.md) implements the explicit owner synthetic-only goal: one controller/voice, neutral versioned skills, exact goal/context/source bindings, strict inert output, cancellable validated streaming, explicit closure/journal-point confirmation, FTS-first retrieval and bounded existing-auth provider evaluation. Scoped maximum100 total inference attempts includes failed/cancelled/interim/final requests. Broad project live/private permissions remain false. Existing-auth subscription proof is not a public service/retention/legal claim. Project-local whisper.cpp small model under2.5GB authorized; no cloud ASR or global install. M7B external ACCEPT is synthetic engineering only; N01/N02 closure requires exact-C evidence. M7D/M8 NOT_STARTED.

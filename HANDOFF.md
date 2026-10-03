@@ -1,24 +1,47 @@
-# M7B — AWAITING_REVIEW
+# M7C same active goal — IN_PROGRESS
 
-Base ff13dfe5b1f546c207c60cc3d4456c2fff28522f.
-Final C f143dc9f82bb356ca10cbb4034cb8126ecf42aa3, incorporates both binding owner addenda in the same goal.
-R immediate evidence-only successor; exact R/origin equality in final response, no self-hash recursion.
-Read STATE, docs/M7B_CONTRACT.md, prompts/M7B_CONVERSATION_HOME.md, report/evidence and ADR008.
+Base/main73ec6064107d3d25475bb7454d96a2bd964ee77c, no implementation C/R or push yet.
+All working changes are this goal; preserve them. Owner55-section spec: prompts/M7C_LIVE_CONVERSATION_CONTROLLER.md.
+Contract/docs/ADR now reconcile controller/neutral skill/provider/ASR scope and historical M7B clauses.
+M7B external ACCEPT synthetic engineering only; N01/N02 exact-C closure pending.
 
-Conversation-first3-nav, Free/Deep conversation persistence/CAS/retry/HTTP restart; versioned agreed goals,
-FTS5/bounded context/metadata receipts/source-bound synthetic derived artifacts/invalidation, isolated schema9.
-M4-only voice composer; Journal grid/list/detail/internal filters and secondary domains preserved.
-Normal responder OFF; explicit synthetic demo only. Entry2/health1/practice1, PWA/crypto/transport/provider/auth/billing intact.
+Implemented: schema10 digest CURRENT uniqueness/supersession/text purge, IANA logical-day/DST;
+existing goal/raw/FTS context foundation, Free recent builder; one deterministic controller with4 original
+neutral skills/version/hash frame, strict candidates, request/receipt/context/source bindings, restart/backup
+fail-closed, cancellable actual streaming, timeout/idempotent retry/no fallback, authenticated API/CLI/demo.
+React Free/Deep/goal proposal separate agreement/closure review, explicit USER point→preview→confirm journal.
+Journal2/health1/practice1 unchanged; no auto memory/journal/practice/health writes or provider access to them.
+All5 clinical skills OFF. Provider receives text with opaque sN aliases, no vault root/audio/local message IDs.
 
-Exact C:539 Python including40 Chromium browser,46 web unit/build, Ajv7/admission/docs/privacy/performance PASS.
-UI named M7B-UI-01 resolved/ship at scored-fix scope;32 original synthetic captures, docs/DESIGN updated;
-source bytes match C. See reports/M7B_CONVERSATION_HOME_REPORT.md for commands/env/limits and all46/addendum audit.
-Demo script verified on fresh synthetic root with agent-browser/unlock; server stopped/root cleaned.
-Old M7A owner root untouched/not read/migrated. Launch ./scripts/m7b_demo.sh with a dedicated new synthetic root;
-one-time code appears in terminal,5-minute expiry. No phone needed. Generated context refreshed; outputs ignored.
+Actual existing ChatGPT Codex0.159.0 gpt-6-luna interim multi-turn and voice PASS. Native app-server stdio,
+deny-root/minimal-read named profile, no tool features/roots/environments, ephemeral/no fallback/retries0.
+Auth type via account/read RPC, other fields discarded, no auth.json/token extraction/login rewrite.
+SDK host working agreements remain present: disclosed limitation, not private-data suitability proof.
+Persistent generated/m7c-live-evaluation-ledger.sqlite3 TOTAL6/100; never reset. Remaining94.
+Full21case26turn eval per chosen model planned Luna +6.1Sol (52calls), final voice1, demoOFF0.
+MiniMax env/auth route not exposed; async owner existing-client question unanswered, no credential search.
+No installed local LLM found. Stop those routes individually. Broad .project permissions remain false.
 
-No self-ACCEPT. Live AI/private data/clinical OFF; genuine model digests/tokenizer, consented narrow health/journal
-context and clinical skills DEFERRED with exact gaps in contract. Real ASR/device/keyboard NOT_RUN.
-All27 findings OPEN,16 RAW manifest-only locally. M6-N01 OPEN, early0.6.0 != final0.6.1 hardware.
-Normal push_main authorized, other permissions false. CI no workflow configured/NOT_RUN.
-Stop for independent architect review; do not start M7C/M8 or activate anything automatically.
+Actual local ASR CPU whisper.cpp sourcev1.9.4 commit927cfce34f31707e17f2bff35c349632fb9e2c3a,
+binary1.9.4-dev SHA54d1e7bf2e36ec29bdf70b87a45e26158396d5004909d16d5ad76e51920b566c.
+Small multilingual revision5359861c739e955e79d9a303bcbc70fb988958b1,487601967bytes,
+SHA1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b. MIT; no signed-tag claim.
+CMake4.4.3 wheel pinned/project-local, no globalinstall/sudo/cloud. Own-sentinel filesystem/network +
+actual model sandbox PASS. Existing Apple say Lesya synthetic clear/short/reflective +silence/noise benchmark;
+clear/reflectiveWER0,shortWER0.5; human/private voice NOT_RUN. Model bytes <2.5GB, binaries/audio ignored.
+M4 record/candidate/edit/explicitinsert/explicitsend/genuineprovider E2E PASS interim, textonlyprovider.
+Reproducible scripts verify_m7c_asr_isolation.py/benchmark_m7c_asr.py/verify_m7c_voice_live.py.
+
+Pre-C fullPython569PASS before late fixes, latest36M7C offlinePASS/3browserPASS/46web/buildPASS/privacyPASS.
+New journal preview/confirm API validatesUSER/synthetic/revision/hash and journalwrite_in transaction,
+repeatoperation sameentry; no new journal schema. Browser preview/uncheckedconfirm PASS desktop/mobile.
+Fresh skill finish reviewer resolved2named UI fixes, dispositionSHIP. Documenter compared current build,
+incumbent matches; DESIGN preserved and pre-existing token/sidecar drift reported, not repaired.
+Single detector pre-existingM5border8px advisory outside scope; do not rerun/reworkworld.
+
+Next: finish skill documentation, complete current-source/schema/docs/fullpreC review, explicit stage/commit
+final C; full exact-C Python/web/build/Ajv/admission/docs/privacy/schema, actualASR+voice and52provider eval
+requests tiedtoC; review original synthetic output samples, public sanitized evidence/reports/state/devlog R;
+privacy/staged review, normal FF main push, verifyorigin==R, AWAITING_REVIEW stop.
+No reviewbranch/force/PAYG/newauth/deploy/realdata/clinical/M7D/M8. All27 findingsOPEN, RAW0, M6-N01OPEN
+(early0.6.0 not final0.6.1). Do not treat technicalPASS as clinical/rights/activation/architectACCEPT.

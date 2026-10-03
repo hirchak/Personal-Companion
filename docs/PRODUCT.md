@@ -1,7 +1,7 @@
 # Продукт і вимоги
 
 Початкові розділи описують продуктове бачення й baseline M0; це не загальне підтвердження реалізації.
-Чинні owner-рішення M7B і перевірений scope визначають останній розділ, contract та STATE/report.
+Чинні owner-рішення M7B/M7C і перевірений scope визначають останній розділ, contract та STATE/report.
 
 ## Призначення
 
@@ -87,3 +87,8 @@ M7B перевіряє synthetic engineering. Звичайний responder OFF �
 AI-відповіді; explicit synthetic demo має нейтральний deterministic mock. Live provider OFF,
 clinical active0, real private data OFF. M7C/M8 NOT_STARTED. Деталі й відкладені інтеграції —
 [M7B contract](M7B_CONTRACT.md) і [ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).
+
+
+## M7C owner scope — 2026-10-04
+
+M7C adds a neutral synthetic-only model voice to Free Conversation and Deep Session. Deep requests bind the agreed goal's exact revision and relevant earlier Free messages, not the entire history. User edits, pause, completion and goal history remain explicit. “Підсумувати” produces a reviewable candidate; continuing or closing is separate from selecting a USER-authored message for journal preview/confirmation. No conversation, assistant summary or model suggestion is automatically promoted to journal/memory. One Conversation Controller composes typed skills; no agent swarm or therapist/diagnosis claims. Primary UX distinguishes provider OFF, local fixture and authorized live synthetic test. Streaming is an uncommitted candidate until strict final validation. Budgets/receipts live under details. Real-user mode is OFF.

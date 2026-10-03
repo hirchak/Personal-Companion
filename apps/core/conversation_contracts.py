@@ -68,6 +68,13 @@ class Conversation(Strict):
         if d.utcoffset() is None or d.utcoffset().total_seconds()!=0:raise ValueError('UTC required')
         return v
 
+class InferenceSource(Strict):
+    job_id:UID
+    request_hash:Hash
+    provider_route:Literal['CODEX_SUBSCRIPTION','MINIMAX_TOKEN_PLAN','EXISTING_LOCAL','OFFLINE_FIXTURE']
+    model:Annotated[str,StringConstraints(min_length=1,max_length=100)]
+    response_hash:Hash
+
 class Message(Strict):
     schema_version: Literal[1]
     id: UID
@@ -76,9 +83,10 @@ class Message(Strict):
     raw_text: Annotated[str,StringConstraints(min_length=1,max_length=12000)]
     created_utc: str
     revision: Annotated[int,Field(ge=1)]
-    provenance: Literal['USER_AUTHORED','MOCK_SYNTHETIC']
+    provenance: Literal['USER_AUTHORED','MOCK_SYNTHETIC','MODEL_GENERATED']
     source_reference: VoiceSource|None
     source_message_id: UID|None
+    inference_reference: InferenceSource|None=None
     synthetic: bool
     privacy_class: Literal['PRIVATE_PERSONAL']
     _text=field_validator('raw_text')(SendMessage.bounded_text.__func__)

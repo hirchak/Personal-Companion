@@ -32,7 +32,8 @@ def check_conversations(c):
         for row in c.execute('SELECT * FROM conversation_messages'):
             m=Message.model_validate_json(row['payload'])
             if str(m.id)!=row['id'] or str(m.conversation_id)!=row['conversation_id']:raise ValueError()
-            if m.role=='ASSISTANT' and (m.provenance!='MOCK_SYNTHETIC' or not m.synthetic):raise ValueError()
+            if m.role=='ASSISTANT' and (m.provenance not in {'MOCK_SYNTHETIC','MODEL_GENERATED'} or not m.synthetic):raise ValueError()
+            if m.provenance=='MODEL_GENERATED' and not m.inference_reference:raise ValueError()
     except (ValueError,TypeError,ValidationError):raise SafeError('CONVERSATION_INTEGRITY') from None
 
 class Conversations:
@@ -103,7 +104,7 @@ class Conversations:
             raise SafeError('VOICE_SOURCE_STALE',409)
         if t['engine']=='deterministic-fake-local' and not self.synthetic_demo:raise SafeError('SYNTHETIC_SOURCE_DENIED',409)
 
-    def send(self,id,body:SendMessage):
+    def send(self,id,body:SendMessage,respond=True):
         mode=self.mode();op=str(body.operation_id);id=str(id);fp=digest(encode({'id':id,'request':body.model_dump(mode='json')}).encode())
         with self.store.transaction() as c:
             x=self.row(c,id);receipt=c.execute('SELECT * FROM conversation_receipts WHERE operation_id=?',(op,)).fetchone()
@@ -121,7 +122,7 @@ class Conversations:
             if seq>=2000:raise SafeError('CONVERSATION_MESSAGE_LIMIT',409)
             user=Message(schema_version=1,id=uid,conversation_id=x.id,role='USER',raw_text=body.text,created_utc=time,revision=1,provenance='USER_AUTHORED',source_reference=body.source_reference,source_message_id=None,synthetic=self.synthetic_demo,privacy_class='PRIVATE_PERSONAL')
             c.execute('INSERT INTO conversation_messages VALUES(?,?,?,?)',(str(uid),id,seq+1,encode(user.model_dump(mode='json'))))
-            if mode['synthetic_demo']:
+            if mode['synthetic_demo'] and respond:
                 # The controller chooses the sole allowed adapter; its output is data, not authority.
                 candidate=CandidateResponse.model_validate(self.responder.candidate())
                 response=Message(schema_version=1,id=uuid5(NAMESPACE,op+':assistant'),conversation_id=x.id,role=candidate.role,raw_text=candidate.text,created_utc=time,revision=1,provenance=candidate.provenance,source_reference=None,source_message_id=uid,synthetic=True,privacy_class='PRIVATE_PERSONAL')

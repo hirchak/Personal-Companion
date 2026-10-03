@@ -1,0 +1,329 @@
+{
+  "$defs": {
+    "ProviderContextPart": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "GOAL_REVISION",
+            "CURRENT_TURN",
+            "GOAL_DIGEST",
+            "DAILY_DIGEST",
+            "FTS_RAW",
+            "FILTER_RAW",
+            "CONFIRMED_MEMORY"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "title": "Source Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "text",
+        "source_refs"
+      ],
+      "title": "ProviderContextPart",
+      "type": "object"
+    },
+    "ProviderPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "FREE",
+            "DEEP"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "purpose": {
+          "enum": [
+            "REFLECT",
+            "GOAL_PROPOSAL",
+            "CLOSURE"
+          ],
+          "title": "Purpose",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true,
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "language": {
+          "const": "uk",
+          "title": "Language",
+          "type": "string"
+        },
+        "skills": {
+          "items": {
+            "$ref": "#/$defs/RuntimeSkill"
+          },
+          "title": "Skills",
+          "type": "array"
+        },
+        "context": {
+          "items": {
+            "$ref": "#/$defs/ProviderContextPart"
+          },
+          "title": "Context",
+          "type": "array"
+        },
+        "current_message_ref": {
+          "title": "Current Message Ref",
+          "type": "string"
+        },
+        "source_refs_allowed": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs Allowed",
+          "type": "array"
+        },
+        "goal_revision": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Goal Revision"
+        },
+        "tool_permissions": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 0,
+          "title": "Tool Permissions",
+          "type": "array"
+        },
+        "controller_frame_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Controller Frame Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "purpose",
+        "synthetic",
+        "language",
+        "skills",
+        "context",
+        "current_message_ref",
+        "source_refs_allowed",
+        "goal_revision",
+        "tool_permissions",
+        "controller_frame_hash"
+      ],
+      "title": "ProviderPayload",
+      "type": "object"
+    },
+    "RuntimeSkill": {
+      "additionalProperties": false,
+      "properties": {
+        "skill_id": {
+          "enum": [
+            "core_reflection",
+            "deep_session",
+            "goal_setting",
+            "session_closure"
+          ],
+          "title": "Skill Id",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "content_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "instructions": {
+          "title": "Instructions",
+          "type": "string"
+        }
+      },
+      "required": [
+        "skill_id",
+        "version",
+        "content_hash",
+        "instructions"
+      ],
+      "title": "RuntimeSkill",
+      "type": "object"
+    },
+    "SkillBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "skill_id": {
+          "enum": [
+            "core_reflection",
+            "deep_session",
+            "goal_setting",
+            "session_closure"
+          ],
+          "title": "Skill Id",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "content_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "skill_id",
+        "version",
+        "content_hash"
+      ],
+      "title": "SkillBinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "request_id": {
+      "format": "uuid",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "FREE",
+        "DEEP"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "purpose": {
+      "enum": [
+        "REFLECT",
+        "GOAL_PROPOSAL",
+        "CLOSURE"
+      ],
+      "title": "Purpose",
+      "type": "string"
+    },
+    "selected_skills": {
+      "items": {
+        "$ref": "#/$defs/SkillBinding"
+      },
+      "title": "Selected Skills",
+      "type": "array"
+    },
+    "context_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Context Hash",
+      "type": "string"
+    },
+    "retrieval_receipt_id": {
+      "format": "uuid",
+      "title": "Retrieval Receipt Id",
+      "type": "string"
+    },
+    "provider_route": {
+      "enum": [
+        "CODEX_SUBSCRIPTION",
+        "MINIMAX_TOKEN_PLAN",
+        "EXISTING_LOCAL",
+        "OFFLINE_FIXTURE"
+      ],
+      "title": "Provider Route",
+      "type": "string"
+    },
+    "provider_model": {
+      "title": "Provider Model",
+      "type": "string"
+    },
+    "consent_scope": {
+      "const": "M7C_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY",
+      "title": "Consent Scope",
+      "type": "string"
+    },
+    "synthetic": {
+      "const": true,
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "clinical_active": {
+      "const": 0,
+      "title": "Clinical Active",
+      "type": "integer"
+    },
+    "tools": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 0,
+      "title": "Tools",
+      "type": "array"
+    },
+    "timeout_seconds": {
+      "maximum": 120,
+      "minimum": 1,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "input_byte_budget": {
+      "maximum": 64000,
+      "minimum": 512,
+      "title": "Input Byte Budget",
+      "type": "integer"
+    },
+    "response_schema": {
+      "const": "M7C_CONVERSATION_CANDIDATE_V1",
+      "title": "Response Schema",
+      "type": "string"
+    },
+    "payload": {
+      "$ref": "#/$defs/ProviderPayload"
+    }
+  },
+  "required": [
+    "schema_version",
+    "request_id",
+    "mode",
+    "purpose",
+    "selected_skills",
+    "context_hash",
+    "retrieval_receipt_id",
+    "provider_route",
+    "provider_model",
+    "consent_scope",
+    "synthetic",
+    "clinical_active",
+    "tools",
+    "timeout_seconds",
+    "input_byte_budget",
+    "response_schema",
+    "payload"
+  ],
+  "title": "ConversationRequest",
+  "type": "object"
+}

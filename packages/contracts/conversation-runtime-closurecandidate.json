@@ -1,0 +1,43 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "discussed": {
+      "items": {
+        "maxLength": 600,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 4,
+      "title": "Discussed",
+      "type": "array"
+    },
+    "clearer": {
+      "maxLength": 1000,
+      "title": "Clearer",
+      "type": "string"
+    },
+    "unresolved": {
+      "maxLength": 600,
+      "title": "Unresolved",
+      "type": "string"
+    },
+    "possible_steps": {
+      "items": {
+        "maxLength": 600,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 3,
+      "title": "Possible Steps",
+      "type": "array"
+    }
+  },
+  "required": [
+    "discussed",
+    "clearer",
+    "unresolved",
+    "possible_steps"
+  ],
+  "title": "ClosureCandidate",
+  "type": "object"
+}

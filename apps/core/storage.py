@@ -10,7 +10,7 @@ from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 9
+SCHEMA = 10
 _ROOT_LOCKS = {}
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
@@ -182,6 +182,8 @@ class Store:
                 for sql in REFLECTION_TABLES:
                     c.execute(sql)
                 reflection_triggers(c)
+                from .conversation_controller import RUNTIME_TABLES
+                for sql in RUNTIME_TABLES:c.execute(sql)
                 from .practice import PRACTICE_TABLES
                 for sql in PRACTICE_TABLES:
                     c.execute(sql)
@@ -339,6 +341,7 @@ class Store:
                     dest.execute('UPDATE feedback_drafts SET approval=NULL')
                     dest.execute("UPDATE health_state SET generation=?,epoch=NULL,sequence=0,batch_hash=NULL,connection='SOURCE_RECONNECT_REQUIRED',blocked=1,permissions=?",(str(uuid4()),encode({k:'NOT_REQUESTED' for k in ('sleep','steps','exercise')})))
                     dest.execute("UPDATE ai_jobs SET state='CANCELLED',error='BACKUP_REAPPROVAL_REQUIRED' WHERE state IN ('QUEUED','RUNNING')")
+                    dest.execute('UPDATE conversation_inferences SET state="FAILED",revision=revision+1,payload=json_set(payload,"$.state","FAILED","$.error","BACKUP_REAPPROVAL_REQUIRED","$.revision",revision+1) WHERE state IN ("QUEUED","RUNNING")')
                     dest.execute("UPDATE transcripts SET state='FAILED',error='ASR_RESTORE_RETRY_REQUIRED' WHERE state IN ('TRANSCRIPTION_QUEUED','TRANSCRIBING')")
                     # Incomplete transfer is resumable on live Mac; a backup contains finalized originals.
                     dest.execute("UPDATE audio SET state='CANCELLED' WHERE state='UPLOADING'")
@@ -351,6 +354,8 @@ class Store:
                     check_conversations(dest)
                     from .reflection import check_reflection
                     check_reflection(dest)
+                    from .conversation_controller import check_inferences
+                    check_inferences(dest)
                     attachments=self.check_audio(dest)
                     meta = dict(dest.execute('SELECT * FROM vault_meta').fetchone())
                 finally: dest.close()
@@ -364,7 +369,7 @@ class Store:
                     shutil.copyfile(source,folder/a['file']);os.chmod(folder/a['file'],0o600)
                     if (folder/a['file']).stat().st_size!=a['byte_size'] or digest((folder/a['file']).read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
                     with (folder/a['file']).open('rb') as file:os.fsync(file.fileno())
-            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M7B',
+            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M7C',
                         'created_at_utc': now(), 'attachments': attachments,
                         'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
             (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
@@ -385,7 +390,7 @@ class Store:
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
             m=json.loads((b/'manifest.json').read_text())
-            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,6,7,8,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,6,7,8,9,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
             attachments=m['attachments']
             if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
             expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
@@ -402,7 +407,10 @@ class Store:
                     check_conversations(source)
                 if m['schema_version']>=9:
                     from .reflection import check_reflection
-                    check_reflection(source)
+                    check_reflection(source,enforce_current_unique=m['schema_version']>=10)
+                if m['schema_version']>=10:
+                    from .conversation_controller import check_inferences
+                    check_inferences(source)
                 required=cls.check_audio(source)
                 if attachments!=required:raise SafeError('AUDIO_REFERENCE_INTEGRITY')
             if attachments:

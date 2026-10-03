@@ -519,6 +519,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/conversations/{conversation_id}/inference": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Conversation Infer */
+        post: operations["conversation_infer_api_v1_conversations__conversation_id__inference_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/inference/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Inference Get */
+        get: operations["inference_get_api_v1_conversations__conversation_id__inference__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/inference/{job_id}/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Inference Action */
+        post: operations["inference_action_api_v1_conversations__conversation_id__inference__job_id__actions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/journal-point/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Journal Point Preview */
+        post: operations["journal_point_preview_api_v1_conversations__conversation_id__journal_point_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/journal-point/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Journal Point Confirm */
+        post: operations["journal_point_confirm_api_v1_conversations__conversation_id__journal_point_confirm_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/practices/catalog": {
         parameters: {
             query?: never;
@@ -1337,7 +1422,7 @@ export interface components {
              * @default DISABLED
              * @enum {string}
              */
-            mode: "DISABLED" | "FAKE";
+            mode: "DISABLED" | "FAKE" | "LOCAL";
             /**
              * Language
              * @default uk
@@ -1464,6 +1549,11 @@ export interface components {
              * @default false
              */
             prepare_synthetic_digests: boolean;
+            /**
+             * Timezone
+             * @default Europe/Warsaw
+             */
+            timezone: string;
             /**
              * Confirmed Memories
              * @default []
@@ -2035,6 +2125,77 @@ export interface components {
             end_offset?: number | null;
             /** Fields */
             fields?: components["schemas"]["SleepFields"] | components["schemas"]["StepsFields"] | components["schemas"]["ExerciseFields"] | null;
+        };
+        /** InferenceAction */
+        InferenceAction: {
+            /**
+             * Operation Id
+             * Format: uuid
+             */
+            operation_id: string;
+            /** Base Revision */
+            base_revision: number;
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "cancel" | "retry";
+        };
+        /** InferenceStart */
+        InferenceStart: {
+            /**
+             * Operation Id
+             * Format: uuid
+             */
+            operation_id: string;
+            /** Base Revision */
+            base_revision: number;
+            /** Text */
+            text: string;
+            /**
+             * Purpose
+             * @default REFLECT
+             * @enum {string}
+             */
+            purpose: "REFLECT" | "GOAL_PROPOSAL" | "CLOSURE";
+            /**
+             * Synthetic Test Ack
+             * @constant
+             */
+            synthetic_test_ack: true;
+            source_reference?: components["schemas"]["VoiceSource"] | null;
+        };
+        /** JournalPointConfirm */
+        JournalPointConfirm: {
+            /**
+             * Message Id
+             * Format: uuid
+             */
+            message_id: string;
+            /** Source Revision */
+            source_revision: number;
+            /**
+             * Operation Id
+             * Format: uuid
+             */
+            operation_id: string;
+            /** Preview Hash */
+            preview_hash: string;
+            /**
+             * User Confirmed
+             * @constant
+             */
+            user_confirmed: true;
+        };
+        /** JournalPointPreview */
+        JournalPointPreview: {
+            /**
+             * Message Id
+             * Format: uuid
+             */
+            message_id: string;
+            /** Source Revision */
+            source_revision: number;
         };
         /** MemoryChange */
         MemoryChange: {
@@ -3554,6 +3715,179 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["ConversationAction"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    conversation_infer_api_v1_conversations__conversation_id__inference_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InferenceStart"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    inference_get_api_v1_conversations__conversation_id__inference__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    inference_action_api_v1_conversations__conversation_id__inference__job_id__actions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InferenceAction"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    journal_point_preview_api_v1_conversations__conversation_id__journal_point_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JournalPointPreview"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    journal_point_confirm_api_v1_conversations__conversation_id__journal_point_confirm_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JournalPointConfirm"];
             };
         };
         responses: {

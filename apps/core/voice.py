@@ -36,7 +36,7 @@ class Voice:
         self.journal,self.store,self.sync=journal,journal.store,sync
         self.store.attachment_lock=getattr(self.store,'attachment_lock',threading.RLock())
         self.lock=self.store.attachment_lock
-        self.engines={'DISABLED':DisabledLocalASR(),'FAKE':FakeLocalASR()}
+        self.engines={'DISABLED':DisabledLocalASR(),'FAKE':FakeLocalASR(),'LOCAL':DisabledLocalASR()}
         self.converter=PCMConverter();self.cancel_events={};self.timeout=15
         self.root=self.store.root/'audio';self.staging=self.store.root/'audio-staging'
         with self.lock:
@@ -67,7 +67,7 @@ class Voice:
         with self.lock,self.store.connect() as c:
             device=self._auth(c,auth)
             rows=c.execute('SELECT * FROM audio WHERE state!=?'+(' AND device_id=?' if device else '')+' ORDER BY created DESC LIMIT 100', ['DELETED']+([device] if device else [])).fetchall()
-            return {'items':[self.view(c,r) for r in rows],'actual_backend':self.engines['DISABLED'].metadata()}
+            return {'items':[self.view(c,r) for r in rows],'actual_backend':self.engines['LOCAL'].metadata()}
     def get(self,id,auth=None):
         with self.lock,self.store.connect() as c:return self.view(c,self._row(c,id,auth))
 

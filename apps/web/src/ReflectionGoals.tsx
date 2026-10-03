@@ -32,14 +32,18 @@ export function ReflectionGoals({
   csrf,
   onStart,
   onChanged,
+  initialText = "",
+  onPropose,
 }: {
   csrf: string;
   onStart: (g: ReflectionGoal) => void;
   onChanged: () => void;
+  initialText?: string;
+  onPropose?: (text: string) => void;
 }) {
   const [goals, setGoals] = useState<ReflectionGoal[]>([]),
     [editing, setEditing] = useState<ReflectionGoal | null>(null),
-    [text, setText] = useState(""),
+    [text, setText] = useState(initialText),
     [agreed, setAgreed] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -132,6 +136,15 @@ export function ReflectionGoals({
           />
           Це моя погоджена ціль
         </label>
+        {onPropose && !editing && (
+          <button
+            type="button"
+            disabled={busy || !text.trim()}
+            onClick={() => onPropose(text)}
+          >
+            Запропонувати формулювання
+          </button>
+        )}
         <button className="primary" disabled={busy || !agreed || !text.trim()}>
           {editing ? "Зберегти нову редакцію" : "Створити ціль"}
         </button>
@@ -348,27 +361,33 @@ export function DeepContext({
             />
           </label>
         </div>
-        <label>
-          Бюджет контексту
-          <input
-            type="number"
-            min={128}
-            max={12000}
-            value={budget}
-            onChange={(e) => setBudget(Number(e.target.value))}
-          />
-        </label>
+        <details className="context-diagnostics">
+          <summary>Діагностика контексту</summary>
+          <label>
+            Бюджет контексту
+            <input
+              type="number"
+              min={128}
+              max={12000}
+              value={budget}
+              onChange={(e) => setBudget(Number(e.target.value))}
+            />
+          </label>
+        </details>
         <button disabled={busy} onClick={() => void build()}>
           {syntheticDemo ? "Підготувати демо-контекст" : "Підготувати контекст"}
         </button>
         {error && <p role="alert">{error}</p>}
         {result && (
           <>
-            <p>
-              Вибрано джерел: {result.receipt.sources.length} · бюджет{" "}
-              {result.receipt.used_tokens_upper_bound}/
-              {result.receipt.token_budget} (консервативна оцінка).
-            </p>
+            <details>
+              <summary>Прив’язки джерел і бюджет</summary>
+              <p>
+                Вибрано джерел: {result.receipt.sources.length} · бюджет{" "}
+                {result.receipt.used_tokens_upper_bound}/
+                {result.receipt.token_budget} (консервативна оцінка).
+              </p>
+            </details>
             {result.context.map((p: any, i: number) => (
               <article key={i}>
                 <h3>

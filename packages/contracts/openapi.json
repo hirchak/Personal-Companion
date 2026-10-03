@@ -1457,6 +1457,256 @@
         }
       }
     },
+    "/api/v1/conversations/{conversation_id}/inference": {
+      "post": {
+        "summary": "Conversation Infer",
+        "operationId": "conversation_infer_api_v1_conversations__conversation_id__inference_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InferenceStart"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/inference/{job_id}": {
+      "get": {
+        "summary": "Inference Get",
+        "operationId": "inference_get_api_v1_conversations__conversation_id__inference__job_id__get",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/inference/{job_id}/actions": {
+      "post": {
+        "summary": "Inference Action",
+        "operationId": "inference_action_api_v1_conversations__conversation_id__inference__job_id__actions_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InferenceAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/journal-point/preview": {
+      "post": {
+        "summary": "Journal Point Preview",
+        "operationId": "journal_point_preview_api_v1_conversations__conversation_id__journal_point_preview_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JournalPointPreview"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/journal-point/confirm": {
+      "post": {
+        "summary": "Journal Point Confirm",
+        "operationId": "journal_point_confirm_api_v1_conversations__conversation_id__journal_point_confirm_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JournalPointConfirm"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/practices/catalog": {
       "get": {
         "summary": "Practice Catalog",
@@ -3550,7 +3800,8 @@
             "type": "string",
             "enum": [
               "DISABLED",
-              "FAKE"
+              "FAKE",
+              "LOCAL"
             ],
             "title": "Mode",
             "default": "DISABLED"
@@ -3831,6 +4082,13 @@
             "type": "boolean",
             "title": "Prepare Synthetic Digests",
             "default": false
+          },
+          "timezone": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Timezone",
+            "default": "Europe/Warsaw"
           },
           "confirmed_memories": {
             "items": {
@@ -5328,6 +5586,150 @@
           "status"
         ],
         "title": "HealthRecord"
+      },
+      "InferenceAction": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Revision"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "cancel",
+              "retry"
+            ],
+            "title": "Action"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_revision",
+          "action"
+        ],
+        "title": "InferenceAction"
+      },
+      "InferenceStart": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Revision"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "purpose": {
+            "type": "string",
+            "enum": [
+              "REFLECT",
+              "GOAL_PROPOSAL",
+              "CLOSURE"
+            ],
+            "title": "Purpose",
+            "default": "REFLECT"
+          },
+          "synthetic_test_ack": {
+            "type": "boolean",
+            "const": true,
+            "title": "Synthetic Test Ack"
+          },
+          "source_reference": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VoiceSource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_revision",
+          "text",
+          "synthetic_test_ack"
+        ],
+        "title": "InferenceStart"
+      },
+      "JournalPointConfirm": {
+        "properties": {
+          "message_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Message Id"
+          },
+          "source_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Source Revision"
+          },
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "preview_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Preview Hash"
+          },
+          "user_confirmed": {
+            "type": "boolean",
+            "const": true,
+            "title": "User Confirmed"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "message_id",
+          "source_revision",
+          "operation_id",
+          "preview_hash",
+          "user_confirmed"
+        ],
+        "title": "JournalPointConfirm"
+      },
+      "JournalPointPreview": {
+        "properties": {
+          "message_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Message Id"
+          },
+          "source_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Source Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "message_id",
+          "source_revision"
+        ],
+        "title": "JournalPointPreview"
       },
       "MemoryChange": {
         "properties": {

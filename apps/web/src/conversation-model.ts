@@ -24,21 +24,24 @@ export type ChatMessage = {
   raw_text: string;
   created_utc: string;
   revision: number;
-  provenance: "USER_AUTHORED" | "MOCK_SYNTHETIC";
+  provenance: "USER_AUTHORED" | "MOCK_SYNTHETIC" | "MODEL_GENERATED";
   synthetic: boolean;
 };
 export type ConversationPage = {
   conversation: Conversation;
   messages: ChatMessage[];
   next_after: number | null;
-  responder: "OFF" | "MOCK_SYNTHETIC";
+  inference_job?: InferenceJob | null;
+  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE";
 };
 export type ConversationStatus = {
   synthetic_demo: boolean;
-  responder: "OFF" | "MOCK_SYNTHETIC";
+  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE";
   actual_asr: string;
   clinical_active: 0;
-  live_provider_calls: false;
+  live_provider_calls: boolean;
+  mode?: "OFF" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE";
+  provider?: { route: string; model: string; live: boolean };
 };
 export function validChatText(text: string) {
   return text.trim().length > 0 && text.length <= 12000 && !text.includes("\0");
@@ -60,3 +63,30 @@ export function chatError(code: string) {
     return "Транскрипт змінився або недоступний у цьому режимі. Перевірте його ще раз; текст залишився в полі.";
   return "Не вдалося завершити дію. Текст залишився тут; перевірте локальний сервер і повторіть.";
 }
+
+export type InferenceJob = {
+  id: string;
+  conversation_id: string;
+  state: "QUEUED" | "RUNNING" | "COMPLETED" | "FAILED" | "CANCELLED";
+  revision: number;
+  purpose: string;
+  error: string | null;
+  partial_candidate?: string | null;
+  candidate: {
+    assistant_text: string;
+    source_refs: string[];
+    goal_suggestion: string | null;
+    closure: {
+      discussed: string[];
+      clearer: string;
+      unresolved: string;
+      possible_steps: string[];
+    } | null;
+    topics: string[];
+  } | null;
+  request_metadata: {
+    provider_route: string;
+    provider_model: string;
+    retrieval_receipt_id: string;
+  };
+};

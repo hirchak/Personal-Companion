@@ -250,3 +250,10 @@ Original synthetic screenshots/metrics only in public evidence. Real audio/conve
 real local ASR/physical virtual keyboard/provider/clinical/deploy tests NOT_RUN. Model-generated digest
 inference/tokenizer, consented narrow journal/sleep/health tools, clinical skills and vector retrieval
 DEFERRED for the precise reasons in [M7B contract](M7B_CONTRACT.md). No external embeddings.
+
+
+## M7C owner scope — 2026-10-04
+
+Deterministic/offline: `.venv/bin/python -m pytest -q` (full M1–M7B plus M7C, including Chromium), `npm --prefix apps/web run build`, `npm --prefix apps/web test`, `node scripts/verify_m7a_schemas.mjs`, `.venv/bin/python scripts/m7_admission.py`, `.venv/bin/python scripts/check_docs.py --json`, generated schema parity/context and privacy checks. M7C tests cover source/hash/goal binding, provider OFF, no automatic writes/tools/fallback, output rejection, cancellation/timeout/retry, persistent100-call ledger, restart/backup, N01 supersession/legacy repair, IANA/DST/day identity, ASR fixture boundary and explicit USER journal preview/confirm. Offline FixtureProvider is never live evidence.
+
+Separated explicit live tools (not pytest): `PYTHONPATH=. .venv/bin/python scripts/evaluate_m7c_providers.py --model gpt-6-luna --implementation-sha <C>` (repeat for selected existing-auth model), `PYTHONPATH=. .venv/bin/python scripts/verify_m7c_voice_live.py --implementation-sha <C>`, `PYTHONPATH=. .venv/bin/python scripts/verify_m7c_asr_isolation.py`, `PYTHONPATH=. .venv/bin/python scripts/benchmark_m7c_asr.py`. These require the authorized synthetic environment; ledger never resets. Full eval21 cases/26 turns per model; no LLM quality judge. Actual ASR measures original Lesya TTS vs known references; silence/noise have no WER/CER. Human UA/device keyboard/clinical/real-data tests remain NOT_RUN. Final C association and command exit statuses are recorded in reports/evidence/M7C; tests PASS do not activate modules.

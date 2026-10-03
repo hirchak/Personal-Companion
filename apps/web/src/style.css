@@ -1643,3 +1643,23 @@ footer {
     );
   }
 }
+
+.inference-panel {
+  padding: 16px 8px;
+  flex-shrink: 0;
+}
+.inference-panel p,
+.inference-panel li {
+  overflow-wrap: anywhere;
+}
+.inference-panel details,
+.context-diagnostics {
+  margin: 12px 0;
+}
+.inference-panel summary,
+.context-diagnostics summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.journal-point-choice { display: flex; align-items: flex-start; gap: .65rem; margin: .8rem 0; overflow-wrap: anywhere; }

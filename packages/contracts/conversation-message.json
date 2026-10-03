@@ -1,5 +1,50 @@
 {
   "$defs": {
+    "InferenceSource": {
+      "additionalProperties": false,
+      "properties": {
+        "job_id": {
+          "format": "uuid",
+          "title": "Job Id",
+          "type": "string"
+        },
+        "request_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Request Hash",
+          "type": "string"
+        },
+        "provider_route": {
+          "enum": [
+            "CODEX_SUBSCRIPTION",
+            "MINIMAX_TOKEN_PLAN",
+            "EXISTING_LOCAL",
+            "OFFLINE_FIXTURE"
+          ],
+          "title": "Provider Route",
+          "type": "string"
+        },
+        "model": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "response_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Response Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "job_id",
+        "request_hash",
+        "provider_route",
+        "model",
+        "response_hash"
+      ],
+      "title": "InferenceSource",
+      "type": "object"
+    },
     "VoiceSource": {
       "additionalProperties": false,
       "properties": {
@@ -83,7 +128,8 @@
     "provenance": {
       "enum": [
         "USER_AUTHORED",
-        "MOCK_SYNTHETIC"
+        "MOCK_SYNTHETIC",
+        "MODEL_GENERATED"
       ],
       "title": "Provenance",
       "type": "string"
@@ -109,6 +155,17 @@
         }
       ],
       "title": "Source Message Id"
+    },
+    "inference_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InferenceSource"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "synthetic": {
       "title": "Synthetic",

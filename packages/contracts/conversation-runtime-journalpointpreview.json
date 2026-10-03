@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message_id": {
+      "format": "uuid",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "source_revision": {
+      "minimum": 1,
+      "title": "Source Revision",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "message_id",
+    "source_revision"
+  ],
+  "title": "JournalPointPreview",
+  "type": "object"
+}

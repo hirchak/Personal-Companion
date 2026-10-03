@@ -20,6 +20,10 @@ def main():
             s.add_argument('--mode',choices=['local','m2-synthetic'],default='local')
             s.add_argument('--test-tls',action='store_true')
             s.add_argument('--synthetic-conversations',action='store_true',help='Explicit deterministic conversation demo, marked synthetic root only')
+            s.add_argument('--m7c-synthetic',action='store_true',help='Goal-scoped synthetic neutral runtime; normal/private mode unavailable')
+            s.add_argument('--conversation-provider',choices=['OFF','CODEX_SUBSCRIPTION'],default='OFF')
+            s.add_argument('--conversation-model',choices=['gpt-6-luna','gpt-6-sol','gpt-6.1-sol'],default='gpt-6-luna')
+            s.add_argument('--local-asr',action='store_true',help='Enable checksum-pinned isolated project-local ASR for synthetic audio')
             s.add_argument('--synthetic-practices',action='store_true',help='Explicit neutral practice fixtures on marked synthetic root only')
         if name == 'init':
             s.add_argument('--seed', action='store_true')
@@ -62,7 +66,15 @@ def main():
                 tls={'ssl_keyfile':str(key),'ssl_certfile':str(cert)}
                 scheme='https'
                 print('Synthetic TLS test only: no trust installation; actual Android route OFF.',flush=True)
-            app = create_app(args.root, args.port,m2=args.mode=='m2-synthetic',scheme=scheme,synthetic_practices=args.synthetic_practices,synthetic_conversations=args.synthetic_conversations)
+            if (args.conversation_provider!='OFF' or args.local_asr) and not args.m7c_synthetic:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED')
+            provider=None;local_asr=None
+            if args.conversation_provider=='CODEX_SUBSCRIPTION':
+                from .codex_conversation_provider import CodexConversationProvider
+                provider=CodexConversationProvider(args.conversation_model)
+            if args.local_asr:
+                from .whisper_local_asr import WhisperLocalASR
+                local_asr=WhisperLocalASR()
+            app = create_app(args.root, args.port,m7c_synthetic=args.m7c_synthetic,conversation_provider=provider,local_asr=local_asr,m2=args.mode=='m2-synthetic',scheme=scheme,synthetic_practices=args.synthetic_practices,synthetic_conversations=args.synthetic_conversations or args.m7c_synthetic)
             print(f'Open {scheme}://127.0.0.1:{args.port}\nOne-time unlock code (5 min): {app.state.auth.code}', flush=True)
             print('Stop: Ctrl+C. Lock/logout requires restart for a new one-time code.', flush=True)
             uvicorn.run(app, host='127.0.0.1', port=args.port, access_log=False, log_level='critical', **tls)

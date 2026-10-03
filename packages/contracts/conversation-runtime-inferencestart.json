@@ -1,0 +1,96 @@
+{
+  "$defs": {
+    "VoiceSource": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "VOICE_TRANSCRIPT",
+          "title": "Kind",
+          "type": "string"
+        },
+        "transcript_id": {
+          "format": "uuid",
+          "title": "Transcript Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "audio_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Audio Hash",
+          "type": "string"
+        },
+        "text_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Text Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "transcript_id",
+        "revision",
+        "audio_hash",
+        "text_hash"
+      ],
+      "title": "VoiceSource",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "base_revision": {
+      "minimum": 1,
+      "title": "Base Revision",
+      "type": "integer"
+    },
+    "text": {
+      "maxLength": 12000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "purpose": {
+      "default": "REFLECT",
+      "enum": [
+        "REFLECT",
+        "GOAL_PROPOSAL",
+        "CLOSURE"
+      ],
+      "title": "Purpose",
+      "type": "string"
+    },
+    "synthetic_test_ack": {
+      "const": true,
+      "title": "Synthetic Test Ack",
+      "type": "boolean"
+    },
+    "source_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/VoiceSource"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "operation_id",
+    "base_revision",
+    "text",
+    "synthetic_test_ack"
+  ],
+  "title": "InferenceStart",
+  "type": "object"
+}

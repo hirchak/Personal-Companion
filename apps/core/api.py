@@ -19,6 +19,8 @@ from .feedback import Feedback, PersonalSpace
 from .m5_contracts import CreativeSelection, CreativeDownload, FeedbackSave, FeedbackExact, FeedbackExport, SpaceUpdate
 from .health import HealthImport
 from .health_contracts import HealthApply, HealthAction
+from .conversation_controller import ConversationController
+from .conversation_runtime_contracts import InferenceStart,InferenceAction,JournalPointPreview,JournalPointConfirm
 from .reflection import Reflection
 from .reflection_contracts import GoalCreate, GoalChange, ContextRequest, Expansion, MessageEdit
 from .conversation import Conversations
@@ -66,8 +68,9 @@ class Auth:
             return s
 
 
-def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False):
+def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None):
     if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
+    if (conversation_provider is not None or local_asr is not None) and not m7c_synthetic:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED',403)
     store = Store(root)
     journal, auth = Journal(store, clock), Auth(clock)
     app = FastAPI(title='M1 Local Journal', version='1.0.0', docs_url=None, redoc_url=None, openapi_url=None)
@@ -88,6 +91,11 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.conversations = conversations
     reflection = Reflection(conversations)
     app.state.reflection = reflection
+    controller=ConversationController(conversations,conversation_provider) if m7c_synthetic else None
+    app.state.conversation_controller=controller
+    if local_asr is not None:
+        voice.engines['LOCAL']=local_asr
+        voice.timeout=90
     host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
@@ -217,7 +225,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     def conversation_message_edit(conversation_id: UUID,message_id: UUID,body: MessageEdit): return reflection.edit_message(conversation_id,message_id,body)
 
     @app.get('/api/v1/conversations/status')
-    def conversation_status(): return conversations.mode()
+    def conversation_status(): return controller.status() if controller else conversations.mode()
 
     @app.get('/api/v1/conversations')
     def conversation_list(archived: bool = False, offset: int = Query(0,ge=0)): return conversations.list(archived,offset)
@@ -226,13 +234,38 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     def conversation_create(body: NewConversation): return conversations.create(body)
 
     @app.get('/api/v1/conversations/{conversation_id}')
-    def conversation_get(conversation_id: UUID, after: int = Query(0,ge=0)): return conversations.get(conversation_id,after)
+    def conversation_get(conversation_id: UUID, after: int = Query(0,ge=0)): return controller.page(conversation_id) if controller and after==0 else conversations.get(conversation_id,after)
 
     @app.post('/api/v1/conversations/{conversation_id}/messages')
     def conversation_send(conversation_id: UUID, body: SendMessage): return conversations.send(conversation_id,body)
 
     @app.post('/api/v1/conversations/{conversation_id}/actions')
     def conversation_action(conversation_id: UUID, body: ConversationAction): return conversations.action(conversation_id,body)
+
+    @app.post('/api/v1/conversations/{conversation_id}/inference')
+    def conversation_infer(conversation_id:UUID,body:InferenceStart):
+        if not controller:raise SafeError('M7C_RUNTIME_OFF',403)
+        return controller.send(conversation_id,body)
+
+    @app.get('/api/v1/conversations/{conversation_id}/inference/{job_id}')
+    def inference_get(conversation_id:UUID,job_id:UUID):
+        if not controller:raise SafeError('M7C_RUNTIME_OFF',403)
+        return controller.get(conversation_id,job_id)
+
+    @app.post('/api/v1/conversations/{conversation_id}/inference/{job_id}/actions')
+    def inference_action(conversation_id:UUID,job_id:UUID,body:InferenceAction):
+        if not controller:raise SafeError('M7C_RUNTIME_OFF',403)
+        return controller.action(conversation_id,job_id,body)
+
+    @app.post('/api/v1/conversations/{conversation_id}/journal-point/preview')
+    def journal_point_preview(conversation_id:UUID,body:JournalPointPreview):
+        if not controller:raise SafeError('M7C_RUNTIME_OFF',403)
+        return controller.journal_preview(conversation_id,body)
+
+    @app.post('/api/v1/conversations/{conversation_id}/journal-point/confirm')
+    def journal_point_confirm(conversation_id:UUID,body:JournalPointConfirm):
+        if not controller:raise SafeError('M7C_RUNTIME_OFF',403)
+        return controller.journal_confirm(journal,conversation_id,body)
 
     @app.get('/api/v1/practices/catalog')
     def practice_catalog(): return practices.catalog()

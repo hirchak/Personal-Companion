@@ -108,3 +108,8 @@ journal/sleep/health tool activation (real private data permission OFF), vector 
 real local ASR/device keyboard smoke (no installed authorized model/private audio/phone test).
 Foundation/stubs and synthetic tests виконуються зараз; ці gaps не блокують незалежні M7B tests.
 M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).
+
+
+## M7C owner scope — 2026-10-04
+
+M7B external ACCEPT — synthetic engineering scope, C f143dc9f82bb356ca10cbb4034cb8126ecf42aa3 / R73ec6064107d3d25475bb7454d96a2bd964ee77c. M7C is the currently authorized bounded preparation/runtime-evaluation goal, IN_PROGRESS until final C/R evidence; earlier M7B “M7C NOT_STARTED/live OFF” text is its historical checkpoint. M7C implements neutral controller, N01/N02, genuine synthetic provider evaluation and local ASR. Deferred: human/private voice quality and final hardware gate, real-user/provider activation, model-derived digest generation/tokenizer, clinical skills and all27 research admissions, MiniMax pending safe existing route, optional embeddings pending measured-gap ADR. M7D/M8 NOT_STARTED; no automatic continuation.

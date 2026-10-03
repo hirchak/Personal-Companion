@@ -1,0 +1,39 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message_id": {
+      "format": "uuid",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "source_revision": {
+      "minimum": 1,
+      "title": "Source Revision",
+      "type": "integer"
+    },
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "preview_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Preview Hash",
+      "type": "string"
+    },
+    "user_confirmed": {
+      "const": true,
+      "title": "User Confirmed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "message_id",
+    "source_revision",
+    "operation_id",
+    "preview_hash",
+    "user_confirmed"
+  ],
+  "title": "JournalPointConfirm",
+  "type": "object"
+}

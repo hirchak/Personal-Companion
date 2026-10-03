@@ -122,3 +122,8 @@ vectors/embeddings відсутні, external embeddings заборонені. L
 Один controller/одна model voice, typed skill stubs, no swarm; no automatic conversation→journal/memory.
 Live provider OFF, clinical active0, real private data OFF; M7C/M8 NOT_STARTED.
 Канонічний [contract](M7B_CONTRACT.md), [owner ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).
+
+
+## M7C owner scope — 2026-10-04
+
+M7C retains the Python/React/SQLite modular monolith, M7B raw/context/goal domains and M4 PCM/candidate pipeline. conversation_controller.py is the only model dispatch authority; conversation_runtime_contracts.py defines strict typed input/output, conversation_skills.py deterministic composition. Codex adapter uses current app-server stdio with ephemeral no-root thread, disabled tool features, deny-root/minimal-read permission profile, sanitized environment, fixed argv/shell=False, bounded IO/timeout/cancel and no fallback. Existing ChatGPT auth stays in the installed CLI. Host CLI working agreements are still injected: this is disclosed rather than claimed to be pure payload-only. Local whisper.cpp runs CPU through the M4 engine interface with pinned binary/model, filesystem and network sandbox and no cloud. ASR downloads/cache/corpus are ignored. Application defaults remain provider OFF; --m7c-synthetic plus explicit route is required. No auth/transport/crypto/storage permission weakening, PWA recorder rewrite, deployment or real-vault migration.

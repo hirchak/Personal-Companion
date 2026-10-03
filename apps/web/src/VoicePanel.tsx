@@ -90,6 +90,7 @@ export function VoicePanel({
     [text, setText] = useState<Record<string, string>>({}),
     [retention, setRetention] = useState<Record<string, string>>({});
   const [rescuePassword, setRescuePassword] = useState("");
+  const [localAvailable, setLocalAvailable] = useState(false);
   const recorder = useRef<PCMRecorder | null>(null),
     alive = useRef(true),
     cancelled = useRef(false),
@@ -136,7 +137,12 @@ export function VoicePanel({
           retention: a.retention,
           uploaded: a.uploaded,
         }))
-      : (await call("/audio")).items;
+      : await (async () => {
+          const data = await call("/audio");
+          if (alive.current)
+            setLocalAvailable(data.actual_backend?.available === true);
+          return data.items;
+        })();
     if (alive.current) setItems(rows);
     return rows;
   }
@@ -304,7 +310,12 @@ export function VoicePanel({
   async function transcribe(item: Item) {
     await action(item.id, async () => {
       const result = await call(`/audio/${item.id}/transcribe`, {
-        mode: fake && allowSyntheticAsr ? "FAKE" : "DISABLED",
+        mode:
+          fake && allowSyntheticAsr
+            ? "FAKE"
+            : localAvailable
+              ? "LOCAL"
+              : "DISABLED",
         language: "uk",
       });
       if (phone)

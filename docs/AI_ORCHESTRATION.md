@@ -106,3 +106,8 @@ Deep UX показує ціль/revision і відмінність current conve
 editable goals/history/pause/complete працюють незалежно від provider. Responder OFF у звичайному
 режимі, explicit synthetic-only deterministic candidate у demo. Live provider OFF, clinical active0,
 real private data OFF, M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).
+
+
+## M7C owner scope — 2026-10-04
+
+One deterministic Conversation Controller → existing Context Builder → versioned skill registry → one provider voice → strict ConversationCandidate validation. Active neutral skills: core_reflection, deep_session (Deep only), goal_setting (explicit proposal only), session_closure (explicit closure only). cbt_reflection, worry_rumination, sleep_review, nightmare_review and grounding remain OFF. Registry and controller frame are original authored, version/hash bound. Goal suggestions are inert until separate user preview/edit/agreement; closure is bounded and reviewable. Model output cannot dispatch tools, start practices, edit goals or write journal/memory/health. Historical instructions are untrusted source data. Receipt replay, source revision, conversation revision and skill/frame hashes are checked before and after inference. Opaque sN source aliases replace local IDs in provider payloads. QUEUED/RUNNING/COMPLETED/FAILED/CANCELLED, one foreground response, bounded timeout, cancellation and same-request explicit retry; no implicit retry or provider fallback. Any invalid final structure/ref/purpose fails without assistant commit. This is synthetic-only owner-authorized evaluation, not M3 general runtime activation.

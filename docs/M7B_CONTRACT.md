@@ -68,3 +68,8 @@ synthetic screenshots, privacy/staged review. New final C after addenda → full
 Live provider OFF; clinical active0; real private data OFF; no auth/billing/transport/crypto/PWA-recorder changes.
 All27 findings OPEN,16 RAW manifest-only locally, primary-source/rights limits unchanged.
 M6-N01 OPEN: early0.6.0 hardware PASS is not final0.6.1 verification. M7C/M8 NOT_STARTED.
+
+
+## M7C owner scope — 2026-10-04
+
+External owner/architect verdict is durably recorded in [M7B_ARCHITECT_REVIEW](../reports/M7B_ARCHITECT_REVIEW.md): ACCEPT — synthetic engineering only. Its original live OFF/M7C NOT_STARTED clauses describe the completed M7B checkpoint. The separately authorized current M7C scope is [M7C_CONTRACT](M7C_CONTRACT.md). N01 single CURRENT/supersession and N02 IANA-local logical-day/DST are fixed forward in M7C; close only with exact-C evidence, never retroactively claim those fixes at M7B C.

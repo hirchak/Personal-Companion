@@ -3,6 +3,7 @@ from typing import Annotated,Literal
 from pydantic import Field,StringConstraints,field_validator
 from .conversation_contracts import UID,Hash,Conversation,SendMessage
 from scripts.m7_admission import Strict,key_closed
+from .logical_day import OWNER_REFERENCE_TIMEZONE,validate_timezone
 
 class GoalRef(Strict):
     id:UID
@@ -58,6 +59,8 @@ class ContextRequest(Strict):
     byte_budget:Annotated[int,Field(ge=512,le=48000)]=8000
     max_sources:Annotated[int,Field(ge=1,le=50)]=16
     prepare_synthetic_digests:bool=False
+    timezone:Annotated[str,StringConstraints(min_length=1,max_length=100)]=OWNER_REFERENCE_TIMEZONE
+    _timezone=field_validator('timezone')(validate_timezone)
     confirmed_memories:Annotated[list[GoalRef],Field(max_length=8)]=[]
     memory_scope:Literal['USER_CONFIRMED_EXPLICIT']|None=None
     @field_validator('window_start','window_end')
@@ -89,6 +92,9 @@ class DerivedDigest(Strict):
     generator_version:Literal['SYNTHETIC_EXCERPT_V1']
     generator_kind:Literal['DETERMINISTIC_FIXTURE_NOT_LLM']
     goal:GoalRef|None
+    timezone:str|None=None
+    logical_local_date:str|None=None
+    day_identity_version:Literal['LEGACY_UTC_V0','IANA_LOCAL_V1']='LEGACY_UTC_V0'
     sources:Annotated[list[GoalRef],Field(max_length=12)]
     window_start:str
     window_end:str
@@ -110,13 +116,14 @@ class ContextPartMeta(Strict):
 
 class RetrievalReceipt(Strict):
     id:UID
-    goal:GoalRef
+    goal:GoalRef|None
     conversation_id:UID
+    timezone:str=OWNER_REFERENCE_TIMEZONE
     window_start:str
     window_end:str
     sources:Annotated[list[GoalRef],Field(max_length=50)]
     digest_versions:list[DigestVersion]
-    retrieval_method:Literal['GOAL_CURRENT_DIGEST_FTS5_FILTER_V1']
+    retrieval_method:Literal['GOAL_CURRENT_DIGEST_FTS5_FILTER_V1','FREE_RECENT_V1']
     token_budget:Annotated[int,Field(ge=128,le=12000)]
     byte_budget:Annotated[int,Field(ge=512,le=48000)]
     used_tokens_upper_bound:Annotated[int,Field(ge=0)]

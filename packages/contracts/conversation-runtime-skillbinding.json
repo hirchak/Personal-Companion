@@ -1,0 +1,31 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "skill_id": {
+      "enum": [
+        "core_reflection",
+        "deep_session",
+        "goal_setting",
+        "session_closure"
+      ],
+      "title": "Skill Id",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "skill_id",
+    "version",
+    "content_hash"
+  ],
+  "title": "SkillBinding",
+  "type": "object"
+}

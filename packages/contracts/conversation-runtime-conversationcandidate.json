@@ -1,0 +1,113 @@
+{
+  "$defs": {
+    "ClosureCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "discussed": {
+          "items": {
+            "maxLength": 600,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Discussed",
+          "type": "array"
+        },
+        "clearer": {
+          "maxLength": 1000,
+          "title": "Clearer",
+          "type": "string"
+        },
+        "unresolved": {
+          "maxLength": 600,
+          "title": "Unresolved",
+          "type": "string"
+        },
+        "possible_steps": {
+          "items": {
+            "maxLength": 600,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Possible Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "discussed",
+        "clearer",
+        "unresolved",
+        "possible_steps"
+      ],
+      "title": "ClosureCandidate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assistant_text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Assistant Text",
+      "type": "string"
+    },
+    "source_refs": {
+      "items": {
+        "pattern": "^s[0-9]{1,2}$",
+        "type": "string"
+      },
+      "maxItems": 50,
+      "title": "Source Refs",
+      "type": "array"
+    },
+    "goal_suggestion": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Goal Suggestion"
+    },
+    "closure": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ClosureCandidate"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "topics": {
+      "items": {
+        "enum": [
+          "work",
+          "relationship",
+          "sleep",
+          "daily_event",
+          "decision",
+          "self_reflection"
+        ],
+        "type": "string"
+      },
+      "maxItems": 5,
+      "title": "Topics",
+      "type": "array"
+    }
+  },
+  "required": [
+    "assistant_text",
+    "source_refs",
+    "goal_suggestion",
+    "closure",
+    "topics"
+  ],
+  "title": "ConversationCandidate",
+  "type": "object"
+}

@@ -33,7 +33,7 @@ class AudioChunk(StrictModel):
 class VoiceEmpty(StrictModel):
     pass
 class ASRRequest(StrictModel):
-    mode: Literal['DISABLED','FAKE'] = 'DISABLED'
+    mode: Literal['DISABLED','FAKE','LOCAL'] = 'DISABLED'
     language: Literal['uk'] = 'uk'
 class TranscriptEdit(StrictModel):
     revision: StrictInt = Field(ge=1)

@@ -84,6 +84,39 @@
         }
       ]
     },
+    "timezone": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Timezone"
+    },
+    "logical_local_date": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Logical Local Date"
+    },
+    "day_identity_version": {
+      "default": "LEGACY_UTC_V0",
+      "enum": [
+        "LEGACY_UTC_V0",
+        "IANA_LOCAL_V1"
+      ],
+      "title": "Day Identity Version",
+      "type": "string"
+    },
     "sources": {
       "items": {
         "$ref": "#/$defs/GoalRef"

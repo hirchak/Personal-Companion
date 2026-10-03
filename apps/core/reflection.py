@@ -2,6 +2,7 @@
 import json,re
 from uuid import uuid4,uuid5,UUID
 from .storage import SafeError,encode,digest,now
+from .logical_day import logical_day,day_window,scope_key
 from .conversation_contracts import Conversation,Message
 from .reflection_contracts import ReflectionGoal,GoalCreate,GoalChange,ContextRequest,Expansion,MessageEdit,SKILLS,DerivedDigest,RetrievalReceipt
 
@@ -29,11 +30,19 @@ def reflection_triggers(c):
     c.execute('''CREATE TRIGGER IF NOT EXISTS goal_digest_stale AFTER UPDATE ON reflection_goals BEGIN
       UPDATE conversation_digests SET status='STALE',payload=json_set(payload,'$.status','STALE','$.text',NULL)
       WHERE kind='GOAL' AND json_extract(payload,'$.goal.id')=OLD.id; END''')
+    # Repair legacy multiple-current scopes atomically before enforcing N01.
+    c.execute('''UPDATE conversation_digests SET status='STALE',payload=json_set(payload,'$.status','STALE','$.text',NULL)
+      WHERE status='CURRENT' AND version < (SELECT MAX(newer.version) FROM conversation_digests newer
+      WHERE newer.kind=conversation_digests.kind AND newer.scope_key=conversation_digests.scope_key AND newer.status='CURRENT')''')
+    # UTC-sliced legacy daily identities require explicit rebuild, never silent local reinterpretation.
+    c.execute('''UPDATE conversation_digests SET status='STALE',payload=json_set(payload,'$.status','STALE','$.text',NULL)
+      WHERE kind='DAILY' AND status='CURRENT' AND COALESCE(json_extract(payload,'$.day_identity_version'),'LEGACY_UTC_V0')!='IANA_LOCAL_V1' ''')
+    c.execute('CREATE UNIQUE INDEX IF NOT EXISTS digest_one_current ON conversation_digests(kind,scope_key) WHERE status="CURRENT"')
     # Idempotent index reconstruction for existing synthetic schema8 rows.
     c.execute('INSERT INTO conversation_fts(message_id,conversation_id,raw_text) SELECT id,conversation_id,json_extract(payload,"$.raw_text") FROM conversation_messages WHERE id NOT IN (SELECT message_id FROM conversation_fts)')
 
 
-def check_reflection(c):
+def check_reflection(c,enforce_current_unique=True):
     try:
         for r in c.execute('SELECT * FROM reflection_goals'):
             g=ReflectionGoal.model_validate_json(r['payload'])
@@ -49,6 +58,7 @@ def check_reflection(c):
                 for ref in d.sources:
                     source=c.execute('SELECT payload FROM conversation_messages WHERE id=?',(str(ref.id),)).fetchone()
                     if not source or json.loads(source[0])['revision']!=ref.revision:raise ValueError()
+        if enforce_current_unique and c.execute('SELECT 1 FROM conversation_digests WHERE status="CURRENT" GROUP BY kind,scope_key HAVING count(*)>1').fetchone():raise ValueError()
         for r in c.execute('SELECT * FROM retrieval_receipts'):
             receipt=RetrievalReceipt.model_validate_json(r['payload'])
             if str(receipt.id)!=r['id'] or receipt.used_bytes_estimate>receipt.byte_budget or receipt.used_tokens_upper_bound>receipt.token_budget:raise ValueError()
@@ -116,18 +126,20 @@ class Reflection:
             c.execute('UPDATE conversation_messages SET payload=? WHERE id=?',(encode(m.model_dump(mode='json')),mid));conv.revision+=1;conv.updated_utc=now();c.execute('UPDATE conversations SET revision=?,payload=?,updated=? WHERE id=?',(conv.revision,encode(conv.model_dump(mode='json')),conv.updated_utc,id))
             c.execute('INSERT INTO reflection_receipts VALUES(?,?,?,?)',(op,mid,'message_edit',fp));result=self.conversations.view(c,conv)
         return result
-    def digest(self,c,kind,scope,refs,start,end,goal=None):
+    def digest(self,c,kind,scope,refs,start,end,goal=None,timezone=None,local_date=None):
         if not self.conversations.synthetic_demo:raise SafeError('DIGEST_GENERATOR_OFF',409)
         current=c.execute('SELECT payload FROM conversation_digests WHERE kind=? AND scope_key=? AND status="CURRENT" ORDER BY version DESC LIMIT 1',(kind,scope)).fetchone()
         if current:
             d=json.loads(current[0])
-            if d['sources']==refs and d['goal']==goal and d['window_start']==start and d['window_end']==end:return d
+            if d['sources']==refs and d['goal']==goal and d['window_start']==start and d['window_end']==end and d.get('timezone')==timezone:return d
         version=c.execute('SELECT COALESCE(MAX(version),0)+1 FROM conversation_digests WHERE kind=? AND scope_key=?',(kind,scope)).fetchone()[0]
         excerpts=[]
         for ref in refs[:12]:
             m=json.loads(c.execute('SELECT payload FROM conversation_messages WHERE id=?',(ref['id'],)).fetchone()[0]);excerpts.append(m['raw_text'][:180])
         d={'id':str(uuid4()),'kind':kind,'scope_key':scope,'version':version,'status':'CURRENT','provenance':'MODEL_DERIVED','synthetic':True,'generator_version':'SYNTHETIC_EXCERPT_V1','generator_kind':'DETERMINISTIC_FIXTURE_NOT_LLM','goal':goal,'sources':refs,'window_start':start,'window_end':end,'text':'\n'.join(excerpts),'created_at':now()}
+        d.update(timezone=timezone,logical_local_date=local_date,day_identity_version='IANA_LOCAL_V1' if kind=='DAILY' else 'LEGACY_UTC_V0')
         DerivedDigest.model_validate(d)
+        c.execute('UPDATE conversation_digests SET status="STALE",payload=json_set(payload,"$.status","STALE","$.text",NULL) WHERE kind=? AND scope_key=? AND status="CURRENT"',(kind,scope))
         c.execute('INSERT INTO conversation_digests VALUES(?,?,?,?,?,?)',(d['id'],kind,scope,version,encode(d),'CURRENT'));return d
     def valid_digest(self,c,d):
         if d['status']!='CURRENT' or d['text'] is None:return False
@@ -169,13 +181,15 @@ class Reflection:
                 self.digest(c,'GOAL',str(goal.id)+':'+str(goal.revision),refs[:12],start,end,goalref)
                 byday={}
                 for r in rows:
-                    m=json.loads(r[0]);byday.setdefault(m['created_utc'][:10],[]).append({'id':m['id'],'revision':m['revision']})
-                for day,dr in list(byday.items())[:3]:self.digest(c,'DAILY',day,dr[:12],max(start,day+'T00:00:00+00:00'),min(end,day+'T23:59:59.999999+00:00'),None)
+                    m=json.loads(r[0]);byday.setdefault(logical_day(m['created_utc'],b.timezone),[]).append({'id':m['id'],'revision':m['revision']})
+                for day,dr in list(byday.items())[:3]:
+                    ds,de=day_window(day,b.timezone)
+                    self.digest(c,'DAILY',scope_key(day,b.timezone),dr[:12],max(start,ds),min(end,de),None,b.timezone,day)
             for kind in ('GOAL','DAILY'):
                 ds=c.execute('SELECT payload FROM conversation_digests WHERE kind=? AND status="CURRENT" ORDER BY version DESC LIMIT 10',(kind,)).fetchall()
                 for row in ds:
                     d=json.loads(row[0])
-                    if (kind=='GOAL' and d['goal']!=goalref) or d['window_start']<start or d['window_end']>end or not self.valid_digest(c,d):continue
+                    if (kind=='GOAL' and d['goal']!=goalref) or (kind=='DAILY' and d.get('timezone')!=b.timezone) or d['window_start']<start or d['window_end']>end or not self.valid_digest(c,d):continue
                     if add(kind+'_DIGEST',d['text'],d['sources'],d['version'],d['id']):digest_versions.append({'id':d['id'],'version':d['version'],'kind':kind})
             query=b.query or goal.text;terms=re.findall(r'\w{2,40}',query.lower())[:8]
             match=' OR '.join('"'+t.replace('"','""')+'"' for t in terms)
@@ -195,15 +209,37 @@ class Reflection:
                     row=c.execute('SELECT * FROM memories WHERE id=?',(str(ref.id),)).fetchone()
                     if not row or row['status']!='USER_CONFIRMED' or row['revision']!=ref.revision:raise SafeError('CONFIRMED_MEMORY_BINDING_INVALID',409)
                     add('CONFIRMED_MEMORY',row['content'],memory_ref=ref.model_dump(mode='json'))
-            receipt={'id':str(uuid4()),'goal':goalref,'conversation_id':str(conv.id),'window_start':start,'window_end':end,'sources':list(selected.values()),'digest_versions':digest_versions,'retrieval_method':'GOAL_CURRENT_DIGEST_FTS5_FILTER_V1','token_budget':b.token_budget,'byte_budget':b.byte_budget,'used_tokens_upper_bound':used,'used_bytes_estimate':used,'budget_scope':'SERIALIZED_CONTEXT_PARTS_UTF8_JSON','token_estimator':'UTF8_BYTE_UPPER_BOUND_V1_NOT_MODEL_TOKENIZER','confirmed_memory_refs':[r.model_dump(mode='json') for r in b.confirmed_memories],'created_at':now(),'raw_text_logged':False,'parts_meta':[{k:v for k,v in p.items() if k!='text'} for p in parts]}
+            receipt={'id':str(uuid4()),'goal':goalref,'conversation_id':str(conv.id),'timezone':b.timezone,'window_start':start,'window_end':end,'sources':list(selected.values()),'digest_versions':digest_versions,'retrieval_method':'GOAL_CURRENT_DIGEST_FTS5_FILTER_V1','token_budget':b.token_budget,'byte_budget':b.byte_budget,'used_tokens_upper_bound':used,'used_bytes_estimate':used,'budget_scope':'SERIALIZED_CONTEXT_PARTS_UTF8_JSON','token_estimator':'UTF8_BYTE_UPPER_BOUND_V1_NOT_MODEL_TOKENIZER','confirmed_memory_refs':[r.model_dump(mode='json') for r in b.confirmed_memories],'created_at':now(),'raw_text_logged':False,'parts_meta':[{k:v for k,v in p.items() if k!='text'} for p in parts]}
             RetrievalReceipt.model_validate(receipt)
             prior=c.execute('SELECT payload,fingerprint FROM retrieval_receipts WHERE operation_id=?',(op,)).fetchone()
             if prior and prior['fingerprint']!=fp:raise SafeError('OPERATION_REUSE',409)
             if prior:receipt=json.loads(prior['payload'])
             else:c.execute('INSERT INTO retrieval_receipts VALUES(?,?,?,?)',(receipt['id'],op,fp,encode(receipt)))
         return {'receipt':receipt,'context':parts,'authority':'RAW_MESSAGES_AND_USER_GOAL; DIGESTS_DERIVED_ONLY','narrow_tools':{'journal':'SEPARATE_AUTHORIZATION_REQUIRED','sleep':'SEPARATE_AUTHORIZATION_REQUIRED','health':'SEPARATE_AUTHORIZATION_REQUIRED'},'live_provider_calls':False}
+    def build_free(self,conversation_id,operation_id,token_budget=8000,byte_budget=16000,max_sources=16):
+        op=str(operation_id);fp=digest(encode({'conversation':str(conversation_id),'token_budget':token_budget,'byte_budget':byte_budget,'max_sources':max_sources}).encode())
+        with self.store.transaction() as c:
+            prior=c.execute('SELECT payload,fingerprint FROM retrieval_receipts WHERE operation_id=?',(op,)).fetchone()
+            if prior:
+                if prior['fingerprint']!=fp:raise SafeError('OPERATION_REUSE',409)
+                return self.replay_context(c,json.loads(prior['payload']))
+            conv=self.conversations.row(c,conversation_id)
+            if conv.mode!='FREE':raise SafeError('FREE_CONTEXT_MODE_REQUIRED')
+            rows=c.execute('SELECT payload FROM conversation_messages WHERE conversation_id=? ORDER BY sequence DESC LIMIT 6',(str(conv.id),)).fetchall()
+            parts=[];refs=[];used=2
+            for row in rows:
+                m=json.loads(row[0]);ref={'id':m['id'],'revision':m['revision']};part={'kind':'CURRENT_TURN','text':m['raw_text'],'sources':[ref],'digest_version':None,'artifact_id':None,'memory_ref':None};size=len(encode(part).encode())+2
+                if used+size>min(token_budget,byte_budget):
+                    if not parts:raise SafeError('CONTEXT_BUDGET_TOO_SMALL',409)
+                    continue
+                parts.append(part);refs.append(ref);used+=size
+            parts.reverse()
+            receipt={'id':str(uuid4()),'goal':None,'conversation_id':str(conv.id),'timezone':'Europe/Warsaw','window_start':conv.created_utc,'window_end':now(),'sources':refs,'digest_versions':[],'retrieval_method':'FREE_RECENT_V1','token_budget':token_budget,'byte_budget':byte_budget,'used_tokens_upper_bound':used,'used_bytes_estimate':used,'budget_scope':'SERIALIZED_CONTEXT_PARTS_UTF8_JSON','token_estimator':'UTF8_BYTE_UPPER_BOUND_V1_NOT_MODEL_TOKENIZER','confirmed_memory_refs':[],'created_at':now(),'raw_text_logged':False,'parts_meta':[{k:v for k,v in p.items() if k!='text'} for p in parts]}
+            RetrievalReceipt.model_validate(receipt)
+            c.execute('INSERT INTO retrieval_receipts VALUES(?,?,?,?)',(receipt['id'],op,fp,encode(receipt)))
+        return {'receipt':receipt,'context':parts,'authority':'RAW_MESSAGES_ONLY','live_provider_calls':False}
     def replay_context(self,c,receipt):
-        goal=self.row(c,receipt['goal']['id'],receipt['goal']['revision']);parts=[]
+        goal=self.row(c,receipt['goal']['id'],receipt['goal']['revision']) if receipt['goal'] else None;parts=[]
         for metadata in receipt['parts_meta']:
             kind=metadata['kind'];value=None
             if kind=='GOAL_REVISION':value=goal.text

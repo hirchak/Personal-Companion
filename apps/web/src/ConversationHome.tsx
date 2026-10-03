@@ -6,6 +6,8 @@ import {
 } from "./ReflectionGoals";
 import { Sheet } from "./Sheet";
 import { VoicePanel } from "./VoicePanel";
+import { InferencePanel } from "./InferencePanel";
+import { JournalPoint } from "./JournalPoint";
 import {
   chatError,
   validChatText,
@@ -38,6 +40,8 @@ export function ConversationHome({
     [voice, setVoice] = useState<"idle" | "record" | null>(null);
   const [goalsOpen, setGoalsOpen] = useState(false);
   const [goalRefresh, setGoalRefresh] = useState(0);
+  const [goalPreset, setGoalPreset] = useState("");
+  const [journalOpen, setJournalOpen] = useState(false);
   const alive = useRef(true),
     working = useRef(false),
     generation = useRef(0),
@@ -187,14 +191,18 @@ export function ConversationHome({
       if (alive.current) setBusy(false);
     }
   }
-  async function send() {
-    if (working.current || !validChatText(text)) return;
+  async function send(
+    purpose: "REFLECT" | "GOAL_PROPOSAL" | "CLOSURE" = "REFLECT",
+    override?: string,
+  ) {
+    const input = override ?? text;
+    if (working.current || !validChatText(input)) return;
     working.current = true;
     setBusy(true);
     setError("");
     setNotice("");
     const seq = ++generation.current;
-    const sent = text;
+    const sent = input;
     try {
       let current = page;
       if (!current) {
@@ -207,14 +215,20 @@ export function ConversationHome({
         base_revision: current!.conversation.revision,
         text: sent,
         source_reference: source,
+        ...(status?.mode ? { purpose, synthetic_test_ack: true } : {}),
       };
       const signature = JSON.stringify({ id: current!.conversation.id, body });
       if (pending.current?.signature !== signature)
         pending.current = { signature, operation_id: crypto.randomUUID() };
-      const result = await api("/" + current!.conversation.id + "/messages", {
-        ...body,
-        operation_id: pending.current.operation_id,
-      });
+      const result = await api(
+        "/" +
+          current!.conversation.id +
+          (status?.mode ? "/inference" : "/messages"),
+        {
+          ...body,
+          operation_id: pending.current.operation_id,
+        },
+      );
       const fresh =
         result.next_after !== null
           ? await load(current!.conversation.id)
@@ -223,6 +237,7 @@ export function ConversationHome({
         selection(fresh);
         setText("");
         setSource(null);
+        setGoalsOpen(false);
         pending.current = null;
         if (status?.responder === "OFF")
           setNotice(
@@ -331,6 +346,9 @@ export function ConversationHome({
     composer.current?.focus();
   }
   const hasMessages = !!page?.messages.length;
+  const inferenceActive =
+    !!page?.inference_job &&
+    ["QUEUED", "RUNNING"].includes(page.inference_job.state);
   return (
     <section className="conversation-home" aria-label="Розмова">
       <div className="conversation-thread">
@@ -340,6 +358,21 @@ export function ConversationHome({
           </h1>
           <div>
             <button onClick={() => setGoalsOpen(true)}>Цілі</button>
+            {status?.mode &&
+              page?.conversation.mode === "DEEP" &&
+              hasMessages && (
+                <button
+                  disabled={busy || inferenceActive}
+                  onClick={() =>
+                    void send(
+                      "CLOSURE",
+                      "ORIGINAL SYNTHETIC · Явно прошу підсумувати цю сесію.",
+                    )
+                  }
+                >
+                  Підсумувати
+                </button>
+              )}
             <button onClick={() => setHistoryOpen(true)}>Розмови</button>
             <button disabled={busy} onClick={reset}>
               Нова розмова
@@ -358,7 +391,15 @@ export function ConversationHome({
             />
           )}
         {status?.synthetic_demo && (
-          <p className="demo-status">Демо · тестові відповіді без AI</p>
+          <p className="demo-status">
+            {status.mode === "LIVE_SYNTHETIC"
+              ? "Тест із вигаданими даними · помічник доступний"
+              : status.mode === "OFF"
+                ? "Тест із вигаданими даними · помічник вимкнений"
+                : status.mode === "OFFLINE_FIXTURE"
+                  ? "Демо · тестова відповідь без зовнішнього AI"
+                  : "Демо · тестові відповіді без AI"}
+          </p>
         )}
         {error && <p role="alert">{error}</p>}
         {notice && <p role="status">{notice}</p>}
@@ -406,11 +447,17 @@ export function ConversationHome({
                   aria-label={
                     m.role === "USER"
                       ? "Ваше повідомлення"
-                      : "Демо-відповідь помічника"
+                      : m.provenance === "MODEL_GENERATED"
+                        ? "Відповідь помічника"
+                        : "Демо-відповідь помічника"
                   }
                 >
                   <span className="message-role">
-                    {m.role === "USER" ? "Ви" : "Помічник · демо"}
+                    {m.role === "USER"
+                      ? "Ви"
+                      : m.provenance === "MODEL_GENERATED"
+                        ? "Помічник"
+                        : "Помічник · демо"}
                   </span>
                   <p>{m.raw_text}</p>
                 </article>
@@ -418,6 +465,29 @@ export function ConversationHome({
             </>
           )}
         </div>
+        {page?.inference_job && (
+          <InferencePanel
+            key={page.inference_job.id}
+            csrf={csrf}
+            conversationId={page.conversation.id}
+            job={page.inference_job}
+            onChanged={(job, final) => {
+              setPage((old) => (old ? { ...old, inference_job: job } : old));
+              if (final)
+                void load(page.conversation.id)
+                  .then((p) => {
+                    if (alive.current) selection(p);
+                  })
+                  .catch(() => setError("Не вдалося оновити розмову."));
+            }}
+            onGoal={(value) => {
+              setGoalPreset(value);
+              setGoalsOpen(true);
+            }}
+            onClose={() => void action(page.conversation, "archive")}
+            onJournal={() => setJournalOpen(true)}
+          />
+        )}
       </div>
       <form
         className="conversation-composer"
@@ -435,7 +505,11 @@ export function ConversationHome({
         )}
         {status?.synthetic_demo && (
           <p className="composer-privacy">
-            Лише вигадані дані. Демо не аналізує ваш стан.
+            {status.mode === "LIVE_SYNTHETIC"
+              ? "Лише вигадані дані. Помічник отримує текст після надсилання."
+              : status.mode === "OFF"
+                ? "Лише вигадані дані. Помічник вимкнений; текст зберігається локально."
+                : "Лише вигадані дані. Відповіді — локальні демонстраційні приклади."}
           </p>
         )}
         <label htmlFor="conversation-text" className="sr-only">
@@ -446,7 +520,9 @@ export function ConversationHome({
           ref={composer}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          disabled={busy || page?.conversation.state === "ARCHIVED"}
+          disabled={
+            busy || inferenceActive || page?.conversation.state === "ARCHIVED"
+          }
           rows={3}
           maxLength={12000}
           placeholder="Напишіть кілька слів…"
@@ -489,6 +565,7 @@ export function ConversationHome({
             className="primary"
             disabled={
               busy ||
+              inferenceActive ||
               !validChatText(text) ||
               page?.conversation.state === "ARCHIVED"
             }
@@ -508,6 +585,12 @@ export function ConversationHome({
         <Sheet title="Цілі" onClose={() => setGoalsOpen(false)} wide>
           <ReflectionGoals
             csrf={csrf}
+            initialText={goalPreset}
+            onPropose={
+              status?.mode && status.responder !== "OFF"
+                ? (intent) => void send("GOAL_PROPOSAL", intent)
+                : undefined
+            }
             onStart={(g) => void startDeep(g)}
             onChanged={() => {
               setGoalRefresh((n) => n + 1);
@@ -579,6 +662,9 @@ export function ConversationHome({
             </div>
           )}
         </Sheet>
+      )}
+      {journalOpen && page && (
+        <JournalPoint csrf={csrf} conversationId={page.conversation.id} messages={page.messages} onClose={() => setJournalOpen(false)} />
       )}
       {voice && (
         <Sheet title="Голосовий ввід" onClose={() => setVoice(null)} wide>
