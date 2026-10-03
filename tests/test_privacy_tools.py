@@ -58,7 +58,7 @@ class M1PrivacySourceTests(unittest.TestCase):
     def test_source_extensions_are_scanned(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)
-            for suffix in ['.tsx','.ts','.css','.html','.sh','.lock']:
+            for suffix in ['.tsx','.ts','.css','.html','.sh','.lock','.jsonl']:
                 file=root/('synthetic'+suffix)
                 file.write_text('sk-'+'Z'*40)
                 self.assertEqual(scan(root)['status'],'FAIL')

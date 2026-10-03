@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-03",
+  "scope": "Delivery files, not source license or clinical approval",
+  "self_hash": "OMITTED_BY_DESIGN",
+  "files": [
+    {
+      "path": "ADMISSION_EVAL_CANDIDATES.jsonl",
+      "bytes": 5672,
+      "sha256": "e20e32960445ee14107d36f6b6378f7f1453fac924a6a9177e4e00f83735e63a"
+    },
+    {
+      "path": "GOAL_START.txt",
+      "bytes": 397,
+      "sha256": "abd07f583e53ab81082fb90006e40cf4024e7d8918d49095e6018dca0c6ed791"
+    },
+    {
+      "path": "INPUT_MANIFEST.json",
+      "bytes": 8288,
+      "sha256": "cd73848a261c17a1cad22a04e4e002a212c402e1afc915113faa551436a1d730"
+    },
+    {
+      "path": "M7_PREP_EVIDENCE_ADMISSION.txt",
+      "bytes": 10815,
+      "sha256": "35a6286c6f670ed65842aa59ce710968b4fa0d322577cb72006a78a74762cc8d"
+    },
+    {
+      "path": "MODULE_ADMISSION_DRAFT.json",
+      "bytes": 7775,
+      "sha256": "c79ecec7f853111a17d78ee3c8c9b592607cf94462277de760e0e14142fbe565"
+    },
+    {
+      "path": "PACKET_DISPOSITIONS.json",
+      "bytes": 12595,
+      "sha256": "7aa37fdd7f00379033fd7bb4272f85314208a0cff22c79514b2b90082fba1b25"
+    },
+    {
+      "path": "PRIMARY_SOURCE_CHECKS.json",
+      "bytes": 14342,
+      "sha256": "54b64bbadc47e832765a8e8b3c42b261154ac4c029504084471e1de16749810f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3138,
+      "sha256": "623e4a2ff75b76653114ce6ecfc4d96ddb0d37a8d4a5d5771402e6d182fc0e18"
+    },
+    {
+      "path": "REPOSITORY_CHECKPOINT.json",
+      "bytes": 1857,
+      "sha256": "2a84175b97026beba03a2d288bb740e4a74e0900f3061e862ddbda959769005c"
+    },
+    {
+      "path": "RESEARCH_GATE_REPORT.md",
+      "bytes": 53076,
+      "sha256": "a98b1f8bd7751d1ce6068b1f457577aa01985fae18d40f667bc1273e2f0e9a07"
+    },
+    {
+      "path": "REVIEW_FINDINGS.json",
+      "bytes": 32463,
+      "sha256": "9499fdbcb6b54a368612c199dbd31ae19aa9091f6b073c3d1c2c3699b0219294"
+    }
+  ],
+  "checks": {
+    "json_parse": "PASS",
+    "case_count": 24,
+    "input_hash_match_count": 16,
+    "findings_count": 27,
+    "packet_count": 16,
+    "source_records_count": 16,
+    "source_reference_integrity": "PASS",
+    "active_clinical_permissions_added": 0,
+    "raw_files_included": 0
+  }
+}

@@ -1,7 +1,9 @@
 # Межі психологічної самодопомоги та клінічний зміст
 
 Це safety specification, не діагноз і не індивідуальний лікувальний план.
-Наразі всі терапевтичні протоколи вимкнені; research/clinical review не виконані.
+Наразі всі терапевтичні протоколи вимкнені. R01–R16 externally received/screened, primary
+checks partial; final content/qualified clinical review NOT_PERFORMED. Preparation registry
+описано в `docs/M7_PREP_CONTRACT.md`; engineering PASS не дозволяє activation.
 
 ## Позиція продукту
 

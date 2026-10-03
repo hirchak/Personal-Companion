@@ -1,0 +1,3388 @@
+{
+  "schema_version": 1,
+  "registry_version": "0.1.0",
+  "status": "PREPARATION_ONLY_NOT_RUNTIME",
+  "base_sha": "7516c9487346d8c3f0cc0b6224bdfe7354f5153a",
+  "review_pack_sha256": "feeec2a0d830eaef3fb5d4a80d2b6b88168a534317b53885db4e20ea5554e6c4",
+  "local_review_pack": "MANIFEST_VERIFIED_SAFE_EXTRACT",
+  "permissions": {
+    "push_review_branch": false,
+    "push_main": true,
+    "merge_main": false,
+    "deploy": false,
+    "live_provider_calls": false,
+    "access_real_user_data": false
+  },
+  "receipts": [
+    {
+      "id": "R01",
+      "filename": "R01_RAW.docx",
+      "bytes": 3058802,
+      "sha256": "d3c34a4f8c4a782e90ace0328259411fd26ffde68f3bc383dd944ba06fd0e149",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-04",
+        "RG-09",
+        "RG-27"
+      ]
+    },
+    {
+      "id": "R02",
+      "filename": "R02_RAW.docx",
+      "bytes": 46871,
+      "sha256": "d515e9307cc530afd90f888d90c03aac6c5812bb707c02af21e799fec13ab5c5",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-08",
+        "RG-20"
+      ]
+    },
+    {
+      "id": "R03",
+      "filename": "R03_RAW.docx",
+      "bytes": 3060788,
+      "sha256": "053f5275abdab1c738004130dfdef19b7b0b09bf6b2bf55e58b6e7f4372baac9",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-04",
+        "RG-05",
+        "RG-06",
+        "RG-07"
+      ]
+    },
+    {
+      "id": "R04",
+      "filename": "R04_RAW.docx",
+      "bytes": 3056089,
+      "sha256": "43f3c83fd3a9df41aac1925eb1dd1d047dd16dc4a8652d509b652884c96dee9a",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-09",
+        "RG-27"
+      ]
+    },
+    {
+      "id": "R05",
+      "filename": "R05_RAW.docx",
+      "bytes": 3056357,
+      "sha256": "ffed6e32ad3ce0e2959e9daf72ff7a5d1913a7b4d0fd7e5dffc434bcab6fc2c7",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-10",
+        "RG-17",
+        "RG-20"
+      ]
+    },
+    {
+      "id": "R06",
+      "filename": "R06_RAW.docx",
+      "bytes": 57339,
+      "sha256": "990df3a4d54a1b8bcfb64337a1c3e1981875b1678dd1460ef0266d5a2634138f",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-13",
+        "RG-17",
+        "RG-20",
+        "RG-27"
+      ]
+    },
+    {
+      "id": "R07",
+      "filename": "R07_RAW.docx",
+      "bytes": 3062317,
+      "sha256": "71fc1ba3eda00c78593893173954671b78709a790bc560e18914dab7b74a8368",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-14",
+        "RG-17",
+        "RG-20"
+      ]
+    },
+    {
+      "id": "R08",
+      "filename": "R08_RAW.docx",
+      "bytes": 3055027,
+      "sha256": "a481a0e12bc9adf1c9c4feefcbce793edf915ad0e66240014903b84f5fb6b8f4",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-11",
+        "RG-12",
+        "RG-13",
+        "RG-27"
+      ]
+    },
+    {
+      "id": "R09",
+      "filename": "R09_RAW.docx",
+      "bytes": 3059231,
+      "sha256": "eb9395e6169a576a37875348d6354ca019c1e59cdfc558991124cdaa43100ce7",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-02",
+        "RG-15"
+      ]
+    },
+    {
+      "id": "R10",
+      "filename": "R10_RAW.docx",
+      "bytes": 3058900,
+      "sha256": "0aa8e04febe82a89e0dac664ead3ef4380eecb490453054e94661366845b0e58",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-16"
+      ]
+    },
+    {
+      "id": "R11",
+      "filename": "R11_RAW.docx",
+      "bytes": 39441,
+      "sha256": "b8ebd00eebff4cb036743abc933b76ddab1f23208230d1e21d64886d42bc0714",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-27"
+      ]
+    },
+    {
+      "id": "R12",
+      "filename": "R12_RAW.docx",
+      "bytes": 44699,
+      "sha256": "5fd0e750e4c5c3763dc319a124212c6dcbe832c0cf7474db7b8759cdb56b36df",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-23"
+      ]
+    },
+    {
+      "id": "R13",
+      "filename": "R13_RAW.docx",
+      "bytes": 3058537,
+      "sha256": "b6e49071222a53143b6b32a725b46ae73731a557354acda376bf01bbba956765",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-24"
+      ]
+    },
+    {
+      "id": "R14",
+      "filename": "R14_RAW.docx",
+      "bytes": 3051139,
+      "sha256": "2c1a184dd72c6162437b4b24e20789f472d4ac45ae3ce2c872a6b617992a80c6",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-25"
+      ]
+    },
+    {
+      "id": "R15",
+      "filename": "R15_RAW.docx",
+      "bytes": 3091158,
+      "sha256": "882b75da180cc4628a9ce8b3df4e73ce813a8fd788955eccfcfccaa41fee1a4b",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-26"
+      ]
+    },
+    {
+      "id": "R16",
+      "filename": "R16_RAW.docx",
+      "bytes": 3066223,
+      "sha256": "2932fae3fb3b773b9121c97815f3afcd4af032a6c0c88aec283421a222e5c79c",
+      "raw_claimed_status": "RECEIVED_NOT_APPROVED",
+      "external_receipt": "RECEIVED_AND_EXTRACTED_IN_CHATGPT",
+      "local_receipt": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+      "local_bytes_verified": false,
+      "external_review_status": "SCOPE_AND_CONSISTENCY_SCREENED",
+      "full_evidence_review": "NOT_COMPLETED",
+      "rights_status": "NOT_CLEARED_AS_A_WHOLE",
+      "content_status": "NOT_APPROVED",
+      "finding_ids": [
+        "RG-03",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-21",
+        "RG-22"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "gate:S01",
+      "title": "AASM — Position Paper for the Treatment of Nightmare Disorder in Adults (2018)",
+      "url": "https://doi.org/10.5664/jcsm.7178",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_ABSTRACT_AND_POSITION_STATEMENTS",
+      "checked_locator": "Determination of Position; Position Statements",
+      "observed": "IRT має позицію recommended для nightmare disorder та PTSD-associated nightmares. Шкала позицій у цьому документі — recommended / may be used / not recommended.",
+      "limits": "Перевірено відкриті позиційні твердження, не весь закритий текст. Не допуск конкретного AI-модуля.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S01",
+      "record_sha256": "7cd65c842de26fb21105e84989efd9e34740beb0080c10eacd5a08b202495a78",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S02",
+      "title": "VA/DoD PTSD CPG (2023), official edited PDF",
+      "url": "https://www.healthquality.va.gov/HEALTHQUALITY/guidelines/MH/ptsd/VA-DoD-CPG-PTSD-Full-CPG-Edited-111624-V5-81825.pdf",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_PDF_TARGETED_TEXT_AND_PAGE_IMAGES",
+      "checked_locator": "Recommendation 33; printed pp. 38 and 81",
+      "observed": "Для nightmares associated with PTSD рекомендація 33 — insufficient evidence for or against IRT та перелічених споріднених втручань. Обґрунтування розглядає непослідовність результатів і низьку визначеність доказів.",
+      "limits": "Це не загальна заборона IRT для всіх кошмарів. Весь 167-сторінковий guideline не пройшов нове клінічне review.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S02",
+      "record_sha256": "dc03d0de698e83ecd81b8514a14629d21f17140630a1a978d0e1412f2685b4ea",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S03",
+      "title": "Lancee, Effting, Kunze — Telephone-guided imagery rehearsal therapy for nightmares",
+      "url": "https://doi.org/10.1111/jsr.13123",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_FULL_TEXT_TARGETED_SECTIONS",
+      "checked_locator": "2.1 Participants; 2.8 Treatment; 2.9 Procedure; 3 Results; 4 Discussion",
+      "observed": "RCT включав 70 учасників і людську телефонну підтримку під супервізією. Досліджений варіант також активував емоції первинного кошмару перед rescripting; це не просто нейтральна заміна тексту.",
+      "limits": "Підтримує конкретний guided формат. Не переносити його результат на скорочений автономний сценарій. Bibliography: online 2020, issue 2021.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S03",
+      "record_sha256": "884067e7d2298aa753e83ff7493edafe6b77bcd5ad45b2a4af2678538de0f493",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S04",
+      "title": "Stetter & Kupper — Autogenic training: a meta-analysis of clinical outcome studies (2002)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12001885/",
+      "checked_on": "2026-10-03",
+      "access_extent": "INDEXED_PRIMARY_ABSTRACT_METADATA",
+      "checked_locator": "Title; abstract; DOI 10.1023/A:1014576505223",
+      "observed": "Це метааналіз autogenic training, а не названий у R08 метааналіз PMR.",
+      "limits": "Повний текст не перевірено. Повторне відкриття PubMed показувало CAPTCHA; ідентифікацію підтверджує індексований abstract/metadata.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S04",
+      "record_sha256": "8736dd2d36daaea5430d4e57c1a14b58f89b7ac84e4df950e8e740cbd8442102",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S05",
+      "title": "Manzoni et al. — Relaxation training for anxiety: a ten-years systematic review with meta-analysis (2008)",
+      "url": "https://doi.org/10.1186/1471-244X-8-41",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_AND_AUTHOR_REPOSITORY_ABSTRACT",
+      "checked_locator": "Abstract: Methods and Results",
+      "observed": "Огляд об’єднує різні relaxation methods. d=.57 наведено для within-analysis, d=.51 для between-group analysis; це не PMR-only ефект Stetter & Kupper.",
+      "limits": "Не виконано повторний метааналіз, оцінку кожного включеного trial або валідацію короткого app-script.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S05",
+      "record_sha256": "c8b9373854339b0562d90336d5079a21e7e8b8b6bab66d977c5630594c136651",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S06",
+      "title": "Balban et al. — Brief structured respiration practices enhance mood and reduce physiological arousal (2023)",
+      "url": "https://doi.org/10.1016/j.xcrm.2022.100895",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_INDEXED_ABSTRACT",
+      "checked_locator": "Summary; intervention conditions",
+      "observed": "Дослідження порівнює три breathing conditions та mindfulness, із 5 хвилинами практики на день протягом місяця.",
+      "limits": "У цьому проході не звірено arm-specific N та всі попарні contrasts. Не схвалено модифіковану дозу/техніку. Повний PMC був недоступний через CAPTCHA, publisher full-text request — 403.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S06",
+      "record_sha256": "bccc54632ef79199886463fb1df7530d90fc8330c167e0bdc943de56d3078288",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S07",
+      "title": "Heinz et al. — Randomized Trial of a Generative AI Chatbot for Mental Health Treatment (2025)",
+      "url": "https://doi.org/10.1056/AIoa2400802",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_ABSTRACT_METHODS_RESULTS",
+      "checked_locator": "NEJM AI, March 27 2025; abstract",
+      "observed": "Є позитивний RCT expert-fine-tuned Therabot: 210 дорослих, 4-тижневе втручання та follow-up до 8 тижнів, waitlist comparator.",
+      "limits": "Не є доказом довготривалої безпеки, переваги над терапевтом або ефективності нашого Codex runtime. Supplement і весь clinical monitoring protocol тут не перевірено.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S07",
+      "record_sha256": "06a9d735fd36cc6d64cc795e432a619fad1774ba324cca626854208faf0900be",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S08",
+      "title": "Pfizer — Free public access to PHQ and GAD assessment tools (2010)",
+      "url": "https://www.pfizer.com/news/press-release/press-release-detail/pfizer_to_offer_free_public_access_to_mental_health_assessment_tools_to_improve_diagnosis_and_patient_care",
+      "checked_on": "2026-10-03",
+      "access_extent": "RIGHTSHOLDER_PUBLIC_STATEMENT",
+      "checked_locator": "July 21 2010; access statement and translations",
+      "observed": "Правовласник оголосив безкоштовний доступ без copyright restriction до PHQ/GAD; це не підтверджує обмеження лише некомерційним використанням, заявлене у R07.",
+      "limits": "Окрема індивідуальна угода не потрібна там, де відповідне використання вже дозволяють умови правовласника. Конкретна українська версія, зміни, scoring і clinical use потребують окремого запису перевірки. Не підміняти точні умови словом public domain.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S08",
+      "record_sha256": "4db64946195a426f879786e2997a66703e76c0b804dea87ab614442f3efffbc9",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S09",
+      "title": "University of Pittsburgh — Pittsburgh Sleep Quality Index",
+      "url": "https://www.sleep.pitt.edu/psqi",
+      "checked_on": "2026-10-03",
+      "access_extent": "RIGHTSHOLDER_CURRENT_POLICY_PAGE",
+      "checked_locator": "Using the PSQI; Request Form; FAQs",
+      "observed": "Політика відокремлює некомерційне використання, модифікації, комерційний доступ і переклади; використання на собі не тотожне праву вбудувати та розповсюджувати шкалу.",
+      "limits": "Перевірка правил не є наданим дозволом нашому застосунку. Жодного permission request, платежу чи ліцензійної угоди не виконано.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S09",
+      "record_sha256": "8f041b5850ddc6a2a964e17e7328ac255a39243974fcdd23351a4a77ff9c78df",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S10",
+      "title": "European Commission — In-house medical devices",
+      "url": "https://health.ec.europa.eu/medical-devices-topics-interest/house-medical-devices_en",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_GUIDANCE_PAGE",
+      "checked_locator": "Health institutions; MDR Article 5(5)",
+      "observed": "In-house виняток стосується виробів, виготовлених і використаних у health institutions, а не довільного домашнього private app.",
+      "limits": "Не визначає остаточну кваліфікацію Personal Companion. Потрібен аналіз intended purpose та реального сценарію використання.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S10",
+      "record_sha256": "3beba5d518d2508e67d32d04cd862458b6e0d2dfb181bc5caf0bd696329322e0",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S11",
+      "title": "Regulation (EU) 2017/745 — Medical Device Regulation",
+      "url": "https://eur-lex.europa.eu/eli/reg/2017/745/oj/eng",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_STATUTORY_EXCERPT",
+      "checked_locator": "Recital 30; Article 2 definition of health institution",
+      "observed": "Текст визначає спеціальний контекст health institutions для in-house режиму.",
+      "limits": "Перевірено вузьку підставу для виправлення R16, не повний актуальний consolidated legal audit чи CE classification.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S11",
+      "record_sha256": "52c2d7a8ebbc45cc2808acb57cd84a5e1e7f3078a9ee3923520b1f82def5646c",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S12",
+      "title": "EDPB Guidelines 07/2020 on controller and processor, final version",
+      "url": "https://www.edpb.europa.eu/system/files/documents/2023-10/EDPB_guidelines_202007_controllerprocessor_final_en.pdf",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_PDF_TARGETED_TEXT_AND_PAGE_IMAGE",
+      "checked_locator": "Paragraphs 20–26; printed pp. 11–12",
+      "observed": "Controller/processor — функціональні ролі для конкретних processing operations; їх визначають фактичні обставини, не лише назва компанії чи контракту.",
+      "limits": "Не є визначенням ролей для майбутньої неіснуючої компанії або конкретного неузгодженого provider route.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S12",
+      "record_sha256": "f5726ac97ca9797a700cce7d62a818737ef5fa2f7dd0ed28f7997a9f44367288",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S13",
+      "title": "OpenAI — Codex authentication",
+      "url": "https://developers.openai.com/codex/auth/",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_CURRENT_DOCUMENTATION",
+      "checked_locator": "OpenAI authentication; API key automation; credential handling",
+      "observed": "Офіційно підтримуються ChatGPT sign-in та API-key sign-in. Документація рекомендує API keys для programmatic workflows; застосовні data controls відрізняються.",
+      "limits": "Redirect під час перевірки: https://learn.chatgpt.com/docs/auth. Це не permission на arbitrary health runtime, public backend або користування чужим account. Installed catalog/account не перевірялися.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S13",
+      "record_sha256": "620771165b981ef4c2113075c518a22f7d76ead6b963cb29fcadd3fa6df13051",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S14",
+      "title": "OpenAI — Data controls in the platform",
+      "url": "https://developers.openai.com/api/docs/guides/your-data",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_CURRENT_DOCUMENTATION",
+      "checked_locator": "Abuse monitoring; Zero Data Retention approval and endpoint limitations",
+      "observed": "ZDR/Modified Abuse Monitoring вимагають попереднього approval та додаткових умов; не є універсальним доступним кожному opt-in перемикачем.",
+      "limits": "Жодне approval/account setting не перевірено та не змінено. Retention має бути описаний для конкретного endpoint/режиму.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S14",
+      "record_sha256": "ecc5ba7f2ce514c074d67d9231487e24218d540d7fcca54cc51b217ce30f5527",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S15",
+      "title": "OpenAI — Usage policies",
+      "url": "https://openai.com/policies/usage-policies/",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_CURRENT_POLICY",
+      "checked_locator": "Tailored advice requiring a license",
+      "observed": "Політика забороняє tailored advice, що потребує ліцензії, без належної участі licensed professional.",
+      "limits": "Не blanket ban на будь-яку нейтральну нотатку про самопочуття; не скасовує інших політик/умов. Жодного runtime permission не надано.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S15",
+      "record_sha256": "897974545431fc6e2f18a3679e7b8bf20683fdd58bdbbb84135ad0cda1f3ca16",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    },
+    {
+      "id": "gate:S16",
+      "title": "European Commission — MDCG 2019-11 rev.1 publication",
+      "url": "https://health.ec.europa.eu/latest-updates/update-mdcg-2019-11-rev1-qualification-and-classification-software-regulation-eu-2017745-and-2025-06-17_en",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_LANDING_METADATA_ONLY",
+      "checked_locator": "Published June 17 2025; document title",
+      "observed": "Існування й дата оновлення rev.1 підтверджені.",
+      "limits": "PDF download був недоступний цьому web retrieval. Повний зміст rev.1 не позначати independently verified на основі цього запису.",
+      "local_source_bytes_sha256": null,
+      "external_id": "S16",
+      "record_sha256": "ea2a4555f294f845120d7758b4cd66b6a329ef2082a0d9eaf2dd69c80228c7a4",
+      "verification_origin": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY"
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim:RG-01",
+      "finding_id": "RG-01",
+      "packet_ids": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Різні RAW використовують ALLOW, VERIFIED, SOURCE_DIRECT, YES або EXCLUDE як підсумкові мітки.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "AUTHORITY_AND_SCOPE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-02",
+      "finding_id": "RG-02",
+      "packet_ids": [
+        "R09"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Дата пошуку названа симульованою; повні тексти були обмежені наданими фрагментами. У матриці є статуси YES.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "RAW_PROVENANCE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-03",
+      "finding_id": "RG-03",
+      "packet_ids": [
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Пункти відсутності ключів, телеметрії та підтвердженої local-first архітектури вже відмічені [x].",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "RAW_VS_IMPLEMENTATION_EVIDENCE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-04",
+      "finding_id": "RG-04",
+      "packet_ids": [
+        "R01",
+        "R03"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "R01 виключає IRT із поясненням, що він передбачає експозицію до травми/PTSD; R03 пропонує reviewed self-help кандидат.",
+      "source_ids": [
+        "gate:S01",
+        "gate:S03"
+      ],
+      "source_bindings": {
+        "gate:S01": "7cd65c842de26fb21105e84989efd9e34740beb0080c10eacd5a08b202495a78",
+        "gate:S03": "884067e7d2298aa753e83ff7493edafe6b77bcd5ad45b2a4af2678538de0f493"
+      },
+      "external_review_status": "PRIMARY_SOURCE_AND_CROSS_REPORT",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-05",
+      "finding_id": "RG-05",
+      "packet_ids": [
+        "R03"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "AASM 2018 описано як Level A; VA/DoD 2023 — як більш консервативну позицію з простим поясненням через військові вибірки.",
+      "source_ids": [
+        "gate:S01",
+        "gate:S02"
+      ],
+      "source_bindings": {
+        "gate:S01": "7cd65c842de26fb21105e84989efd9e34740beb0080c10eacd5a08b202495a78",
+        "gate:S02": "dc03d0de698e83ecd81b8514a14629d21f17140630a1a978d0e1412f2685b4ea"
+      },
+      "external_review_status": "PRIMARY_SOURCE_VERIFIED",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-06",
+      "finding_id": "RG-06",
+      "packet_ids": [
+        "R03"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Телефонна self-help робота використана як один з аргументів на користь майбутнього автоматизованого IRT.",
+      "source_ids": [
+        "gate:S03"
+      ],
+      "source_bindings": {
+        "gate:S03": "884067e7d2298aa753e83ff7493edafe6b77bcd5ad45b2a4af2678538de0f493"
+      },
+      "external_review_status": "PRIMARY_SOURCE_VERIFIED",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-07",
+      "finding_id": "RG-07",
+      "packet_ids": [
+        "R03"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Source ID 20 використано в матриці для різних праць, зокрема Cook та Casement.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "INTERNAL_CITATION_INTEGRITY",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-08",
+      "finding_id": "RG-08",
+      "packet_ids": [
+        "R02"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "UNKNOWN ≠ ZERO, але при unknown WASO пропонується припустити 5 хв на пробудження та позначити LOW_CONFIDENCE.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "INTERNAL_CONTRADICTION_AND_DATA_CONTRACT",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-09",
+      "finding_id": "RG-09",
+      "packet_ids": [
+        "R01",
+        "R04"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "R01 називає stimulus control безпечнішою заміною; R04 класифікує жорсткий автономний протокол як clinician-dependent і пропонує числовий sleep-stop cutoff.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "CROSS_REPORT_AND_SCOPE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-10",
+      "finding_id": "RG-10",
+      "packet_ids": [
+        "R05"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Заявлено перевагу didactic над Socratic стилем; водночас draft має кілька Mandatory кроків попри можливість just-save.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "SCOPE_AND_PENDING_SOURCE_CHECK",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-11",
+      "finding_id": "RG-11",
+      "packet_ids": [
+        "R08"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Stetter & Kupper2002 та d=.57 подані як PMR evidence, тоді як source21 веде до іншої роботи.",
+      "source_ids": [
+        "gate:S04",
+        "gate:S05"
+      ],
+      "source_bindings": {
+        "gate:S04": "8736dd2d36daaea5430d4e57c1a14b58f89b7ac84e4df950e8e740cbd8442102",
+        "gate:S05": "c8b9373854339b0562d90336d5079a21e7e8b8b6bab66d977c5630594c136651"
+      },
+      "external_review_status": "PRIMARY_SOURCE_VERIFIED",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-12",
+      "finding_id": "RG-12",
+      "packet_ids": [
+        "R08"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "N=111 і перевага cyclic sighing широко переказані; proposed app variant має інший wording/тривалість.",
+      "source_ids": [
+        "gate:S06"
+      ],
+      "source_bindings": {
+        "gate:S06": "bccc54632ef79199886463fb1df7530d90fc8330c167e0bdc943de56d3078288"
+      },
+      "external_review_status": "PRIMARY_ABSTRACT_AND_PENDING_DETAIL_CHECK",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-13",
+      "finding_id": "RG-13",
+      "packet_ids": [
+        "R06",
+        "R08"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "R06 називає grounding/5-4-3-2-1 надійно підтриманим; R08 прямо фіксує недостатність direct evidence для точної послідовності.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "CROSS_REPORT",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-14",
+      "finding_id": "RG-14",
+      "packet_ids": [
+        "R07"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Корисне розбиття задач пов’язано з BA; додано сильні пояснення про амигдалу та клінічно source-backed механізм.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "SCOPE_AND_UNVERIFIED_MECHANISM",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-15",
+      "finding_id": "RG-15",
+      "packet_ids": [
+        "R09"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Guided/Human support виключено з причиною local-first constraint.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "ARCHITECTURAL_REASONING",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-16",
+      "finding_id": "RG-16",
+      "packet_ids": [
+        "R10"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Текст відхиляє універсальний minimum N, але фінальна матриця пропонує >5 і >15. Є USER_CONFIRMED hypothesis та автоматичне виявлення confounders.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "INTERNAL_CONTRADICTION_AND_INFERENCE_BOUNDARY",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-17",
+      "finding_id": "RG-17",
+      "packet_ids": [
+        "R05",
+        "R06",
+        "R07",
+        "R11"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Корпус акцентує інциденти, ризики та відсутність достатніх довготривалих доказів для автономної роботи.",
+      "source_ids": [
+        "gate:S07"
+      ],
+      "source_bindings": {
+        "gate:S07": "06a9d735fd36cc6d64cc795e432a619fad1774ba324cca626854208faf0900be"
+      },
+      "external_review_status": "EXTERNAL_COMPLEMENT_NOT_REPLACEMENT",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-18",
+      "finding_id": "RG-18",
+      "packet_ids": [
+        "R11",
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Journal + consumer subscription позначено PROHIBITED з дією Move to API; Codex/OAuth названо загалом непридатним.",
+      "source_ids": [
+        "gate:S13",
+        "gate:S15"
+      ],
+      "source_bindings": {
+        "gate:S13": "620771165b981ef4c2113075c518a22f7d76ead6b963cb29fcadd3fa6df13051",
+        "gate:S15": "897974545431fc6e2f18a3679e7b8bf20683fdd58bdbbb84135ad0cda1f3ca16"
+      },
+      "external_review_status": "OFFICIAL_DOC_AND_SCOPE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-19",
+      "finding_id": "RG-19",
+      "packet_ids": [
+        "R11",
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "OpenAI API ZDR подано як opt-in VERIFIED; retention у RAW зведено до загальних чисел.",
+      "source_ids": [
+        "gate:S14"
+      ],
+      "source_bindings": {
+        "gate:S14": "ecc5ba7f2ce514c074d67d9231487e24218d540d7fcca54cc51b217ce30f5527"
+      },
+      "external_review_status": "OFFICIAL_DOC_VERIFIED",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-20",
+      "finding_id": "RG-20",
+      "packet_ids": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "PHQ/GAD описані як public domain або лише non-commercial; RRS rightsholder ототожнений із vendor implementation; PSQI позначається permission-related без grant.",
+      "source_ids": [
+        "gate:S08",
+        "gate:S09"
+      ],
+      "source_bindings": {
+        "gate:S08": "4db64946195a426f879786e2997a66703e76c0b804dea87ab614442f3efffbc9",
+        "gate:S09": "8f041b5850ddc6a2a964e17e7328ac255a39243974fcdd23351a4a77ff9c78df"
+      },
+      "external_review_status": "RIGHTSHOLDER_POLICY_AND_PENDING_CHAIN_OF_RIGHTS",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-21",
+      "finding_id": "RG-21",
+      "packet_ids": [
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Для private prototype у таблиці зазначено Exempt (in-house), для commercial — potential Class IIa.",
+      "source_ids": [
+        "gate:S10",
+        "gate:S11",
+        "gate:S16"
+      ],
+      "source_bindings": {
+        "gate:S10": "3beba5d518d2508e67d32d04cd862458b6e0d2dfb181bc5caf0bd696329322e0",
+        "gate:S11": "52c2d7a8ebbc45cc2808acb57cd84a5e1e7f3078a9ee3923520b1f82def5646c",
+        "gate:S16": "ea2a4555f294f845120d7758b4cd66b6a329ef2082a0d9eaf2dd69c80228c7a4"
+      },
+      "external_review_status": "OFFICIAL_LAW_SCOPE_CHECK",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-22",
+      "finding_id": "RG-22",
+      "packet_ids": [
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Розробник і всі provider-и отримують controller/processor ролі за узагальненою схемою.",
+      "source_ids": [
+        "gate:S12"
+      ],
+      "source_bindings": {
+        "gate:S12": "f5726ac97ca9797a700cce7d62a818737ef5fa2f7dd0ed28f7997a9f44367288"
+      },
+      "external_review_status": "OFFICIAL_GUIDANCE_SCOPE_CHECK",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "SCOPED_EXTERNAL_CHECK",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-23",
+      "finding_id": "RG-23",
+      "packet_ids": [
+        "R12"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "У RAW hardware не тестувався; таблиці обговорюють більше health types, ніж дозволено M6.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "REPOSITORY_VS_RAW_TIME_AND_SCOPE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-24",
+      "finding_id": "RG-24",
+      "packet_ids": [
+        "R13"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Запропоновано nonce strategy, PBKDF2 target, SQLCipher/Keychain; cleanup keys пов’язано з JS garbage collector, .gitignore — із запобіганням staging.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "UNVERIFIED_SECURITY_ASSUMPTIONS",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-25",
+      "finding_id": "RG-25",
+      "packet_ids": [
+        "R14"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Є мітки MEASURED поряд із NOT_RUN; пропонується MediaRecorder/Opus, OPFS і конкретні ASR engines.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "RAW_LABEL_CONTRADICTION_AND_SCOPE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-26",
+      "finding_id": "RG-26",
+      "packet_ids": [
+        "R15",
+        "R01",
+        "R11"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "Потрібна незмінність original і повний semantic immunity творчості.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "CROSS_REPORT_AND_DATA_LIFECYCLE",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    },
+    {
+      "id": "claim:RG-27",
+      "finding_id": "RG-27",
+      "packet_ids": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16"
+      ],
+      "raw_claimed_status": "RESEARCH_AUTHOR_POSITION_NOT_INDEPENDENT_APPROVAL",
+      "raw_position": "RAW містять готові expected routing/status і примусові кроки з різними safety assumptions.",
+      "source_ids": [],
+      "source_bindings": {},
+      "external_review_status": "TEST_ORACLE_AUTHORITY",
+      "actual_local_verification": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "evidence_status": "NEEDS_VERIFICATION",
+      "applicability": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "rights_status": "NOT_REVIEWED_FOR_EXACT_USE",
+      "content_status": "NOT_REVIEWED",
+      "scientific_validation": false
+    }
+  ],
+  "corrections": [
+    {
+      "id": "RG-01",
+      "supplied_finding": {
+        "id": "RG-01",
+        "title": "Отримання та RAW labels не є content approval",
+        "packets": [
+          "R01",
+          "R02",
+          "R03",
+          "R04",
+          "R05",
+          "R06",
+          "R07",
+          "R08",
+          "R09",
+          "R10",
+          "R11",
+          "R12",
+          "R13",
+          "R14",
+          "R15",
+          "R16"
+        ],
+        "raw_locators": [
+          "All RAW executive decisions / final matrices; canonical docs/SAFETY.md"
+        ],
+        "basis": "AUTHORITY_AND_SCOPE",
+        "raw_position": "Різні RAW використовують ALLOW, VERIFIED, SOURCE_DIRECT, YES або EXCLUDE як підсумкові мітки.",
+        "review_finding": "Це твердження дослідницьких звітів, а не підписи незалежних reviewer-ів чи дозволи runtime. Наявність DOI не підтверджує всі пов’язані висновки.",
+        "required_action": "Зберігати claimed_status окремо від reviewed_status, rights_status, content_status, technical_status і activation_status.",
+        "blocks": [
+          "BULK_RAW_TO_ACTIVE_PROMOTION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "03ff51fc81b4b908b68f800d05182b507404fc4830d4e8e831cc7856bc7917c4",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Зберігати claimed_status окремо від reviewed_status, rights_status, content_status, technical_status і activation_status.",
+      "claim_id": "claim:RG-01"
+    },
+    {
+      "id": "RG-02",
+      "supplied_finding": {
+        "id": "RG-02",
+        "title": "Симульована дата пошуку у R09",
+        "packets": [
+          "R09"
+        ],
+        "raw_locators": [
+          "C. Evidence methodology / P0008"
+        ],
+        "basis": "RAW_PROVENANCE",
+        "raw_position": "Дата пошуку названа симульованою; повні тексти були обмежені наданими фрагментами. У матриці є статуси YES.",
+        "review_finding": "Такий опис не підтверджує, що заявлений пошук і full-text verification були реально виконані. Це не доказ, що всі висновки хибні.",
+        "required_action": "Методологію зберегти дослівно в оригіналі; у похідному реєстрі позначити search_execution/full_text_access як UNVERIFIED, доки немає перевірюваного evidence.",
+        "blocks": [
+          "R09_EVIDENCE_PROMOTION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "f95ff33b086ddc546e9113c8cf9e9873064cfb6905b1becf6f255fbf02a3d690",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Методологію зберегти дослівно в оригіналі; у похідному реєстрі позначити search_execution/full_text_access як UNVERIFIED, доки немає перевірюваного evidence.",
+      "claim_id": "claim:RG-02"
+    },
+    {
+      "id": "RG-03",
+      "supplied_finding": {
+        "id": "RG-03",
+        "title": "R16 помилково виглядає як виконаний release checklist",
+        "packets": [
+          "R16"
+        ],
+        "raw_locators": [
+          "AN. Private prototype release prerequisites / P0089–P0094"
+        ],
+        "basis": "RAW_VS_IMPLEMENTATION_EVIDENCE",
+        "raw_position": "Пункти відсутності ключів, телеметрії та підтвердженої local-first архітектури вже відмічені [x].",
+        "review_finding": "RAW не наводить для цих checkmarks exact implementation SHA, команд та logs. Чатове або research-ствердження не замінює інженерну перевірку.",
+        "required_action": "Перенести як requirements без execution PASS; evidence брати тільки з конкретних C/R tests та наступних фактичних перевірок.",
+        "blocks": [
+          "RELEASE_ATTESTATION_FROM_RAW"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "ab8f6c36c44583faca43d4f8e4888bd1464e816ba5f56c87280146fc24c0b256",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Перенести як requirements без execution PASS; evidence брати тільки з конкретних C/R tests та наступних фактичних перевірок.",
+      "claim_id": "claim:RG-03"
+    },
+    {
+      "id": "RG-04",
+      "supplied_finding": {
+        "id": "RG-04",
+        "title": "IRT: не ототожнювати метод із trauma processing",
+        "packets": [
+          "R01",
+          "R03"
+        ],
+        "raw_locators": [
+          "R01 J / P0101; R03 B; R03 Y / T06R004"
+        ],
+        "basis": "PRIMARY_SOURCE_AND_CROSS_REPORT",
+        "raw_position": "R01 виключає IRT із поясненням, що він передбачає експозицію до травми/PTSD; R03 пропонує reviewed self-help кандидат.",
+        "review_finding": "Blanket-ототожнення некоректне. Є nightmare-focused guided дослідження; конкретні варіанти істотно відрізняються за роботою з первинним образом.",
+        "required_action": "IRT лишити кандидатним, не активним. Не оголошувати всі vivid dreams показанням. Для обраного варіанта потрібні fidelity, safety, content/qualified review.",
+        "blocks": [
+          "IRT_ACTIVATION"
+        ],
+        "primary_source_ids": [
+          "S01",
+          "S03"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "62989beb8fc044471a02e25e345f3639bc75a72179eccad7c35b9679a37c80ff",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "IRT лишити кандидатним, не активним. Не оголошувати всі vivid dreams показанням. Для обраного варіанта потрібні fidelity, safety, content/qualified review.",
+      "claim_id": "claim:RG-04"
+    },
+    {
+      "id": "RG-05",
+      "supplied_finding": {
+        "id": "RG-05",
+        "title": "IRT: рекомендації AASM і VA/DoD не можна звести до одного бала",
+        "packets": [
+          "R03"
+        ],
+        "raw_locators": [
+          "D. Guidelines / P0018–P0022"
+        ],
+        "basis": "PRIMARY_SOURCE_VERIFIED",
+        "raw_position": "AASM 2018 описано як Level A; VA/DoD 2023 — як більш консервативну позицію з простим поясненням через військові вибірки.",
+        "review_finding": "AASM 2018 використовує recommended/may be used. VA/DoD 2023 Recommendation33 має neither for nor against саме для PTSD-associated nightmares; обґрунтування містить непослідовні ефекти та низьку визначеність.",
+        "required_action": "Окремі versioned guideline claims із population/outcome; не називати розбіжність доведеною різницею лише цивільні/військові.",
+        "blocks": [
+          "IRT_EVIDENCE_PROMOTION"
+        ],
+        "primary_source_ids": [
+          "S01",
+          "S02"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "1b06d7ed709a4e29f1c00ab9b9e05c2444a8b006c7783284f5d3b9db4d62990d",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Окремі versioned guideline claims із population/outcome; не називати розбіжність доведеною різницею лише цивільні/військові.",
+      "claim_id": "claim:RG-05"
+    },
+    {
+      "id": "RG-06",
+      "supplied_finding": {
+        "id": "RG-06",
+        "title": "Guided IRT effect не переноситься на наш довільний короткий script",
+        "packets": [
+          "R03"
+        ],
+        "raw_locators": [
+          "F / P0031; E / T01R006; source DOI 10.1111/jsr.13123"
+        ],
+        "basis": "PRIMARY_SOURCE_VERIFIED",
+        "raw_position": "Телефонна self-help робота використана як один з аргументів на користь майбутнього автоматизованого IRT.",
+        "review_finding": "У дослідженому варіанті є людська підтримка, screening, супервізія і емоційна активація первинного кошмару. Текстове guided UI не дорівнює цьому guided delivery.",
+        "required_action": "Не присвоювати ефект trial нашій адаптації; описати її як новий кандидат зі своїм content/safety testing.",
+        "blocks": [
+          "IRT_FIDELITY_AND_CLAIMS"
+        ],
+        "primary_source_ids": [
+          "S03"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "e73a5d575cccba359691bb657098e88796894389fc02e51b36d62b351f366f8a",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Не присвоювати ефект trial нашій адаптації; описати її як новий кандидат зі своїм content/safety testing.",
+      "claim_id": "claim:RG-06"
+    },
+    {
+      "id": "RG-07",
+      "supplied_finding": {
+        "id": "RG-07",
+        "title": "R03: неоднозначні бібліографічні ID",
+        "packets": [
+          "R03"
+        ],
+        "raw_locators": [
+          "E.1 Source Documentation Matrix / T02"
+        ],
+        "basis": "INTERNAL_CITATION_INTEGRITY",
+        "raw_position": "Source ID 20 використано в матриці для різних праць, зокрема Cook та Casement.",
+        "review_finding": "Локатор за одним числом не забезпечує однозначної claim-to-source прив’язки.",
+        "required_action": "Стабільні source IDs за DOI/PMID/version. Не виправляти номер глобальним replace; звірити кожний claim. Superscript ref не є частиною DOI.",
+        "blocks": [
+          "AFFECTED_CLAIM_PROMOTION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "b56dcfeeaebf4c7f9c5d995394d57361b803b8576e7f7bd3a7e59946d6474185",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Стабільні source IDs за DOI/PMID/version. Не виправляти номер глобальним replace; звірити кожний claim. Superscript ref не є частиною DOI.",
+      "claim_id": "claim:RG-07"
+    },
+    {
+      "id": "RG-08",
+      "supplied_finding": {
+        "id": "RG-08",
+        "title": "R02: не домислювати 5 хвилин на пробудження",
+        "packets": [
+          "R02"
+        ],
+        "raw_locators": [
+          "I. Missing Data / P0054–P0056"
+        ],
+        "basis": "INTERNAL_CONTRADICTION_AND_DATA_CONTRACT",
+        "raw_position": "UNKNOWN ≠ ZERO, але при unknown WASO пропонується припустити 5 хв на пробудження та позначити LOW_CONFIDENCE.",
+        "review_finding": "Припущені хвилини не є даними людини. Позначка confidence не робить їх observed values і не усуває суперечність із provenance.",
+        "required_action": "WASO лишається null; TST/SE лише за достатніх явно визначених inputs. Інтервал між часами показувати як інтервал, не виміряну тривалість сну. No silent imputation.",
+        "blocks": [
+          "SLEEP_DERIVED_METRICS"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "cdc5380a229fba1599d51c6eaee0338876106619b0f25af88ce7055d919368e4",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "WASO лишається null; TST/SE лише за достатніх явно визначених inputs. Інтервал між часами показувати як інтервал, не виміряну тривалість сну. No silent imputation.",
+      "claim_id": "claim:RG-08"
+    },
+    {
+      "id": "RG-09",
+      "supplied_finding": {
+        "id": "RG-09",
+        "title": "Контроль стимулів і triage thresholds — окремі scope-рішення",
+        "packets": [
+          "R01",
+          "R04"
+        ],
+        "raw_locators": [
+          "R01 A; R04 A / P0005; R04 R / P0114; R04 Final matrix"
+        ],
+        "basis": "CROSS_REPORT_AND_SCOPE",
+        "raw_position": "R01 називає stimulus control безпечнішою заміною; R04 класифікує жорсткий автономний протокол як clinician-dependent і пропонує числовий sleep-stop cutoff.",
+        "review_finding": "Загальна інформація та персональне призначення — різні функції. Числовий cutoff у RAW не можна автоматично зробити validated medical triage rule.",
+        "required_action": "Залишити sleep restriction/compression/titration OFF у V1; scripted stimulus-control призначення OFF. Освітній кандидат та будь-який поріг розглядати окремо, без висновку «нижче/вище порога — безпечно».",
+        "blocks": [
+          "SLEEP_PROTOCOL_ACTIVATION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "6285385dcf8c784db8afb680688d425b2f7dd399d811cba3bcb8bdfbe4e5b474",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Залишити sleep restriction/compression/titration OFF у V1; scripted stimulus-control призначення OFF. Освітній кандидат та будь-який поріг розглядати окремо, без висновку «нижче/вище порога — безпечно».",
+      "claim_id": "claim:RG-09"
+    },
+    {
+      "id": "RG-10",
+      "supplied_finding": {
+        "id": "RG-10",
+        "title": "R05: порядок запитань та стиль не є універсально validated протоколом",
+        "packets": [
+          "R05"
+        ],
+        "raw_locators": [
+          "J / P0031; U / P0062 onward; D / T01R006"
+        ],
+        "basis": "SCOPE_AND_PENDING_SOURCE_CHECK",
+        "raw_position": "Заявлено перевагу didactic над Socratic стилем; водночас draft має кілька Mandatory кроків попри можливість just-save.",
+        "review_finding": "Точне дослідження стилю та comparator ще не звірені. Жоден flow не може позбавити користувача stop/skip/reject або дописувати мотиви.",
+        "required_action": "Залишити structured reflection draft; обмеження кількості запитань — product configuration, не клінічний cutoff. Позначити необхідність перевірити citation16.",
+        "blocks": [
+          "THOUGHT_RECORD_CONTENT_PROMOTION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "d710780e6621a8a9b4794b2bcbeff336e8460d36f6557fac95935a4f3166fbbf",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Залишити structured reflection draft; обмеження кількості запитань — product configuration, не клінічний cutoff. Позначити необхідність перевірити citation16.",
+      "claim_id": "claim:RG-10"
+    },
+    {
+      "id": "RG-11",
+      "supplied_finding": {
+        "id": "RG-11",
+        "title": "R08: переплутано PMR, autogenic training та змішаний огляд",
+        "packets": [
+          "R08"
+        ],
+        "raw_locators": [
+          "H / P0047; bibliography source21 / P0212"
+        ],
+        "basis": "PRIMARY_SOURCE_VERIFIED",
+        "raw_position": "Stetter & Kupper2002 та d=.57 подані як PMR evidence, тоді як source21 веде до іншої роботи.",
+        "review_finding": "Stetter & Kupper — autogenic training; Manzoni2008 охоплює кілька relaxation methods. Неправильно прив’язано метод, авторів і показник ефекту.",
+        "required_action": "Створити окремі source records; PMR claim перевірити за PMR-specific evidence. Не переносити pooled d у коротку вправу застосунку.",
+        "blocks": [
+          "PMR_EVIDENCE_PROMOTION"
+        ],
+        "primary_source_ids": [
+          "S04",
+          "S05"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "8b6f5ebb565c1064a3169ead1a41217094aeb1923edcec98e67b9cf5ae3ee8d0",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Створити окремі source records; PMR claim перевірити за PMR-specific evidence. Не переносити pooled d у коротку вправу застосунку.",
+      "claim_id": "claim:RG-11"
+    },
+    {
+      "id": "RG-12",
+      "supplied_finding": {
+        "id": "RG-12",
+        "title": "R08: breathing trial, доза та modified variant не взаємозамінні",
+        "packets": [
+          "R08"
+        ],
+        "raw_locators": [
+          "D / T01R002; L / P0067–P0069; AA candidate D"
+        ],
+        "basis": "PRIMARY_ABSTRACT_AND_PENDING_DETAIL_CHECK",
+        "raw_position": "N=111 і перевага cyclic sighing широко переказані; proposed app variant має інший wording/тривалість.",
+        "review_finding": "Першоджерело має кілька arms та визначений режим практики. У цьому review exact arm N і всі pairwise comparisons не підтверджені.",
+        "required_action": "Позначити ці quantitative claims NEEDS_VERIFICATION; не називати змінену дозу дослідженою, не видавати physiological mechanism за гарантований ефект.",
+        "blocks": [
+          "BREATHING_CONTENT_PROMOTION"
+        ],
+        "primary_source_ids": [
+          "S06"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "d0f105a1106dda6ef1c909645d88d7dd30e39213f7f9b90ebb17c6d41c2a4c19",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Позначити ці quantitative claims NEEDS_VERIFICATION; не називати змінену дозу дослідженою, не видавати physiological mechanism за гарантований ефект.",
+      "claim_id": "claim:RG-12"
+    },
+    {
+      "id": "RG-13",
+      "supplied_finding": {
+        "id": "RG-13",
+        "title": "R06/R08: direct evidence 5-4-3-2-1 не узгоджене",
+        "packets": [
+          "R06",
+          "R08"
+        ],
+        "raw_locators": [
+          "R06 O / P0043; R06 final T04R007; R08 F"
+        ],
+        "basis": "CROSS_REPORT",
+        "raw_position": "R06 називає grounding/5-4-3-2-1 надійно підтриманим; R08 прямо фіксує недостатність direct evidence для точної послідовності.",
+        "review_finding": "Загальний принцип спрямування уваги та конкретна числова послідовність — різні claims.",
+        "required_action": "Не називати exact 5-4-3-2-1 чи 3-2-1 validated treatment. Простий добровільний orientation flow — кандидат із власним wording і stop path після content review.",
+        "blocks": [
+          "GROUNDING_EFFICACY_CLAIM"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "212a503a6cb9057890ab0d6157e383bcdd80efe6cf09fb4e0d3d0182f352c2cf",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Не називати exact 5-4-3-2-1 чи 3-2-1 validated treatment. Простий добровільний orientation flow — кандидат із власним wording і stop path після content review.",
+      "claim_id": "claim:RG-13"
+    },
+    {
+      "id": "RG-14",
+      "supplied_finding": {
+        "id": "RG-14",
+        "title": "R07: micro-step UX не є повноцінною Behavioral Activation",
+        "packets": [
+          "R07"
+        ],
+        "raw_locators": [
+          "R. Small actions / P0094; F. variants; Final T03"
+        ],
+        "basis": "SCOPE_AND_UNVERIFIED_MECHANISM",
+        "raw_position": "Корисне розбиття задач пов’язано з BA; додано сильні пояснення про амигдалу та клінічно source-backed механізм.",
+        "review_finding": "У цьому проході механістичні твердження не підтверджені. Загальна організація обраної дії не набуває ефекту або статусу терапії BA.",
+        "required_action": "Зберегти optional user-chosen next step/rest/just-save як нейтральний UX-кандидат. BA, CMT і психодіагностика — окремі неактивні content кандидати.",
+        "blocks": [
+          "THERAPEUTIC_MICROSTEP_CLAIMS"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "1e5e937a06b56242e5218def900a74874014fa5f56f359208d4a4adb9cf5b18d",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Зберегти optional user-chosen next step/rest/just-save як нейтральний UX-кандидат. BA, CMT і психодіагностика — окремі неактивні content кандидати.",
+      "claim_id": "claim:RG-14"
+    },
+    {
+      "id": "RG-15",
+      "supplied_finding": {
+        "id": "RG-15",
+        "title": "Local-first не виключає людської допомоги",
+        "packets": [
+          "R09"
+        ],
+        "raw_locators": [
+          "AV. Final matrix / T06R002"
+        ],
+        "basis": "ARCHITECTURAL_REASONING",
+        "raw_position": "Guided/Human support виключено з причиною local-first constraint.",
+        "review_finding": "Локальне зберігання не суперечить добровільній очній консультації чи окремо погодженому експорту. Shared automatic access при цьому не дозволяється.",
+        "required_action": "Замінити цей висновок у похідному рішенні: human support не виключений архітектурою; він не є автоматично реалізованою функцією або permission на передачу даних.",
+        "blocks": [
+          "INCORRECT_ARCHITECTURE_CONSTRAINT"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "079e3ad8dd0e49a0bd760d03573039da66aa061b9e491192ba9c6bfdb501d628",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Замінити цей висновок у похідному рішенні: human support не виключений архітектурою; він не є автоматично реалізованою функцією або permission на передачу даних.",
+      "claim_id": "claim:RG-15"
+    },
+    {
+      "id": "RG-16",
+      "supplied_finding": {
+        "id": "RG-16",
+        "title": "R10: мінімальний N і статус гіпотези потребують явного контракту",
+        "packets": [
+          "R10"
+        ],
+        "raw_locators": [
+          "E / P0019; AM / T06R002–T06R005; AE / P0097; W abstention"
+        ],
+        "basis": "INTERNAL_CONTRADICTION_AND_INFERENCE_BOUNDARY",
+        "raw_position": "Текст відхиляє універсальний minimum N, але фінальна матриця пропонує >5 і >15. Є USER_CONFIRMED hypothesis та автоматичне виявлення confounders.",
+        "review_finding": "Ці пороги не є підтвердженим універсальним правилом; user acknowledgement не є причинним доказом. MNAR/confounding не встановлюються лише з пропуску або красивого графіка.",
+        "required_action": "Перший analytics scope — описові результати з coverage/provenance. Correlation/N-of-1 engine DEFER. Причини abstention повинні посилатись на перевірні властивості даних, не на прихований діагноз.",
+        "blocks": [
+          "EXPLORATORY_AND_CAUSAL_ANALYTICS"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "1128e28b6a246695b52008481350894623e70f43f42b67bd0c0894e138e4a5b6",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Перший analytics scope — описові результати з coverage/provenance. Correlation/N-of-1 engine DEFER. Причини abstention повинні посилатись на перевірні властивості даних, не на прихований діагноз.",
+      "claim_id": "claim:RG-16"
+    },
+    {
+      "id": "RG-17",
+      "supplied_finding": {
+        "id": "RG-17",
+        "title": "AI evidence: потрібні і позитивні trials, і межі перенесення",
+        "packets": [
+          "R05",
+          "R06",
+          "R07",
+          "R11"
+        ],
+        "raw_locators": [
+          "Conversational/generative AI evidence sections; R11 D/E"
+        ],
+        "basis": "EXTERNAL_COMPLEMENT_NOT_REPLACEMENT",
+        "raw_position": "Корпус акцентує інциденти, ризики та відсутність достатніх довготривалих доказів для автономної роботи.",
+        "review_finding": "Додано релевантний позитивний Therabot RCT 2025 для балансу. Він не спростовує конкретну прогалину довготривалої безпеки або evidence нашої адаптації.",
+        "required_action": "Не писати ані «генеративна допомога доведено не працює», ані «інший бот пройшов trial — наш валідований». Зберегти model/intervention/population/comparator окремо.",
+        "blocks": [
+          "OVERBROAD_GENERATIVE_AI_CONCLUSIONS"
+        ],
+        "primary_source_ids": [
+          "S07"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "06ca988d31969e9cafa768651e354e35e9ea924f3240f68e4e1ccb39abdaa75d",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Не писати ані «генеративна допомога доведено не працює», ані «інший бот пройшов trial — наш валідований». Зберегти model/intervention/population/comparator окремо.",
+      "claim_id": "claim:RG-17"
+    },
+    {
+      "id": "RG-18",
+      "supplied_finding": {
+        "id": "RG-18",
+        "title": "R11/R16: provider route не можна вирішити blanket ban або forced API",
+        "packets": [
+          "R11",
+          "R16"
+        ],
+        "raw_locators": [
+          "R11 Y/Z / P0057–P0061; R16 T06R004; provider matrices"
+        ],
+        "basis": "OFFICIAL_DOC_AND_SCOPE",
+        "raw_position": "Journal + consumer subscription позначено PROHIBITED з дією Move to API; Codex/OAuth названо загалом непридатним.",
+        "review_finding": "Офіційний Codex має subscription та API auth; це не дає blanket permission на наш health runtime. Developer CLI, personal trusted runtime і public backend — різні scenarios.",
+        "required_action": "Не міняти provider, billing чи auth. Відкрити route-specific gate із plan/terms/data flow/consent/tool isolation. MiniMax Token Plan окремо UNVERIFIED.",
+        "blocks": [
+          "LIVE_PROVIDER_ENABLEMENT"
+        ],
+        "primary_source_ids": [
+          "S13",
+          "S15"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "f8b588b9f61097366b12f4a5974995ee1b7ad79515ce5e7a6a993686a1cafb39",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Не міняти provider, billing чи auth. Відкрити route-specific gate із plan/terms/data flow/consent/tool isolation. MiniMax Token Plan окремо UNVERIFIED.",
+      "claim_id": "claim:RG-18"
+    },
+    {
+      "id": "RG-19",
+      "supplied_finding": {
+        "id": "RG-19",
+        "title": "R11: ZDR не простий загальнодоступний opt-in",
+        "packets": [
+          "R11",
+          "R16"
+        ],
+        "raw_locators": [
+          "R11 AL / T03R002; R16 provider retention matrix"
+        ],
+        "basis": "OFFICIAL_DOC_VERIFIED",
+        "raw_position": "OpenAI API ZDR подано як opt-in VERIFIED; retention у RAW зведено до загальних чисел.",
+        "review_finding": "Потрібні approval та additional requirements, застосовність залежить від endpoint/режиму. Наявність API key не означає нульового зберігання.",
+        "required_action": "Account approval UNKNOWN; endpoint retention UNKNOWN до окремої перевірки. API не активувати як нібито автоматично приватніший fallback.",
+        "blocks": [
+          "PROVIDER_PRIVACY_ATTESTATION"
+        ],
+        "primary_source_ids": [
+          "S14"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "5872702baf7701fc2ef5b88d47a803f92c7ccfbdc6071297bef3f5bb24e39949",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Account approval UNKNOWN; endpoint retention UNKNOWN до окремої перевірки. API не активувати як нібито автоматично приватніший fallback.",
+      "claim_id": "claim:RG-19"
+    },
+    {
+      "id": "RG-20",
+      "supplied_finding": {
+        "id": "RG-20",
+        "title": "Права на шкали, переклади та scoring не узгоджені",
+        "packets": [
+          "R02",
+          "R05",
+          "R06",
+          "R07",
+          "R16"
+        ],
+        "raw_locators": [
+          "R05 Z / P0104; R07 AJ / P0205; R06 AB / P0092; R16 AI rights matrix"
+        ],
+        "basis": "RIGHTSHOLDER_POLICY_AND_PENDING_CHAIN_OF_RIGHTS",
+        "raw_position": "PHQ/GAD описані як public domain або лише non-commercial; RRS rightsholder ототожнений із vendor implementation; PSQI позначається permission-related без grant.",
+        "review_finding": "Pfizer дає statement unrestricted/free access; Pittsburgh встановлює власні умови. Ці записи не підтверджують права на будь-який UA переклад/модифікацію чи права нашому app.",
+        "required_action": "Реєстр на рівні exact instrument/version/language/use; policy checked ≠ license granted ≠ clinically validated. RRS chain-of-rights UNVERIFIED, не присвоювати іншого власника навмання.",
+        "blocks": [
+          "QUESTIONNAIRE_REDISTRIBUTION_AND_ACTIVATION"
+        ],
+        "primary_source_ids": [
+          "S08",
+          "S09"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "0a097d803bf49a8cf59cc98f9ee409ce83ccce658b1bfeb19640bc8069301dfc",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Реєстр на рівні exact instrument/version/language/use; policy checked ≠ license granted ≠ clinically validated. RRS chain-of-rights UNVERIFIED, не присвоювати іншого власника навмання.",
+      "claim_id": "claim:RG-20"
+    },
+    {
+      "id": "RG-21",
+      "supplied_finding": {
+        "id": "RG-21",
+        "title": "R16: in-house MDR не побутовий виняток",
+        "packets": [
+          "R16"
+        ],
+        "raw_locators": [
+          "AV. Final gate matrix / T08R009; C–H"
+        ],
+        "basis": "OFFICIAL_LAW_SCOPE_CHECK",
+        "raw_position": "Для private prototype у таблиці зазначено Exempt (in-house), для commercial — potential Class IIa.",
+        "review_finding": "In-house правило адресоване health institutions, не будь-якому домашньому прототипу. Назва wellness і комерційність самі по собі не завершують classification.",
+        "required_action": "Прибрати автоматичний exemption/CE-verdict у derived gate. Intended purpose і фактичний release scope описати; остаточний legal review позначити NOT_PERFORMED.",
+        "blocks": [
+          "LEGAL_CLEARANCE"
+        ],
+        "primary_source_ids": [
+          "S10",
+          "S11",
+          "S16"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "6e2d49b4e454c442acd32c3636014086cecce9c3dd26506088cc3a0504060836",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Прибрати автоматичний exemption/CE-verdict у derived gate. Intended purpose і фактичний release scope описати; остаточний legal review позначити NOT_PERFORMED.",
+      "claim_id": "claim:RG-21"
+    },
+    {
+      "id": "RG-22",
+      "supplied_finding": {
+        "id": "RG-22",
+        "title": "R16: ролі GDPR визначаються за конкретною обробкою",
+        "packets": [
+          "R16"
+        ],
+        "raw_locators": [
+          "K. Controller/processor roles / P0023; C/J/L"
+        ],
+        "basis": "OFFICIAL_GUIDANCE_SCOPE_CHECK",
+        "raw_position": "Розробник і всі provider-и отримують controller/processor ролі за узагальненою схемою.",
+        "review_finding": "EDPB вимагає аналізувати конкретні operations та фактичне визначення purposes/means. Не перевірено повний GDPR/AI Act legal scope для Personal Companion.",
+        "required_action": "Підготувати карту data flows, не видавати blanket household exemption, controller або processor verdict. No account/legal/permission mutation.",
+        "blocks": [
+          "PILOT_OR_COMMERCIAL_LEGAL_ATTESTATION"
+        ],
+        "primary_source_ids": [
+          "S12"
+        ],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "9966d2f6966cac89c9cf0f2827a5ebe12f1c98c5bfc153a09fa9ae3167daef0e",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Підготувати карту data flows, не видавати blanket household exemption, controller або processor verdict. No account/legal/permission mutation.",
+      "claim_id": "claim:RG-22"
+    },
+    {
+      "id": "RG-23",
+      "supplied_finding": {
+        "id": "RG-23",
+        "title": "R12: research capability не замінює фактичний M6 hardware scope",
+        "packets": [
+          "R12"
+        ],
+        "raw_locators": [
+          "A/C; capability matrices; repo M6 report at pinned R"
+        ],
+        "basis": "REPOSITORY_VS_RAW_TIME_AND_SCOPE",
+        "raw_position": "У RAW hardware не тестувався; таблиці обговорюють більше health types, ніж дозволено M6.",
+        "review_finding": "Фактичний M6 report уже має ранній 0.6.0 gate Sleep/Steps, Exercise NO_RECORDS; final 0.6.1 hardware NOT_RUN. Це не валідація Watch7 physiology.",
+        "required_action": "Зберегти обидві provenance: research-author did not test; repo early hardware evidence існує. Не додавати HR/SpO2/history/background або health-to-AI context.",
+        "blocks": [
+          "EXPANDED_HEALTH_SCOPE",
+          "FALSE_FINAL_DEVICE_PASS"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "1b5ee014bd6568122e82ba23a13e3b2eec7e3636799b87134a328ef335a2652c",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Зберегти обидві provenance: research-author did not test; repo early hardware evidence існує. Не додавати HR/SpO2/history/background або health-to-AI context.",
+      "claim_id": "claim:RG-23"
+    },
+    {
+      "id": "RG-24",
+      "supplied_finding": {
+        "id": "RG-24",
+        "title": "R13: security design candidate не гарантія захисту",
+        "packets": [
+          "R13"
+        ],
+        "raw_locators": [
+          "H / P0039–P0042; AL / T08; adversarial T05R020"
+        ],
+        "basis": "UNVERIFIED_SECURITY_ASSUMPTIONS",
+        "raw_position": "Запропоновано nonce strategy, PBKDF2 target, SQLCipher/Keychain; cleanup keys пов’язано з JS garbage collector, .gitignore — із запобіганням staging.",
+        "review_finding": "У цьому research gate не виконано crypto audit, memory-zeroization proof чи перевірку нового storage/transport. Не можна перетворити suggestions на підтверджені гарантії.",
+        "required_action": "Окремий ADR/тести перед зміною accepted M1–M6. Наявність ignore/sandbox/HTTPS не дає абсолютного no-leak PASS; потрібні явний threat model та межі перевірки.",
+        "blocks": [
+          "SECURITY_READY_CLAIMS",
+          "UNREVIEWED_STORAGE_MIGRATION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "6b9c85009651d73b1e65d0db7e95632482b28c2c270a9c7715dd5dfea1ce3cc2",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Окремий ADR/тести перед зміною accepted M1–M6. Наявність ignore/sandbox/HTTPS не дає абсолютного no-leak PASS; потрібні явний threat model та межі перевірки.",
+      "claim_id": "claim:RG-24"
+    },
+    {
+      "id": "RG-25",
+      "supplied_finding": {
+        "id": "RG-25",
+        "title": "R14: benchmarks, codec та engines залишаються кандидатами",
+        "packets": [
+          "R14"
+        ],
+        "raw_locators": [
+          "D / P0024; K / P0048; H/I; AH final / T05"
+        ],
+        "basis": "RAW_LABEL_CONTRADICTION_AND_SCOPE",
+        "raw_position": "Є мітки MEASURED поряд із NOT_RUN; пропонується MediaRecorder/Opus, OPFS і конкретні ASR engines.",
+        "review_finding": "Вимірювань на цільовому Mac/S24 цей RAW не наводить. Відсутність одного acceleration backend не дорівнює повній несумісності engine. Current M4 не змінюється цим звітом.",
+        "required_action": "Engine/model licence та checksum перевіряти окремо; окремий authorized benchmark перед вибором. Ніяких downloads, cloud fallback або recorder/storage rewrite у M7_PREP.",
+        "blocks": [
+          "ASR_READY_CLAIMS",
+          "UNAUTHORIZED_MODEL_INSTALL"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "19b424f9d84bdc9aa7a302187bbd6f9efaa6a3ca0b834e8de404b8630ba028f2",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Engine/model licence та checksum перевіряти окремо; окремий authorized benchmark перед вибором. Ніяких downloads, cloud fallback або recorder/storage rewrite у M7_PREP.",
+      "claim_id": "claim:RG-25"
+    },
+    {
+      "id": "RG-26",
+      "supplied_finding": {
+        "id": "RG-26",
+        "title": "R15: original/fiction protection має співіснувати з consent і delete",
+        "packets": [
+          "R15",
+          "R01",
+          "R11"
+        ],
+        "raw_locators": [
+          "R15 A / P0006; G / P0037; I / P0047; R01 A creative boundary"
+        ],
+        "basis": "CROSS_REPORT_AND_DATA_LIFECYCLE",
+        "raw_position": "Потрібна незмінність original і повний semantic immunity творчості.",
+        "review_finding": "Автоматичне переписування заборонено; це не заборона власного edit/delete. Fiction ≠ biography, але тег fiction не робить явний поточний real-life safety request неіснуючим.",
+        "required_action": "Не сканувати creative vault для психологічного профілю. Відрізняти персонажа від користувача; обробляти явний user intent у поточній взаємодії. Видалення охоплює похідні дані згідно з existing retention contract.",
+        "blocks": [
+          "CREATIVE_LIFECYCLE_AND_ROUTING_PROMOTION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "bacac50abdd84fd5390d1f40d3bf54f878799d56130b60d7df2ab041eafcba69",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Не сканувати creative vault для психологічного профілю. Відрізняти персонажа від користувача; обробляти явний user intent у поточній взаємодії. Видалення охоплює похідні дані згідно з existing retention contract.",
+      "claim_id": "claim:RG-26"
+    },
+    {
+      "id": "RG-27",
+      "supplied_finding": {
+        "id": "RG-27",
+        "title": "RAW evaluation cases не є автоматично gold-standard corpus",
+        "packets": [
+          "R01",
+          "R02",
+          "R03",
+          "R04",
+          "R05",
+          "R06",
+          "R07",
+          "R08",
+          "R09",
+          "R10",
+          "R11",
+          "R12",
+          "R13",
+          "R14",
+          "R15",
+          "R16"
+        ],
+        "raw_locators": [
+          "All Synthetic evaluation / final gate tables"
+        ],
+        "basis": "TEST_ORACLE_AUTHORITY",
+        "raw_position": "RAW містять готові expected routing/status і примусові кроки з різними safety assumptions.",
+        "review_finding": "Тест, який лише відтворює невірну очікувану відповідь RAW, закріпить помилку. Правила scope/tests і наукові cutoffs — різні сутності.",
+        "required_action": "Зберігати proposed_expected; незалежно reviewed_expected з rationale. Клінічні labels/gold cases не підписувати як validated; mechanical gate cases можна тестувати окремо.",
+        "blocks": [
+          "CLINICAL_EVAL_GOLD_PROMOTION"
+        ],
+        "primary_source_ids": [],
+        "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+      },
+      "finding_sha256": "9214af0cd5960fc02cd338016b23120744bfb7361bfb245d3d2f37891284cb3d",
+      "integration_status": "INTEGRATED_AS_DERIVED_DECISION",
+      "content_resolution": "OPEN_DEPENDENT_GATE",
+      "derived_decision": "Зберігати proposed_expected; незалежно reviewed_expected з rationale. Клінічні labels/gold cases не підписувати як validated; mechanical gate cases можна тестувати окремо.",
+      "claim_id": "claim:RG-27"
+    }
+  ],
+  "modules": [
+    {
+      "id": "journal_capture",
+      "proposed_disposition": "NEUTRAL_EXISTING_SCOPE",
+      "research_packets": [
+        "R01",
+        "R02",
+        "R15"
+      ],
+      "boundary": "Не втручатися в existing journal CRUD; лише збереження введеного користувачем тексту.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": false,
+      "required_reviewer_role": "CONTENT_REVIEWER",
+      "intended_scope": "Не втручатися в existing journal CRUD; лише збереження введеного користувачем тексту.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-04",
+        "claim:RG-08",
+        "claim:RG-09",
+        "claim:RG-20",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-04",
+        "RG-08",
+        "RG-09",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-04",
+        "FINDING:RG-08",
+        "FINDING:RG-09",
+        "FINDING:RG-20",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "У межах окремої goal визначити лише нейтральний capture scope та перевірити stop/edit/delete.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "creative_organization",
+      "proposed_disposition": "NEUTRAL_EXISTING_SCOPE",
+      "research_packets": [
+        "R11",
+        "R15"
+      ],
+      "boundary": "Сортування з explicit selection, без психологічного профілю автора чи автоматичного перетворення ідеї в обов’язок.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": false,
+      "required_reviewer_role": "CONTENT_REVIEWER",
+      "intended_scope": "Сортування з explicit selection, без психологічного профілю автора чи автоматичного перетворення ідеї в обов’язок.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Уточнити selection та fiction/user-intent boundaries без психологічного профілю.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "sleep_education",
+      "proposed_disposition": "CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R01",
+        "R02",
+        "R04"
+      ],
+      "boundary": "Освітній текст не розраховує індивідуальні вікна сну, не називає consumer estimates клінічними вимірами.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Освітній текст не розраховує індивідуальні вікна сну, не називає consumer estimates клінічними вимірами.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-04",
+        "claim:RG-08",
+        "claim:RG-09",
+        "claim:RG-20",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-04",
+        "RG-08",
+        "RG-09",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-04",
+        "FINDING:RG-08",
+        "FINDING:RG-09",
+        "FINDING:RG-20",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Підготувати exact UA educational draft без персональних sleep windows для content reviewer.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "thought_record",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R05",
+        "R06",
+        "R11"
+      ],
+      "boundary": "Версійований draft без переконування, hidden-belief inference або forced completion.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Версійований draft без переконування, hidden-belief inference або forced completion.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-10",
+        "claim:RG-13",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-20",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-10",
+        "RG-13",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-10",
+        "FINDING:RG-13",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-20",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Звірити R05 citation16 і сформувати exact добровільний draft для фахового review.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "worry_rumination",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R06",
+        "R09",
+        "R11"
+      ],
+      "boundary": "Не нескінченний діалог; не clinician diagnosis з loop detector.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Не нескінченний діалог; не clinician diagnosis з loop detector.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-02",
+        "claim:RG-13",
+        "claim:RG-15",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-20",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-02",
+        "RG-13",
+        "RG-15",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-02",
+        "FINDING:RG-13",
+        "FINDING:RG-15",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-20",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Зіставити exact grounding claims і stop/skip wording, не створюючи diagnosis rule.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "activity_self_kindness",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R07",
+        "R09"
+      ],
+      "boundary": "Не маскувати treatment BA під загальний task organizer.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Не маскувати treatment BA під загальний task organizer.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-02",
+        "claim:RG-14",
+        "claim:RG-15",
+        "claim:RG-17",
+        "claim:RG-20",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-02",
+        "RG-14",
+        "RG-15",
+        "RG-17",
+        "RG-20",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-02",
+        "FINDING:RG-14",
+        "FINDING:RG-15",
+        "FINDING:RG-17",
+        "FINDING:RG-20",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Відокремити нейтральну дію/rest від BA та перевірити claims обраного draft.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "grounding_relaxation",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R01",
+        "R08",
+        "R09"
+      ],
+      "boundary": "Кожний exact technique/dose окремо; generic low-risk назва не є допуском.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Кожний exact technique/dose окремо; generic low-risk назва не є допуском.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-02",
+        "claim:RG-04",
+        "claim:RG-09",
+        "claim:RG-11",
+        "claim:RG-12",
+        "claim:RG-13",
+        "claim:RG-15",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-02",
+        "RG-04",
+        "RG-09",
+        "RG-11",
+        "RG-12",
+        "RG-13",
+        "RG-15",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-02",
+        "FINDING:RG-04",
+        "FINDING:RG-09",
+        "FINDING:RG-11",
+        "FINDING:RG-12",
+        "FINDING:RG-13",
+        "FINDING:RG-15",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Спершу розділити PMR/autogenic/mixed sources; обрати одну exact technique/dose.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "dream_irt",
+      "proposed_disposition": "QUALIFIED_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R01",
+        "R03",
+        "R11"
+      ],
+      "boundary": "Не blanket reject методу, але specific variant/fidelity/target scope мають пройти qualified review.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Не blanket reject методу, але specific variant/fidelity/target scope мають пройти qualified review.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-04",
+        "claim:RG-05",
+        "claim:RG-06",
+        "claim:RG-07",
+        "claim:RG-09",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-04",
+        "RG-05",
+        "RG-06",
+        "RG-07",
+        "RG-09",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-04",
+        "FINDING:RG-05",
+        "FINDING:RG-06",
+        "FINDING:RG-07",
+        "FINDING:RG-09",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Розв’язати R03 citation20 collision, визначити fidelity/population/guidance перед qualified review.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "weekly_descriptive_review",
+      "proposed_disposition": "ANALYTICS_CONTRACT_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R02",
+        "R10",
+        "R11",
+        "R12"
+      ],
+      "boundary": "Лише описові результати; M6 health не додавати до M3 AI контексту без окремого дозволу.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": false,
+      "required_reviewer_role": "CONTENT_REVIEWER",
+      "intended_scope": "Лише описові результати; M6 health не додавати до M3 AI контексту без окремого дозволу.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-08",
+        "claim:RG-16",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-20",
+        "claim:RG-23",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-08",
+        "RG-16",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-23",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-08",
+        "FINDING:RG-16",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-20",
+        "FINDING:RG-23",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Визначити deterministic coverage/missing-data contract; health-to-AI потребує окремого дозволу.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "exploratory_n_of_1",
+      "proposed_disposition": "DEFERRED",
+      "research_packets": [
+        "R10"
+      ],
+      "boundary": "Не впроваджувати causal claims/пошук усіх кореляцій під видом weekly summary.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": false,
+      "required_reviewer_role": "CONTENT_REVIEWER",
+      "intended_scope": "Не впроваджувати causal claims/пошук усіх кореляцій під видом weekly summary.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-16",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-16",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "DEFERRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-16",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Залишити DEFERRED; перед окремою goal визначити hypotheses/coverage/confounding contract.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "questionnaires",
+      "proposed_disposition": "EXACT_RIGHTS_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R16"
+      ],
+      "boundary": "Instrument/version/translation/scoring/use-case окремо. Тут жодної шкали не активовано.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Instrument/version/translation/scoring/use-case окремо. Тут жодної шкали не активовано.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-03",
+        "claim:RG-08",
+        "claim:RG-10",
+        "claim:RG-13",
+        "claim:RG-14",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-20",
+        "claim:RG-21",
+        "claim:RG-22",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-03",
+        "RG-08",
+        "RG-10",
+        "RG-13",
+        "RG-14",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-21",
+        "RG-22",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-03",
+        "FINDING:RG-08",
+        "FINDING:RG-10",
+        "FINDING:RG-13",
+        "FINDING:RG-14",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-20",
+        "FINDING:RG-21",
+        "FINDING:RG-22",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Вибрати exact instrument/version/UA translation/use; записати застосовну license/public permission або потрібний grant.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "clinical_sleep_window",
+      "proposed_disposition": "EXCLUDED_V1",
+      "research_packets": [
+        "R01",
+        "R04"
+      ],
+      "boundary": "Autonomous restriction/compression/titration залишається OFF.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Autonomous restriction/compression/titration залишається OFF.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-04",
+        "claim:RG-09",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-04",
+        "RG-09",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "EXCLUDED_V1",
+        "FINDING:RG-01",
+        "FINDING:RG-04",
+        "FINDING:RG-09",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Залишити EXCLUDED_V1; не створювати autonomous titration.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "trauma_processing_diagnosis_medication",
+      "proposed_disposition": "EXCLUDED_V1",
+      "research_packets": [
+        "R01",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R11"
+      ],
+      "boundary": "Не реалізовувати autonomous clinical decision making.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": true,
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "intended_scope": "Не реалізовувати autonomous clinical decision making.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-04",
+        "claim:RG-09",
+        "claim:RG-10",
+        "claim:RG-13",
+        "claim:RG-14",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-20",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-04",
+        "RG-09",
+        "RG-10",
+        "RG-13",
+        "RG-14",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "EXCLUDED_V1",
+        "FINDING:RG-01",
+        "FINDING:RG-04",
+        "FINDING:RG-09",
+        "FINDING:RG-10",
+        "FINDING:RG-13",
+        "FINDING:RG-14",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-20",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Залишити EXCLUDED_V1; не реалізовувати autonomous clinical decisions.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "live_ai_provider",
+      "proposed_disposition": "SEPARATE_PERMISSION_AND_ROUTE_GATE",
+      "research_packets": [
+        "R11",
+        "R16"
+      ],
+      "boundary": "Залишається OFF; дослідження не змінює provider/auth/billing/data permissions.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": false,
+      "required_reviewer_role": "CONTENT_REVIEWER",
+      "intended_scope": "Залишається OFF; дослідження не змінює provider/auth/billing/data permissions.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-03",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-20",
+        "claim:RG-21",
+        "claim:RG-22",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-03",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-21",
+        "RG-22",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-03",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-20",
+        "FINDING:RG-21",
+        "FINDING:RG-22",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "SEPARATE_PERMISSION_AND_ROUTE_GATE",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Окремо описати route/plan/endpoint/consent/retention, потім отримати scoped runtime permission.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "local_asr_real_model",
+      "proposed_disposition": "SEPARATE_PERMISSION_AND_BENCHMARK_GATE",
+      "research_packets": [
+        "R14"
+      ],
+      "boundary": "Це не дозвіл на engine/model download або ASR з real private audio.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": false,
+      "required_reviewer_role": "CONTENT_REVIEWER",
+      "intended_scope": "Це не дозвіл на engine/model download або ASR з real private audio.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-25",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-25",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-25",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "SEPARATE_PERMISSION_AND_BENCHMARK_GATE",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Окрема goal із exact engine/model/version/license/checksum та synthetic UA benchmark дозволом.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    },
+    {
+      "id": "expanded_health_access",
+      "proposed_disposition": "SEPARATE_PERMISSION_GATE",
+      "research_packets": [
+        "R12"
+      ],
+      "boundary": "Не розширювати M6 reads, не активувати background/history чи health-to-AI.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null,
+      "version": "0.1.0-draft",
+      "draft_status": "DRAFT_NOT_RUNTIME",
+      "clinical_sensitive": false,
+      "required_reviewer_role": "CONTENT_REVIEWER",
+      "intended_scope": "Не розширювати M6 reads, не активувати background/history чи health-to-AI.",
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-23",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-23",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-23",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "SEPARATE_PERMISSION_GATE",
+        "UNRESOLVED_CLAIM"
+      ],
+      "smallest_next_step": "Залишити чинні 3 reads; перед private pilot виконати дозволений exact 0.6.1 smoke M6-N01.",
+      "allowed_actions": [
+        "METADATA_REVIEW",
+        "SYNTHETIC_PREPARATION_TESTS"
+      ],
+      "forbidden_actions": [
+        "CLINICAL_ACTIVATION",
+        "PRIVATE_DATA_ACCESS",
+        "UNSCOPED_PROVIDER_CALLS"
+      ],
+      "rollback": "Metadata-only; revert by forward commit. No runtime state to roll back.",
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "technical_status": "NOT_RUN",
+      "technical_sha": null,
+      "approval": null,
+      "activation_status": "OFF",
+      "technical_receipt": null
+    }
+  ],
+  "m6_review": {
+    "implementation_sha": "1d30db9677f2c7b6f07145e8c0c5263969f39d3e",
+    "evidence_sha": "7516c9487346d8c3f0cc0b6224bdfe7354f5153a",
+    "external_verdict": "ACCEPT_ENGINEERING_AND_BOUNDED_EARLY_HARDWARE",
+    "tested_hardware_build": "0.6.0-debug",
+    "final_build": "0.6.1-debug",
+    "final_build_hardware": "NOT_RUN",
+    "note_id": "M6-N01",
+    "note": "Before private pilot: exact final Android0.6.1 short hardware smoke; early 0.6.0 evidence cannot be upgraded retroactively"
+  },
+  "active_clinical_protocols": 0
+}

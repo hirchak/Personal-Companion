@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/hirchak/Personal-Companion.git",
+  "observed_branch": "main",
+  "observed_head": "7516c9487346d8c3f0cc0b6224bdfe7354f5153a",
+  "last_implementation_C": "1d30db9677f2c7b6f07145e8c0c5263969f39d3e",
+  "checked_on": "2026-10-03",
+  "read_paths": [
+    "STATE.md",
+    "HANDOFF.md",
+    ".project/project.json",
+    "docs/M6_CONTRACT.md",
+    "reports/M6_HEALTH_CONNECT_REPORT.md",
+    "prompts/M6_HEALTH_CONNECT.md",
+    "research/RESEARCH_PLAN.md",
+    "docs/SAFETY.md",
+    "docs/ROADMAP.md"
+  ],
+  "compare_C_to_R": {
+    "ahead_by": 1,
+    "application_code_changed": false,
+    "changed_paths": [
+      "HANDOFF.md",
+      "STATE.md",
+      "devlog/2026-10-01-M6.md",
+      "docs/ROADMAP.md",
+      "reports/M6_HEALTH_CONNECT_REPORT.md",
+      "reports/evidence/M6/ACCEPTANCE_MATRIX.json",
+      "reports/evidence/M6/COMPLETION_AUDIT.json",
+      "reports/evidence/M6/EXACT_C_CHECKS.json",
+      "reports/evidence/M6/EXACT_C_PRIVACY.json",
+      "reports/evidence/M6/PRE_PUBLICATION_PRIVACY.json",
+      "reports/evidence/M6/SYNTHETIC_BENCHMARK_FINAL.json"
+    ]
+  },
+  "repo_recorded_status": "M6_AWAITING_REVIEW",
+  "external_chat_review": "M6_ACCEPT_ENGINEERING_AND_BOUNDED_EARLY_HARDWARE",
+  "external_review_persisted_in_repo_at_observed_head": false,
+  "M6_N01": "Before private pilot: exact final Android0.6.1 short hardware smoke; early 0.6.0 evidence cannot be upgraded retroactively",
+  "research_repo_state": "NOT_STARTED / no RAW ingestion, while R01–R16 now received in ChatGPT Project",
+  "M7_runtime": "NOT_STARTED",
+  "new_repo_writes_in_this_review": false,
+  "application_tests_rerun_in_this_review": false,
+  "snapshot_warning": "Four attached context MD files are R5/M0 snapshots at175fc934ad16552759273d2ed6770835b6f28786; they are not current implementation evidence."
+}

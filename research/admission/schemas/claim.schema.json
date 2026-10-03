@@ -1,0 +1,108 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^claim:RG-(?:0[1-9]|1[0-9]|2[0-7])$",
+      "title": "Id",
+      "type": "string"
+    },
+    "finding_id": {
+      "pattern": "^RG-(?:0[1-9]|1[0-9]|2[0-7])$",
+      "title": "Finding Id",
+      "type": "string"
+    },
+    "packet_ids": {
+      "items": {
+        "pattern": "^R(?:0[1-9]|1[0-6])$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Packet Ids",
+      "type": "array"
+    },
+    "raw_claimed_status": {
+      "minLength": 1,
+      "title": "Raw Claimed Status",
+      "type": "string"
+    },
+    "raw_position": {
+      "minLength": 1,
+      "title": "Raw Position",
+      "type": "string"
+    },
+    "source_ids": {
+      "items": {
+        "pattern": "^gate:S(?:0[1-9]|1[0-6])$",
+        "type": "string"
+      },
+      "title": "Source Ids",
+      "type": "array"
+    },
+    "source_bindings": {
+      "patternProperties": {
+        "^gate:S(?:0[1-9]|1[0-6])$": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "title": "Source Bindings",
+      "type": "object"
+    },
+    "external_review_status": {
+      "minLength": 1,
+      "title": "External Review Status",
+      "type": "string"
+    },
+    "actual_local_verification": {
+      "const": "MAPPING_ONLY_NOT_PRIMARY_RECHECK",
+      "title": "Actual Local Verification",
+      "type": "string"
+    },
+    "evidence_status": {
+      "enum": [
+        "SCOPED_EXTERNAL_CHECK",
+        "NEEDS_VERIFICATION"
+      ],
+      "title": "Evidence Status",
+      "type": "string"
+    },
+    "applicability": {
+      "const": "NO_AUTOMATIC_TRANSFER_TO_APP",
+      "title": "Applicability",
+      "type": "string"
+    },
+    "rights_status": {
+      "const": "NOT_REVIEWED_FOR_EXACT_USE",
+      "title": "Rights Status",
+      "type": "string"
+    },
+    "content_status": {
+      "const": "NOT_REVIEWED",
+      "title": "Content Status",
+      "type": "string"
+    },
+    "scientific_validation": {
+      "const": false,
+      "title": "Scientific Validation",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "finding_id",
+    "packet_ids",
+    "raw_claimed_status",
+    "raw_position",
+    "source_ids",
+    "source_bindings",
+    "external_review_status",
+    "actual_local_verification",
+    "evidence_status",
+    "applicability",
+    "rights_status",
+    "content_status",
+    "scientific_validation"
+  ],
+  "title": "Claim",
+  "type": "object"
+}

@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "status": "ARCHITECTURE_DRAFT_NOT_RUNTIME_REGISTRY",
+  "review_date": "2026-10-03",
+  "warning": "Цей файл не є executable protocol registry; жодний запис не надає activation permission. Existing accepted neutral функції не вимикаються цим draft.",
+  "modules": [
+    {
+      "id": "journal_capture",
+      "proposed_disposition": "NEUTRAL_EXISTING_SCOPE",
+      "research_packets": [
+        "R01",
+        "R02",
+        "R15"
+      ],
+      "boundary": "Не втручатися в existing journal CRUD; лише збереження введеного користувачем тексту.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "creative_organization",
+      "proposed_disposition": "NEUTRAL_EXISTING_SCOPE",
+      "research_packets": [
+        "R11",
+        "R15"
+      ],
+      "boundary": "Сортування з explicit selection, без психологічного профілю автора чи автоматичного перетворення ідеї в обов’язок.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "sleep_education",
+      "proposed_disposition": "CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R01",
+        "R02",
+        "R04"
+      ],
+      "boundary": "Освітній текст не розраховує індивідуальні вікна сну, не називає consumer estimates клінічними вимірами.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "thought_record",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R05",
+        "R06",
+        "R11"
+      ],
+      "boundary": "Версійований draft без переконування, hidden-belief inference або forced completion.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "worry_rumination",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R06",
+        "R09",
+        "R11"
+      ],
+      "boundary": "Не нескінченний діалог; не clinician diagnosis з loop detector.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "activity_self_kindness",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R07",
+        "R09"
+      ],
+      "boundary": "Не маскувати treatment BA під загальний task organizer.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "grounding_relaxation",
+      "proposed_disposition": "EVIDENCE_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R01",
+        "R08",
+        "R09"
+      ],
+      "boundary": "Кожний exact technique/dose окремо; generic low-risk назва не є допуском.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "dream_irt",
+      "proposed_disposition": "QUALIFIED_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R01",
+        "R03",
+        "R11"
+      ],
+      "boundary": "Не blanket reject методу, але specific variant/fidelity/target scope мають пройти qualified review.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "weekly_descriptive_review",
+      "proposed_disposition": "ANALYTICS_CONTRACT_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R02",
+        "R10",
+        "R11",
+        "R12"
+      ],
+      "boundary": "Лише описові результати; M6 health не додавати до M3 AI контексту без окремого дозволу.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "exploratory_n_of_1",
+      "proposed_disposition": "DEFERRED",
+      "research_packets": [
+        "R10"
+      ],
+      "boundary": "Не впроваджувати causal claims/пошук усіх кореляцій під видом weekly summary.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "questionnaires",
+      "proposed_disposition": "EXACT_RIGHTS_AND_CONTENT_REVIEW_REQUIRED",
+      "research_packets": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R16"
+      ],
+      "boundary": "Instrument/version/translation/scoring/use-case окремо. Тут жодної шкали не активовано.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "clinical_sleep_window",
+      "proposed_disposition": "EXCLUDED_V1",
+      "research_packets": [
+        "R01",
+        "R04"
+      ],
+      "boundary": "Autonomous restriction/compression/titration залишається OFF.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "trauma_processing_diagnosis_medication",
+      "proposed_disposition": "EXCLUDED_V1",
+      "research_packets": [
+        "R01",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R11"
+      ],
+      "boundary": "Не реалізовувати autonomous clinical decision making.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "live_ai_provider",
+      "proposed_disposition": "SEPARATE_PERMISSION_AND_ROUTE_GATE",
+      "research_packets": [
+        "R11",
+        "R16"
+      ],
+      "boundary": "Залишається OFF; дослідження не змінює provider/auth/billing/data permissions.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "local_asr_real_model",
+      "proposed_disposition": "SEPARATE_PERMISSION_AND_BENCHMARK_GATE",
+      "research_packets": [
+        "R14"
+      ],
+      "boundary": "Це не дозвіл на engine/model download або ASR з real private audio.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    },
+    {
+      "id": "expanded_health_access",
+      "proposed_disposition": "SEPARATE_PERMISSION_GATE",
+      "research_packets": [
+        "R12"
+      ],
+      "boundary": "Не розширювати M6 reads, не активувати background/history чи health-to-AI.",
+      "runtime_activation_authorized_by_this_pack": false,
+      "qualified_clinical_review_record": null,
+      "exact_content_hash": null
+    }
+  ]
+}

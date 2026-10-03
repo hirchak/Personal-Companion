@@ -1,0 +1,96 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^gate:S(?:0[1-9]|1[0-6])$",
+      "title": "Id",
+      "type": "string"
+    },
+    "external_id": {
+      "minLength": 1,
+      "title": "External Id",
+      "type": "string"
+    },
+    "record_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Record Sha256",
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "url": {
+      "pattern": "^https://\\S+$",
+      "title": "Url",
+      "type": "string"
+    },
+    "checked_on": {
+      "minLength": 1,
+      "title": "Checked On",
+      "type": "string"
+    },
+    "access_extent": {
+      "enum": [
+        "PUBLISHER_ABSTRACT_AND_POSITION_STATEMENTS",
+        "OFFICIAL_PDF_TARGETED_TEXT_AND_PAGE_IMAGES",
+        "PUBLISHER_FULL_TEXT_TARGETED_SECTIONS",
+        "INDEXED_PRIMARY_ABSTRACT_METADATA",
+        "PUBLISHER_AND_AUTHOR_REPOSITORY_ABSTRACT",
+        "PUBLISHER_INDEXED_ABSTRACT",
+        "PUBLISHER_ABSTRACT_METHODS_RESULTS",
+        "RIGHTSHOLDER_PUBLIC_STATEMENT",
+        "RIGHTSHOLDER_CURRENT_POLICY_PAGE",
+        "OFFICIAL_GUIDANCE_PAGE",
+        "OFFICIAL_STATUTORY_EXCERPT",
+        "OFFICIAL_PDF_TARGETED_TEXT_AND_PAGE_IMAGE",
+        "OFFICIAL_CURRENT_DOCUMENTATION",
+        "OFFICIAL_CURRENT_POLICY",
+        "OFFICIAL_LANDING_METADATA_ONLY"
+      ],
+      "title": "Access Extent",
+      "type": "string"
+    },
+    "checked_locator": {
+      "minLength": 1,
+      "title": "Checked Locator",
+      "type": "string"
+    },
+    "observed": {
+      "minLength": 1,
+      "title": "Observed",
+      "type": "string"
+    },
+    "limits": {
+      "minLength": 1,
+      "title": "Limits",
+      "type": "string"
+    },
+    "verification_origin": {
+      "const": "EXTERNAL_REVIEW_NOT_RECHECKED_LOCALLY",
+      "title": "Verification Origin",
+      "type": "string"
+    },
+    "local_source_bytes_sha256": {
+      "title": "Local Source Bytes Sha256",
+      "type": "null"
+    }
+  },
+  "required": [
+    "id",
+    "external_id",
+    "record_sha256",
+    "title",
+    "url",
+    "checked_on",
+    "access_extent",
+    "checked_locator",
+    "observed",
+    "limits",
+    "verification_origin",
+    "local_source_bytes_sha256"
+  ],
+  "title": "Source",
+  "type": "object"
+}

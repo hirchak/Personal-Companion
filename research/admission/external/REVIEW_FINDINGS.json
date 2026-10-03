@@ -1,0 +1,597 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-03",
+  "verdict_scope": "Bulk promotion of RAW to authoritative/active runtime content",
+  "verdict": "FIX_REQUIRED",
+  "findings": [
+    {
+      "id": "RG-01",
+      "title": "Отримання та RAW labels не є content approval",
+      "packets": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16"
+      ],
+      "raw_locators": [
+        "All RAW executive decisions / final matrices; canonical docs/SAFETY.md"
+      ],
+      "basis": "AUTHORITY_AND_SCOPE",
+      "raw_position": "Різні RAW використовують ALLOW, VERIFIED, SOURCE_DIRECT, YES або EXCLUDE як підсумкові мітки.",
+      "review_finding": "Це твердження дослідницьких звітів, а не підписи незалежних reviewer-ів чи дозволи runtime. Наявність DOI не підтверджує всі пов’язані висновки.",
+      "required_action": "Зберігати claimed_status окремо від reviewed_status, rights_status, content_status, technical_status і activation_status.",
+      "blocks": [
+        "BULK_RAW_TO_ACTIVE_PROMOTION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-02",
+      "title": "Симульована дата пошуку у R09",
+      "packets": [
+        "R09"
+      ],
+      "raw_locators": [
+        "C. Evidence methodology / P0008"
+      ],
+      "basis": "RAW_PROVENANCE",
+      "raw_position": "Дата пошуку названа симульованою; повні тексти були обмежені наданими фрагментами. У матриці є статуси YES.",
+      "review_finding": "Такий опис не підтверджує, що заявлений пошук і full-text verification були реально виконані. Це не доказ, що всі висновки хибні.",
+      "required_action": "Методологію зберегти дослівно в оригіналі; у похідному реєстрі позначити search_execution/full_text_access як UNVERIFIED, доки немає перевірюваного evidence.",
+      "blocks": [
+        "R09_EVIDENCE_PROMOTION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-03",
+      "title": "R16 помилково виглядає як виконаний release checklist",
+      "packets": [
+        "R16"
+      ],
+      "raw_locators": [
+        "AN. Private prototype release prerequisites / P0089–P0094"
+      ],
+      "basis": "RAW_VS_IMPLEMENTATION_EVIDENCE",
+      "raw_position": "Пункти відсутності ключів, телеметрії та підтвердженої local-first архітектури вже відмічені [x].",
+      "review_finding": "RAW не наводить для цих checkmarks exact implementation SHA, команд та logs. Чатове або research-ствердження не замінює інженерну перевірку.",
+      "required_action": "Перенести як requirements без execution PASS; evidence брати тільки з конкретних C/R tests та наступних фактичних перевірок.",
+      "blocks": [
+        "RELEASE_ATTESTATION_FROM_RAW"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-04",
+      "title": "IRT: не ототожнювати метод із trauma processing",
+      "packets": [
+        "R01",
+        "R03"
+      ],
+      "raw_locators": [
+        "R01 J / P0101; R03 B; R03 Y / T06R004"
+      ],
+      "basis": "PRIMARY_SOURCE_AND_CROSS_REPORT",
+      "raw_position": "R01 виключає IRT із поясненням, що він передбачає експозицію до травми/PTSD; R03 пропонує reviewed self-help кандидат.",
+      "review_finding": "Blanket-ототожнення некоректне. Є nightmare-focused guided дослідження; конкретні варіанти істотно відрізняються за роботою з первинним образом.",
+      "required_action": "IRT лишити кандидатним, не активним. Не оголошувати всі vivid dreams показанням. Для обраного варіанта потрібні fidelity, safety, content/qualified review.",
+      "blocks": [
+        "IRT_ACTIVATION"
+      ],
+      "primary_source_ids": [
+        "S01",
+        "S03"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-05",
+      "title": "IRT: рекомендації AASM і VA/DoD не можна звести до одного бала",
+      "packets": [
+        "R03"
+      ],
+      "raw_locators": [
+        "D. Guidelines / P0018–P0022"
+      ],
+      "basis": "PRIMARY_SOURCE_VERIFIED",
+      "raw_position": "AASM 2018 описано як Level A; VA/DoD 2023 — як більш консервативну позицію з простим поясненням через військові вибірки.",
+      "review_finding": "AASM 2018 використовує recommended/may be used. VA/DoD 2023 Recommendation33 має neither for nor against саме для PTSD-associated nightmares; обґрунтування містить непослідовні ефекти та низьку визначеність.",
+      "required_action": "Окремі versioned guideline claims із population/outcome; не називати розбіжність доведеною різницею лише цивільні/військові.",
+      "blocks": [
+        "IRT_EVIDENCE_PROMOTION"
+      ],
+      "primary_source_ids": [
+        "S01",
+        "S02"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-06",
+      "title": "Guided IRT effect не переноситься на наш довільний короткий script",
+      "packets": [
+        "R03"
+      ],
+      "raw_locators": [
+        "F / P0031; E / T01R006; source DOI 10.1111/jsr.13123"
+      ],
+      "basis": "PRIMARY_SOURCE_VERIFIED",
+      "raw_position": "Телефонна self-help робота використана як один з аргументів на користь майбутнього автоматизованого IRT.",
+      "review_finding": "У дослідженому варіанті є людська підтримка, screening, супервізія і емоційна активація первинного кошмару. Текстове guided UI не дорівнює цьому guided delivery.",
+      "required_action": "Не присвоювати ефект trial нашій адаптації; описати її як новий кандидат зі своїм content/safety testing.",
+      "blocks": [
+        "IRT_FIDELITY_AND_CLAIMS"
+      ],
+      "primary_source_ids": [
+        "S03"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-07",
+      "title": "R03: неоднозначні бібліографічні ID",
+      "packets": [
+        "R03"
+      ],
+      "raw_locators": [
+        "E.1 Source Documentation Matrix / T02"
+      ],
+      "basis": "INTERNAL_CITATION_INTEGRITY",
+      "raw_position": "Source ID 20 використано в матриці для різних праць, зокрема Cook та Casement.",
+      "review_finding": "Локатор за одним числом не забезпечує однозначної claim-to-source прив’язки.",
+      "required_action": "Стабільні source IDs за DOI/PMID/version. Не виправляти номер глобальним replace; звірити кожний claim. Superscript ref не є частиною DOI.",
+      "blocks": [
+        "AFFECTED_CLAIM_PROMOTION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-08",
+      "title": "R02: не домислювати 5 хвилин на пробудження",
+      "packets": [
+        "R02"
+      ],
+      "raw_locators": [
+        "I. Missing Data / P0054–P0056"
+      ],
+      "basis": "INTERNAL_CONTRADICTION_AND_DATA_CONTRACT",
+      "raw_position": "UNKNOWN ≠ ZERO, але при unknown WASO пропонується припустити 5 хв на пробудження та позначити LOW_CONFIDENCE.",
+      "review_finding": "Припущені хвилини не є даними людини. Позначка confidence не робить їх observed values і не усуває суперечність із provenance.",
+      "required_action": "WASO лишається null; TST/SE лише за достатніх явно визначених inputs. Інтервал між часами показувати як інтервал, не виміряну тривалість сну. No silent imputation.",
+      "blocks": [
+        "SLEEP_DERIVED_METRICS"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-09",
+      "title": "Контроль стимулів і triage thresholds — окремі scope-рішення",
+      "packets": [
+        "R01",
+        "R04"
+      ],
+      "raw_locators": [
+        "R01 A; R04 A / P0005; R04 R / P0114; R04 Final matrix"
+      ],
+      "basis": "CROSS_REPORT_AND_SCOPE",
+      "raw_position": "R01 називає stimulus control безпечнішою заміною; R04 класифікує жорсткий автономний протокол як clinician-dependent і пропонує числовий sleep-stop cutoff.",
+      "review_finding": "Загальна інформація та персональне призначення — різні функції. Числовий cutoff у RAW не можна автоматично зробити validated medical triage rule.",
+      "required_action": "Залишити sleep restriction/compression/titration OFF у V1; scripted stimulus-control призначення OFF. Освітній кандидат та будь-який поріг розглядати окремо, без висновку «нижче/вище порога — безпечно».",
+      "blocks": [
+        "SLEEP_PROTOCOL_ACTIVATION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-10",
+      "title": "R05: порядок запитань та стиль не є універсально validated протоколом",
+      "packets": [
+        "R05"
+      ],
+      "raw_locators": [
+        "J / P0031; U / P0062 onward; D / T01R006"
+      ],
+      "basis": "SCOPE_AND_PENDING_SOURCE_CHECK",
+      "raw_position": "Заявлено перевагу didactic над Socratic стилем; водночас draft має кілька Mandatory кроків попри можливість just-save.",
+      "review_finding": "Точне дослідження стилю та comparator ще не звірені. Жоден flow не може позбавити користувача stop/skip/reject або дописувати мотиви.",
+      "required_action": "Залишити structured reflection draft; обмеження кількості запитань — product configuration, не клінічний cutoff. Позначити необхідність перевірити citation16.",
+      "blocks": [
+        "THOUGHT_RECORD_CONTENT_PROMOTION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-11",
+      "title": "R08: переплутано PMR, autogenic training та змішаний огляд",
+      "packets": [
+        "R08"
+      ],
+      "raw_locators": [
+        "H / P0047; bibliography source21 / P0212"
+      ],
+      "basis": "PRIMARY_SOURCE_VERIFIED",
+      "raw_position": "Stetter & Kupper2002 та d=.57 подані як PMR evidence, тоді як source21 веде до іншої роботи.",
+      "review_finding": "Stetter & Kupper — autogenic training; Manzoni2008 охоплює кілька relaxation methods. Неправильно прив’язано метод, авторів і показник ефекту.",
+      "required_action": "Створити окремі source records; PMR claim перевірити за PMR-specific evidence. Не переносити pooled d у коротку вправу застосунку.",
+      "blocks": [
+        "PMR_EVIDENCE_PROMOTION"
+      ],
+      "primary_source_ids": [
+        "S04",
+        "S05"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-12",
+      "title": "R08: breathing trial, доза та modified variant не взаємозамінні",
+      "packets": [
+        "R08"
+      ],
+      "raw_locators": [
+        "D / T01R002; L / P0067–P0069; AA candidate D"
+      ],
+      "basis": "PRIMARY_ABSTRACT_AND_PENDING_DETAIL_CHECK",
+      "raw_position": "N=111 і перевага cyclic sighing широко переказані; proposed app variant має інший wording/тривалість.",
+      "review_finding": "Першоджерело має кілька arms та визначений режим практики. У цьому review exact arm N і всі pairwise comparisons не підтверджені.",
+      "required_action": "Позначити ці quantitative claims NEEDS_VERIFICATION; не називати змінену дозу дослідженою, не видавати physiological mechanism за гарантований ефект.",
+      "blocks": [
+        "BREATHING_CONTENT_PROMOTION"
+      ],
+      "primary_source_ids": [
+        "S06"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-13",
+      "title": "R06/R08: direct evidence 5-4-3-2-1 не узгоджене",
+      "packets": [
+        "R06",
+        "R08"
+      ],
+      "raw_locators": [
+        "R06 O / P0043; R06 final T04R007; R08 F"
+      ],
+      "basis": "CROSS_REPORT",
+      "raw_position": "R06 називає grounding/5-4-3-2-1 надійно підтриманим; R08 прямо фіксує недостатність direct evidence для точної послідовності.",
+      "review_finding": "Загальний принцип спрямування уваги та конкретна числова послідовність — різні claims.",
+      "required_action": "Не називати exact 5-4-3-2-1 чи 3-2-1 validated treatment. Простий добровільний orientation flow — кандидат із власним wording і stop path після content review.",
+      "blocks": [
+        "GROUNDING_EFFICACY_CLAIM"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-14",
+      "title": "R07: micro-step UX не є повноцінною Behavioral Activation",
+      "packets": [
+        "R07"
+      ],
+      "raw_locators": [
+        "R. Small actions / P0094; F. variants; Final T03"
+      ],
+      "basis": "SCOPE_AND_UNVERIFIED_MECHANISM",
+      "raw_position": "Корисне розбиття задач пов’язано з BA; додано сильні пояснення про амигдалу та клінічно source-backed механізм.",
+      "review_finding": "У цьому проході механістичні твердження не підтверджені. Загальна організація обраної дії не набуває ефекту або статусу терапії BA.",
+      "required_action": "Зберегти optional user-chosen next step/rest/just-save як нейтральний UX-кандидат. BA, CMT і психодіагностика — окремі неактивні content кандидати.",
+      "blocks": [
+        "THERAPEUTIC_MICROSTEP_CLAIMS"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-15",
+      "title": "Local-first не виключає людської допомоги",
+      "packets": [
+        "R09"
+      ],
+      "raw_locators": [
+        "AV. Final matrix / T06R002"
+      ],
+      "basis": "ARCHITECTURAL_REASONING",
+      "raw_position": "Guided/Human support виключено з причиною local-first constraint.",
+      "review_finding": "Локальне зберігання не суперечить добровільній очній консультації чи окремо погодженому експорту. Shared automatic access при цьому не дозволяється.",
+      "required_action": "Замінити цей висновок у похідному рішенні: human support не виключений архітектурою; він не є автоматично реалізованою функцією або permission на передачу даних.",
+      "blocks": [
+        "INCORRECT_ARCHITECTURE_CONSTRAINT"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-16",
+      "title": "R10: мінімальний N і статус гіпотези потребують явного контракту",
+      "packets": [
+        "R10"
+      ],
+      "raw_locators": [
+        "E / P0019; AM / T06R002–T06R005; AE / P0097; W abstention"
+      ],
+      "basis": "INTERNAL_CONTRADICTION_AND_INFERENCE_BOUNDARY",
+      "raw_position": "Текст відхиляє універсальний minimum N, але фінальна матриця пропонує >5 і >15. Є USER_CONFIRMED hypothesis та автоматичне виявлення confounders.",
+      "review_finding": "Ці пороги не є підтвердженим універсальним правилом; user acknowledgement не є причинним доказом. MNAR/confounding не встановлюються лише з пропуску або красивого графіка.",
+      "required_action": "Перший analytics scope — описові результати з coverage/provenance. Correlation/N-of-1 engine DEFER. Причини abstention повинні посилатись на перевірні властивості даних, не на прихований діагноз.",
+      "blocks": [
+        "EXPLORATORY_AND_CAUSAL_ANALYTICS"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-17",
+      "title": "AI evidence: потрібні і позитивні trials, і межі перенесення",
+      "packets": [
+        "R05",
+        "R06",
+        "R07",
+        "R11"
+      ],
+      "raw_locators": [
+        "Conversational/generative AI evidence sections; R11 D/E"
+      ],
+      "basis": "EXTERNAL_COMPLEMENT_NOT_REPLACEMENT",
+      "raw_position": "Корпус акцентує інциденти, ризики та відсутність достатніх довготривалих доказів для автономної роботи.",
+      "review_finding": "Додано релевантний позитивний Therabot RCT 2025 для балансу. Він не спростовує конкретну прогалину довготривалої безпеки або evidence нашої адаптації.",
+      "required_action": "Не писати ані «генеративна допомога доведено не працює», ані «інший бот пройшов trial — наш валідований». Зберегти model/intervention/population/comparator окремо.",
+      "blocks": [
+        "OVERBROAD_GENERATIVE_AI_CONCLUSIONS"
+      ],
+      "primary_source_ids": [
+        "S07"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-18",
+      "title": "R11/R16: provider route не можна вирішити blanket ban або forced API",
+      "packets": [
+        "R11",
+        "R16"
+      ],
+      "raw_locators": [
+        "R11 Y/Z / P0057–P0061; R16 T06R004; provider matrices"
+      ],
+      "basis": "OFFICIAL_DOC_AND_SCOPE",
+      "raw_position": "Journal + consumer subscription позначено PROHIBITED з дією Move to API; Codex/OAuth названо загалом непридатним.",
+      "review_finding": "Офіційний Codex має subscription та API auth; це не дає blanket permission на наш health runtime. Developer CLI, personal trusted runtime і public backend — різні scenarios.",
+      "required_action": "Не міняти provider, billing чи auth. Відкрити route-specific gate із plan/terms/data flow/consent/tool isolation. MiniMax Token Plan окремо UNVERIFIED.",
+      "blocks": [
+        "LIVE_PROVIDER_ENABLEMENT"
+      ],
+      "primary_source_ids": [
+        "S13",
+        "S15"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-19",
+      "title": "R11: ZDR не простий загальнодоступний opt-in",
+      "packets": [
+        "R11",
+        "R16"
+      ],
+      "raw_locators": [
+        "R11 AL / T03R002; R16 provider retention matrix"
+      ],
+      "basis": "OFFICIAL_DOC_VERIFIED",
+      "raw_position": "OpenAI API ZDR подано як opt-in VERIFIED; retention у RAW зведено до загальних чисел.",
+      "review_finding": "Потрібні approval та additional requirements, застосовність залежить від endpoint/режиму. Наявність API key не означає нульового зберігання.",
+      "required_action": "Account approval UNKNOWN; endpoint retention UNKNOWN до окремої перевірки. API не активувати як нібито автоматично приватніший fallback.",
+      "blocks": [
+        "PROVIDER_PRIVACY_ATTESTATION"
+      ],
+      "primary_source_ids": [
+        "S14"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-20",
+      "title": "Права на шкали, переклади та scoring не узгоджені",
+      "packets": [
+        "R02",
+        "R05",
+        "R06",
+        "R07",
+        "R16"
+      ],
+      "raw_locators": [
+        "R05 Z / P0104; R07 AJ / P0205; R06 AB / P0092; R16 AI rights matrix"
+      ],
+      "basis": "RIGHTSHOLDER_POLICY_AND_PENDING_CHAIN_OF_RIGHTS",
+      "raw_position": "PHQ/GAD описані як public domain або лише non-commercial; RRS rightsholder ототожнений із vendor implementation; PSQI позначається permission-related без grant.",
+      "review_finding": "Pfizer дає statement unrestricted/free access; Pittsburgh встановлює власні умови. Ці записи не підтверджують права на будь-який UA переклад/модифікацію чи права нашому app.",
+      "required_action": "Реєстр на рівні exact instrument/version/language/use; policy checked ≠ license granted ≠ clinically validated. RRS chain-of-rights UNVERIFIED, не присвоювати іншого власника навмання.",
+      "blocks": [
+        "QUESTIONNAIRE_REDISTRIBUTION_AND_ACTIVATION"
+      ],
+      "primary_source_ids": [
+        "S08",
+        "S09"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-21",
+      "title": "R16: in-house MDR не побутовий виняток",
+      "packets": [
+        "R16"
+      ],
+      "raw_locators": [
+        "AV. Final gate matrix / T08R009; C–H"
+      ],
+      "basis": "OFFICIAL_LAW_SCOPE_CHECK",
+      "raw_position": "Для private prototype у таблиці зазначено Exempt (in-house), для commercial — potential Class IIa.",
+      "review_finding": "In-house правило адресоване health institutions, не будь-якому домашньому прототипу. Назва wellness і комерційність самі по собі не завершують classification.",
+      "required_action": "Прибрати автоматичний exemption/CE-verdict у derived gate. Intended purpose і фактичний release scope описати; остаточний legal review позначити NOT_PERFORMED.",
+      "blocks": [
+        "LEGAL_CLEARANCE"
+      ],
+      "primary_source_ids": [
+        "S10",
+        "S11",
+        "S16"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-22",
+      "title": "R16: ролі GDPR визначаються за конкретною обробкою",
+      "packets": [
+        "R16"
+      ],
+      "raw_locators": [
+        "K. Controller/processor roles / P0023; C/J/L"
+      ],
+      "basis": "OFFICIAL_GUIDANCE_SCOPE_CHECK",
+      "raw_position": "Розробник і всі provider-и отримують controller/processor ролі за узагальненою схемою.",
+      "review_finding": "EDPB вимагає аналізувати конкретні operations та фактичне визначення purposes/means. Не перевірено повний GDPR/AI Act legal scope для Personal Companion.",
+      "required_action": "Підготувати карту data flows, не видавати blanket household exemption, controller або processor verdict. No account/legal/permission mutation.",
+      "blocks": [
+        "PILOT_OR_COMMERCIAL_LEGAL_ATTESTATION"
+      ],
+      "primary_source_ids": [
+        "S12"
+      ],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-23",
+      "title": "R12: research capability не замінює фактичний M6 hardware scope",
+      "packets": [
+        "R12"
+      ],
+      "raw_locators": [
+        "A/C; capability matrices; repo M6 report at pinned R"
+      ],
+      "basis": "REPOSITORY_VS_RAW_TIME_AND_SCOPE",
+      "raw_position": "У RAW hardware не тестувався; таблиці обговорюють більше health types, ніж дозволено M6.",
+      "review_finding": "Фактичний M6 report уже має ранній 0.6.0 gate Sleep/Steps, Exercise NO_RECORDS; final 0.6.1 hardware NOT_RUN. Це не валідація Watch7 physiology.",
+      "required_action": "Зберегти обидві provenance: research-author did not test; repo early hardware evidence існує. Не додавати HR/SpO2/history/background або health-to-AI context.",
+      "blocks": [
+        "EXPANDED_HEALTH_SCOPE",
+        "FALSE_FINAL_DEVICE_PASS"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-24",
+      "title": "R13: security design candidate не гарантія захисту",
+      "packets": [
+        "R13"
+      ],
+      "raw_locators": [
+        "H / P0039–P0042; AL / T08; adversarial T05R020"
+      ],
+      "basis": "UNVERIFIED_SECURITY_ASSUMPTIONS",
+      "raw_position": "Запропоновано nonce strategy, PBKDF2 target, SQLCipher/Keychain; cleanup keys пов’язано з JS garbage collector, .gitignore — із запобіганням staging.",
+      "review_finding": "У цьому research gate не виконано crypto audit, memory-zeroization proof чи перевірку нового storage/transport. Не можна перетворити suggestions на підтверджені гарантії.",
+      "required_action": "Окремий ADR/тести перед зміною accepted M1–M6. Наявність ignore/sandbox/HTTPS не дає абсолютного no-leak PASS; потрібні явний threat model та межі перевірки.",
+      "blocks": [
+        "SECURITY_READY_CLAIMS",
+        "UNREVIEWED_STORAGE_MIGRATION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-25",
+      "title": "R14: benchmarks, codec та engines залишаються кандидатами",
+      "packets": [
+        "R14"
+      ],
+      "raw_locators": [
+        "D / P0024; K / P0048; H/I; AH final / T05"
+      ],
+      "basis": "RAW_LABEL_CONTRADICTION_AND_SCOPE",
+      "raw_position": "Є мітки MEASURED поряд із NOT_RUN; пропонується MediaRecorder/Opus, OPFS і конкретні ASR engines.",
+      "review_finding": "Вимірювань на цільовому Mac/S24 цей RAW не наводить. Відсутність одного acceleration backend не дорівнює повній несумісності engine. Current M4 не змінюється цим звітом.",
+      "required_action": "Engine/model licence та checksum перевіряти окремо; окремий authorized benchmark перед вибором. Ніяких downloads, cloud fallback або recorder/storage rewrite у M7_PREP.",
+      "blocks": [
+        "ASR_READY_CLAIMS",
+        "UNAUTHORIZED_MODEL_INSTALL"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-26",
+      "title": "R15: original/fiction protection має співіснувати з consent і delete",
+      "packets": [
+        "R15",
+        "R01",
+        "R11"
+      ],
+      "raw_locators": [
+        "R15 A / P0006; G / P0037; I / P0047; R01 A creative boundary"
+      ],
+      "basis": "CROSS_REPORT_AND_DATA_LIFECYCLE",
+      "raw_position": "Потрібна незмінність original і повний semantic immunity творчості.",
+      "review_finding": "Автоматичне переписування заборонено; це не заборона власного edit/delete. Fiction ≠ biography, але тег fiction не робить явний поточний real-life safety request неіснуючим.",
+      "required_action": "Не сканувати creative vault для психологічного профілю. Відрізняти персонажа від користувача; обробляти явний user intent у поточній взаємодії. Видалення охоплює похідні дані згідно з existing retention contract.",
+      "blocks": [
+        "CREATIVE_LIFECYCLE_AND_ROUTING_PROMOTION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    },
+    {
+      "id": "RG-27",
+      "title": "RAW evaluation cases не є автоматично gold-standard corpus",
+      "packets": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R13",
+        "R14",
+        "R15",
+        "R16"
+      ],
+      "raw_locators": [
+        "All Synthetic evaluation / final gate tables"
+      ],
+      "basis": "TEST_ORACLE_AUTHORITY",
+      "raw_position": "RAW містять готові expected routing/status і примусові кроки з різними safety assumptions.",
+      "review_finding": "Тест, який лише відтворює невірну очікувану відповідь RAW, закріпить помилку. Правила scope/tests і наукові cutoffs — різні сутності.",
+      "required_action": "Зберігати proposed_expected; незалежно reviewed_expected з rationale. Клінічні labels/gold cases не підписувати як validated; mechanical gate cases можна тестувати окремо.",
+      "blocks": [
+        "CLINICAL_EVAL_GOLD_PROMOTION"
+      ],
+      "primary_source_ids": [],
+      "status": "OPEN_FOR_CANONICAL_INTEGRATION"
+    }
+  ]
+}

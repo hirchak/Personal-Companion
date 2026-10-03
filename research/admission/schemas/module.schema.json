@@ -1,0 +1,485 @@
+{
+  "$defs": {
+    "Approval": {
+      "additionalProperties": false,
+      "properties": {
+        "module_id": {
+          "minLength": 1,
+          "title": "Module Id",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "content_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "claim_bindings": {
+          "additionalProperties": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "title": "Claim Bindings",
+          "type": "object"
+        },
+        "source_bindings": {
+          "patternProperties": {
+            "^gate:S(?:0[1-9]|1[0-6])$": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "title": "Source Bindings",
+          "type": "object"
+        },
+        "reviewer": {
+          "minLength": 1,
+          "title": "Reviewer",
+          "type": "string"
+        },
+        "reviewer_role": {
+          "enum": [
+            "QUALIFIED_CLINICAL_REVIEWER",
+            "CONTENT_REVIEWER"
+          ],
+          "title": "Reviewer Role",
+          "type": "string"
+        },
+        "reviewed_on": {
+          "minLength": 1,
+          "title": "Reviewed On",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        },
+        "rights_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Rights Hash",
+          "type": "string"
+        },
+        "technical_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Technical Sha",
+          "type": "string"
+        }
+      },
+      "required": [
+        "module_id",
+        "version",
+        "content_hash",
+        "claim_bindings",
+        "source_bindings",
+        "reviewer",
+        "reviewer_role",
+        "reviewed_on",
+        "scope",
+        "rights_hash",
+        "technical_sha"
+      ],
+      "title": "Approval",
+      "type": "object"
+    },
+    "Rights": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "NOT_REVIEWED",
+            "POLICY_CHECKED",
+            "RIGHTS_CLEARED"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "PUBLIC_LICENSE",
+                "PUBLIC_PERMISSION",
+                "INDIVIDUAL_GRANT",
+                "OWN_ORIGINAL"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Basis"
+        },
+        "locator": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Locator"
+        },
+        "material_hash": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Material Hash"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Language"
+        },
+        "use_scope": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Use Scope"
+        },
+        "reviewed_by": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reviewed By"
+        },
+        "reviewed_on": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reviewed On"
+        }
+      },
+      "required": [
+        "status",
+        "basis",
+        "locator",
+        "material_hash",
+        "language",
+        "use_scope",
+        "reviewed_by",
+        "reviewed_on"
+      ],
+      "title": "Rights",
+      "type": "object"
+    },
+    "TechnicalCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "minLength": 1,
+          "title": "Command",
+          "type": "string"
+        },
+        "exit_code": {
+          "const": 0,
+          "title": "Exit Code",
+          "type": "integer"
+        },
+        "environment": {
+          "minLength": 1,
+          "title": "Environment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "command",
+        "exit_code",
+        "environment"
+      ],
+      "title": "TechnicalCheck",
+      "type": "object"
+    },
+    "TechnicalReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "implementation_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Implementation Sha",
+          "type": "string"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/TechnicalCheck"
+          },
+          "minItems": 1,
+          "title": "Checks",
+          "type": "array"
+        },
+        "evidence_locator": {
+          "minLength": 1,
+          "title": "Evidence Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "implementation_sha",
+        "checks",
+        "evidence_locator"
+      ],
+      "title": "TechnicalReceipt",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "version": {
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    },
+    "proposed_disposition": {
+      "minLength": 1,
+      "title": "Proposed Disposition",
+      "type": "string"
+    },
+    "research_packets": {
+      "items": {
+        "pattern": "^R(?:0[1-9]|1[0-6])$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Research Packets",
+      "type": "array"
+    },
+    "boundary": {
+      "minLength": 1,
+      "title": "Boundary",
+      "type": "string"
+    },
+    "draft_status": {
+      "const": "DRAFT_NOT_RUNTIME",
+      "title": "Draft Status",
+      "type": "string"
+    },
+    "clinical_sensitive": {
+      "title": "Clinical Sensitive",
+      "type": "boolean"
+    },
+    "required_reviewer_role": {
+      "enum": [
+        "QUALIFIED_CLINICAL_REVIEWER",
+        "CONTENT_REVIEWER"
+      ],
+      "title": "Required Reviewer Role",
+      "type": "string"
+    },
+    "exact_content_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Exact Content Hash"
+    },
+    "intended_scope": {
+      "minLength": 1,
+      "title": "Intended Scope",
+      "type": "string"
+    },
+    "claim_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Claim Ids",
+      "type": "array"
+    },
+    "finding_ids": {
+      "items": {
+        "pattern": "^RG-(?:0[1-9]|1[0-9]|2[0-7])$",
+        "type": "string"
+      },
+      "title": "Finding Ids",
+      "type": "array"
+    },
+    "missing_gates": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Missing Gates",
+      "type": "array"
+    },
+    "smallest_next_step": {
+      "minLength": 1,
+      "title": "Smallest Next Step",
+      "type": "string"
+    },
+    "allowed_actions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Allowed Actions",
+      "type": "array"
+    },
+    "forbidden_actions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Forbidden Actions",
+      "type": "array"
+    },
+    "rollback": {
+      "minLength": 1,
+      "title": "Rollback",
+      "type": "string"
+    },
+    "rights": {
+      "$ref": "#/$defs/Rights"
+    },
+    "evidence_status": {
+      "enum": [
+        "NOT_REVIEWED",
+        "EVIDENCE_REVIEWED"
+      ],
+      "title": "Evidence Status",
+      "type": "string"
+    },
+    "content_status": {
+      "enum": [
+        "NOT_REVIEWED",
+        "CONTENT_REVIEWED"
+      ],
+      "title": "Content Status",
+      "type": "string"
+    },
+    "technical_status": {
+      "enum": [
+        "NOT_RUN",
+        "TECHNICALLY_TESTED"
+      ],
+      "title": "Technical Status",
+      "type": "string"
+    },
+    "technical_sha": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Technical Sha"
+    },
+    "technical_receipt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TechnicalReceipt"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "approval": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Approval"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "activation_status": {
+      "const": "OFF",
+      "title": "Activation Status",
+      "type": "string"
+    },
+    "runtime_activation_authorized_by_this_pack": {
+      "const": false,
+      "title": "Runtime Activation Authorized By This Pack",
+      "type": "boolean"
+    },
+    "qualified_clinical_review_record": {
+      "title": "Qualified Clinical Review Record",
+      "type": "null"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "proposed_disposition",
+    "research_packets",
+    "boundary",
+    "draft_status",
+    "clinical_sensitive",
+    "required_reviewer_role",
+    "exact_content_hash",
+    "intended_scope",
+    "claim_ids",
+    "finding_ids",
+    "missing_gates",
+    "smallest_next_step",
+    "allowed_actions",
+    "forbidden_actions",
+    "rollback",
+    "rights",
+    "evidence_status",
+    "content_status",
+    "technical_status",
+    "technical_sha",
+    "technical_receipt",
+    "approval",
+    "activation_status",
+    "runtime_activation_authorized_by_this_pack",
+    "qualified_clinical_review_record"
+  ],
+  "title": "Module",
+  "type": "object"
+}

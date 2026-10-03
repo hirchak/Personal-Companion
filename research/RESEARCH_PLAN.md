@@ -1,7 +1,9 @@
 # План deep research — 16 пакетів
 
 Кількість пакетів не дорівнює кількості агентів. Це окремі дослідницькі питання з
-перевірюваним виходом. **Усі пакети зараз NOT_STARTED.** Наявність промпту не є дослідженням.
+перевірюваним виходом. **R01–R16 RECEIVED_EXTERNALLY у ChatGPT та scope/consistency screened.** Локально originals
+не отримані; primary checks partial, content/clinical approval NOT_PERFORMED.
+Canonical metadata: [admission registry](admission/README.md); bulk active promotion FIX_REQUIRED.
 
 ## Пріоритет
 

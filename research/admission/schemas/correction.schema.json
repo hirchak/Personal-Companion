@@ -1,0 +1,141 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^RG-(?:0[1-9]|1[0-9]|2[0-7])$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "packets": {
+          "items": {
+            "pattern": "^R(?:0[1-9]|1[0-6])$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Packets",
+          "type": "array"
+        },
+        "raw_locators": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Raw Locators",
+          "type": "array"
+        },
+        "basis": {
+          "minLength": 1,
+          "title": "Basis",
+          "type": "string"
+        },
+        "raw_position": {
+          "minLength": 1,
+          "title": "Raw Position",
+          "type": "string"
+        },
+        "review_finding": {
+          "minLength": 1,
+          "title": "Review Finding",
+          "type": "string"
+        },
+        "required_action": {
+          "minLength": 1,
+          "title": "Required Action",
+          "type": "string"
+        },
+        "blocks": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Blocks",
+          "type": "array"
+        },
+        "primary_source_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Primary Source Ids",
+          "type": "array"
+        },
+        "status": {
+          "const": "OPEN_FOR_CANONICAL_INTEGRATION",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "packets",
+        "raw_locators",
+        "basis",
+        "raw_position",
+        "review_finding",
+        "required_action",
+        "blocks",
+        "primary_source_ids",
+        "status"
+      ],
+      "title": "Finding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^RG-(?:0[1-9]|1[0-9]|2[0-7])$",
+      "title": "Id",
+      "type": "string"
+    },
+    "supplied_finding": {
+      "$ref": "#/$defs/Finding"
+    },
+    "finding_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Finding Sha256",
+      "type": "string"
+    },
+    "integration_status": {
+      "const": "INTEGRATED_AS_DERIVED_DECISION",
+      "title": "Integration Status",
+      "type": "string"
+    },
+    "content_resolution": {
+      "const": "OPEN_DEPENDENT_GATE",
+      "title": "Content Resolution",
+      "type": "string"
+    },
+    "derived_decision": {
+      "minLength": 1,
+      "title": "Derived Decision",
+      "type": "string"
+    },
+    "claim_id": {
+      "minLength": 1,
+      "title": "Claim Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "supplied_finding",
+    "finding_sha256",
+    "integration_status",
+    "content_resolution",
+    "derived_decision",
+    "claim_id"
+  ],
+  "title": "Correction",
+  "type": "object"
+}

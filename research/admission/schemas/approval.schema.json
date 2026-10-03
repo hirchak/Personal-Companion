@@ -1,0 +1,86 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "module_id": {
+      "minLength": 1,
+      "title": "Module Id",
+      "type": "string"
+    },
+    "version": {
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "claim_bindings": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "title": "Claim Bindings",
+      "type": "object"
+    },
+    "source_bindings": {
+      "patternProperties": {
+        "^gate:S(?:0[1-9]|1[0-6])$": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "title": "Source Bindings",
+      "type": "object"
+    },
+    "reviewer": {
+      "minLength": 1,
+      "title": "Reviewer",
+      "type": "string"
+    },
+    "reviewer_role": {
+      "enum": [
+        "QUALIFIED_CLINICAL_REVIEWER",
+        "CONTENT_REVIEWER"
+      ],
+      "title": "Reviewer Role",
+      "type": "string"
+    },
+    "reviewed_on": {
+      "minLength": 1,
+      "title": "Reviewed On",
+      "type": "string"
+    },
+    "scope": {
+      "minLength": 1,
+      "title": "Scope",
+      "type": "string"
+    },
+    "rights_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Rights Hash",
+      "type": "string"
+    },
+    "technical_sha": {
+      "pattern": "^[0-9a-f]{40}$",
+      "title": "Technical Sha",
+      "type": "string"
+    }
+  },
+  "required": [
+    "module_id",
+    "version",
+    "content_hash",
+    "claim_bindings",
+    "source_bindings",
+    "reviewer",
+    "reviewer_role",
+    "reviewed_on",
+    "scope",
+    "rights_hash",
+    "technical_sha"
+  ],
+  "title": "Approval",
+  "type": "object"
+}

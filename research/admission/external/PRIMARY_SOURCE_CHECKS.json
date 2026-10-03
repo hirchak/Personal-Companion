@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-03",
+  "note": "Це журнал фактично виконаної вузької перевірки. Не повна бібліографія RAW і не 16 повністю reviewed full texts.",
+  "sources": [
+    {
+      "id": "S01",
+      "title": "AASM — Position Paper for the Treatment of Nightmare Disorder in Adults (2018)",
+      "url": "https://doi.org/10.5664/jcsm.7178",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_ABSTRACT_AND_POSITION_STATEMENTS",
+      "checked_locator": "Determination of Position; Position Statements",
+      "observed": "IRT має позицію recommended для nightmare disorder та PTSD-associated nightmares. Шкала позицій у цьому документі — recommended / may be used / not recommended.",
+      "limits": "Перевірено відкриті позиційні твердження, не весь закритий текст. Не допуск конкретного AI-модуля.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S02",
+      "title": "VA/DoD PTSD CPG (2023), official edited PDF",
+      "url": "https://www.healthquality.va.gov/HEALTHQUALITY/guidelines/MH/ptsd/VA-DoD-CPG-PTSD-Full-CPG-Edited-111624-V5-81825.pdf",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_PDF_TARGETED_TEXT_AND_PAGE_IMAGES",
+      "checked_locator": "Recommendation 33; printed pp. 38 and 81",
+      "observed": "Для nightmares associated with PTSD рекомендація 33 — insufficient evidence for or against IRT та перелічених споріднених втручань. Обґрунтування розглядає непослідовність результатів і низьку визначеність доказів.",
+      "limits": "Це не загальна заборона IRT для всіх кошмарів. Весь 167-сторінковий guideline не пройшов нове клінічне review.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S03",
+      "title": "Lancee, Effting, Kunze — Telephone-guided imagery rehearsal therapy for nightmares",
+      "url": "https://doi.org/10.1111/jsr.13123",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_FULL_TEXT_TARGETED_SECTIONS",
+      "checked_locator": "2.1 Participants; 2.8 Treatment; 2.9 Procedure; 3 Results; 4 Discussion",
+      "observed": "RCT включав 70 учасників і людську телефонну підтримку під супервізією. Досліджений варіант також активував емоції первинного кошмару перед rescripting; це не просто нейтральна заміна тексту.",
+      "limits": "Підтримує конкретний guided формат. Не переносити його результат на скорочений автономний сценарій. Bibliography: online 2020, issue 2021.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S04",
+      "title": "Stetter & Kupper — Autogenic training: a meta-analysis of clinical outcome studies (2002)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12001885/",
+      "checked_on": "2026-10-03",
+      "access_extent": "INDEXED_PRIMARY_ABSTRACT_METADATA",
+      "checked_locator": "Title; abstract; DOI 10.1023/A:1014576505223",
+      "observed": "Це метааналіз autogenic training, а не названий у R08 метааналіз PMR.",
+      "limits": "Повний текст не перевірено. Повторне відкриття PubMed показувало CAPTCHA; ідентифікацію підтверджує індексований abstract/metadata.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S05",
+      "title": "Manzoni et al. — Relaxation training for anxiety: a ten-years systematic review with meta-analysis (2008)",
+      "url": "https://doi.org/10.1186/1471-244X-8-41",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_AND_AUTHOR_REPOSITORY_ABSTRACT",
+      "checked_locator": "Abstract: Methods and Results",
+      "observed": "Огляд об’єднує різні relaxation methods. d=.57 наведено для within-analysis, d=.51 для between-group analysis; це не PMR-only ефект Stetter & Kupper.",
+      "limits": "Не виконано повторний метааналіз, оцінку кожного включеного trial або валідацію короткого app-script.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S06",
+      "title": "Balban et al. — Brief structured respiration practices enhance mood and reduce physiological arousal (2023)",
+      "url": "https://doi.org/10.1016/j.xcrm.2022.100895",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_INDEXED_ABSTRACT",
+      "checked_locator": "Summary; intervention conditions",
+      "observed": "Дослідження порівнює три breathing conditions та mindfulness, із 5 хвилинами практики на день протягом місяця.",
+      "limits": "У цьому проході не звірено arm-specific N та всі попарні contrasts. Не схвалено модифіковану дозу/техніку. Повний PMC був недоступний через CAPTCHA, publisher full-text request — 403.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S07",
+      "title": "Heinz et al. — Randomized Trial of a Generative AI Chatbot for Mental Health Treatment (2025)",
+      "url": "https://doi.org/10.1056/AIoa2400802",
+      "checked_on": "2026-10-03",
+      "access_extent": "PUBLISHER_ABSTRACT_METHODS_RESULTS",
+      "checked_locator": "NEJM AI, March 27 2025; abstract",
+      "observed": "Є позитивний RCT expert-fine-tuned Therabot: 210 дорослих, 4-тижневе втручання та follow-up до 8 тижнів, waitlist comparator.",
+      "limits": "Не є доказом довготривалої безпеки, переваги над терапевтом або ефективності нашого Codex runtime. Supplement і весь clinical monitoring protocol тут не перевірено.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S08",
+      "title": "Pfizer — Free public access to PHQ and GAD assessment tools (2010)",
+      "url": "https://www.pfizer.com/news/press-release/press-release-detail/pfizer_to_offer_free_public_access_to_mental_health_assessment_tools_to_improve_diagnosis_and_patient_care",
+      "checked_on": "2026-10-03",
+      "access_extent": "RIGHTSHOLDER_PUBLIC_STATEMENT",
+      "checked_locator": "July 21 2010; access statement and translations",
+      "observed": "Правовласник оголосив безкоштовний доступ без copyright restriction до PHQ/GAD; це не підтверджує обмеження лише некомерційним використанням, заявлене у R07.",
+      "limits": "Окрема індивідуальна угода не потрібна там, де відповідне використання вже дозволяють умови правовласника. Конкретна українська версія, зміни, scoring і clinical use потребують окремого запису перевірки. Не підміняти точні умови словом public domain.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S09",
+      "title": "University of Pittsburgh — Pittsburgh Sleep Quality Index",
+      "url": "https://www.sleep.pitt.edu/psqi",
+      "checked_on": "2026-10-03",
+      "access_extent": "RIGHTSHOLDER_CURRENT_POLICY_PAGE",
+      "checked_locator": "Using the PSQI; Request Form; FAQs",
+      "observed": "Політика відокремлює некомерційне використання, модифікації, комерційний доступ і переклади; використання на собі не тотожне праву вбудувати та розповсюджувати шкалу.",
+      "limits": "Перевірка правил не є наданим дозволом нашому застосунку. Жодного permission request, платежу чи ліцензійної угоди не виконано.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S10",
+      "title": "European Commission — In-house medical devices",
+      "url": "https://health.ec.europa.eu/medical-devices-topics-interest/house-medical-devices_en",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_GUIDANCE_PAGE",
+      "checked_locator": "Health institutions; MDR Article 5(5)",
+      "observed": "In-house виняток стосується виробів, виготовлених і використаних у health institutions, а не довільного домашнього private app.",
+      "limits": "Не визначає остаточну кваліфікацію Personal Companion. Потрібен аналіз intended purpose та реального сценарію використання.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S11",
+      "title": "Regulation (EU) 2017/745 — Medical Device Regulation",
+      "url": "https://eur-lex.europa.eu/eli/reg/2017/745/oj/eng",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_STATUTORY_EXCERPT",
+      "checked_locator": "Recital 30; Article 2 definition of health institution",
+      "observed": "Текст визначає спеціальний контекст health institutions для in-house режиму.",
+      "limits": "Перевірено вузьку підставу для виправлення R16, не повний актуальний consolidated legal audit чи CE classification.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S12",
+      "title": "EDPB Guidelines 07/2020 on controller and processor, final version",
+      "url": "https://www.edpb.europa.eu/system/files/documents/2023-10/EDPB_guidelines_202007_controllerprocessor_final_en.pdf",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_PDF_TARGETED_TEXT_AND_PAGE_IMAGE",
+      "checked_locator": "Paragraphs 20–26; printed pp. 11–12",
+      "observed": "Controller/processor — функціональні ролі для конкретних processing operations; їх визначають фактичні обставини, не лише назва компанії чи контракту.",
+      "limits": "Не є визначенням ролей для майбутньої неіснуючої компанії або конкретного неузгодженого provider route.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S13",
+      "title": "OpenAI — Codex authentication",
+      "url": "https://developers.openai.com/codex/auth/",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_CURRENT_DOCUMENTATION",
+      "checked_locator": "OpenAI authentication; API key automation; credential handling",
+      "observed": "Офіційно підтримуються ChatGPT sign-in та API-key sign-in. Документація рекомендує API keys для programmatic workflows; застосовні data controls відрізняються.",
+      "limits": "Redirect під час перевірки: https://learn.chatgpt.com/docs/auth. Це не permission на arbitrary health runtime, public backend або користування чужим account. Installed catalog/account не перевірялися.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S14",
+      "title": "OpenAI — Data controls in the platform",
+      "url": "https://developers.openai.com/api/docs/guides/your-data",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_CURRENT_DOCUMENTATION",
+      "checked_locator": "Abuse monitoring; Zero Data Retention approval and endpoint limitations",
+      "observed": "ZDR/Modified Abuse Monitoring вимагають попереднього approval та додаткових умов; не є універсальним доступним кожному opt-in перемикачем.",
+      "limits": "Жодне approval/account setting не перевірено та не змінено. Retention має бути описаний для конкретного endpoint/режиму.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S15",
+      "title": "OpenAI — Usage policies",
+      "url": "https://openai.com/policies/usage-policies/",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_CURRENT_POLICY",
+      "checked_locator": "Tailored advice requiring a license",
+      "observed": "Політика забороняє tailored advice, що потребує ліцензії, без належної участі licensed professional.",
+      "limits": "Не blanket ban на будь-яку нейтральну нотатку про самопочуття; не скасовує інших політик/умов. Жодного runtime permission не надано.",
+      "local_source_bytes_sha256": null
+    },
+    {
+      "id": "S16",
+      "title": "European Commission — MDCG 2019-11 rev.1 publication",
+      "url": "https://health.ec.europa.eu/latest-updates/update-mdcg-2019-11-rev1-qualification-and-classification-software-regulation-eu-2017745-and-2025-06-17_en",
+      "checked_on": "2026-10-03",
+      "access_extent": "OFFICIAL_LANDING_METADATA_ONLY",
+      "checked_locator": "Published June 17 2025; document title",
+      "observed": "Існування й дата оновлення rev.1 підтверджені.",
+      "limits": "PDF download був недоступний цьому web retrieval. Повний зміст rev.1 не позначати independently verified на основі цього запису.",
+      "local_source_bytes_sha256": null
+    }
+  ]
+}

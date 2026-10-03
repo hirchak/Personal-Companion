@@ -1,0 +1,289 @@
+{
+  "$defs": {
+    "Permissions": {
+      "additionalProperties": false,
+      "properties": {
+        "push_review_branch": {
+          "const": false,
+          "title": "Push Review Branch",
+          "type": "boolean"
+        },
+        "push_main": {
+          "const": true,
+          "title": "Push Main",
+          "type": "boolean"
+        },
+        "merge_main": {
+          "const": false,
+          "title": "Merge Main",
+          "type": "boolean"
+        },
+        "deploy": {
+          "const": false,
+          "title": "Deploy",
+          "type": "boolean"
+        },
+        "live_provider_calls": {
+          "const": false,
+          "title": "Live Provider Calls",
+          "type": "boolean"
+        },
+        "access_real_user_data": {
+          "const": false,
+          "title": "Access Real User Data",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "push_review_branch",
+        "push_main",
+        "merge_main",
+        "deploy",
+        "live_provider_calls",
+        "access_real_user_data"
+      ],
+      "title": "Permissions",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Typed mechanical metadata, not a medical result or instruction parser.",
+  "properties": {
+    "raw_claimed_status": {
+      "default": "UNVERIFIED",
+      "minLength": 1,
+      "title": "Raw Claimed Status",
+      "type": "string"
+    },
+    "untrusted_text": {
+      "default": "",
+      "title": "Untrusted Text",
+      "type": "string"
+    },
+    "independent_check": {
+      "default": false,
+      "title": "Independent Check",
+      "type": "boolean"
+    },
+    "search_execution": {
+      "default": "UNVERIFIED",
+      "enum": [
+        "SIMULATED",
+        "EXECUTED",
+        "UNVERIFIED"
+      ],
+      "title": "Search Execution",
+      "type": "string"
+    },
+    "access": {
+      "default": "NONE",
+      "enum": [
+        "NONE",
+        "ABSTRACT_ONLY",
+        "TARGETED_FULLTEXT"
+      ],
+      "title": "Access",
+      "type": "string"
+    },
+    "citation_candidates": {
+      "default": [],
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Citation Candidates",
+      "type": "array"
+    },
+    "doi": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Doi"
+    },
+    "adjacent_reference": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Adjacent Reference"
+    },
+    "delivery": {
+      "default": "UNKNOWN",
+      "enum": [
+        "GUIDED",
+        "AUTONOMOUS_AI",
+        "UNKNOWN"
+      ],
+      "title": "Delivery",
+      "type": "string"
+    },
+    "requested_delivery": {
+      "default": "UNKNOWN",
+      "enum": [
+        "GUIDED",
+        "AUTONOMOUS_AI",
+        "UNKNOWN"
+      ],
+      "title": "Requested Delivery",
+      "type": "string"
+    },
+    "user_confirmed": {
+      "default": false,
+      "title": "User Confirmed",
+      "type": "boolean"
+    },
+    "data_status": {
+      "default": "UNKNOWN",
+      "enum": [
+        "PRESENT",
+        "UNKNOWN",
+        "NO_RECORDS",
+        "PERMISSION_DENIED"
+      ],
+      "title": "Data Status",
+      "type": "string"
+    },
+    "observed_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Observed Value"
+    },
+    "benchmark_status": {
+      "default": "NOT_RUN",
+      "enum": [
+        "NOT_RUN",
+        "PASS"
+      ],
+      "title": "Benchmark Status",
+      "type": "string"
+    },
+    "benchmark_sha": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Benchmark Sha"
+    },
+    "checklist_checked": {
+      "default": false,
+      "title": "Checklist Checked",
+      "type": "boolean"
+    },
+    "checklist_sha": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Checklist Sha"
+    },
+    "requested_health_types": {
+      "default": [],
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Requested Health Types",
+      "type": "array"
+    },
+    "hardware_build": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Hardware Build"
+    },
+    "requested_hardware_build": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Requested Hardware Build"
+    },
+    "residual_risk_claim": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Residual Risk Claim"
+    },
+    "narrative": {
+      "default": "FICTION",
+      "enum": [
+        "FICTION",
+        "REAL_LIFE"
+      ],
+      "title": "Narrative",
+      "type": "string"
+    },
+    "explicit_real_life_request": {
+      "default": false,
+      "title": "Explicit Real Life Request",
+      "type": "boolean"
+    },
+    "exercise_complete": {
+      "default": false,
+      "title": "Exercise Complete",
+      "type": "boolean"
+    },
+    "cosmetics_enabled": {
+      "default": false,
+      "title": "Cosmetics Enabled",
+      "type": "boolean"
+    },
+    "permissions": {
+      "$ref": "#/$defs/Permissions"
+    }
+  },
+  "title": "Attestation",
+  "type": "object"
+}
