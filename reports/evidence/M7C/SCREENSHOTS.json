@@ -1,0 +1,163 @@
+{
+  "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "material_review": "Original synthetic typed/TTS fixture screenshots; no auth code/raw private audio/account data; UI source unchanged since skill review",
+  "captures": [
+    {
+      "file": "screenshots/actual-live-voice-response-desktop.png",
+      "sha256": "f2b5db5ff04fceb4721f34289c66a295f0f79141b74a7fa5d5626b0be5238aab",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/actual-live-voice-response-mobile.png",
+      "sha256": "74b048c3d991bb5d0017a3b51586537114b57f4b64c3a4becc69fbf1efd9926f",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/actual-local-asr-candidate-desktop.png",
+      "sha256": "3f2f00f1d17f9ee8b434965545f1af3019f30d1127d93eae745ebebb1db9c81e",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/actual-local-asr-candidate-mobile.png",
+      "sha256": "322a2ab479e9172a7ca149d6ddf64dd6d8f013eec39ea8a1c59b4d719155c37c",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/closure-review-desktop.png",
+      "sha256": "c14dcb2c7c541b17a5ad59d04ecd394829af736eaf2b7dc03f0bd97cccc3b30d",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/closure-review-mobile.png",
+      "sha256": "0ffbd4c273f60a36296b6a35deea223c77b55097788f1a0e25ba0680a0facfbe",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/deep-response-desktop.png",
+      "sha256": "95d3204fadb99304672b30266717753ec06661c97ed378803b29174ebb2ae0f6",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/deep-response-mobile.png",
+      "sha256": "6cc2e55126b828994ed83c2daae789ea3802dc19b8e3a54c095f72428594b186",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/demo-script-deep-off-mobile.png",
+      "sha256": "613d3af0ddf6b8afb3a8b529c29728e70d90e38358eb75c10c5223ff576ca1be",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/demo-script-off-desktop.png",
+      "sha256": "a29276d7956e8978ff18a7dc7eb253409b06d2ea28103c03f2588aef1ae34658",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/fixture-home-desktop.png",
+      "sha256": "da7ce9df6344cddbdec109031a04facaa94fc28d80d11f83df65538b277045cc",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/fixture-home-mobile.png",
+      "sha256": "7e35085c078c14844da79359292111ce4692a20fb2a6bbec867e839d47304ecb",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/free-response-desktop.png",
+      "sha256": "9c10597a85639384594b2af01555923753a34cd9b2af627b0ef71d7d80b62c94",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/free-response-mobile.png",
+      "sha256": "b3f652b19d322c0fe3be1d1ff19005f73d845b1b2578b3cb05da653dc72b9991",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/goal-candidate-desktop.png",
+      "sha256": "9a435831e3d13421b27c9f3064802d019353eefcb86676129815eb24093a4a25",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/goal-candidate-mobile.png",
+      "sha256": "b6fedc03dff469ab53c0af1d4120a1fbbac947bb6ba630a8b1acf473aa75d63f",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/goal-preview-desktop.png",
+      "sha256": "7f45c61c2146773bf24a230525f6ba628026ac5c14cbd21a5ddb6ba1bde74ad1",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/goal-preview-mobile.png",
+      "sha256": "cb9fbee7121c2b79393460444caa0c2677061615736e88cd3fb263ed51e0305b",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/journal-point-preview-desktop.png",
+      "sha256": "88a6779fe618ba3705dec21a5bd14fb2c332818d513923d32f9f23bfc5fc80c7",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/journal-point-preview-mobile.png",
+      "sha256": "908ddca664f6b5a4eb585e21bc1a226a9170f3cb2afa712ae8c4d73fda5aceb5",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/provider-off-desktop.png",
+      "sha256": "78e40ad75521f653fcae244c48f6f82d4019f7905961ba1a739947e46ed2fd23",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/provider-off-mobile.png",
+      "sha256": "e29767e709c851a61ed6809b692936a17dd7c015550d7883d7bd7d8bf0602898",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/response-cancelled-desktop.png",
+      "sha256": "f2c0f05627168b7b0544b3a5a24ed8712538e9a8c74015a33871860355058ad2",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/response-cancelled-mobile.png",
+      "sha256": "b295ade38b3d458925b8973f02348612790df552140c94e8950e632f7d9c669f",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/response-pending-desktop.png",
+      "sha256": "12c12b4180b9ad08a2704a5b63ab8bf0e121788b34e311a6308e6506c288e01d",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    },
+    {
+      "file": "screenshots/response-pending-mobile.png",
+      "sha256": "84153831927fad067a3c6d81ce5a4561f03c1dd17a17728c197607280f70ad04",
+      "provenance": "ORIGINAL_SYNTHETIC_UI_CAPTURE",
+      "real_private_data": false
+    }
+  ],
+  "physical_keyboard_or_phone": "NOT_RUN"
+}

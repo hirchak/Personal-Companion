@@ -1,0 +1,54 @@
+{
+  "phase": "EXACT_C",
+  "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "status": "PASS",
+  "provenance": "ORIGINAL_SYNTHETIC_APPLE_TTS_FAKE_BROWSER_CAPTURE",
+  "voice_engine": {
+    "engine": "whisper.cpp",
+    "version": "1.9.4-dev",
+    "model": "small-multilingual",
+    "model_hash": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
+    "binary_hash": "54d1e7bf2e36ec29bdf70b87a45e26158396d5004909d16d5ad76e51920b566c",
+    "languages": [
+      "uk"
+    ],
+    "available": true,
+    "status": "LOCAL_SYNTHETIC_ONLY",
+    "supported_input": [
+      "audio/wav"
+    ],
+    "cloud_asr": false,
+    "scope": "M7C_ORIGINAL_SYNTHETIC_AUDIO_ONLY"
+  },
+  "route": {
+    "route": "CODEX_SUBSCRIPTION",
+    "model": "gpt-6-luna",
+    "auth_type": "EXISTING_CHATGPT_CLI_ONLY",
+    "live": true,
+    "availability": "CAPABILITY_REQUIRES_COMPLETED_INFERENCE",
+    "streaming": true,
+    "tools": [],
+    "fallback": false,
+    "payg": false,
+    "host_policy": "SDK_HOST_WORKING_AGREEMENTS_PRESENT; NO_APPLICATION_VAULT_ACCESS"
+  },
+  "provider_result": {
+    "auth_type": "EXISTING_CHATGPT",
+    "elapsed_ms": 4272.542,
+    "frame_hash": "34600c3046ffb8e975ed5aae3cae153d9620683d9d077acbcc8a74de64e33e89",
+    "model": "gpt-6-luna",
+    "route": "CODEX_SUBSCRIPTION",
+    "streaming_actual": true,
+    "usage": {
+      "cachedInputTokens": 7936,
+      "inputTokens": 8887,
+      "outputTokens": 75,
+      "totalTokens": 8962
+    }
+  },
+  "raw_audio_in_provider": false,
+  "automatic_insert_or_send": false,
+  "no_journal_mutation": true,
+  "messages": 2,
+  "evidence_implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9"
+}

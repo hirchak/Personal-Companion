@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "role": "impeccable_documenter",
+  "recorded_at": "2026-10-03T22:45:30.612082+00:00",
+  "disposition": "No canonical design changes; incumbent system matches ordinary M7C Operate extension",
+  "write_boundary": "<owned-temporary>/m7c-documenter-review.json",
+  "written": [
+    "<owned-temporary>/m7c-documenter-review.json"
+  ],
+  "scope": "Finished-build design documentation check; retained paper/ink/sage/system body/Georgia; no new world, source change, detector, network call or system migration. This is not architect ACCEPT.",
+  "branch": "main",
+  "base_sha": "73ec6064107d3d25475bb7454d96a2bd964ee77c",
+  "implementation_sha": null,
+  "final_C_status": "PENDING; hashes describe current working source, not a committed/exact-C build assertion",
+  "role_inputs": {
+    "definition": "<installed-impeccable-skill>/agents/impeccable_documenter.toml",
+    "reference": "<installed-impeccable-skill>/reference/document.md",
+    "context": "Existing session context and retained direction used; no context/detector rerun"
+  },
+  "source_artifacts": [
+    {
+      "path": "docs/PRODUCT.md",
+      "sha256": "5ebaf9838e308d4d5a560910c5a62afd89b5f5006c80d15969acf62b936041da"
+    },
+    {
+      "path": "docs/DESIGN.md",
+      "sha256": "075513fbe052344a803ea9335eaa6b4a4894144d003b0917c8c0f505f70cc860"
+    },
+    {
+      "path": "docs/surfaces/M7C_CONVERSATION.md",
+      "sha256": "7629c57d8a124a02632b046426f86c6a5d20a3213a603883eae8b2ff3046d1ee"
+    },
+    {
+      "path": "apps/web/src/ConversationHome.tsx",
+      "sha256": "bf31ce54cc16a773fa031ecd5e07bdcaebb65028c8b32670145970063ae4b7b8"
+    },
+    {
+      "path": "apps/web/src/InferencePanel.tsx",
+      "sha256": "870d01f87aaa42accece42a93bfa5b0e579b1a5f7b5be7119a4171466e784d17"
+    },
+    {
+      "path": "apps/web/src/JournalPoint.tsx",
+      "sha256": "07d981e3f895d1618d550d3c521f29714eaa22a58818cce9847b425dc9680979"
+    },
+    {
+      "path": "apps/web/src/ReflectionGoals.tsx",
+      "sha256": "619503f93835a7e40ed2c70bd26abef6a885c8c48b8b240992bff8a0a85a866e"
+    },
+    {
+      "path": "apps/web/src/VoicePanel.tsx",
+      "sha256": "1b4b1d296209fd503ad51a1ce47cb036c88a6833f2b03884a1e86b8c50a7e142"
+    },
+    {
+      "path": "apps/web/src/Sheet.tsx",
+      "sha256": "c490f725aea1d2195f12b2da70649382eb0fa6e89f9a2d4d231c01b094386abb"
+    },
+    {
+      "path": "apps/web/src/style.css",
+      "sha256": "063b2e1964f2289c68e17207fd819f457fcccbd08fe0266a4bb609f64434b364"
+    }
+  ],
+  "incumbent_comparison": {
+    "DESIGN_equal_HEAD": true,
+    "DESIGN_preserved_sha256": "075513fbe052344a803ea9335eaa6b4a4894144d003b0917c8c0f505f70cc860",
+    "screenshots": [
+      {
+        "path": "reports/evidence/M7B/ui/empty-conversation-desktop.png",
+        "sha256": "1cd1e5dc9addd2a4f1f9fe2ce865ebbc6017edc12edad4acfa57bcb3feb83a96",
+        "opened_individually": true
+      },
+      {
+        "path": "reports/evidence/M7B/ui/empty-conversation-mobile.png",
+        "sha256": "8945ff6589ce236131badba0e50b1b53ebe0648ef61e1f2162a008e41c85dd27",
+        "opened_individually": true
+      }
+    ],
+    "finding": "M7B and M7C empty conversation desktop/mobile retain ground, type, three-nav, intent controls, thread and anchored composer. Longer truthful synthetic-mode copy accounts for mobile vertical position; no identity change. New panels inherit primitives; CSS diff adds only scoped inference/diagnostic/journal-choice layout rules."
+  },
+  "rendered_evidence": [
+    {
+      "path": "generated/m7c-ui/fixture-home-desktop.png",
+      "sha256": "da7ce9df6344cddbdec109031a04facaa94fc28d80d11f83df65538b277045cc",
+      "width": 1440,
+      "height": 1000,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    },
+    {
+      "path": "generated/m7c-ui/fixture-home-mobile.png",
+      "sha256": "7e35085c078c14844da79359292111ce4692a20fb2a6bbec867e839d47304ecb",
+      "width": 390,
+      "height": 844,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    },
+    {
+      "path": "generated/m7c-ui/deep-response-desktop.png",
+      "sha256": "95d3204fadb99304672b30266717753ec06661c97ed378803b29174ebb2ae0f6",
+      "width": 1440,
+      "height": 1000,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    },
+    {
+      "path": "generated/m7c-ui/closure-review-mobile.png",
+      "sha256": "0ffbd4c273f60a36296b6a35deea223c77b55097788f1a0e25ba0680a0facfbe",
+      "width": 390,
+      "height": 844,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    },
+    {
+      "path": "generated/m7c-ui/journal-point-preview-desktop.png",
+      "sha256": "d3a4ed316da012ea45ebaa6c277116b66fab7077d94743f72b8f35495eeed89a",
+      "width": 1440,
+      "height": 1000,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    },
+    {
+      "path": "generated/m7c-ui/journal-point-preview-mobile.png",
+      "sha256": "cba2641cdd8d5b3a860ff7e91c3413b2750427243e1f1055e0d6b1e906a87bd0",
+      "width": 390,
+      "height": 844,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    },
+    {
+      "path": "generated/m7c-ui/actual-local-asr-candidate-mobile.png",
+      "sha256": "322a2ab479e9172a7ca149d6ddf64dd6d8f013eec39ea8a1c59b4d719155c37c",
+      "width": 390,
+      "height": 844,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    },
+    {
+      "path": "generated/m7c-ui/actual-live-voice-response-desktop.png",
+      "sha256": "f020c3a8b9b1e20f3d7218062319e4f0826e77b7592c06c8aee328f99fdb8955",
+      "width": 1440,
+      "height": 1000,
+      "opened_individually": true,
+      "provenance": "ORIGINAL_SYNTHETIC; fixture vs actual ASR/live distinctions retained, execution not independently rerun"
+    }
+  ],
+  "supplied_review": {
+    "path": "<owned-temporary>/m7c-ui-review.json",
+    "sha256": "8f979e274f32d11bbc97d30124be86758b4d4301719585bd2658097aecf6f092",
+    "disposition": "ship",
+    "resolved": [
+      "M7C-UI-01",
+      "M7C-UI-02"
+    ],
+    "provenance": "Fresh reviewer record read; documenter checked sampled original captures and current code, did not rerun its tests/provider authentication"
+  },
+  "system_summary": [
+    "Palette: page #f7f7f0, surface #fffef9, ink #28372f, primary sage #335945, USER sage block #e9eee2, line #d6ddd3 and muted #546458; existing CSS root matches HEAD.",
+    "Type ramp: system body 16px/1.55; Georgia empty question clamp(30px, 3vw, 44px), 32px <=650px; Georgia toolbar 24px/22px; Georgia sheet title 28px; body messages 1.7 line-height; muted role/copy 0.85rem.",
+    "Named descriptive rule: Anchored explicit action — independent thread/context scrolling, composer outside thread, full-width send/save row <=650px; no new normative name added to DESIGN.",
+    "Named descriptive rule: Quiet paper layering — 8px buttons, 6px fields, 10px USER/context surfaces and 12px desktop sheet; mobile sheet square/full viewport; sheet-only ambient 0 18px 60px rgba(28,46,34,.18) with dim backdrop.",
+    "Named descriptive rule: Explicit review — goal proposal/agreement, provisional candidate/cancel/retry, closure versus USER journal preview/unchecked confirm, ASR edit/insert then send; diagnostics disclosed; minimum 44px buttons/summary and visible focus retained."
+  ],
+  "pre_existing_drift_not_canonized_or_repaired": [
+    "docs/DESIGN.md contains historical prose plus Layout/Components and lacks optional YAML token frontmatter, normative token map, and full canonical section organization. Root DESIGN.md absent. Legacy documentation placement/format is confirmed pre-existing and remains outside ordinary extension scope.",
+    "Root and docs .impeccable/design.json sidecars absent, likewise pre-existing; no sidecar/frontmatter migration or fabricated token scale added.",
+    "Supplied single detector advisory is pre-existing M5 .object-vase border-top 8px (#405644), outside M7C. Code confirms it; no detector rerun, repair or new system doctrine.",
+    "Historical M7B DESIGN text mentions demo assistant while M7C now has explicit authorized live synthetic mode. M7C PRODUCT section and surface brief carry current surface truth; the M7B historical description is not rewritten as a global prohibition or provider restriction."
+  ],
+  "narrow_prose_decision": "No existing visual-system statement materially changed by M7C. Surface behavior belongs to existing M7C PRODUCT/surface brief; leave DESIGN bytes untouched. No refresh/overwrite/merge needed.",
+  "checks": [
+    {
+      "command": "git HEAD docs/DESIGN.md byte equality + no-sidecar/root assertions + supplied final ship/resolved verdict + sampled PNG IHDR dimensions",
+      "exit_code": 0,
+      "scope": "documentation evidence integrity only"
+    }
+  ],
+  "limits": [
+    "Eight M7C originals and two M7B incumbent captures opened; not all M7C states independently reviewed by documenter.",
+    "Screenshots are synthetic browser viewports, no physical phone/keyboard acceptance. Voice sheet continues below viewport via native internal scrolling.",
+    "No independent provider/ASR run, tests, clinical review or architect ACCEPT. Genuine route provenance is supplied evidence, not authenticated by this role.",
+    "No final implementation C yet; required exact-C full checks and report/publication workflow remain parent responsibility.",
+    "No source/code, canonical docs, privacy flags or state modified."
+  ],
+  "evidence_implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "association_note": "Finish review before C; UI source unchanged at final C; full final-C browser checks separately verified. No architect ACCEPT."
+}

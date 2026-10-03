@@ -1,0 +1,195 @@
+{
+  "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "rows": [
+    {
+      "check": "web_build",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.483,
+      "log_sha256": "4125d6263040eef04ee4f903796eb6c916e0541f7d16f30e784cf41e501b7657"
+    },
+    {
+      "check": "web_tests",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "test"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.591,
+      "log_sha256": "7ae6ddd8a8e48a2fc74347be8550127d88fb1dbdeb547ff027d5f18c6e33fd61"
+    },
+    {
+      "check": "m7a_ajv",
+      "command": [
+        "node",
+        "scripts/verify_m7a_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.111,
+      "log_sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d"
+    },
+    {
+      "check": "m7c_ajv",
+      "command": [
+        "node",
+        "scripts/verify_m7c_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.069,
+      "log_sha256": "b688daa486a388bea4e9ae5a702d4ba14f7c843f6205a4d4c9d35eb1412a33b8"
+    },
+    {
+      "check": "admission",
+      "command": [
+        ".venv/bin/python",
+        "scripts/m7_admission.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.14,
+      "log_sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde"
+    },
+    {
+      "check": "schemas",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.generate_contracts"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.337,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "check": "schema_types",
+      "command": [
+        "apps/web/node_modules/.bin/openapi-typescript",
+        "packages/contracts/openapi.json",
+        "-o",
+        "apps/web/src/api-schema.ts"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.367,
+      "log_sha256": "a7b4582733f334aa0aa17594b18cf7d8337f7791448e332519c6b1ff06af93cb"
+    },
+    {
+      "check": "docs",
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_docs.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.221,
+      "log_sha256": "0a465ef3ba751dac49bc9f7fbf4547e3f7f9da65889f9e7a57381af1d3c83ddb"
+    },
+    {
+      "check": "context",
+      "command": [
+        ".venv/bin/python",
+        "scripts/build_chatgpt_context.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.196,
+      "log_sha256": "fcdeb834c82b7e3288f4cafe6cf053228324aef85ebbbeb24503e9d69ee6017b"
+    },
+    {
+      "check": "privacy",
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_privacy.py",
+        "--include-generated"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 23.608,
+      "log_sha256": "0683798828153f02f3f432c68ef279e171363441ee770a59b5040cb8217c166d"
+    }
+  ],
+  "status": "PASS",
+  "base_sha": "73ec6064107d3d25475bb7454d96a2bd964ee77c",
+  "environment": {
+    "OS": "macOS27.0",
+    "architecture": "arm64",
+    "Python": "3.13.2",
+    "Node": "26.8.2",
+    "reference_timezone": "Europe/Warsaw",
+    "browser": "Chromium140.0.7339.16; synthetic viewports1440x1000/390x844",
+    "configured_development_model": "gpt-6-luna/max; active sampling not exposed",
+    "Plan_Mode": "OFF"
+  },
+  "python": {
+    "command": ".venv/bin/python -m pytest -q --junitxml=generated/m7c-checks/full-python.xml",
+    "exit_code": 0,
+    "passed": 580,
+    "failed": 0,
+    "skipped": 0,
+    "elapsed_seconds": 150.357,
+    "log_sha256": "960403072aa4bf57661a38cdfd7343891a91a90673f012fe48983203c10e76b3",
+    "junit_raw_exported": false,
+    "browser_tests_included": 42,
+    "browser_cases": [
+      "tests.test_m1_browser::test_A09_browser_end_to_end",
+      "tests.test_m2_browser::test_M2_A01_A02_A03_A04_A07_A09_offline_sync_conflict_and_storage",
+      "tests.test_m2_browser::test_M2_A08_waiting_worker_interrupted_update_preserves_outbox",
+      "tests.test_m2_browser::test_M2_A10_browser_epoch_mismatch_requires_explicit_repair",
+      "tests.test_m2_browser::test_M2_synthetic_https_manifest_and_worker_gate",
+      "tests.test_m2_browser::test_M2_A09_evicted_store_and_offline_delete_restart",
+      "tests.test_m3_browser::test_M3_browser_consent_suggestions_memory_and_viewports",
+      "tests.test_m3_browser::test_M3_browser_job_cancel_and_phone_AI_independent_after_IDB_pair_failure",
+      "tests.test_m3_browser::test_M3_mobile_long_memory_pending_confirmation_wraps",
+      "tests.test_m4_browser::test_M4_browser_Mac_microphone_transcript_retention_and_accessibility",
+      "tests.test_m4_browser::test_M4_browser_phone_offline_encrypted_restart_upload_lost_response",
+      "tests.test_m4_browser::test_M4_browser_phone_quota_retains_recording_retry_export_cancel",
+      "tests.test_m4_browser::test_M4_browser_recording_interruptions[permission]",
+      "tests.test_m4_browser::test_M4_browser_recording_interruptions[start]",
+      "tests.test_m4_browser::test_M4_browser_recording_interruptions[track]",
+      "tests.test_m4_browser::test_M4_browser_recording_interruptions[background]",
+      "tests.test_m4_browser::test_M4_browser_synthetic_silent_mic_no_meaningful_note",
+      "tests.test_m5_browser::test_M5_browser_library_desktop_mobile_exact_exports_metadata_and_space_parity",
+      "tests.test_m5_browser::test_M5_browser_feedback_private_exact_approval_edit_stale_and_local_file",
+      "tests.test_m5_browser::test_M5_browser_phone_offline_restart_sync_metadata_conflict_and_space_local",
+      "tests.test_m5_browser::test_M5_browser_stale_export_after_remote_edit_is_blocked",
+      "tests.test_m5_browser::test_M5_browser_lost_create_response_retry_has_single_original",
+      "tests.test_m5_browser::test_M5_browser_delayed_save_and_preview_cannot_replace_new_draft_or_selection",
+      "tests.test_m6_browser::test_health_browser_import_delete_explicit_reimport_desktop_mobile",
+      "tests.test_m6_browser::test_health_browser_malformed_partial_revoke_keeps_journal",
+      "tests.test_m6_browser::test_phone_health_truthful_offline_without_fake_copy",
+      "tests.test_m6_browser::test_phone_health_pairing_reads_only_status_and_disconnects_normally",
+      "tests.test_m6_browser::test_health_delayed_record_response_cannot_restore_deleted_ui_copy",
+      "tests.test_m7a_browser::test_built_normal_catalog_empty_with_journal_independent",
+      "tests.test_m7a_browser::test_built_complete_pause_refresh_resume_optional_skip_history_delete",
+      "tests.test_m7a_browser::test_built_stop_block_inert_response_and_normal_sections_accessible",
+      "tests.test_m7a_browser::test_browser_response_loss_retries_same_operation_without_duplicate_session",
+      "tests.test_m7a_browser::test_browser_stale_revision_retains_unsaved_text",
+      "tests.test_m7b_browser::test_conversation_text_home_history_journal_and_practice",
+      "tests.test_m7b_browser::test_voice_composer_generated_audio_unavailable_and_explicit_demo_insert",
+      "tests.test_m7b_browser::test_normal_home_off_fake_transcript_hidden_and_mic_cancel",
+      "tests.test_m7b_browser::test_deep_goal_context_ux_exact_revision_history_and_budget",
+      "tests.test_m7b_browser::test_response_loss_retry_and_stale_preserve_draft",
+      "tests.test_m7b_browser::test_journal_grid_list_bounded_render_metrics",
+      "tests.test_m7c_browser::test_free_deep_closure_goal_history_and_diagnostics",
+      "tests.test_m7c_browser::test_goal_proposal_preview_requires_separate_agreement",
+      "tests.test_m7c_browser::test_off_and_cancel_retry_truth"
+    ]
+  },
+  "web": {
+    "passed": 46,
+    "files": 6
+  },
+  "independent_ajv": {
+    "M7A": 7,
+    "M7C": 12
+  },
+  "limitations": [
+    "The successful full checks are engineering/synthetic scope only.",
+    "Exact C1 full corpus is interim, not final C; its results remain separately labeled.",
+    "C1 schema invocation without package context failed ModuleNotFoundError and was corrected to module invocation; final C checks all exit0."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "status": "PASS",
+  "demo_command": "M7C_LOCAL_ASR=1 ./scripts/m7c_demo.sh <fresh-synthetic-root> OFF",
+  "scope": "Actual owned CLI/demo script; Playwright auth/OFF/seeded goal/Deep/no page errors",
+  "one_time_code_published": false,
+  "provider_inference_requests": 0,
+  "api_statuses": [
+    {
+      "path": "/api/v1/auth/session",
+      "status": 401
+    },
+    {
+      "path": "/api/v1/auth/unlock",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/conversations/status",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/personal-space",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/entries",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/reflection/goals",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/conversations",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/reflection/goals/0cf18a27-c851-5215-ac50-9cbf76eefe3b",
+      "status": 200
+    }
+  ],
+  "agent_browser_status": "Partial page/auth-surface PASS; native fill/click failed to complete auth after bounded retries; Playwright user-input path verified",
+  "evidence_implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9"
+}

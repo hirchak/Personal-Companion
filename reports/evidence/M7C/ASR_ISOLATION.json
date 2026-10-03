@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "scope": "Own compiled synthetic sentinels; no real/auth/private files read",
+  "checks": [
+    {
+      "case": "allowed",
+      "read_allowed": true,
+      "outside_write_denied": true,
+      "network_denied": true
+    },
+    {
+      "case": "denied",
+      "read_allowed": false,
+      "outside_write_denied": true,
+      "network_denied": true
+    }
+  ],
+  "actual_engine_under_same_profile": "PASS",
+  "actual_audio_duration": 3.6203125,
+  "candidate_chars": 50,
+  "elapsed_seconds": 2.648,
+  "model_bytes": 487601967,
+  "cloud_asr": false,
+  "private_audio": false,
+  "engine": {
+    "engine": "whisper.cpp",
+    "version": "1.9.4-dev",
+    "model": "small-multilingual",
+    "model_hash": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
+    "binary_hash": "54d1e7bf2e36ec29bdf70b87a45e26158396d5004909d16d5ad76e51920b566c",
+    "languages": [
+      "uk"
+    ],
+    "available": true,
+    "status": "LOCAL_SYNTHETIC_ONLY",
+    "supported_input": [
+      "audio/wav"
+    ],
+    "cloud_asr": false,
+    "scope": "M7C_ORIGINAL_SYNTHETIC_AUDIO_ONLY"
+  },
+  "evidence_implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "profile_sha256": "dbffd7a641cc007c6db1769f32a32ca52534f1801a38d5deac63e4acd80e68d8"
+}

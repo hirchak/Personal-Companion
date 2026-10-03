@@ -1,6 +1,6 @@
-# M7C local ASR capability — pre-C measurements
+# M7C local ASR capability — exact-C capability / bounded quality
 
-Original synthetic audio only; no cloud/human/private recording. Final exact-C evidence pending.
+Original synthetic audio only; no cloud/human/private recording. Final C `36b99e45a5d6ce93a828cf1be7d82a76685a89e9`; measured synthetic scope only.
 Engine [whisper.cpp](https://github.com/ggml-org/whisper.cpp/tree/927cfce34f31707e17f2bff35c349632fb9e2c3a), MIT,
 release sourcev1.9.4 commit927cfce34f31707e17f2bff35c349632fb9e2c3a, actual binary1.9.4-dev.
 Tag verification false; no signed-tag claim. Source archive9354923bytes,
@@ -28,12 +28,19 @@ files inspected. Actual engine executes under the same profile. Default app LOCA
 Existing local Apple say Lesya uk_UA generates3 original phrases; existing ffmpeg converts16kmonoPCM;
 silence/noise are generated deterministically, not speech references. Benchmark normalizes NFC/casefold,
 punctuation→space/whitespace collapse and uses Levenshtein reference-normalized word/character edits.
-Pre-C clear/reflectiveWER0, shortWER0.5; latency approximately1.8–2.4s per shortclip, checksum/startup included.
-Silence/noise WER/CER undefined, no fake UA quality from tones. Peak RSS not measured; no per-engine peak
-from this synchronous subprocess collector. Human UA/real hardware/private voice quality NOT_RUN; no
-forecast for future user voice. Model size/startup-inclusive wall/RTF/corpus limits are reported explicitly.
+Exact-C clear/reflectiveWER0,shortWER0.5 (CER0.0769); checksum/startup-inclusive wall2.15–2.80s
+for speech, RTF clear0.7535/short1.8366/reflective0.4844. Both silence and noise produced text: observed
+non-speech false positives. Their WER/CER are undefined, not a speech-quality claim. Candidate review/edit
+and explicit insertion/sending prevent automatic promotion; non-speech robustness is a measured future
+quality gap. Peak RSS NOT_MEASURED: this synchronous collector does not isolate per-engine peak.
+Human UA/real hardware/private voice quality NOT_RUN; no forecast for future user voice.
 
-M4 record→localASR→candidate→edit→explicitinsert→explicitsend→genuine synthetic provider PASS interim,
+
+M4 record→localASR→candidate→edit→explicitinsert→explicitsend→genuine synthetic provider PASS at final C,
 providertextonly. Raw candidates/audio/binary/models/cache/DB remain ignored. Public metadata/checksums
 and original synthetic screenshots only. Reproduce via scripts/benchmark_m7c_asr.py,
 verify_m7c_asr_isolation.py and verify_m7c_voice_live.py (last consumes1 authorized inference).
+
+[Exact benchmark](evidence/M7C/ASR_BENCHMARK.json), [model receipt](evidence/M7C/ASR_MODEL_RECEIPT.json),
+[isolation sentinels](evidence/M7C/ASR_ISOLATION.json), [actual voice E2E](evidence/M7C/VOICE_EXACT_C.json).
+Engineering capability PASS_WITH_QUALITY_LIMITS; no production UA-quality acceptance or cloud fallback.

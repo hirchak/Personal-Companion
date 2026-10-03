@@ -1,0 +1,157 @@
+{
+  "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "corpus_sha256": "b2cc9eed7f3017f2935e797c40d5217f3727891011c0dbe946209f742684aa15",
+  "rows": [
+    {
+      "phase": "FINAL_EXACT_C",
+      "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+      "route": "CODEX_SUBSCRIPTION",
+      "model": "gpt-6-luna",
+      "auth_type": "EXISTING_CHATGPT",
+      "requests": 25,
+      "cases": 21,
+      "completed": 24,
+      "failed": 1,
+      "latency_ms": {
+        "median": 4191.405,
+        "max": 6329.968
+      },
+      "reported_token_sums": {
+        "cachedInputTokens": 166400,
+        "inputTokens": 217147,
+        "outputTokens": 2487,
+        "totalTokens": 219634
+      },
+      "failures": [
+        {
+          "case": "DEEP_GOAL",
+          "error": "PROVIDER_TOOL_REQUEST_DENIED"
+        }
+      ],
+      "structured_adherence": "24/25",
+      "no_automatic_downstream_mutation": true,
+      "goal_revision_unchanged": true
+    },
+    {
+      "phase": "FINAL_EXACT_C",
+      "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+      "route": "CODEX_SUBSCRIPTION",
+      "model": "gpt-6.1-sol",
+      "auth_type": "EXISTING_CHATGPT",
+      "requests": 9,
+      "cases": 6,
+      "completed": 9,
+      "failed": 0,
+      "latency_ms": {
+        "median": 6535.017,
+        "max": 9065.8
+      },
+      "reported_token_sums": {
+        "cachedInputTokens": 43776,
+        "inputTokens": 82321,
+        "outputTokens": 1075,
+        "totalTokens": 83396
+      },
+      "failures": [],
+      "structured_adherence": "9/9",
+      "no_automatic_downstream_mutation": true,
+      "goal_revision_unchanged": true
+    },
+    {
+      "phase": "INTERIM_C1",
+      "implementation_sha": "ba20f8e1c32738c4a3ae816896995a3c9cd03cef",
+      "route": "CODEX_SUBSCRIPTION",
+      "model": "gpt-6-luna",
+      "auth_type": "EXISTING_CHATGPT",
+      "requests": 26,
+      "cases": 21,
+      "completed": 26,
+      "failed": 0,
+      "latency_ms": {
+        "median": 4276.229,
+        "max": 7184.686
+      },
+      "reported_token_sums": {
+        "cachedInputTokens": 127744,
+        "inputTokens": 235551,
+        "outputTokens": 2777,
+        "totalTokens": 238328
+      },
+      "failures": [],
+      "structured_adherence": "26/26",
+      "no_automatic_downstream_mutation": true,
+      "goal_revision_unchanged": true
+    },
+    {
+      "phase": "INTERIM_C1",
+      "implementation_sha": "ba20f8e1c32738c4a3ae816896995a3c9cd03cef",
+      "route": "CODEX_SUBSCRIPTION",
+      "model": "gpt-6.1-sol",
+      "auth_type": "EXISTING_CHATGPT",
+      "requests": 26,
+      "cases": 21,
+      "completed": 25,
+      "failed": 1,
+      "latency_ms": {
+        "median": 6101.599,
+        "max": 8455.878
+      },
+      "reported_token_sums": {
+        "cachedInputTokens": 58368,
+        "inputTokens": 226402,
+        "outputTokens": 2572,
+        "totalTokens": 228974
+      },
+      "failures": [
+        {
+          "case": "DEEP_NEXT",
+          "error": "CLOSURE_SCHEMA_REQUIRED"
+        }
+      ],
+      "structured_adherence": "25/26",
+      "no_automatic_downstream_mutation": true,
+      "goal_revision_unchanged": true
+    }
+  ],
+  "ledger": {
+    "goal": "M7C_OWNER_2026_10_03",
+    "maximum": 100,
+    "total_requests": 94,
+    "remaining": 6,
+    "routes": [
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "COMPLETED",
+        "requests": 58
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "FAILED",
+        "requests": 1
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6.1-sol",
+        "outcome": "COMPLETED",
+        "requests": 35
+      }
+    ],
+    "raw_payload_logged": false
+  },
+  "final_eval_requests": 34,
+  "final_voice_requests": 1,
+  "interim_capability_voice_requests": 7,
+  "interim_full_eval_requests": 52,
+  "billing_changes": false,
+  "new_authentication": false,
+  "PAYG_route": false,
+  "fallback": false,
+  "credits_purchased": false,
+  "provider_internal_allocation_or_retention": "NOT_VERIFIED; no balance/account scraping",
+  "provider_selection": "PENDING_OWNER_ARCHITECT",
+  "MiniMax": "UNAVAILABLE_AUTH_EXISTING_ROUTE_NOT_EXPOSED; env/project/callable tools inspected, no credential search",
+  "existing_local_LLM": "UNAVAILABLE_NO_EXISTING_ROUTE_IDENTIFIED",
+  "qualified_clinical_or_rights_acceptance": false
+}

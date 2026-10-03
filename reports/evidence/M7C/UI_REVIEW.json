@@ -1,0 +1,141 @@
+{
+  "disposition": "ship",
+  "scope": "Verdict pass covering exactly M7C-UI-01 and M7C-UI-02; not a new whole-surface, architect or clinical ACCEPT; final C pending",
+  "input_gaps": [
+    "No separate QUALITY BAR card or five-block/seed-bearing direction contract supplied. This is an ordinary incumbent-world Operate extension, so no new comp, asset, concept-roll or world replacement is required."
+  ],
+  "evidence": {
+    "captures": "All 22 named original PNGs opened individually; 11 states at 1440x1000 and 390x844. Content matches names; no blank, black or loading failures.",
+    "mobile_limit": "Synthetic browser viewports only. Closure body and voice insert actions continue below the visible thread/sheet and require internal scrolling; physical keyboard/device acceptance not established.",
+    "truth": "OFFLINE_FIXTURE captures are labeled demo. Actual local ASR and actual live voice response are supplied genuine synthetic route evidence; this review does not independently rerun or authenticate the provider.",
+    "detector": "Provided single detector result only: pre-existing M5 border-top 8px at style.css:807. Outside M7C; no second detector run or expanded repair requested.",
+    "tests": "Parent reports 3 M7C plus 6 M7B browser checks and 569 pre-C Python checks PASS. Reviewer did not rerun tests."
+  },
+  "persistence": {
+    "status": "pass",
+    "details": "PRODUCT.md and DESIGN.md exist. Incumbent paper/ink/sage, system body and Georgia headings match the render. M7C surface brief retains anchored composer and three primary navigation actions. PRODUCT/state completion updates remain the pending documenter/C-R workflow, not an implementation review ACCEPT."
+  },
+  "fidelity": [
+    {
+      "element": "TYPE",
+      "status": "match",
+      "evidence": "Georgia question/sheet headings and system body retain the named incumbent world; clear title/body/action scale."
+    },
+    {
+      "element": "MATERIAL",
+      "status": "match",
+      "evidence": "Flat paper/ink/sage surfaces are the incumbent material. No imitation physicality, new illustration or missing raster obligation."
+    },
+    {
+      "element": "GROUND",
+      "status": "match",
+      "evidence": "Rendered field retains declared #f7f7f0, sheet #fffef9 and muted sage user blocks; no world-temperature change."
+    },
+    {
+      "element": "Conversation hierarchy and primary action",
+      "status": "match",
+      "evidence": "Three navigation actions, thread above anchored composer, full-width mobile send and readable turn separation match DESIGN.md and retained scope."
+    },
+    {
+      "element": "Deep goal and revision",
+      "status": "match",
+      "evidence": "Exact agreed revision visible; past context collapsed; edit/pause/complete/history exist in goals sheet. Budgets/receipt details sit under diagnostics."
+    },
+    {
+      "element": "Goal proposal and agreement",
+      "status": "match",
+      "evidence": "Candidate is labeled proposal, editable preview opens goals sheet, explicit unchecked agreement gates create."
+    },
+    {
+      "element": "Closure review and continuation/close",
+      "status": "match",
+      "evidence": "Candidate review has explicit archive action; composer preserves continuation. No automatic journal or memory writes are advertised."
+    },
+    {
+      "element": "Closure selected user point to journal",
+      "status": "match",
+      "evidence": "Resolved by explicit source-only USER selection, exact preview, unchecked confirmation and named closure save action. JournalPoint desktop/mobile previews and recaptured mobile closure visibly support this."
+    },
+    {
+      "element": "Pending/cancel/retry",
+      "status": "match",
+      "evidence": "Pending has cancel, cancelled explicitly says unfinished answer was not saved, retry is a named action. Partial candidate code identifies an unsaved draft."
+    },
+    {
+      "element": "Provider-mode copy",
+      "status": "match",
+      "evidence": "Resolved: updated OFF screenshots say helper is off and text remains local; recaptured LIVE_SYNTHETIC screenshots say helper receives text after explicit send. Neither calls the route demo."
+    },
+    {
+      "element": "Voice candidate/edit/insert/send",
+      "status": "match",
+      "evidence": "Local candidate has editable transcript and separate insert action; insertion explicitly says not sent. Composer requires send. ASR and live response synthetic captures retain original provenance labels."
+    }
+  ],
+  "ceiling": {
+    "status": "reached",
+    "details": "At retained Operate scope: quiet hierarchy, plain actions, readable text and compact secondary diagnostics. No native-world device or ornamental expansion is owed. No comp/QUALITY BAR supplied to establish a higher new-world ceiling."
+  },
+  "material_fixes": [],
+  "keep": "Preserve paper/ink/sage/system body/Georgia, viewport-anchored composer, explicit goal agreement, unsaved candidate semantics, original synthetic evidence and diagnostics under details.",
+  "initial_disposition": "fix",
+  "confirmation": {
+    "disposition": "recapture",
+    "recapture": [
+      {
+        "file": "generated/m7c-ui/closure-review-mobile.png",
+        "reason": "The screenshot shows only the preceding deep-session turn; neither closure heading nor candidate nor closure actions is visible.",
+        "required": "Keep document shell/composer visible, scroll the internal thread to the closure candidate and explicit close/save controls."
+      },
+      {
+        "file": "generated/m7c-ui/actual-live-voice-response-desktop.png",
+        "reason": "Still displays pre-fix demo composer wording; it is not evidence of the changed build for M7C-UI-02.",
+        "required": "Capture updated build using the existing genuine synthetic stored reply, without another provider call."
+      },
+      {
+        "file": "generated/m7c-ui/actual-live-voice-response-mobile.png",
+        "reason": "Still displays pre-fix demo composer wording; it is not evidence of the changed build for M7C-UI-02.",
+        "required": "Capture updated build using the existing genuine synthetic stored reply, without another provider call."
+      }
+    ],
+    "captures_opened": 24,
+    "note": "No implementation edits, detector rerun or new polish hunt. Stop at invalid confirmation evidence; no ship verdict yet."
+  },
+  "initial_material_fixes": [
+    {
+      "id": "M7C-UI-01",
+      "check": "Contract section31",
+      "file": "apps/web/src/InferencePanel.tsx",
+      "fix": "Expose a narrow explicit review/save action for a selected USER-authored point through the existing journal confirmation flow. Preserve source text selection; never save model closure text automatically or add an automatic memory flow."
+    },
+    {
+      "id": "M7C-UI-02",
+      "check": "Truth / contract section28",
+      "file": "apps/web/src/ConversationHome.tsx",
+      "fix": "Use mode-specific composer copy or neutral synthetic-only copy so LIVE_SYNTHETIC and OFF are not called demo. Keep the truthful top mode distinction and avoid developer jargon."
+    }
+  ],
+  "final_confirmation": {
+    "disposition": "ship",
+    "scope": "Scores only the two previously named fixes. No new polish hunt.",
+    "verdict": [
+      {
+        "id": "M7C-UI-01",
+        "status": "resolved",
+        "evidence": "Recaptured closure-review-mobile shows separate close/save actions. Previously inspected journal-point-preview desktop/mobile show exact USER source text, unchecked confirmation and disabled final save until agreement. Source filtering excludes assistant/model content."
+      },
+      {
+        "id": "M7C-UI-02",
+        "status": "resolved",
+        "evidence": "Actual-live-voice-response desktop/mobile now show mode-specific after-send copy. Updated OFF desktop/mobile inspected in previous confirmation show local-save/OFF copy."
+      }
+    ],
+    "remaining": "clear",
+    "regressions": [],
+    "evidence": "Only three requested originals reopened in this final evidence confirmation: closure-review-mobile and actual-live-voice-response desktop/mobile. All valid for named state.",
+    "provider_note": "Parent reports previous disposable root had been removed; a new authorized original synthetic voice E2E supplied the live recaptures, ledger 6/100. Reviewer did not rerun or authenticate provider calls.",
+    "test_note": "Parent reports 3 M7C browser tests and genuine voice E2E PASS. No reviewer test rerun, physical phone acceptance or private recording evidence."
+  },
+  "evidence_implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "association_note": "Finish review before C; UI source unchanged at final C; full final-C browser checks separately verified. No architect ACCEPT."
+}

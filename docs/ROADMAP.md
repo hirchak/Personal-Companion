@@ -9,8 +9,9 @@ M6: external ACCEPT — engineering + bounded early hardware за C6/R6
 (reports/M6_ARCHITECT_REVIEW.md). M6-N01 OPEN: early0.6.0 PASS не закриває final0.6.1 hardware NOT_RUN.
 M7_PREP_EVIDENCE_ADMISSION: external ACCEPT preparation/tooling scope (reports/M7_PREP_ARCHITECT_REVIEW.md); clinical active=0.
 M7A_GENERIC_PRACTICE_ENGINE: external ACCEPT — synthetic engineering scope (reports/M7A_ARCHITECT_REVIEW.md).
-M7B_CONVERSATION_HOME: AWAITING_REVIEW — same goal includes binding longitudinal/deep-goal addenda; exact-C539 Python/40 browser/46 web PASS.
-M7C/clinical activation і M8: NOT_STARTED; наступної goal/permission немає.
+M7B_CONVERSATION_HOME: external ACCEPT — synthetic engineering scope; binding longitudinal/deep-goal addenda included.
+M7C: AWAITING_REVIEW — bounded original-synthetic controller/provider/ASR scope; final exact-C580Python/42browser/46web.
+Clinical activation/M7D/M8 NOT_STARTED; наступної goal/permission немає.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -112,4 +113,6 @@ M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](adr/ADR-008-M7B-CONVERSAT
 
 ## M7C owner scope — 2026-10-04
 
-M7B external ACCEPT — synthetic engineering scope, C f143dc9f82bb356ca10cbb4034cb8126ecf42aa3 / R73ec6064107d3d25475bb7454d96a2bd964ee77c. M7C is the currently authorized bounded preparation/runtime-evaluation goal, IN_PROGRESS until final C/R evidence; earlier M7B “M7C NOT_STARTED/live OFF” text is its historical checkpoint. M7C implements neutral controller, N01/N02, genuine synthetic provider evaluation and local ASR. Deferred: human/private voice quality and final hardware gate, real-user/provider activation, model-derived digest generation/tokenizer, clinical skills and all27 research admissions, MiniMax pending safe existing route, optional embeddings pending measured-gap ADR. M7D/M8 NOT_STARTED; no automatic continuation.
+M7B external ACCEPT — synthetic engineering scope, C f143dc9f82bb356ca10cbb4034cb8126ecf42aa3 / R73ec6064107d3d25475bb7454d96a2bd964ee77c. M7C is AWAITING_REVIEW in the currently authorized bounded preparation/runtime-evaluation goal; earlier M7B “M7C NOT_STARTED/live OFF” text is its historical checkpoint. M7C implements neutral controller, N01/N02, genuine synthetic provider evaluation and local ASR. Deferred: human/private voice quality and final hardware gate, real-user/provider activation, model-derived digest generation/tokenizer, clinical skills and all27 research admissions, MiniMax pending safe existing route, optional embeddings pending measured-gap ADR. M7D/M8 NOT_STARTED; no automatic continuation.
+
+M7C exact evidence: [runtime report](../reports/M7C_CONVERSATION_RUNTIME_REPORT.md). N01/N02 CLOSED engineering;94/100requests, private activation/clinical0 unchanged.

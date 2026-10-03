@@ -1,0 +1,20 @@
+{
+  "engine": "whisper.cpp",
+  "engine_version": "v1.9.4",
+  "engine_commit": "927cfce34f31707e17f2bff35c349632fb9e2c3a",
+  "engine_signed_tag_verified": false,
+  "engine_source": "https://github.com/ggml-org/whisper.cpp",
+  "engine_license": "MIT",
+  "model": "small multilingual",
+  "model_repo_revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+  "model_source": "https://huggingface.co/ggerganov/whisper.cpp",
+  "model_license": "mit",
+  "model_bytes": 487601967,
+  "model_sha256": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
+  "new_model_asset_budget_bytes": 2500000000,
+  "downloaded_model_asset_bytes": 487601967,
+  "cloud_asr": false,
+  "private_audio": false,
+  "model_checksum_verified": true,
+  "evidence_implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9"
+}

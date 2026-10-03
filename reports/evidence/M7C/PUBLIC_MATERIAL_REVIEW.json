@@ -1,0 +1,20 @@
+{
+  "implementation_sha": "36b99e45a5d6ce93a828cf1be7d82a76685a89e9",
+  "status": "PASS_WITH_SCOPE_LIMITS",
+  "reviewed_inputs": [
+    "Original project-authored21case corpus",
+    "All52 accepted/rejected interim rows and34 final rows; accepted text read",
+    "Original neutral4skill/controller frame",
+    "Pinned ASR source/model license/checksum metadata",
+    "Synthetic fixture/TTS-derived UI screenshots"
+  ],
+  "rights_scope": "Original synthetic prompts/generated text/metadata only; no full article/RAW/clinical forms/audio/models/auth/DB exported",
+  "qualified_content_or_legal_review": false,
+  "real_private_data": false,
+  "clinical_active": 0,
+  "research_findings_OPEN": 27,
+  "RAW_locally_received": 0,
+  "research_packets_external_manifest_only": 16,
+  "ASR_non_speech_limit": "Both synthetic silence and noise produced text; no WER/CER claim or production-quality acceptance",
+  "no_provider_winner": true
+}
