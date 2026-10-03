@@ -1,0 +1,21 @@
+{
+  "provenance": "ORIGINAL_SYNTHETIC",
+  "unit": "milliseconds",
+  "limit": "Headless local Chromium render, not physical phone/virtual keyboard",
+  "viewports": [
+    {
+      "width": 1440,
+      "grid_ms": 175.669,
+      "list_switch_ms": 46.187,
+      "cards_first_page": 30,
+      "total_synthetic_records": 50
+    },
+    {
+      "width": 390,
+      "grid_ms": 49.868,
+      "list_switch_ms": 44.512,
+      "cards_first_page": 30,
+      "total_synthetic_records": 50
+    }
+  ]
+}

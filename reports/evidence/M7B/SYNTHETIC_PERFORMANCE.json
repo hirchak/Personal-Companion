@@ -1,0 +1,51 @@
+{
+  "provenance": "ORIGINAL_SYNTHETIC",
+  "unit": "milliseconds",
+  "limits": "Local service/store reopening, not provider latency, Galaxy, real ASR or full browser startup",
+  "runs": [
+    {
+      "conversations": 25,
+      "messages": 50,
+      "actions_ms": {
+        "create": {
+          "median": 1.431,
+          "max": 2.675
+        },
+        "send": {
+          "median": 1.794,
+          "max": 3.429
+        }
+      },
+      "history_50_ms": 1.351,
+      "reopen_ms": 1.059,
+      "service_restart_ms": 4.695,
+      "context_builder_ms": 2.937,
+      "context_sources": 9,
+      "context_used_bytes_upper_bound": 1932,
+      "context_budget": 2000,
+      "db_growth_bytes": 77824
+    },
+    {
+      "conversations": 100,
+      "messages": 200,
+      "actions_ms": {
+        "create": {
+          "median": 1.489,
+          "max": 3.698
+        },
+        "send": {
+          "median": 1.851,
+          "max": 4.701
+        }
+      },
+      "history_50_ms": 1.733,
+      "reopen_ms": 1.076,
+      "service_restart_ms": 4.836,
+      "context_builder_ms": 4.282,
+      "context_sources": 9,
+      "context_used_bytes_upper_bound": 1932,
+      "context_budget": 2000,
+      "db_growth_bytes": 344064
+    }
+  ]
+}

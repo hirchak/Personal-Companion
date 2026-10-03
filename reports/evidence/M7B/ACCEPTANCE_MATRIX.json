@@ -1,0 +1,114 @@
+{
+  "implementation_sha": "f143dc9f82bb356ca10cbb4034cb8126ecf42aa3",
+  "scope": "Technical synthetic engineering only; no self ACCEPT/activation",
+  "gates": [
+    {
+      "id": "M7B-A01",
+      "requirement": "Default Conversation home",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_browser::test_conversation_text_home_history_journal_and_practice"
+    },
+    {
+      "id": "M7B-A02",
+      "requirement": "Three primary destinations, Journal filters",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_browser; ui_navigation + M1-M7A browser regressions"
+    },
+    {
+      "id": "M7B-A03",
+      "requirement": "Persistent create/send/reopen/archive/delete/actual HTTP process restart",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_conversation; test_m7b_restart"
+    },
+    {
+      "id": "M7B-A04",
+      "requirement": "Explicit synthetic responder vs normal OFF",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_conversation::test_normal_mode_never_calls_synthetic_or_live_responder; test_m7b_browser normal OFF"
+    },
+    {
+      "id": "M7B-A05",
+      "requirement": "No live provider calls",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "M7B API/domain no provider execution; CLI deny_egress; admission clinical0"
+    },
+    {
+      "id": "M7B-A06",
+      "requirement": "No downstream journal/memory/health/tasks/feedback mutation",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_conversation no_downstream; test_m7b_api"
+    },
+    {
+      "id": "M7B-A07",
+      "requirement": "M4-only microphone/PCM/source binding",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_browser generated audio; test_m7b_api voice source; unchanged PCMRecorder/voice.py"
+    },
+    {
+      "id": "M7B-A08",
+      "requirement": "Truthful unavailable ASR, no fake production transcript",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_browser unavailable/normal OFF; source gate test_m7b_api"
+    },
+    {
+      "id": "M7B-A09",
+      "requirement": "Explicit practice click/admission/clinical0",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_browser practice entry; full test_m7a* + unchanged canonical registry"
+    },
+    {
+      "id": "M7B-A10",
+      "requirement": "Journal grid/list local preference",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_browser home + render metrics"
+    },
+    {
+      "id": "M7B-A11",
+      "requirement": "Journal detail native sheet, compact protected actions",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_browser; full test_m1_browser CRUD/history/delete"
+    },
+    {
+      "id": "M7B-A12",
+      "requirement": "Creative/feedback/health preserved secondary",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "full test_m5_browser/test_m6_browser/test_m2_ui regressions"
+    },
+    {
+      "id": "M7B-A13",
+      "requirement": "Backup restore no provider/synthetic activation",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_conversation parameterized backups; test_m7b_reflection backup integrity"
+    },
+    {
+      "id": "M7B-A14",
+      "requirement": "Duplicate/lost/stale CAS-safe retries",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "test_m7b_conversation races; test_m7b_browser response_loss_retry_and_stale_preserve_draft"
+    },
+    {
+      "id": "M7B-A15",
+      "requirement": "Public evidence only original synthetic/metadata",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "privacy heuristic exact-C + R staged scan; manual source/rights review;32 original synthetic UI PNG"
+    },
+    {
+      "id": "M7B-A16",
+      "requirement": "Desktop/mobile UI review with named fix resolved",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "UI_REVIEW.json full review + M7B-UI-01 resolved; physical keyboard NOT_RUN"
+    },
+    {
+      "id": "M7B-A17",
+      "requirement": "Full relevant M1-M7A regression retained",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "EXACT_C_CHECKS.json539 Python/40 browser/46 web; historical selectors adapted without disabling persistence/error assertions"
+    },
+    {
+      "id": "M7B-A18",
+      "requirement": "One-command local synthetic demo",
+      "status": "TECHNICAL_SCOPE_VERIFIED",
+      "evidence": "DEMO_COMMAND_CHECK.json actual script/agent-browser unlock/home PASS; owner acceptance not inferred"
+    }
+  ]
+}

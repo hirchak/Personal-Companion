@@ -1,0 +1,551 @@
+{
+  "implementation_sha": "f143dc9f82bb356ca10cbb4034cb8126ecf42aa3",
+  "root_validation": "All recorded UI/direction/product/capture-source hashes equal committed C;32 frozen original screenshots match documenter hashes",
+  "documenter_run": "PRE_C_SOURCE_BYTE_EQUIVALENT; original evidence preserved",
+  "evidence": {
+    "schema_version": 1,
+    "documenter_definition": "/Users/hirchak/.agents/skills/impeccable/agents/impeccable_documenter.toml",
+    "reference": "/Users/hirchak/.agents/skills/impeccable/reference/document.md",
+    "recorded_at": "2026-10-03T15:37:01.104193+00:00",
+    "root": "/Users/hirchak/Desktop/Personal Companion",
+    "scope": "Narrow M7B retained-world documentation: conversation-first primary three-item navigation, internal journal grid/list/filter and native detail sheet, anchored multiline composer/full mobile primary action row, versioned agreed goals, independent context/thread scroll and inherited palette/type. No code edits, new world, sidecar migration, unrelated drift repair or M7A practice/admission changes.",
+    "branch": "main",
+    "base_sha": "ff13dfe5b1f546c207c60cc3d4456c2fff28522f",
+    "implementation_sha": null,
+    "final_C_status": "PENDING; documentation/source hashes describe the working tree, not exact final-C verification",
+    "written": [
+      {
+        "path": "docs/DESIGN.md",
+        "sha256": "075513fbe052344a803ea9335eaa6b4a4894144d003b0917c8c0f505f70cc860"
+      }
+    ],
+    "incumbent_document_sha256": "35c124731040f4aac1914c35a89daa0540cdd632575f1f20ffb0fc9a695dc977",
+    "incumbent_original_bytes_preserved": true,
+    "documentation_decision": "Merge only the ordinary extension into the existing DESIGN.md; parent scope explicitly authorizes this choice. Historical M1/M2/M5 blocks preserved. M7A practice requirements retained via existing documentation.",
+    "pre_existing_drift_not_canonized_or_repaired": [
+      "Existing DESIGN.md lacks canonical frontmatter/eight-section organization; ordinary extension does not authorize whole-system migration.",
+      "No .impeccable/design.json exists; not created for this retained-world narrow extension.",
+      "Pre-existing M5 detector advisory outside changed surface remains outside scope."
+    ],
+    "inherited_source_tokens": {
+      "paper_page": "#f7f7f0",
+      "paper_surface": "#fffef9",
+      "ink": "#28372f",
+      "sage_primary": "#335945",
+      "sage_user_block": "#e9eee2",
+      "body": "-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; 16px / 1.55",
+      "heading": "Georgia serif; empty question clamp(30px, 3vw, 44px), 32px narrow"
+    },
+    "source_artifacts": [
+      {
+        "path": "apps/web/src/ConversationHome.tsx",
+        "sha256": "2620745f2a52713e14ff1da60009ecf6e16c34ef9301c090b25d786f7098cd61"
+      },
+      {
+        "path": "apps/web/src/ReflectionGoals.tsx",
+        "sha256": "b3e9795c62109918f3c1ce6248acff7806268ed68b5c13d22b6f555473b6602c"
+      },
+      {
+        "path": "apps/web/src/Sheet.tsx",
+        "sha256": "c490f725aea1d2195f12b2da70649382eb0fa6e89f9a2d4d231c01b094386abb"
+      },
+      {
+        "path": "apps/web/src/main.tsx",
+        "sha256": "731ec13c741a90b93b19be616481ce252e4415c70b9142935b41510d74e023d9"
+      },
+      {
+        "path": "apps/web/src/VoicePanel.tsx",
+        "sha256": "e0655e2c943100662d8e5a89b169d17e766a99b50aabf9f4f281152db0fee07c"
+      },
+      {
+        "path": "apps/web/src/style.css",
+        "sha256": "db21f4d60fec9be5da3db89c1dfac88e4f6770601bb1c5d7ba19dd71b58b224f"
+      }
+    ],
+    "direction_and_product": [
+      {
+        "path": "docs/surfaces/M7B_CONVERSATION.md",
+        "sha256": "c240223a641ed783a0a60ea47f93ee11d78c24f159aef0106b487b37bd0838b7"
+      },
+      {
+        "path": "docs/PRODUCT.md",
+        "sha256": "ae33a93f2213c26ad5732a0ef343d5c5fdb8e1799d7c3055ffcbe5f376074b6b"
+      }
+    ],
+    "capture_source": {
+      "path": "tests/test_m7b_browser.py",
+      "sha256": "17b5fa3cca2b9ac38592461cd2ebe593d595a886057da0f1705973f19e28146f"
+    },
+    "synthetic_screenshots": [
+      {
+        "path": "generated/m7b-ui/asr-unavailable-desktop.png",
+        "sha256": "59d8d64a15e196ffa5cd3fe0e82ae4024146f0886674b49500cc6e0025b48944",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/asr-unavailable-mobile.png",
+        "sha256": "e0b11d2711e023f174bb2cc307a43a93f20044e209fea10ee46deb269a628126",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/conversation-history-desktop.png",
+        "sha256": "688e280b5760ae3eb2faa91499144f8d367d831603d32a9c21bb342344cb3528",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/conversation-history-mobile.png",
+        "sha256": "6a9f888b057d510ed448e430b992666260c19fcb3c893886687483297cadd5c0",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/deep-context-desktop.png",
+        "sha256": "a7390703d84eee1e6b28dfe756dcc68dd07e3e31bd40a14d843359904a60e770",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/deep-context-mobile.png",
+        "sha256": "2cb9d45c0e977c770cb75e7ed21b76ad5168823077df9380a11a2cfea6ba7f06",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/deep-goal-desktop.png",
+        "sha256": "3f1aee9557f95098925937bde4f2e027b15ab4d7ff3acb761a73f46767c45e94",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/deep-goal-mobile.png",
+        "sha256": "aa6b363dd7fd3385093b6e13823409fa75fcd57fa401cbf6d82801e8263ab70b",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/empty-conversation-desktop.png",
+        "sha256": "1cd1e5dc9addd2a4f1f9fe2ce865ebbc6017edc12edad4acfa57bcb3feb83a96",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/empty-conversation-mobile.png",
+        "sha256": "8945ff6589ce236131badba0e50b1b53ebe0648ef61e1f2162a008e41c85dd27",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/goal-history-desktop.png",
+        "sha256": "283ae1406fb5366b2922e53e152fc15b2a976dc27c47ac55ce05f5bde561d30f",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/goal-history-mobile.png",
+        "sha256": "fbaed3634ccdc4818d5e33b1235f173ac6a2d92aa2eeab873c29e2614699cc07",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/journal-detail-desktop.png",
+        "sha256": "0e9867c1db318b8c86059c2d20c9413abe48478ce3be445634a6ddfc11fb6f72",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/journal-detail-mobile.png",
+        "sha256": "1339faed0d9931f67a99035b5d8278ad8a585988eccd88c1c580ea84d03ecc3a",
+        "width": 390,
+        "height": 1077,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/journal-list-desktop.png",
+        "sha256": "6b89536ab331204875d708ba2b62d0e61a636675d4fdac4c9d4b08dcfa00d113",
+        "width": 1440,
+        "height": 1286,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/journal-list-mobile.png",
+        "sha256": "8639a29ce453049c0599aceca43ff6a90822507efcf13a81680a9a0f77d19689",
+        "width": 390,
+        "height": 1446,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/journal-tiles-desktop.png",
+        "sha256": "7576cb971f3fa8090f3b21872fa35098314761e5885d23e4f4adb3c10e108bc3",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/journal-tiles-mobile.png",
+        "sha256": "6029ebaa8bcd562539e086fac3572ce65c3d1052dded5181fbcd898c3938b493",
+        "width": 390,
+        "height": 1454,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/mic-idle-desktop.png",
+        "sha256": "f4ce53f54247ec786838c6869576542b6c6c7f45be0aa1609fb35a974287ba4a",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/mic-idle-mobile.png",
+        "sha256": "8945ff6589ce236131badba0e50b1b53ebe0648ef61e1f2162a008e41c85dd27",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/multi-turn-desktop.png",
+        "sha256": "714ffd346799679f11ddeec1a818f16177b4db802b744004084e12fe897cb7c0",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/multi-turn-mobile.png",
+        "sha256": "720aef014cd7a649e3b2df09d9ab1695650e821364117350b9c0c2a85f45ac21",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/normal-off-desktop.png",
+        "sha256": "8e2da5466ddac7f6dd0756d3377c5b047c99b95cbfcb17fcae875c30463db80a",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/normal-off-mobile.png",
+        "sha256": "83fa590bc9e4f968a1eb35ec025bf8bb0126aef7480839dbc30c3ab6c6bc4c18",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/practice-entry-desktop.png",
+        "sha256": "891fba0c8f7269498110f934a04fe2a776aeff02cf94b74c48e9b4b567231292",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/practice-entry-mobile.png",
+        "sha256": "eae79112bac7a2813ee5fa1e8b6b4f101858956a6a6061588ecd76cf01c70215",
+        "width": 390,
+        "height": 1015,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/recording-desktop.png",
+        "sha256": "f6f8771dcdd8d6c0b97076542b776fe2817cfa1baa92e7904f4f99e302155d6a",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/recording-mobile.png",
+        "sha256": "3533efd031341ccab47427d44b1dfc52d35d58210e795bad94a0834a859f7716",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/settings-connections-desktop.png",
+        "sha256": "601dae2d35284bb9d79a5f67c243e8b05f80826aedc3787321470bc97bc0ec60",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/settings-connections-mobile.png",
+        "sha256": "4de628fdc57ac64e0e7bc3c8b43e644bcfa75316448a44d624b861c949944957",
+        "width": 390,
+        "height": 844,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/simplified-menu-desktop.png",
+        "sha256": "84388ca05de680004ebe5152d8c4d1eca5b6462ad6d25c295ba6590e0f71a606",
+        "width": 1440,
+        "height": 1000,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      },
+      {
+        "path": "generated/m7b-ui/simplified-menu-mobile.png",
+        "sha256": "f7308d39192e75e218bfeb561bbf6ecb287d2384b464009028fe8e7f7f18530e",
+        "width": 390,
+        "height": 1077,
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "source": "tests/test_m7b_browser.py capture(); synthetic local app fixture; no private records or real audio"
+      }
+    ],
+    "direct_original_screenshots_inspected": [
+      "generated/m7b-ui/deep-context-mobile.png",
+      "generated/m7b-ui/normal-off-mobile.png",
+      "generated/m7b-ui/deep-goal-mobile.png",
+      "generated/m7b-ui/empty-conversation-mobile.png",
+      "generated/m7b-ui/multi-turn-mobile.png",
+      "generated/m7b-ui/deep-context-desktop.png",
+      "generated/m7b-ui/normal-off-desktop.png",
+      "generated/m7b-ui/journal-detail-mobile.png",
+      "generated/m7b-ui/goal-history-mobile.png"
+    ],
+    "contact_sheet_note": "Temporary contact sheets were overview navigation aids from an earlier capture pass and are not authoritative fix evidence; direct current original screenshots are hashed above.",
+    "finish_review": {
+      "path": "/private/tmp/m7b-ui-review.json",
+      "sha256": "4f7d567480f795787dacdaa3e6e754387e8a10f097c4d5bf751fb7361170765d",
+      "disposition": "fix",
+      "scope": "Full initial M7B synthetic UI finish review with one named material finding."
+    },
+    "finish_verdict": {
+      "path": "/private/tmp/m7b-ui-verdict.json",
+      "sha256": "c008a71a1e35bb0d65e2f00bc4a4b7884c6e479e8ada74917c141343dc4d9f4e",
+      "disposition": "ship",
+      "named_fix": "M7B-UI-01",
+      "status": "resolved",
+      "scope": "Only M7B-UI-01 scored; not whole-surface, architect, clinical or real-phone acceptance",
+      "remaining": "clear",
+      "regressions": []
+    },
+    "checks": [
+      {
+        "command": "git diff --check -- docs/DESIGN.md",
+        "exit_code": 0,
+        "scope": "documentation whitespace"
+      },
+      {
+        "command": "incumbent DESIGN bytes prefix preservation + no-sidecar assertion + original PNG count/dimensions + supplied verdict checks",
+        "exit_code": 0,
+        "scope": "documenter evidence validation"
+      },
+      {
+        "path": "/private/tmp/m7b-composer-verdict-browser.log",
+        "sha256": "ac5f16618a3388e209002054d40f8e740c57689fb1b11e91c2acbdca4bbaba13",
+        "result": "6 passed in 22.45s",
+        "provenance": "Supplied supporting test evidence read; not rerun by documenter."
+      }
+    ],
+    "limitations": [
+      "No architect ACCEPT or clinical approval.",
+      "No physical-phone virtual keyboard or real ASR verification.",
+      "No final-C assertion; root must rerun required exact-C checks after C."
+    ]
+  },
+  "public_reviewed_captures": [
+    {
+      "path": "reports/evidence/M7B/ui/asr-unavailable-desktop.png",
+      "sha256": "59d8d64a15e196ffa5cd3fe0e82ae4024146f0886674b49500cc6e0025b48944",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/asr-unavailable-mobile.png",
+      "sha256": "e0b11d2711e023f174bb2cc307a43a93f20044e209fea10ee46deb269a628126",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/conversation-history-desktop.png",
+      "sha256": "688e280b5760ae3eb2faa91499144f8d367d831603d32a9c21bb342344cb3528",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/conversation-history-mobile.png",
+      "sha256": "6a9f888b057d510ed448e430b992666260c19fcb3c893886687483297cadd5c0",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-context-desktop.png",
+      "sha256": "a7390703d84eee1e6b28dfe756dcc68dd07e3e31bd40a14d843359904a60e770",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-context-mobile.png",
+      "sha256": "2cb9d45c0e977c770cb75e7ed21b76ad5168823077df9380a11a2cfea6ba7f06",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-goal-desktop.png",
+      "sha256": "3f1aee9557f95098925937bde4f2e027b15ab4d7ff3acb761a73f46767c45e94",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-goal-mobile.png",
+      "sha256": "aa6b363dd7fd3385093b6e13823409fa75fcd57fa401cbf6d82801e8263ab70b",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/empty-conversation-desktop.png",
+      "sha256": "1cd1e5dc9addd2a4f1f9fe2ce865ebbc6017edc12edad4acfa57bcb3feb83a96",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/empty-conversation-mobile.png",
+      "sha256": "8945ff6589ce236131badba0e50b1b53ebe0648ef61e1f2162a008e41c85dd27",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/goal-history-desktop.png",
+      "sha256": "283ae1406fb5366b2922e53e152fc15b2a976dc27c47ac55ce05f5bde561d30f",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/goal-history-mobile.png",
+      "sha256": "fbaed3634ccdc4818d5e33b1235f173ac6a2d92aa2eeab873c29e2614699cc07",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-detail-desktop.png",
+      "sha256": "0e9867c1db318b8c86059c2d20c9413abe48478ce3be445634a6ddfc11fb6f72",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-detail-mobile.png",
+      "sha256": "1339faed0d9931f67a99035b5d8278ad8a585988eccd88c1c580ea84d03ecc3a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-list-desktop.png",
+      "sha256": "6b89536ab331204875d708ba2b62d0e61a636675d4fdac4c9d4b08dcfa00d113",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-list-mobile.png",
+      "sha256": "8639a29ce453049c0599aceca43ff6a90822507efcf13a81680a9a0f77d19689",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-tiles-desktop.png",
+      "sha256": "7576cb971f3fa8090f3b21872fa35098314761e5885d23e4f4adb3c10e108bc3",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-tiles-mobile.png",
+      "sha256": "6029ebaa8bcd562539e086fac3572ce65c3d1052dded5181fbcd898c3938b493",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/mic-idle-desktop.png",
+      "sha256": "f4ce53f54247ec786838c6869576542b6c6c7f45be0aa1609fb35a974287ba4a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/mic-idle-mobile.png",
+      "sha256": "8945ff6589ce236131badba0e50b1b53ebe0648ef61e1f2162a008e41c85dd27",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/multi-turn-desktop.png",
+      "sha256": "714ffd346799679f11ddeec1a818f16177b4db802b744004084e12fe897cb7c0",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/multi-turn-mobile.png",
+      "sha256": "720aef014cd7a649e3b2df09d9ab1695650e821364117350b9c0c2a85f45ac21",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/normal-off-desktop.png",
+      "sha256": "8e2da5466ddac7f6dd0756d3377c5b047c99b95cbfcb17fcae875c30463db80a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/normal-off-mobile.png",
+      "sha256": "83fa590bc9e4f968a1eb35ec025bf8bb0126aef7480839dbc30c3ab6c6bc4c18",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/practice-entry-desktop.png",
+      "sha256": "891fba0c8f7269498110f934a04fe2a776aeff02cf94b74c48e9b4b567231292",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/practice-entry-mobile.png",
+      "sha256": "eae79112bac7a2813ee5fa1e8b6b4f101858956a6a6061588ecd76cf01c70215",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/recording-desktop.png",
+      "sha256": "f6f8771dcdd8d6c0b97076542b776fe2817cfa1baa92e7904f4f99e302155d6a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/recording-mobile.png",
+      "sha256": "3533efd031341ccab47427d44b1dfc52d35d58210e795bad94a0834a859f7716",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/settings-connections-desktop.png",
+      "sha256": "601dae2d35284bb9d79a5f67c243e8b05f80826aedc3787321470bc97bc0ec60",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/settings-connections-mobile.png",
+      "sha256": "4de628fdc57ac64e0e7bc3c8b43e644bcfa75316448a44d624b861c949944957",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/simplified-menu-desktop.png",
+      "sha256": "84388ca05de680004ebe5152d8c4d1eca5b6462ad6d25c295ba6590e0f71a606",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/simplified-menu-mobile.png",
+      "sha256": "f7308d39192e75e218bfeb561bbf6ecb287d2384b464009028fe8e7f7f18530e",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    }
+  ]
+}

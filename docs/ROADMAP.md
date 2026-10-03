@@ -9,7 +9,7 @@ M6: external ACCEPT — engineering + bounded early hardware за C6/R6
 (reports/M6_ARCHITECT_REVIEW.md). M6-N01 OPEN: early0.6.0 PASS не закриває final0.6.1 hardware NOT_RUN.
 M7_PREP_EVIDENCE_ADMISSION: external ACCEPT preparation/tooling scope (reports/M7_PREP_ARCHITECT_REVIEW.md); clinical active=0.
 M7A_GENERIC_PRACTICE_ENGINE: external ACCEPT — synthetic engineering scope (reports/M7A_ARCHITECT_REVIEW.md).
-M7B_CONVERSATION_HOME: IN_PROGRESS — same goal includes binding longitudinal/deep-goal addenda.
+M7B_CONVERSATION_HOME: AWAITING_REVIEW — same goal includes binding longitudinal/deep-goal addenda; exact-C539 Python/40 browser/46 web PASS.
 M7C/clinical activation і M8: NOT_STARTED; наступної goal/permission немає.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.

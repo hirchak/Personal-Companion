@@ -1,0 +1,54 @@
+{
+  "implementation_sha": "f143dc9f82bb356ca10cbb4034cb8126ecf42aa3",
+  "base_sha": "ff13dfe5b1f546c207c60cc3d4456c2fff28522f",
+  "unchanged_files": [
+    {
+      "path": ".gitignore",
+      "sha256": "7e82cbc6be0566e069267d962dbab1237bf57ed56f2cec26de65db4d613a9b76"
+    },
+    {
+      "path": ".project/project.json",
+      "sha256": "893af47de673eabb72ad86259a16db5304bf6a6d3eb39ef090fa8244b02f985b"
+    },
+    {
+      "path": ".project/context_map.json",
+      "sha256": "86fdc85997b35959450ed6e96008c6fa0c2e3d848b221b4e155814c07ab7107d"
+    },
+    {
+      "path": "research/admission/registry.json",
+      "sha256": "8aab44e94922ef3860e2777a9611cf574b9bb65d46fd9b4c9d5f9d2e2fa5a1df"
+    },
+    {
+      "path": "apps/core/runtime.py",
+      "sha256": "e018bb7e281bc714155a3941008aa2437dc4a991095c54847ece8e16770320d1"
+    },
+    {
+      "path": "apps/core/health.py",
+      "sha256": "b787f2ef805283bf30302b9532d62de9a90c9dd1fe9097061720404e358604d2"
+    },
+    {
+      "path": "apps/core/voice.py",
+      "sha256": "7701c7ff1234239397093f09ac39b3c0758153fd3cd87da4dce6b77f89d05d51"
+    },
+    {
+      "path": "apps/core/sync.py",
+      "sha256": "72c9aa1d073aa132ae17d102a6c9bda2f85d810e83d48e2416c9a77791ecd514"
+    }
+  ],
+  "storage_change": "Envelope schema9 isolated conversation/reflection tables/FTS/triggers and backup checks; no entry2/health1/practice1 payload change; only fixtures migrated",
+  "auth_change": "API adds endpoints under unchanged Auth/middleware/CSRF/origin guards; no auth/billing/provider route change",
+  "live_provider_calls": 0,
+  "production_clinical_active": 0,
+  "real_private_data_accessed": false,
+  "original_RAW_locally_received": 0,
+  "findings_preserved": 27,
+  "findings_closed": 0,
+  "packets_received_externally": 16,
+  "M6_N01": "OPEN; early0.6.0 not final0.6.1",
+  "M7C": "NOT_STARTED",
+  "M8": "NOT_STARTED",
+  "old_M7A_owner_demo_root_read_or_migrated": false,
+  "material_rights_review": "Only original synthetic fixture code/UI PNG; no RAW/article/clinical form/private material/new external assets published",
+  "permissions_push_main": true,
+  "permissions_merge_main_deploy_liveAI_realData": false
+}

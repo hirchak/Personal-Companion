@@ -1,0 +1,297 @@
+{
+  "implementation_sha": "f143dc9f82bb356ca10cbb4034cb8126ecf42aa3",
+  "binding": "Reviewed UI source bytes match final C; reviewed original fixture captures frozen before exact-C rerun, not represented as exact-C captures",
+  "full_review": {
+    "disposition": "fix",
+    "scope": "M7B synthetic engineering UI finish review; no architect or clinical acceptance",
+    "evidence": {
+      "captures_inspected": 32,
+      "desktop_viewport": [
+        1440,
+        1000
+      ],
+      "mobile_viewport": [
+        390,
+        844
+      ],
+      "capture_shape": "Full-document captures can be taller than viewport; screenshots have content, correct surface and document top.",
+      "detector": "One supplied pass; pre-existing M5 advisory outside changed surface not expanded.",
+      "limitations": [
+        "No physical-phone virtual keyboard or real ASR verification",
+        "No approved comp or separate QUALITY BAR card; incumbent owner-defined world is authority"
+      ]
+    },
+    "persistence": {
+      "status": "pass",
+      "details": [
+        "PRODUCT.md contains binding M7B information architecture and goal/context behavior",
+        "DESIGN.md records incumbent paper/ink/sage/system body/Georgia world",
+        "M7B navigation documentation must be reconciled by planned post-review documenter",
+        "Operate functional redesign with retained world; no new-world concept roll or comp reproduction obligation"
+      ]
+    },
+    "fidelity": [
+      {
+        "element": "TYPE",
+        "state": "match",
+        "evidence": "Georgia question/display and system body preserve incumbent owner-defined character"
+      },
+      {
+        "element": "MATERIAL",
+        "state": "match",
+        "evidence": "Quiet flat paper field, subtle sage user blocks and native modal surfaces; no imitation physicality or asset obligation"
+      },
+      {
+        "element": "GROUND",
+        "state": "match",
+        "evidence": "Source #f7f7f0 page and #fffef9 sheets visibly preserve incumbent warm paper ground"
+      },
+      {
+        "element": "Top-level topology",
+        "state": "match",
+        "evidence": "Conversation/Journal/More; domain controls secondary; no persistent administrative rail"
+      },
+      {
+        "element": "First viewport and message hierarchy",
+        "state": "match",
+        "evidence": "Question and intents precede anchored composer; user block and plain assistant text are distinct and readable"
+      },
+      {
+        "element": "Mobile composer/context layout",
+        "state": "contradicted",
+        "evidence": "Expanded context has rigid 35vh allocation and pushes complete send control outside 844px viewport; normal-OFF primary save collapses into narrow three-line action"
+      },
+      {
+        "element": "Native sheets",
+        "state": "adaptation",
+        "evidence": "Owner M7B sections4/19 permit clean menus and fullscreen mobile detail; desktop native dialog/mobile fullscreen sheet preserves focus"
+      },
+      {
+        "element": "Truth and admission",
+        "state": "match",
+        "evidence": "Synthetic messages/demo replies labeled; production OFF states no assistant; practice catalog distinguishes demo and unavailable reviewed content"
+      },
+      {
+        "element": "Goal/context affordances",
+        "state": "match",
+        "evidence": "Goals entry, agreed revision, context disclosure and goal history are explicit; inner context and dialog scrolling expose additional controls"
+      },
+      {
+        "element": "Focus and browser surfaces",
+        "state": "match",
+        "evidence": "Native showModal, Escape close, focus restore, labeled controls, themed focus/caret/selection/scrollbar source"
+      }
+    ],
+    "ceiling": "Incumbent quiet reading world retained; no unused new-world ornamental or image obligation. Primary mobile action reachability remains below its functional quality bar.",
+    "material_fixes": [
+      {
+        "id": "M7B-UI-01",
+        "priority": 1,
+        "check": "FIRST VIEWPORT / COMPOSER / mobile reachability",
+        "files": [
+          "apps/web/src/style.css",
+          "apps/web/src/ConversationHome.tsx"
+        ],
+        "finding": "At 390x844 in deep-context-mobile.png the send control occupies approximately y835-879 and is not fully visible without page scrolling. normal-off-mobile.png compresses its save label into a narrow three-line column.",
+        "required": "Give mobile primary send/save a stable full action row and keep the whole composer inside the available viewport when context is expanded. Allocate context height from remaining available space or reduce/collapse its allocation; keep context and message areas independently scrollable and avoid a fixed minimum that forces root overflow.",
+        "verification": "Recapture same deep-context-mobile.png and normal-off-mobile.png after fix, plus deep-goal/empty/multi-turn mobile regressions. Assert composer bottom <= visual viewport bottom; all primary actions visible and focus reachable. Do not claim physical virtual-keyboard acceptance."
+      }
+    ],
+    "keep": "Retain paper/ink/sage/Georgia, readable conversation hierarchy, explicit synthetic/OFF truth, primary3-way navigation, exact agreed-goal revision and local-only voice boundaries."
+  },
+  "named_fix_verdict": {
+    "disposition": "ship",
+    "scope": "Only M7B-UI-01 scored; not whole-surface, architect, clinical or real-phone acceptance",
+    "verdict": [
+      {
+        "id": "M7B-UI-01",
+        "status": "resolved",
+        "evidence": "Re-read exact deep-context/normal-off/deep-goal/empty-conversation/multi-turn desktop and mobile captures. Mobile primary send/save now a full-width single line at approximately y780-824 inside 844px viewport, with subordinate actions above. Expanded context retains inner scrolling and thread scrolling; desktop composition preserved."
+      }
+    ],
+    "remaining": "clear",
+    "regressions": [],
+    "limitations": [
+      "Physical phone virtual keyboard and real ASR NOT_RUN"
+    ],
+    "supporting_checks": {
+      "browser_log": "/private/tmp/m7b-composer-verdict-browser.log",
+      "result": "6 passed; no second detector"
+    }
+  },
+  "detector_once": [
+    {
+      "antipattern": "border-accent-on-rounded",
+      "name": "Border accent on rounded element",
+      "description": "Thick accent border on a rounded card — the border clashes with the rounded corners. Remove the border or the border-radius.",
+      "severity": "warning",
+      "category": "slop",
+      "file": "/Users/hirchak/Desktop/Personal Companion/apps/web/src/style.css",
+      "line": 807,
+      "snippet": "border-top: 8px solid"
+    }
+  ],
+  "scope": "Synthetic UI finish review; architect/clinical/physical-keyboard acceptance not granted",
+  "public_reviewed_captures": [
+    {
+      "path": "reports/evidence/M7B/ui/asr-unavailable-desktop.png",
+      "sha256": "59d8d64a15e196ffa5cd3fe0e82ae4024146f0886674b49500cc6e0025b48944",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/asr-unavailable-mobile.png",
+      "sha256": "e0b11d2711e023f174bb2cc307a43a93f20044e209fea10ee46deb269a628126",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/conversation-history-desktop.png",
+      "sha256": "688e280b5760ae3eb2faa91499144f8d367d831603d32a9c21bb342344cb3528",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/conversation-history-mobile.png",
+      "sha256": "6a9f888b057d510ed448e430b992666260c19fcb3c893886687483297cadd5c0",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-context-desktop.png",
+      "sha256": "a7390703d84eee1e6b28dfe756dcc68dd07e3e31bd40a14d843359904a60e770",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-context-mobile.png",
+      "sha256": "2cb9d45c0e977c770cb75e7ed21b76ad5168823077df9380a11a2cfea6ba7f06",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-goal-desktop.png",
+      "sha256": "3f1aee9557f95098925937bde4f2e027b15ab4d7ff3acb761a73f46767c45e94",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/deep-goal-mobile.png",
+      "sha256": "aa6b363dd7fd3385093b6e13823409fa75fcd57fa401cbf6d82801e8263ab70b",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/empty-conversation-desktop.png",
+      "sha256": "1cd1e5dc9addd2a4f1f9fe2ce865ebbc6017edc12edad4acfa57bcb3feb83a96",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/empty-conversation-mobile.png",
+      "sha256": "8945ff6589ce236131badba0e50b1b53ebe0648ef61e1f2162a008e41c85dd27",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/goal-history-desktop.png",
+      "sha256": "283ae1406fb5366b2922e53e152fc15b2a976dc27c47ac55ce05f5bde561d30f",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/goal-history-mobile.png",
+      "sha256": "fbaed3634ccdc4818d5e33b1235f173ac6a2d92aa2eeab873c29e2614699cc07",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-detail-desktop.png",
+      "sha256": "0e9867c1db318b8c86059c2d20c9413abe48478ce3be445634a6ddfc11fb6f72",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-detail-mobile.png",
+      "sha256": "1339faed0d9931f67a99035b5d8278ad8a585988eccd88c1c580ea84d03ecc3a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-list-desktop.png",
+      "sha256": "6b89536ab331204875d708ba2b62d0e61a636675d4fdac4c9d4b08dcfa00d113",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-list-mobile.png",
+      "sha256": "8639a29ce453049c0599aceca43ff6a90822507efcf13a81680a9a0f77d19689",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-tiles-desktop.png",
+      "sha256": "7576cb971f3fa8090f3b21872fa35098314761e5885d23e4f4adb3c10e108bc3",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/journal-tiles-mobile.png",
+      "sha256": "6029ebaa8bcd562539e086fac3572ce65c3d1052dded5181fbcd898c3938b493",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/mic-idle-desktop.png",
+      "sha256": "f4ce53f54247ec786838c6869576542b6c6c7f45be0aa1609fb35a974287ba4a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/mic-idle-mobile.png",
+      "sha256": "8945ff6589ce236131badba0e50b1b53ebe0648ef61e1f2162a008e41c85dd27",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/multi-turn-desktop.png",
+      "sha256": "714ffd346799679f11ddeec1a818f16177b4db802b744004084e12fe897cb7c0",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/multi-turn-mobile.png",
+      "sha256": "720aef014cd7a649e3b2df09d9ab1695650e821364117350b9c0c2a85f45ac21",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/normal-off-desktop.png",
+      "sha256": "8e2da5466ddac7f6dd0756d3377c5b047c99b95cbfcb17fcae875c30463db80a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/normal-off-mobile.png",
+      "sha256": "83fa590bc9e4f968a1eb35ec025bf8bb0126aef7480839dbc30c3ab6c6bc4c18",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/practice-entry-desktop.png",
+      "sha256": "891fba0c8f7269498110f934a04fe2a776aeff02cf94b74c48e9b4b567231292",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/practice-entry-mobile.png",
+      "sha256": "eae79112bac7a2813ee5fa1e8b6b4f101858956a6a6061588ecd76cf01c70215",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/recording-desktop.png",
+      "sha256": "f6f8771dcdd8d6c0b97076542b776fe2817cfa1baa92e7904f4f99e302155d6a",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/recording-mobile.png",
+      "sha256": "3533efd031341ccab47427d44b1dfc52d35d58210e795bad94a0834a859f7716",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/settings-connections-desktop.png",
+      "sha256": "601dae2d35284bb9d79a5f67c243e8b05f80826aedc3787321470bc97bc0ec60",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/settings-connections-mobile.png",
+      "sha256": "4de628fdc57ac64e0e7bc3c8b43e644bcfa75316448a44d624b861c949944957",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/simplified-menu-desktop.png",
+      "sha256": "84388ca05de680004ebe5152d8c4d1eca5b6462ad6d25c295ba6590e0f71a606",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    },
+    {
+      "path": "reports/evidence/M7B/ui/simplified-menu-mobile.png",
+      "sha256": "f7308d39192e75e218bfeb561bbf6ecb287d2384b464009028fe8e7f7f18530e",
+      "provenance": "ORIGINAL_SYNTHETIC"
+    }
+  ]
+}

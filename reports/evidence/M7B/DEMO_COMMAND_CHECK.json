@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "command": "./scripts/m7b_demo.sh <fresh original-synthetic fixture root>",
+  "implementation_sha": "f143dc9f82bb356ca10cbb4034cb8126ecf42aa3",
+  "fresh_root": true,
+  "marked_synthetic": true,
+  "journal_seed_records": 4,
+  "seeded_conversation_messages": 2,
+  "agent_browser_navigation_unlock_home": "PASS",
+  "browser_errors": 0,
+  "live_provider_calls": 0,
+  "production_clinical_active": 0,
+  "old_M7A_owner_root_read_or_migrated": false,
+  "port_scope": "LOOPBACK_ONLY",
+  "one_time_code_in_public_evidence": false,
+  "server_stopped_after_check": true
+}

@@ -1,0 +1,196 @@
+{
+  "implementation_sha": "f143dc9f82bb356ca10cbb4034cb8126ecf42aa3",
+  "base_sha": "ff13dfe5b1f546c207c60cc3d4456c2fff28522f",
+  "environment": {
+    "python": "3.13.2",
+    "pydantic": "2.11.3",
+    "os": "Darwin",
+    "architecture": "arm64",
+    "node": "v26.8.2",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "model_evidence": "CURRENT_SESSION_TURN_CONTEXT_READ_ONLY_MODEL_EFFORT_FIELDS",
+    "mode": "DEFAULT_EXECUTION_PLAN_OFF"
+  },
+  "clean_C_start": true,
+  "checks": [
+    {
+      "command": "npm --prefix apps/web run build",
+      "exit_code": 0,
+      "log_sha256": "bbd35748c3a74529baacc0903ab5d9dea8070c35f9bbb0cad1f521ac8b6b73f9",
+      "environment_ref": "environment"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q --junitxml=/private/tmp/m7b-exact-C.xml",
+      "exit_code": 0,
+      "log_sha256": "0928e06bf0316a7dfc302af9601413b212f0bdb5d0c929eda73e2a539f53658e",
+      "environment_ref": "environment",
+      "python_tests": 539,
+      "browser_tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "browser_modules": [
+        "test_m1_browser",
+        "test_m2_browser",
+        "test_m2_ui",
+        "test_m3_browser",
+        "test_m4_browser",
+        "test_m5_browser",
+        "test_m6_browser",
+        "test_m7a_browser",
+        "test_m7b_browser"
+      ]
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0,
+      "log_sha256": "aa92debcfe03a02dc4b2e9b4b950db215f96afdb585afe76271c155073bda42e",
+      "environment_ref": "environment",
+      "summary": [
+        "",
+        " Test Files  6 passed (6)",
+        "      Tests  46 passed (46)",
+        "   Start at  17:43:46",
+        "   Duration  4.23s (transform 551ms, setup 0ms, import 755ms, tests 7.90s, environment 1ms)",
+        ""
+      ]
+    },
+    {
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "log_sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d",
+      "environment_ref": "environment",
+      "result": {
+        "status": "PASS",
+        "standalone_checks": 7,
+        "oracle": "Ajv 2020 independent from Python validator"
+      }
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "log_sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde",
+      "environment_ref": "environment",
+      "result": {
+        "structural_status": "PASS",
+        "errors": [],
+        "findings_preserved": 27,
+        "findings_content_closed": 0,
+        "packets_received_externally": 16,
+        "raw_locally_received": 0,
+        "active_clinical_protocols": 0,
+        "activation_status": "OFF"
+      }
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py --json",
+      "exit_code": 0,
+      "log_sha256": "2024892da019a88cb5678797103efd9cd72f8f7fdc9fea3153d9b7de7cfdf839",
+      "environment_ref": "environment",
+      "result": {
+        "status": "PASS",
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "files_checked": 467,
+          "json_checked": 149,
+          "local_links_checked": 226,
+          "research_prompts": 16,
+          "snapshot_source_files": 43
+        },
+        "scope": "Documentation structure only; not exhaustive privacy, security, clinical or app verification."
+      }
+    },
+    {
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0,
+      "log_sha256": "71711d03f1a44a59c212c0d78669f597e945872bc5174d7e97b9f373ba5a5e49",
+      "environment_ref": "environment"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "log_sha256": "ff98df3f785c3ee4d4750aacd0dc5375201feb8063a4d200adfd583457afc5c1",
+      "environment_ref": "environment",
+      "result": {
+        "status": "PASS",
+        "errors": [],
+        "metrics": {
+          "worktree_text_files": 431,
+          "git_objects": 1226,
+          "git_text_objects": 871
+        },
+        "git_scope": "SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED",
+        "generated_included": true,
+        "limitations": "Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded."
+      }
+    },
+    {
+      "command": ".venv/bin/python -m scripts.measure_m7b",
+      "exit_code": 0,
+      "log_sha256": "38410ac1cc60d379c18f3f29d6f1edf2f68c04fe1a81e8d621fc76eec37cbfa1",
+      "environment_ref": "environment",
+      "result": {
+        "provenance": "ORIGINAL_SYNTHETIC",
+        "unit": "milliseconds",
+        "limits": "Local service/store reopening, not provider latency, Galaxy, real ASR or full browser startup",
+        "runs": [
+          {
+            "conversations": 25,
+            "messages": 50,
+            "actions_ms": {
+              "create": {
+                "median": 1.431,
+                "max": 2.675
+              },
+              "send": {
+                "median": 1.794,
+                "max": 3.429
+              }
+            },
+            "history_50_ms": 1.351,
+            "reopen_ms": 1.059,
+            "service_restart_ms": 4.695,
+            "context_builder_ms": 2.937,
+            "context_sources": 9,
+            "context_used_bytes_upper_bound": 1932,
+            "context_budget": 2000,
+            "db_growth_bytes": 77824
+          },
+          {
+            "conversations": 100,
+            "messages": 200,
+            "actions_ms": {
+              "create": {
+                "median": 1.489,
+                "max": 3.698
+              },
+              "send": {
+                "median": 1.851,
+                "max": 4.701
+              }
+            },
+            "history_50_ms": 1.733,
+            "reopen_ms": 1.076,
+            "service_restart_ms": 4.836,
+            "context_builder_ms": 4.282,
+            "context_sources": 9,
+            "context_used_bytes_upper_bound": 1932,
+            "context_budget": 2000,
+            "db_growth_bytes": 344064
+          }
+        ]
+      }
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "environment_ref": "environment"
+    }
+  ],
+  "status": "PASS",
+  "clean_C_end": true,
+  "sha_unchanged": true
+}

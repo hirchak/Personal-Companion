@@ -1,0 +1,349 @@
+{
+  "implementation_sha": "f143dc9f82bb356ca10cbb4034cb8126ecf42aa3",
+  "owner_goal_sections": 46,
+  "sections": [
+    {
+      "section": 1,
+      "requirement": "PRODUCT DECISION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "PRODUCT/ADR/contract"
+    },
+    {
+      "section": 2,
+      "requirement": "RECORD PREVIOUS REVIEW",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7A_ARCHITECT_REVIEW"
+    },
+    {
+      "section": 3,
+      "requirement": "MAIN UX — ONE SCREEN",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 4,
+      "requirement": "NAVIGATION SIMPLIFICATION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 5,
+      "requirement": "SECONDARY FEATURE PLACEMENT",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 6,
+      "requirement": "CONVERSATION DOMAIN",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "conversation_contracts/schema9"
+    },
+    {
+      "section": 7,
+      "requirement": "CONVERSATION PERSISTENCE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A03/A14"
+    },
+    {
+      "section": 8,
+      "requirement": "SYNTHETIC MOCK DIALOGUE ONLY",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A04"
+    },
+    {
+      "section": 9,
+      "requirement": "FUTURE PROVIDER BOUNDARY",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A05/DEFERRED provider"
+    },
+    {
+      "section": 10,
+      "requirement": "REFLECTIVE CONVERSATION FUTURE CONTRACT",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "typed skill contracts only"
+    },
+    {
+      "section": 11,
+      "requirement": "COMPOSER",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 12,
+      "requirement": "MICROPHONE — USE EXISTING VOICE FOUNDATION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A07"
+    },
+    {
+      "section": 13,
+      "requirement": "MICROPHONE UX WHEN ASR IS UNAVAILABLE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A08"
+    },
+    {
+      "section": 14,
+      "requirement": "NO AUTOMATIC MESSAGE → MEMORY",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A06"
+    },
+    {
+      "section": 15,
+      "requirement": "NO AUTOMATIC MESSAGE → JOURNAL",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A06"
+    },
+    {
+      "section": 16,
+      "requirement": "PRACTICE INTEGRATION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A09"
+    },
+    {
+      "section": 17,
+      "requirement": "JOURNAL UX SIMPLIFICATION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 18,
+      "requirement": "JOURNAL LIST / TILE MODE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 19,
+      "requirement": "JOURNAL ENTRY DETAIL",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 20,
+      "requirement": "HIDE TECHNICAL STATUS FROM DAILY UX",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 21,
+      "requirement": "PERSONAL SPACE / GAME LAYER",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 22,
+      "requirement": "CREATIVE FEATURES",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 23,
+      "requirement": "HEALTH",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A12/M6-N01"
+    },
+    {
+      "section": 24,
+      "requirement": "FEEDBACK",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 25,
+      "requirement": "CONVERSATION DELETE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A03/source invalidation"
+    },
+    {
+      "section": 26,
+      "requirement": "BACKUP / RESTORE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A13"
+    },
+    {
+      "section": 27,
+      "requirement": "SEARCH",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "reflection FTS5 tests/NO vectors"
+    },
+    {
+      "section": 28,
+      "requirement": "PRIVACY",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A15/privacy"
+    },
+    {
+      "section": 29,
+      "requirement": "CONVERSATION UI VISUAL DIRECTION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 30,
+      "requirement": "MESSAGE PRESENTATION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 31,
+      "requirement": "EMPTY CONVERSATION STATE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 32,
+      "requirement": "CONVERSATION HISTORY UX",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 33,
+      "requirement": "RESPONSIVE DESIGN",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 34,
+      "requirement": "ACCESSIBILITY",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "M7B contract + acceptance matrix + built browser UI"
+    },
+    {
+      "section": 35,
+      "requirement": "SYNTHETIC DEMO",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A18"
+    },
+    {
+      "section": 36,
+      "requirement": "M7B ACCEPTANCE MATRIX",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A01-A18"
+    },
+    {
+      "section": 37,
+      "requirement": "TESTING",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "EXACT_C_CHECKS"
+    },
+    {
+      "section": 38,
+      "requirement": "VISUAL EVIDENCE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "32 reviewed original synthetic PNG"
+    },
+    {
+      "section": 39,
+      "requirement": "PERFORMANCE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "SYNTHETIC_PERFORMANCE/RENDER_METRICS"
+    },
+    {
+      "section": 40,
+      "requirement": "NO MULTI-AGENT / ORCHESTRATOR EXPANSION",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "controller/helper/no swarm"
+    },
+    {
+      "section": 41,
+      "requirement": "CURRENT SAFETY BOUNDARY",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "neutral mock/contract-only skills/clinical0"
+    },
+    {
+      "section": 42,
+      "requirement": "DURABLE DOCS",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "canonical docs/ADR/snapshots"
+    },
+    {
+      "section": 43,
+      "requirement": "PERMISSIONS",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "project permissions OFF"
+    },
+    {
+      "section": 44,
+      "requirement": "GIT WORKFLOW",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "PUBLICATION_GATE; C→R evidence-only"
+    },
+    {
+      "section": 45,
+      "requirement": "DEFINITION OF DONE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "A01-A18 + addenda"
+    },
+    {
+      "section": 46,
+      "requirement": "FINAL RESPONSE",
+      "status": "VERIFIED_WITHIN_SYNTHETIC_SCOPE",
+      "evidence": "report/final response"
+    }
+  ],
+  "binding_addenda": [
+    {
+      "requirement": "Versioned editable agreed goal/pinned revision",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "test_m7b_reflection goal_history; browser deep goal/history"
+    },
+    {
+      "requirement": "Persistent free timestamp/provenance/no promotion",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "test_m7b_conversation + strict contracts/no_downstream"
+    },
+    {
+      "requirement": "Budgeted longitudinal goal/current/digest/FTS/expansion/explicit memory",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "test_m7b_reflection; narrow journal/sleep/health contracts OFF"
+    },
+    {
+      "requirement": "Source-bound derived artifacts/invalidation/raw authority",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "test_m7b_reflection edit_delete/goal_digest/backup integrity"
+    },
+    {
+      "requirement": "Local metadata-only RetrievalReceipt",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "test_m7b_reflection stable replay/source drift/budget; API strict receipt metadata"
+    },
+    {
+      "requirement": "FTS5 first/no mandatory vectors/no external embeddings",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "reflection.py local SQLite; ADR measured future-gap requirement"
+    },
+    {
+      "requirement": "Single controller +9 typed future skills",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "reflection_contracts.SKILLS all CONTRACT_ONLY_NOT_ACTIVE; no clinical activation"
+    },
+    {
+      "requirement": "Deep goal/current/past UX and edit/pause/complete/history/new",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "ReflectionGoals/DeepContext; domain/browser exact revision/history"
+    },
+    {
+      "requirement": "Eight canonical docs + ADR + generated snapshots",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "PRODUCT/DATA_MEMORY/AI_ORCHESTRATION/ARCHITECTURE/DECISIONS/ROADMAP/M7B_CONTRACT; ADR008; SNAPSHOT_CHECK"
+    },
+    {
+      "requirement": "Same goal/new final C/full regression/evidence-only R/stop",
+      "status": "FOUNDATION_IMPLEMENTED_WITH_EXPLICIT_DEFERRED_INTEGRATIONS",
+      "evidence": "C selected after both addenda; EXACT_C_CHECKS; PUBLICATION_GATE; M7C/M8 NOT_STARTED"
+    }
+  ],
+  "deferred": {
+    "genuine_model_digest_and_tokenizer": "live provider OFF; model fidelity/tokenizer integration NOT_RUN; deterministic synthetic generator tagged NOT_LLM",
+    "journal_sleep_health_context_activation": "separate consent absent; narrow deny/stub tool contracts tested; authorized-data integration NOT_RUN",
+    "clinical_skill_execution": "content/rights/admission gates unresolved;9 contracts inactive; clinical0",
+    "vector_retrieval": "no measured-gap ADR; no mandatory vectors or external embeddings"
+  },
+  "not_run": [
+    "real ASR",
+    "real private audio/conversation/vault",
+    "physical mobile virtual keyboard/device",
+    "live provider",
+    "clinical content approval",
+    "deploy",
+    "M6-N01 exact final0.6.1 hardware"
+  ]
+}
