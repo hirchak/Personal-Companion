@@ -45,3 +45,16 @@ requests tiedtoC; review original synthetic output samples, public sanitized evi
 privacy/staged review, normal FF main push, verifyorigin==R, AWAITING_REVIEW stop.
 No reviewbranch/force/PAYG/newauth/deploy/realdata/clinical/M7D/M8. All27 findingsOPEN, RAW0, M6-N01OPEN
 (early0.6.0 not final0.6.1). Do not treat technicalPASS as clinical/rights/activation/architectACCEPT.
+
+## 2026-10-04 forward checkpoint
+
+Interim C ba20f8e1c32738c4a3ae816896995a3c9cd03cef: full exactPython578PASS/web46/build/schema/admission/privacyPASS.
+Both models executed21case26turn corpus; separate voice1; globalledger reaches59/100.
+Luna all26COMPLETED, raw per-case sum27 because a concurrent voice attempt fell into global delta.
+Sol DEEP_NEXT REFLECT returned unsolicited closure; controller failed CLOSURE_SCHEMA_REQUIRED safely.
+No invalid final assistant commit/activation. Preserve interim evidence labelledC1.
+Fix: per-case ledger attempt_id binding, retain only text-free usage/attempt metadata on invalid/cancelled
+output, no prompt/skill/ASR/UI changes.21targeted offlinePASS. New final C required; then FULL Python/web
+regression, full Luna26 + targeted Sol7 (FREE_DAY/DEEP_THEME/DEEP_PRIOR/DEEP_CLOSURE/DEEP_NEXT) +voice1.
+Total goal requests<=93/100; do not rerun52all blindly. Remaining fullSolcorpus is explicitly interimC1,
+request frame/skills/context/schema unchanged; final exact-C focused recertification documented.

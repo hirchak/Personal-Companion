@@ -109,3 +109,12 @@ def test_provider_model_cannot_silently_change(controller):
  c.provider.execute=changed;p=new(c);r=c.send(p['conversation']['id'],body(p));d=finish(c,r['inference_job']['id'])
  assert d['state']=='FAILED' and d['error']=='PROVIDER_BINDING_CHANGED'
  assert len(c.conversations.get(p['conversation']['id'])['messages'])==1
+
+def test_invalid_output_preserves_text_free_usage_attempt_receipt(controller):
+ c=controller;c.provider=FixtureProvider('tool');original=c.provider.execute;attempt=str(uuid4())
+ def observed(*args,**kwargs):
+  result=original(*args,**kwargs);result['attempt_id']=attempt;result['usage']={'inputTokens':7,'outputTokens':3};return result
+ c.provider.execute=observed;p=new(c);r=c.send(p['conversation']['id'],body(p));d=finish(c,r['inference_job']['id'])
+ assert d['state']=='FAILED' and d['provider_result']['attempt_id']==attempt
+ assert d['provider_result']['usage']=={'inputTokens':7,'outputTokens':3} and 'text' not in d['provider_result']
+ assert len(c.conversations.get(p['conversation']['id'])['messages'])==1

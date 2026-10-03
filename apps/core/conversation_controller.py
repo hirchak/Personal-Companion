@@ -148,6 +148,7 @@ class ConversationController:
         d['updated_at']=now();c.execute('UPDATE conversation_inferences SET state=?,revision=?,payload=? WHERE id=?',(d['state'],d['revision'],encode(d),d['id']))
     def run(self,id):
         cancel=self.events.setdefault(id,threading.Event());started=time.monotonic()
+        result_metadata=None
         try:
             with self.store.transaction() as c:
                 d=self.row(c,id)
@@ -161,6 +162,7 @@ class ConversationController:
                     except ValueError:pass
             result=self.provider.execute(payload,ConversationCandidate.model_json_schema(),cancel,started+self.timeout,preview)
             if result.get('route')!=d['request_metadata']['provider_route'] or result.get('model')!=d['request_metadata']['provider_model']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
+            result_metadata={k:result[k] for k in ('route','model','elapsed_ms','usage','auth_type','streaming_actual','frame_hash','attempt_id') if k in result}
             candidate=ConversationCandidate.model_validate_json(result['text'])
             if any(s not in payload['source_refs_allowed'] for s in candidate.source_refs):raise SafeError('MODEL_SOURCE_OUT_OF_SCOPE')
             if candidate.goal_suggestion is not None and d['purpose']!='GOAL_PROPOSAL':raise SafeError('UNREQUESTED_GOAL_CANDIDATE')
@@ -168,19 +170,24 @@ class ConversationController:
             if candidate.assistant_text.count('?')>1:raise SafeError('MAIN_QUESTION_LIMIT')
             with self.store.transaction() as c:
                 d=self.row(c,id)
-                if cancel.is_set() or d['state']!='RUNNING':return
+                if cancel.is_set() or d['state']!='RUNNING':
+                    if result_metadata:d['provider_result']=result_metadata;d['revision']+=1;self.persist(c,d)
+                    return
                 self.request_for(c,d)
                 conv=self.conversations.row(c,d['conversation_id']);seq=c.execute('SELECT COALESCE(MAX(sequence),0)+1 FROM conversation_messages WHERE conversation_id=?',(d['conversation_id'],)).fetchone()[0]
                 message=Message(schema_version=1,id=uuid5(NAMESPACE,id+':assistant'),conversation_id=conv.id,role='ASSISTANT',raw_text=candidate.assistant_text,created_utc=now(),revision=1,provenance='MODEL_GENERATED',source_reference=None,source_message_id=UUID(d['source_message_id']),synthetic=True,privacy_class='PRIVATE_PERSONAL',inference_reference={'job_id':id,'request_hash':d['request_hash'],'provider_route':result['route'],'model':result['model'],'response_hash':digest(encode(candidate.model_dump(mode='json')).encode())})
                 c.execute('INSERT INTO conversation_messages VALUES(?,?,?,?)',(str(message.id),d['conversation_id'],seq,encode(message.model_dump(mode='json'))));conv.revision+=1;conv.updated_utc=now();c.execute('UPDATE conversations SET revision=?,payload=?,updated=? WHERE id=?',(conv.revision,encode(conv.model_dump(mode='json')),conv.updated_utc,d['conversation_id']))
-                d['candidate']=candidate.model_dump(mode='json');d['provider_result']={k:result[k] for k in ('route','model','elapsed_ms','usage','auth_type','streaming_actual','frame_hash') if k in result};d['state']='COMPLETED';d['revision']+=1;self.persist(c,d)
+                d['candidate']=candidate.model_dump(mode='json');d['provider_result']=result_metadata;d['state']='COMPLETED';d['revision']+=1;self.persist(c,d)
         except Exception as exc:
             error=exc.code if isinstance(exc,SafeError) else 'MODEL_OUTPUT_INVALID' if isinstance(exc,ValueError) else 'PROVIDER_FAILED'
             with self.store.transaction() as c:
                 row=c.execute('SELECT 1 FROM conversation_inferences WHERE id=?',(id,)).fetchone()
                 if row:
                     d=self.row(c,id)
+                    if result_metadata:d['provider_result']=result_metadata
+                    elif getattr(exc,'inference_attempt_id',None):d['provider_result']={'attempt_id':exc.inference_attempt_id}
                     if d['state'] in {'QUEUED','RUNNING'}:d['state']='CANCELLED' if cancel.is_set() else 'FAILED';d['error']=error;d['revision']+=1;self.persist(c,d)
+                    elif result_metadata or getattr(exc,'inference_attempt_id',None):d['revision']+=1;self.persist(c,d)
         finally:self.previews.pop(id,None)
     def action(self,conversation_id,id,body:InferenceAction):
         fingerprint=digest(encode({'id':str(id),'body':body.model_dump(mode='json')}).encode());op=str(body.operation_id);retry=False

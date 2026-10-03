@@ -32,15 +32,16 @@ paid_or_subscription_calls_authorized: false
 
 # M7C — IN_PROGRESS
 
-Same owner55-section goal, base73ec6064107d3d25475bb7454d96a2bd964ee77c; no C/R/push yet.
+Same owner55-section goal, base73ec6064107d3d25475bb7454d96a2bd964ee77c. Interim C ba20f8e; new final C pending, no R/push.
 One synthetic-only controller +4 original neutral skills, strict inert output, async jobs/cancel/retry,
 versioned goal/context/source binding, real streaming candidate, explicit closure/USER journal preview-confirm.
 N01/N02 supersession/IANA day/DST fixed; exact-C evidence pending. Journal2/health1/practice1 unchanged.
-Codex0.159.0 existing ChatGPT gpt-6-luna genuine synthetic interim multi-turn/voice proof; ledger6/100.
+Codex0.159.0 existing ChatGPT gpt-6-luna genuine synthetic interim multi-turn/voice proof; ledger59/100 after in-flight eval completes.
 MiniMax route not exposed; no existing local LLM identified. No credentials search/new auth/PAYG.
 Pinned whisper.cpp1.9.4-dev small multilingual487601967bytes; CPU/local filesystem/network isolation PASS,
 original Lesya TTS benchmark clear/reflective WER0, shortWER0.5; human/private UA quality NOT_RUN.
-Pre-C full Python569 PASS before final fixes; latest36 offline/3 browser/46 web/build/privacy PASS.
-Canonical docs/schemas updated; UI reviewer resolved2 named fixes; documenter matches incumbent. Next final C/full exact checks/live eval/R.
+Interim exact-C Python578/browser/web46/build/schema/admission/privacy PASS. Per-case attribution fix
+requires new final C/full regression; final live budget <=remaining41, no ledger reset.
+Canonical docs/schemas updated; UI reviewer resolved2 named fixes; documenter matches incumbent. Next final C/full exact checks/full Luna + targeted Sol/voice live eval/R.
 Broad live/private flags OFF; scoped synthetic <=100 request authorization only. Clinical0, RAW0,
 all27 research findings OPEN, M6-N01 OPEN; M7D/M8 NOT_STARTED.

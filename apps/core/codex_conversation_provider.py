@@ -99,9 +99,10 @@ class CodexConversationProvider:
                     if status!='completed':raise SafeError('PROVIDER_TURN_FAILED')
                     result=final_text if final_text is not None else text
                     self.budget.finish(attempt,'COMPLETED')
-                    return {'text':result,'elapsed_ms':round((time.monotonic()-started)*1000,3),'usage':usage,'route':self.route,'model':self.model,'auth_type':'EXISTING_CHATGPT','profile_verified':profile_verified,'streaming_actual':bool(text),'frame_hash':frame_hash}
+                    return {'text':result,'attempt_id':attempt,'elapsed_ms':round((time.monotonic()-started)*1000,3),'usage':usage,'route':self.route,'model':self.model,'auth_type':'EXISTING_CHATGPT','profile_verified':profile_verified,'streaming_actual':bool(text),'frame_hash':frame_hash}
         except BaseException as exc:
             if attempt:self.budget.finish(attempt,'CANCELLED' if isinstance(exc,SafeError) and exc.code=='CANCELLED' else 'FAILED')
+            if isinstance(exc,SafeError):exc.inference_attempt_id=attempt
             raise
         finally:
             selector.close()

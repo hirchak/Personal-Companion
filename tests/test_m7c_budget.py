@@ -23,3 +23,13 @@ def test_reusing_attempt_never_sends_again(isolated):
  b=LiveEvaluationBudget(isolated/'ledger.sqlite3');id=str(uuid4());b.reserve(id,'CODEX_SUBSCRIPTION','original-synthetic-fixture')
  with pytest.raises(SafeError,match='LIVE_ATTEMPT_REUSE'):b.reserve(id,'CODEX_SUBSCRIPTION','original-synthetic-fixture')
  assert b.summary()['total_requests']==1
+
+def test_eval_attempt_attribution_ignores_concurrent_voice_or_other_model(isolated):
+ from scripts.evaluate_m7c_providers import own_attempt_count
+ from uuid import uuid4
+ budget=LiveEvaluationBudget(isolated/'attribution.sqlite3');own=str(uuid4());other=str(uuid4())
+ budget.reserve(own,'CODEX_SUBSCRIPTION','gpt-6-luna');budget.reserve(other,'CODEX_SUBSCRIPTION','gpt-6.1-sol');budget.finish(own,'COMPLETED')
+ assert budget.summary()['total_requests']==2
+ assert own_attempt_count(budget,{'attempt_id':own},'CODEX_SUBSCRIPTION','gpt-6-luna')==1
+ assert own_attempt_count(budget,None,'CODEX_SUBSCRIPTION','gpt-6-luna')==0
+ with pytest.raises(AssertionError,match='ATTEMPT_BINDING_MISMATCH'):own_attempt_count(budget,{'attempt_id':other},'CODEX_SUBSCRIPTION','gpt-6-luna')
