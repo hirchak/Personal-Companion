@@ -1,0 +1,279 @@
+{
+  "implementation_sha": "a68ca709874a6efeb2ec848ec0e246c7264351b7",
+  "owner_goal_sections": 45,
+  "sections": [
+    {
+      "section": 1,
+      "requirement": "GOAL",
+      "evidence": "ACCEPTANCE_MATRIX.json A01-A18 + DEMO_COMMAND_CHECK.json",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 2,
+      "requirement": "RECORD PREVIOUS REVIEW",
+      "evidence": "reports/M7_PREP_ARCHITECT_REVIEW.md; M6 review/N01",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 3,
+      "requirement": "ARCHITECTURE PRINCIPLE",
+      "evidence": "apps/core/practice.py deterministic service; A11",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 4,
+      "requirement": "M7_PREP ADMISSION LAYER IS AUTHORITATIVE",
+      "evidence": "canonical registry unchanged; validate_directory + admitted; A02/A10",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 5,
+      "requirement": "CLOSE M7_PREP SCHEMA HARDENING NOTE",
+      "evidence": "schemas patternProperties additionalProperties=false; independent Ajv A16",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 6,
+      "requirement": "RUNTIME ACTIVATION MODEL",
+      "evidence": "RuntimeReceipt strict fields/namespace; production OFF gate A02",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 7,
+      "requirement": "SYNTHETIC DEMO MODE",
+      "evidence": "synthetic path/namespace + explicit flag/marked root A03",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 8,
+      "requirement": "PRACTICE PACKAGE FORMAT",
+      "evidence": "Package/Step strict bounded schema; A04",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 9,
+      "requirement": "BRANCHING",
+      "evidence": "finite_linear validates exact next/order/terminal; A04",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 10,
+      "requirement": "SESSION STATE MACHINE",
+      "evidence": "act explicit enum/transitions/terminal; A06",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 11,
+      "requirement": "USER AGENCY",
+      "evidence": "UI manual controls/no rewards; A07",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 12,
+      "requirement": "SESSION DATA MODEL",
+      "evidence": "Session schema/SQLite/CAS/UTC; A05/A08",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 13,
+      "requirement": "RESPONSE HISTORY / EDITING",
+      "evidence": "response revisions/current explicit edit; A06",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 14,
+      "requirement": "IDEMPOTENCY / CONCURRENCY",
+      "evidence": "receipts/replay/race/stale revision/lost response; A08",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 15,
+      "requirement": "PACKAGE / SESSION BINDING",
+      "evidence": "version/hash/receipt pin; A09/A10",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 16,
+      "requirement": "NO CLINICAL CONTENT IN M7A",
+      "evidence": "original neutral fixture only; real OFF package denied A01/A03",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 17,
+      "requirement": "PRACTICE CATALOG UI",
+      "evidence": "normal empty vs synthetic catalog, metadata only; UI_REVIEW",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 18,
+      "requirement": "PRACTICE SESSION UX",
+      "evidence": "built React finite inputs/manual controls; A18",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 19,
+      "requirement": "RESTART / RESUME",
+      "evidence": "five process restart states + actual HTTP server restart A05",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 20,
+      "requirement": "PRACTICE HISTORY",
+      "evidence": "local paginated history/date/version/status/open/delete",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 21,
+      "requirement": "DELETE",
+      "evidence": "cascade response revisions/redacted receipts/minimal tombstones A06",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 22,
+      "requirement": "JOURNAL INDEPENDENCE",
+      "evidence": "broken registry/storage preserve journal/other sections A12",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 23,
+      "requirement": "NO AUTOMATIC JOURNAL MUTATION",
+      "evidence": "no downstream table mutations A13",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 24,
+      "requirement": "M3 / LIVE AI BOUNDARY",
+      "evidence": "no runtime/model authority/providers A11",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 25,
+      "requirement": "SAFETY ROUTING SCOPE",
+      "evidence": "manual stop; no classifier/hotlines/partner alerts",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 26,
+      "requirement": "HOMEWORK / REMINDERS",
+      "evidence": "no reminders/jobs/homework/overdue/streak code",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 27,
+      "requirement": "WEEKLY REVIEW",
+      "evidence": "no analytics/health correlation/progress engine",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 28,
+      "requirement": "PHONE / CROSS-DEVICE SCOPE",
+      "evidence": "responsive Mac UX; practice phone sync explicitly deferred",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 29,
+      "requirement": "BACKUP / RESTORE",
+      "evidence": "four-state backup + revoked/invalid restore A14",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 30,
+      "requirement": "EXPORT / PORTABILITY",
+      "evidence": "selected journal exports exclude sessions; explicit SQLite backup only",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 31,
+      "requirement": "PACKAGE SECURITY",
+      "evidence": "14 package mutations/duplicate JSON/UTF/HTML/hash/cycle; A04",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 32,
+      "requirement": "PROMPT-INJECTION-LIKE CONTENT",
+      "evidence": "inert package prose + user response injection A11",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 33,
+      "requirement": "SYNTHETIC/PRODUCTION SEPARATION",
+      "evidence": "valid real OFF shadow denied both flags; no synthetic promotion A03",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 34,
+      "requirement": "ADMISSION INVALIDATION",
+      "evidence": "11 drift/revoke cases + live technical identity A10",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 35,
+      "requirement": "M7A CONTRACT",
+      "evidence": "docs/M7A_CONTRACT.md +18 gate matrix",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 36,
+      "requirement": "UI VISUAL REVIEW",
+      "evidence": "UI_REVIEW.json +24 captures/independent reviewer/documenter",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 37,
+      "requirement": "PERFORMANCE",
+      "evidence": "SYNTHETIC_PERFORMANCE.json + exact demo startup timing",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 38,
+      "requirement": "TESTING",
+      "evidence": "EXACT_C_CHECKS.json full510/34Chromium/web43/build; native diff0",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 39,
+      "requirement": "DEMO",
+      "evidence": "DEMO_COMMAND_CHECK.json exact-C script full smoke",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 40,
+      "requirement": "PRIVACY / PUBLIC REPO",
+      "evidence": "EXACT_C_PRIVACY.json + manual scope/material audit A15",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 41,
+      "requirement": "DURABLE DOCUMENTATION",
+      "evidence": "STATE/HANDOFF/roadmap/testing/ADR/report/devlog/generated source hashes",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 42,
+      "requirement": "CURRENT PERMISSIONS",
+      "evidence": "SCOPE_AUDIT permissions unchanged; no real/live/deploy",
+      "status": "VERIFIED_WITHIN_SCOPE"
+    },
+    {
+      "section": 43,
+      "requirement": "GIT WORKFLOW",
+      "evidence": "exact C PASS; R evidence-only/push receipt pending at creation",
+      "status": "PRE_PUSH_RECEIPT_PENDING"
+    },
+    {
+      "section": 44,
+      "requirement": "DEFINITION OF DONE",
+      "evidence": "18 engineering gates PASS; publication receipt pending at creation",
+      "status": "PRE_PUSH_RECEIPT_PENDING"
+    },
+    {
+      "section": 45,
+      "requirement": "FINAL RESPONSE",
+      "evidence": "exact final Base/C/R/origin handoff is final response after push",
+      "status": "PRE_PUSH_RECEIPT_PENDING"
+    }
+  ],
+  "publication_checkpoint": "PRE_PUSH; final response supplies exact R/origin equality",
+  "clinical_acceptance": "NOT_PERFORMED",
+  "M7B_M8": "NOT_STARTED"
+}

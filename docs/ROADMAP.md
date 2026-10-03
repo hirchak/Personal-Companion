@@ -8,7 +8,7 @@ M5: external ACCEPT for synthetic engineering (reports/M5_ARCHITECT_REVIEW.md).
 M6: external ACCEPT — engineering + bounded early hardware за C6/R6
 (reports/M6_ARCHITECT_REVIEW.md). M6-N01 OPEN: early0.6.0 PASS не закриває final0.6.1 hardware NOT_RUN.
 M7_PREP_EVIDENCE_ADMISSION: external ACCEPT preparation/tooling scope (reports/M7_PREP_ARCHITECT_REVIEW.md); clinical active=0.
-M7A_GENERIC_PRACTICE_ENGINE: IN_PROGRESS — deterministic generic engine + isolated synthetic demo.
+M7A_GENERIC_PRACTICE_ENGINE: AWAITING_REVIEW — deterministic generic engine + isolated synthetic demo.
 M7 clinical runtime/M7B і M8: NOT_STARTED; content/clinical activation permission немає.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.

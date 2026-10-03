@@ -1,0 +1,53 @@
+{
+  "implementation_sha": "a68ca709874a6efeb2ec848ec0e246c7264351b7",
+  "data": "ORIGINAL_SYNTHETIC_ONLY",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "captures": {
+    "active-information-desktop.png": "133a49ee413cdc9f2f87603370fbef71840ca2f71d08c126a9c372aad57d7dd9",
+    "active-information-mobile.png": "c235ba702674d404ed0a4e8143203646ae3e058f2fc3726858a132eabb97f3f3",
+    "blocked-desktop.png": "61a05e50d68a25628f0cf43ac17e7b6e4ad2a30f417b416691bf54579b6e563e",
+    "blocked-mobile.png": "82fa8341f8b9e1fc369f515fa4fea2fc0fe47617bced5593ccb91b94a8ac56dc",
+    "completed-desktop.png": "11b8c476dd018d716ac76c51220bbda5bbabea6fbc773ce2e3ca70efe428b3db",
+    "completed-mobile.png": "05f09d1ec87e87ff7095aab008fda635a914c8a910a10062a676c209cb6ee71f",
+    "deleted-empty-desktop.png": "6b7d978ae08f11a62acf655956773714b6573fdd43116b0f422eee9216eeab69",
+    "deleted-empty-mobile.png": "0f286b1357e407b891de522d828fe2ef1964cb6f0b6d8b2888d84361b7d3585a",
+    "history-desktop.png": "a28c8fec51a8b74f0380cbba8e1505203f62e3bab42f365357dcc3d3e8efec51",
+    "history-mobile.png": "2bc4df4cde9a6797792b9565eaa4d7b363d584f384b08ca444d8a31201ac604c",
+    "normal-empty-desktop.png": "679d9a0dc721f349f4255ceb8e528f753e5d085926cc9a9e94d6717276b23c1e",
+    "normal-empty-mobile.png": "b4d3ad420ff5211dc63619963f3d114a751870a2733df65bc5cd489cc66049e9",
+    "optional-choice-desktop.png": "39259545543fd58e1b6ffe2c7574379ca915414c20c315cd6623aed99538b64f",
+    "optional-choice-mobile.png": "c176e9625c7647aac49ac4089e898d3d84e3c846d1a6bd820c482142d9760361",
+    "paused-desktop.png": "2eebcdb321ee466d47504d411997ec559170197ae159a11e312e0af5d7abb43b",
+    "paused-mobile.png": "b4fce4fbcf1d1a2fc6b777559e943a7a65133486542083ccbade8625279d9c79",
+    "resumed-desktop.png": "9283ad04091366fd520d242496fc2f562869694077d5b3b8688fc0f6ce0d8763",
+    "resumed-mobile.png": "cb6a9f6b4c3c5cab6a9537f3e6d252db47b645a9a4f31eface7b67fd9ea15d92",
+    "stopped-desktop.png": "b1c34731786cba79577f988458f78121e763231c0044352fdcb52e02bfcbbf8e",
+    "stopped-mobile.png": "6876378a9e6152e70873d4c7da976e9ae0250b5eebb2c4b2a7217c0f66cd6ab5",
+    "synthetic-catalog-desktop.png": "35d0fa6b2ef7ee367aa039ec759c32f0d3b974879b9fe172ac4ebcf36ba3cdd2",
+    "synthetic-catalog-mobile.png": "f896d0f00ce37ff491c983574f6c36efa468033ae2d383a06bb131af673f91a0",
+    "text-input-desktop.png": "88eff04abe37d3f832d98c94d9a349102558b53ca4382f786fa668775baa5d54",
+    "text-input-mobile.png": "28df25a62ee19564beb12e5b19204764ded955c50e7c167a791dfc27e9cc5bc8"
+  },
+  "actual_built_browser_tests": 5,
+  "full_C_browser_tests": 34,
+  "review_role": "INDEPENDENT_IMPECCABLE_FINISH_REVIEWER",
+  "initial_evidence": "one premature optional-step desktop capture; recaptured after visible group wait",
+  "full_matrix": "26 handoff captures validated; 24 unique state/viewport screenshots",
+  "material_finding": "programmatic heading focus used browser blue ring",
+  "fix": "palette #577c36 outline3px/offset3px; focus behavior retained",
+  "verdict": "SHIP_NAMED_FIX_RESOLVED",
+  "scope": "Full matrix visual review + named-fix verdict, not architect or clinical ACCEPT",
+  "detector_runs": 1,
+  "detector_remaining": "pre-existing M5 border-top8px rounded shelf warning; unchanged and outside M7A",
+  "design_documentation": "COMPLETE_WITHIN_INHERITED_SCOPE; final C rechecked",
+  "limits": "No clinical outcome/device claim; finish reviewer screenshots/code only. Full C built browser exercises live controls/focus/no overflow/44px/reduced motion/no external requests."
+}

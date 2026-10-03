@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "role": "impeccable_documenter",
+  "generated_at": "2026-10-03T11:27:19.107143+00:00",
+  "scope": "M7A ordinary inherited Operate extension; no new world or approved system change",
+  "documentation_status": "COMPLETE_WITHIN_SCOPE",
+  "source_hashes": {
+    "apps/web/src/PracticePanel.tsx": "8d452d5e1a77ebb0498a3364fee07694e246e1947c381a7c7bad8fa9017aeccb",
+    "apps/web/src/practice-model.ts": "ff921ecb0320e6708571be42e8446e81da239bd434664eb909573e4ace2a0817",
+    "apps/web/src/style.css": "cacbbba38aa8c66f8499fd570fddb576158d960b5f22a13dd0a2b43f55d78209",
+    "apps/web/src/main.tsx": "a90c5903a582f0b3e4d023a6ecb7d6219d4e28b7b6dd3ba6414bbc0540f942cb",
+    "docs/PRODUCT.md": "bcf32446f68bce147c16c805b037ffdfe0a8fdda427421b6cdd9246134e57005",
+    "docs/DESIGN.md": "35c124731040f4aac1914c35a89daa0540cdd632575f1f20ffb0fc9a695dc977",
+    "docs/surfaces/M7A_PRACTICES.md": "3089becd9512e3c3ab95d606f469b073d0331e11285ef25d675980d2a0ab1aff"
+  },
+  "system_files_preserved": {
+    "docs/DESIGN.md": "unchanged; git diff empty",
+    ".impeccable/design.json": "absent before this pass; not created"
+  },
+  "palette": {
+    "paper": "#fffef9",
+    "background": "#f7f7f0",
+    "ink": "#28372f",
+    "sage-accent": "#335945",
+    "muted": "#546458",
+    "line": "#d6ddd3"
+  },
+  "typography": {
+    "body": "system sans;16px;line-height1.55",
+    "h1": "Georgia/Times New Roman serif;clamp32px-48px;400;line-height1.15",
+    "practice-h2": "Georgia serif;1.65rem;400;line-height1.3",
+    "step": "1.15rem"
+  },
+  "rules_checked": [
+    {
+      "rule": "Inherited palette, typography and navigation",
+      "result": "PASS",
+      "source": "style.css root/button/nav and M7A rules; main.tsx Practices current state"
+    },
+    {
+      "rule": "44px controls and labels",
+      "result": "PASS",
+      "source": "global button44px; summary44px; checkbox/radio label48px"
+    },
+    {
+      "rule": "Focus visibility",
+      "result": "PASS",
+      "source": "global button/link/summary3px; inputs2px; practice-session h2 focus3px at1121"
+    },
+    {
+      "rule": "Wrapping and narrow layouts",
+      "result": "PASS",
+      "source": "practice-panel overflow-wrap:anywhere; actions/control flex-wrap;700px stacked history/header"
+    },
+    {
+      "rule": "Reduced motion",
+      "result": "PASS",
+      "source": "M7A introduces no animations/transitions; inherited reduced-motion for M5/space preserved"
+    },
+    {
+      "rule": "Neutral finite sessions and user exit",
+      "result": "PASS",
+      "source": "PracticePanel visible journal/catalog exit, pause/stop/history/delete; model neutral state names"
+    }
+  ],
+  "visual_evidence": {
+    "personally_viewed": [
+      "generated/m7a-ui/text-input-desktop.png",
+      "generated/m7a-ui/text-input-mobile.png"
+    ],
+    "capture_files_present": [
+      "generated/m7a-ui/active-information-desktop.png",
+      "generated/m7a-ui/active-information-mobile.png",
+      "generated/m7a-ui/blocked-desktop.png",
+      "generated/m7a-ui/blocked-mobile.png",
+      "generated/m7a-ui/completed-desktop.png",
+      "generated/m7a-ui/completed-mobile.png",
+      "generated/m7a-ui/deleted-empty-desktop.png",
+      "generated/m7a-ui/deleted-empty-mobile.png",
+      "generated/m7a-ui/history-desktop.png",
+      "generated/m7a-ui/history-mobile.png",
+      "generated/m7a-ui/normal-empty-desktop.png",
+      "generated/m7a-ui/normal-empty-mobile.png",
+      "generated/m7a-ui/optional-choice-desktop.png",
+      "generated/m7a-ui/optional-choice-mobile.png",
+      "generated/m7a-ui/paused-desktop.png",
+      "generated/m7a-ui/paused-mobile.png",
+      "generated/m7a-ui/resumed-desktop.png",
+      "generated/m7a-ui/resumed-mobile.png",
+      "generated/m7a-ui/stopped-desktop.png",
+      "generated/m7a-ui/stopped-mobile.png",
+      "generated/m7a-ui/synthetic-catalog-desktop.png",
+      "generated/m7a-ui/synthetic-catalog-mobile.png",
+      "generated/m7a-ui/text-input-desktop.png",
+      "generated/m7a-ui/text-input-mobile.png"
+    ],
+    "matrix_validation": "Parent reports exact-C Chromium34 and complete synthetic capture matrix PASS. Documenter personally rechecked regenerated desktop/mobile text-input captures and committed source; browser matrix not rerun by documenter.",
+    "review_verdict": "Parent reports material focus ring finding resolved/ship at named-fix scope; source confirms focus ring fix.",
+    "synthetic_only": true,
+    "representative_hashes": {
+      "generated/m7a-ui/text-input-desktop.png": "88eff04abe37d3f832d98c94d9a349102558b53ca4382f786fa668775baa5d54",
+      "generated/m7a-ui/text-input-mobile.png": "28df25a62ee19564beb12e5b19204764ded955c50e7c167a791dfc27e9cc5bc8"
+    },
+    "prior_disposable_review_copies": "Removed by parent; current evidence references regenerated matrix paths."
+  },
+  "pre_existing_drift_not_repaired": [
+    "Incumbent docs/DESIGN.md is narrative without token frontmatter/canonical eight-section schema; design.json absent. Ordinary extension preservation boundary does not authorize format migration.",
+    "Inherited mobile navigation horizontally scrolls at650px; observed in representative mobile capture and existing CSS. No navigation redesign authorized."
+  ],
+  "clinical_acceptance": false,
+  "architect_acceptance": false,
+  "writes": [
+    "/private/tmp/m7a-design-documentation.json"
+  ],
+  "code_or_canonical_doc_changes": false,
+  "implementation_sha": "a68ca709874a6efeb2ec848ec0e246c7264351b7",
+  "recheck_after_later_edits": true,
+  "recheck_changed_sources": [
+    "apps/web/src/PracticePanel.tsx",
+    "apps/web/src/practice-model.ts",
+    "docs/surfaces/M7A_PRACTICES.md"
+  ],
+  "recheck_result": "COMPLETE_WITHIN_SCOPE; final C retains incumbent palette/type/layout/interaction conventions",
+  "recheck_changes": "Own-property responseFor lookup and actual session.title badge; demo rendering unchanged. No visual tokens, layout, or world changed.",
+  "verification_reports_from_parent": {
+    "python": 510,
+    "chromium": 34,
+    "web": 43,
+    "build": "PASS",
+    "prep_schema_docs_privacy": "PASS",
+    "scope": "Reported by parent; documenter did not rerun these checks."
+  }
+}

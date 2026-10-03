@@ -1,0 +1,228 @@
+{
+  "implementation_sha": "a68ca709874a6efeb2ec848ec0e246c7264351b7",
+  "gates": [
+    {
+      "id": "M7A-A01",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_browser::test_built_normal_catalog_empty_with_journal_independent",
+        "tests.test_m7a_practice::test_normal_runtime_and_demo_namespace_cannot_activate_real_off"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A02",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_api::test_auth_csrf_origin_unknown_fields_and_no_device_route",
+        "tests.test_m7a_practice::test_production_receipt_needs_approval_rights_owner_and_exact_namespaces"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A03",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_normal_runtime_and_demo_namespace_cannot_activate_real_off",
+        "tests.test_m7a_practice::test_demo_requires_boolean_flag_and_marked_root"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A04",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_untrusted_package_rejected[duplicate]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[entry]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[dangling]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[cycle]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[kind]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[oversized]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[unicode]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[html]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[traversal]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[unknown]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[duplicate_json]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[hash]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[version]",
+        "tests.test_m7a_practice::test_untrusted_package_rejected[provenance]",
+        "tests.test_m7a_practice::test_blank_package_copy_is_not_a_valid_ui_package"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A05",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_actual_process_restart_exact_state[ACTIVE]",
+        "tests.test_m7a_practice::test_actual_process_restart_exact_state[PAUSED]",
+        "tests.test_m7a_practice::test_actual_process_restart_exact_state[STOPPED]",
+        "tests.test_m7a_practice::test_actual_process_restart_exact_state[COMPLETED]",
+        "tests.test_m7a_practice::test_actual_process_restart_exact_state[BLOCKED_BY_ADMISSION]",
+        "tests.test_m7a_process::test_server_termination_restart_resume_saved_exact_step"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A06",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_full_state_machine_edits_idempotency_stop_delete",
+        "tests.test_m7a_practice::test_response_required_and_optional_skip_rule"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A07",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_browser::test_built_complete_pause_refresh_resume_optional_skip_history_delete",
+        "tests.test_m7a_browser::test_built_stop_block_inert_response_and_normal_sections_accessible"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A08",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_browser::test_browser_response_loss_retries_same_operation_without_duplicate_session",
+        "tests.test_m7a_browser::test_browser_stale_revision_retains_unsaved_text",
+        "tests.test_m7a_practice::test_stale_revision_and_duplicate_operation_race",
+        "tests.test_m7a_practice::test_blocked_action_response_loss_replays_current_block_once"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A09",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_package_pin_new_version_creates_separate_session"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A10",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[content]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[version]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[rights]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[source]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[claim]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[technical]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[expiry]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[owner]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[registry]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[approval]",
+        "tests.test_m7a_practice::test_invalidation_blocks_progress_retains_text_and_allows_exit[schema]",
+        "tests.test_m7a_practice::test_admission_revalidation_precedes_pause",
+        "tests.test_m7a_practice::test_live_implementation_identity_drift_blocks_pinned_session"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A11",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_user_text_and_package_instruction_remain_inert",
+        "tests.test_m7a_practice::test_instruction_in_package_text_is_data_not_authority"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A12",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_api::test_practice_storage_failure_does_not_gate_other_sections",
+        "tests.test_m7a_practice::test_journal_survives_broken_practices_and_delete_is_independent"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A13",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_api::test_e2e_session_progress_history_delete_with_no_downstream_writes",
+        "tests.test_m7a_practice::test_user_text_and_package_instruction_remain_inert"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A14",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_backup_restore_preserves_data_not_activation[ACTIVE]",
+        "tests.test_m7a_practice::test_backup_restore_preserves_data_not_activation[PAUSED]",
+        "tests.test_m7a_practice::test_backup_restore_preserves_data_not_activation[STOPPED]",
+        "tests.test_m7a_practice::test_backup_restore_preserves_data_not_activation[COMPLETED]",
+        "tests.test_m7a_practice::test_backup_of_revoked_session_cannot_restore_activation",
+        "tests.test_m7a_practice::test_corrupted_session_backup_is_rejected"
+      ],
+      "additional_artifacts": [],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A15",
+      "engineering_status": "PASS",
+      "testcases": [],
+      "additional_artifacts": [
+        "EXACT_C_PRIVACY.json",
+        "PUBLICATION_GATE.json"
+      ],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A16",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_practice::test_standalone_json_schema_namespace_closure"
+      ],
+      "additional_artifacts": [
+        "EXACT_C_CHECKS.json"
+      ],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A17",
+      "engineering_status": "PASS",
+      "testcases": [],
+      "additional_artifacts": [
+        "EXACT_C_CHECKS.json",
+        "SCOPE_AUDIT.json"
+      ],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    },
+    {
+      "id": "M7A-A18",
+      "engineering_status": "PASS",
+      "testcases": [
+        "tests.test_m7a_browser::test_built_complete_pause_refresh_resume_optional_skip_history_delete",
+        "tests.test_m7a_browser::test_built_stop_block_inert_response_and_normal_sections_accessible"
+      ],
+      "additional_artifacts": [
+        "DEMO_COMMAND_CHECK.json",
+        "UI_REVIEW.json",
+        "DESIGN_DOCUMENTATION.json"
+      ],
+      "scope": "SYNTHETIC_ENGINEERING_ONLY; no content/clinical activation"
+    }
+  ],
+  "passed": 18,
+  "active_clinical": 0,
+  "synthetic_modules": 1,
+  "architect_status": "AWAITING_REVIEW",
+  "research_findings_content_open": 27
+}

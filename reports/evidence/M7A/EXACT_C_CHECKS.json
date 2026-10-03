@@ -1,0 +1,143 @@
+{
+  "implementation_sha": "a68ca709874a6efeb2ec848ec0e246c7264351b7",
+  "base_sha": "9b3d8c7171920074fb9b755274d5879a0972c4ff",
+  "environment": {
+    "python": "3.13.2",
+    "pydantic": "2.11.3",
+    "os": "Darwin",
+    "architecture": "arm64",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "model_evidence": "CURRENT_SESSION_TURN_CONTEXT",
+    "mode": "DEFAULT_EXECUTION_PLAN_OFF"
+  },
+  "clean_C_start": true,
+  "checks": [
+    {
+      "command": "npm --prefix apps/web run build",
+      "exit_code": 0,
+      "log_sha256": "e73c8a87a3084454abfc0f78cc46a39d744c4c5a549f9f9d3e52e0d686c9bbd6",
+      "environment_ref": "environment"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q --junitxml=/private/tmp/m7a-exact-C.xml",
+      "exit_code": 0,
+      "log_sha256": "b191e950d83199f00c62211a822f0b77c2654b55a5bfc478c1aec4f5bbb22ae1",
+      "environment_ref": "environment",
+      "python_tests": 510,
+      "browser_tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "browser_count_source": "JUnit testcases in eight source modules importing real Playwright, including test_m2_ui",
+      "browser_modules": [
+        "test_m1_browser",
+        "test_m2_browser",
+        "test_m2_ui",
+        "test_m3_browser",
+        "test_m4_browser",
+        "test_m5_browser",
+        "test_m6_browser",
+        "test_m7a_browser"
+      ]
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0,
+      "log_sha256": "3f73520881e9bd51c69f257ca503b232e65d3d597965343c9dc7f6f28a40876c",
+      "environment_ref": "environment",
+      "summary": [
+        "",
+        " Test Files  5 passed (5)",
+        "      Tests  43 passed (43)",
+        "   Start at  13:18:25",
+        "   Duration  3.63s (transform 501ms, setup 0ms, import 704ms, tests 6.19s, environment 0ms)"
+      ]
+    },
+    {
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "log_sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d",
+      "environment_ref": "environment",
+      "result": {
+        "status": "PASS",
+        "standalone_checks": 7,
+        "oracle": "Ajv 2020 independent from Python validator"
+      }
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "log_sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde",
+      "environment_ref": "environment",
+      "result": {
+        "structural_status": "PASS",
+        "errors": [],
+        "findings_preserved": 27,
+        "findings_content_closed": 0,
+        "packets_received_externally": 16,
+        "raw_locally_received": 0,
+        "active_clinical_protocols": 0,
+        "activation_status": "OFF"
+      }
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py --json",
+      "exit_code": 0,
+      "log_sha256": "ebc5d41003144a1f058f0987454ac296372dbb332e55fb344589a38a3c86e3ea",
+      "environment_ref": "environment",
+      "result": {
+        "status": "PASS",
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "files_checked": 394,
+          "json_checked": 124,
+          "local_links_checked": 199,
+          "research_prompts": 16,
+          "snapshot_source_files": 43
+        },
+        "scope": "Documentation structure only; not exhaustive privacy, security, clinical or app verification."
+      }
+    },
+    {
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0,
+      "log_sha256": "5d3c1e00d590bcb18fa88b8325cc409b77c1e70bb11287fc86db149e79b69b5c",
+      "environment_ref": "environment"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "log_sha256": "218f2305fc7d131e7f41d4952f769ba434d121eb859baa521925452582e999a5",
+      "environment_ref": "environment",
+      "result": {
+        "status": "PASS",
+        "errors": [],
+        "metrics": {
+          "worktree_text_files": 382,
+          "git_objects": 1065,
+          "git_text_objects": 743
+        },
+        "git_scope": "SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED",
+        "generated_included": true,
+        "limitations": "Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded."
+      }
+    },
+    {
+      "command": ".venv/bin/python -m scripts.measure_m7a",
+      "exit_code": 0,
+      "log_sha256": "a30e8ef055a871fd03d3aff9603e6806c6f0bea630b4ba09665e21ea2940a526",
+      "environment_ref": "environment"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "environment_ref": "environment"
+    }
+  ],
+  "clean_C_end": true,
+  "sha_unchanged": true,
+  "status": "PASS"
+}

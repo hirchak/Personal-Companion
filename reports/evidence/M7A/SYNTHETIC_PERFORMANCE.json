@@ -1,0 +1,53 @@
+{
+  "provenance": "ORIGINAL_SYNTHETIC",
+  "unit": "milliseconds",
+  "limits": "Local service/store reopening, not Galaxy or full browser startup; no clinical/provider metrics",
+  "runs": [
+    {
+      "synthetic_sessions": 25,
+      "catalog_validation_ms": 46.416,
+      "actions_ms": {
+        "start": {
+          "median": 37.489,
+          "max": 53.79
+        },
+        "response_save": {
+          "median": 55.383,
+          "max": 72.632
+        },
+        "transition": {
+          "median": 55.702,
+          "max": 62.171
+        }
+      },
+      "history_list_50_ms": 418.539,
+      "service_restart_resume_ms": 71.823,
+      "initial_db_bytes": 245760,
+      "db_bytes": 290816,
+      "db_growth_bytes": 45056
+    },
+    {
+      "synthetic_sessions": 100,
+      "catalog_validation_ms": 32.019,
+      "actions_ms": {
+        "start": {
+          "median": 35.761,
+          "max": 82.306
+        },
+        "response_save": {
+          "median": 52.554,
+          "max": 75.193
+        },
+        "transition": {
+          "median": 53.038,
+          "max": 84.706
+        }
+      },
+      "history_list_50_ms": 917.488,
+      "service_restart_resume_ms": 73.539,
+      "initial_db_bytes": 245760,
+      "db_bytes": 425984,
+      "db_growth_bytes": 180224
+    }
+  ]
+}

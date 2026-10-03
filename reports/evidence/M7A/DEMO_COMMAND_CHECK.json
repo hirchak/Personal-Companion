@@ -1,0 +1,17 @@
+{
+  "implementation_sha": "a68ca709874a6efeb2ec848ec0e246c7264351b7",
+  "status": "PASS",
+  "command": "./scripts/m7a_demo.sh <NEW_SYNTHETIC_ROOT>",
+  "configuration": "EXPLICIT_SYNTHETIC_FLAG_AND_MARKED_ROOT",
+  "production_active_clinical": 0,
+  "synthetic_modules": 1,
+  "journal_seed_count": 4,
+  "practice_writes_to_journal": 0,
+  "flow": "start/response/pause/read/resume/stop",
+  "command_including_build_to_ready_ms": 5907.635,
+  "data": "ORIGINAL_SYNTHETIC",
+  "external_calls": "NONE",
+  "phone": "NOT_USED",
+  "checker_exit_code": 0,
+  "demo_server_stop": "EXPECTED_SIGTERM"
+}
