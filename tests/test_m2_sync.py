@@ -8,7 +8,7 @@ import pytest
 from apps.core.api import create_app
 from apps.core.models import Create, Patch, Delete
 from apps.core.sync import Pair, Packet
-from apps.core.storage import Store, SafeError
+from apps.core.storage import SCHEMA, Store, SafeError
 from test_m1_domain import isolated, journal, create
 
 ORIGIN='http://127.0.0.1:8765'
@@ -179,7 +179,7 @@ def test_M2_A08_mac_schema1_migration_rollback_and_preservation(isolated):
         assert c.execute('SELECT schema_version FROM vault_meta').fetchone()[0]==1
         assert c.execute("SELECT count(*) FROM sqlite_master WHERE name='devices'").fetchone()[0]==0
     store=Store(root)
-    assert store.meta()['schema_version']==6
+    assert store.meta()['schema_version']==SCHEMA
     from apps.core.domain import Journal
     assert Journal(store).get(id)['raw_text']=='SYNTHETIC migrated'
     assert (root/'preupgrade.sqlite3').is_file()

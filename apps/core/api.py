@@ -19,6 +19,8 @@ from .feedback import Feedback, PersonalSpace
 from .m5_contracts import CreativeSelection, CreativeDownload, FeedbackSave, FeedbackExact, FeedbackExport, SpaceUpdate
 from .health import HealthImport
 from .health_contracts import HealthApply, HealthAction
+from .practice import PracticeEngine
+from .practice_contracts import Start as PracticeStart, Action as PracticeAction
 from .runtime import Runtime
 from .ai_contracts import PreviewRequest, Approval, Enqueue, RuntimeMode, Empty, MemoryCreate, MemoryChange, SuggestionChange
 from .sync import SyncService, Pair, Packet, EpochReset
@@ -60,7 +62,7 @@ class Auth:
             return s
 
 
-def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http"):
+def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False):
     if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
     store = Store(root)
     journal, auth = Journal(store, clock), Auth(clock)
@@ -76,6 +78,8 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.creative, app.state.feedback, app.state.space = creative, feedback, space
     health = HealthImport(store)
     app.state.health = health
+    practices = PracticeEngine(store, synthetic_demo=synthetic_practices)
+    app.state.practices = practices
     host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
@@ -183,6 +187,22 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
             ('/transcripts/{transcript_id}/cancel',voice_discard,['POST']),('/transcripts/{transcript_id}/confirm',voice_confirm,['POST'])]:
             app.add_api_route(prefix+path,endpoint,methods=methods)
 
+    @app.get('/api/v1/practices/catalog')
+    def practice_catalog(): return practices.catalog()
+
+    @app.get('/api/v1/practices/sessions')
+    def practice_history(limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
+        return practices.history(limit, offset)
+
+    @app.post('/api/v1/practices/sessions')
+    def practice_start(body: PracticeStart): return practices.start(body)
+
+    @app.get('/api/v1/practices/sessions/{session_id}')
+    def practice_get(session_id: UUID): return practices.get(session_id)
+
+    @app.post('/api/v1/practices/sessions/{session_id}/actions')
+    def practice_action(session_id: UUID, body: PracticeAction): return practices.act(session_id, body)
+
     @app.get('/api/v1/health/status')
     def health_status():return health.status()
 
@@ -226,7 +246,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
 
     @app.get('/api/v1/status')
     def status():
-        return {'schema_version': 5, 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
+        return {'schema_version': store.meta()['schema_version'], 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
 
     @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):

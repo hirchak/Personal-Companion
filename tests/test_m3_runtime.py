@@ -9,7 +9,7 @@ from pydantic import ValidationError
 from apps.core.api import create_app
 from apps.core.domain import Journal
 from apps.core.models import Create, Patch, Delete
-from apps.core.storage import Store, SafeError, encode
+from apps.core.storage import SCHEMA, Store, SafeError, encode
 from apps.core.runtime import Runtime, VERSION
 from apps.core.providers import DeterministicMock, DisabledCodex
 from apps.core.ai_contracts import PreviewRequest, Enqueue, MemoryCreate, MemoryChange, SuggestionChange
@@ -317,9 +317,9 @@ def test_M3_schema2_migration_atomic_and_legacy_backup_restore(rt,isolated):
         dest=sqlite3.connect(b/'snapshot.sqlite3');source.backup(dest);dest.execute('PRAGMA journal_mode=DELETE');dest.close()
     from apps.core.storage import digest
     (b/'manifest.json').write_text(encode({'backup_format':1,'schema_version':2,'created_at_utc':'2099-01-01T00:00:00Z','attachments':[],'files':{'snapshot.sqlite3':digest((b/'snapshot.sqlite3').read_bytes())}}))
-    restored=Store.restore(b,isolated/'legacy-restored');assert restored.meta()['schema_version']==6
+    restored=Store.restore(b,isolated/'legacy-restored');assert restored.meta()['schema_version']==SCHEMA
     assert Journal(restored).get(ref['id'])['raw_text']=='SYNTHETIC neutral entry'
-    migrated=Store(rt.store.root);assert migrated.meta()['schema_version']==6
+    migrated=Store(rt.store.root);assert migrated.meta()['schema_version']==SCHEMA
     assert Journal(migrated).get(ref['id'])['raw_text']=='SYNTHETIC neutral entry'
 
 

@@ -32,7 +32,7 @@ Rights NOT_CLEARED_AS_A_WHOLE; content NOT_APPROVED; qualified clinical/legal re
 16 future module drafts мають dependency IDs, missing gates і smallest next step у registry.
 Unresolved claim блокує залежний future module, не незалежні preparation tests.
 Research raw labels VERIFIED/ALLOW, expected responses чи release checkmarks не є approval.
-Existing neutral journal/creative functionality не змінена. M7 runtime і M8 NOT_STARTED.
+Existing neutral journal/creative functionality не змінена. M7A generic engine authorized separately; research-derived clinical runtime/M7B і M8 NOT_STARTED.
 
 Legacy [technical sources](SOURCES.md) лишаються Sxx; new gate source IDs — gate:Sxx,
 без глобальної заміни бібліографічних IDs. R03 citation20 collision не замаплено навмання.

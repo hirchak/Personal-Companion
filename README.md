@@ -121,3 +121,13 @@ inference. Early real Galaxy debug gate verified private import/replay/increment
 Exercise NO_RECORDS. Later native recovery/cancellation changes are build/unit checked, hardware
 follow-up NOT_RUN. [Contract](docs/M6_CONTRACT.md), [Galaxy runbook](docs/M6_GALAXY_HEALTH_GATE.md),
 [report](reports/M6_HEALTH_CONNECT_REPORT.md). Synthetic demo: `./scripts/m6_demo.sh`.
+
+M7A neutral practice demo (existing dependencies, synthetic root only):
+
+```sh
+./scripts/m7a_demo.sh /private/tmp/personal-companion-m7a-synthetic-demo
+```
+
+Open the printed loopback URL and use the one-time code from your terminal; section «Практики».
+Normal launch does not enable practice fixtures. Clinical practices remain unavailable.
+Contract: [M7A](docs/M7A_CONTRACT.md). No provider, private vault or phone required.

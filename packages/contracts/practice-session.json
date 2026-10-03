@@ -1,0 +1,210 @@
+{
+  "$defs": {
+    "UserResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "title": "Value"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_utc": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Updated Utc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "revision",
+        "updated_utc"
+      ],
+      "title": "UserResponse",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "module_id": {
+      "pattern": "^(?:synthetic:)?[a-z][a-z0-9_]{0,63}$",
+      "title": "Module Id",
+      "type": "string"
+    },
+    "module_version": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Module Version",
+      "type": "string"
+    },
+    "package_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Package Hash",
+      "type": "string"
+    },
+    "package_schema_version": {
+      "const": 1,
+      "title": "Package Schema Version",
+      "type": "integer"
+    },
+    "title": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "provenance": {
+      "enum": [
+        "ORIGINAL_SYNTHETIC",
+        "REVIEWED_PRODUCTION"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "admission_binding": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Admission Binding",
+      "type": "string"
+    },
+    "activation_epoch": {
+      "minimum": 0,
+      "title": "Activation Epoch",
+      "type": "integer"
+    },
+    "started_utc": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Started Utc",
+      "type": "string"
+    },
+    "updated_utc": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Updated Utc",
+      "type": "string"
+    },
+    "current_step": {
+      "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+      "title": "Current Step",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "ACTIVE",
+        "PAUSED",
+        "COMPLETED",
+        "STOPPED",
+        "BLOCKED_BY_ADMISSION"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "responses": {
+      "patternProperties": {
+        "^[a-z][a-z0-9_-]{0,63}$": {
+          "$ref": "#/$defs/UserResponse"
+        }
+      },
+      "title": "Responses",
+      "type": "object",
+      "additionalProperties": false
+    },
+    "skipped_steps": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+        "type": "string"
+      },
+      "title": "Skipped Steps",
+      "type": "array"
+    },
+    "completed_utc": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Completed Utc"
+    },
+    "stopped_utc": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Stopped Utc"
+    },
+    "blocked_reason": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Blocked Reason"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "module_id",
+    "module_version",
+    "package_hash",
+    "package_schema_version",
+    "title",
+    "provenance",
+    "admission_binding",
+    "activation_epoch",
+    "started_utc",
+    "updated_utc",
+    "current_step",
+    "state",
+    "revision",
+    "responses",
+    "skipped_steps",
+    "completed_utc",
+    "stopped_utc",
+    "blocked_reason"
+  ],
+  "title": "Session",
+  "type": "object"
+}

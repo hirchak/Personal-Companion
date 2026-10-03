@@ -145,6 +145,7 @@ p {
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
 }
 .wordmark {
   font-family: Georgia, "Times New Roman", serif;
@@ -914,13 +915,210 @@ footer {
   min-width: 0;
 }
 
-.health-panel .health-status > div { padding: 1rem 0; border-bottom: 1px solid var(--line, #ddd8cb); }
-.health-panel dt { font-weight: 600; }
-.health-panel dd { margin: .5rem 0 0; overflow-wrap: anywhere; }
-.health-panel form { margin: 2rem 0; }
-.health-panel form label { display: block; margin: 1rem 0; }
-.health-panel input[type="file"] { display: block; max-width: 100%; min-height: 44px; margin-top: .5rem; }
-.health-panel details { margin: 1.5rem 0; }
-.health-panel li { overflow-wrap: anywhere; margin-bottom: 1.5rem; }
-.health-panel form label.check { display: flex; align-items: center; gap: .75rem; min-height: 44px; }
-.health-panel .button-row { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0; }
+.health-panel .health-status > div {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line, #ddd8cb);
+}
+.health-panel dt {
+  font-weight: 600;
+}
+.health-panel dd {
+  margin: 0.5rem 0 0;
+  overflow-wrap: anywhere;
+}
+.health-panel form {
+  margin: 2rem 0;
+}
+.health-panel form label {
+  display: block;
+  margin: 1rem 0;
+}
+.health-panel input[type="file"] {
+  display: block;
+  max-width: 100%;
+  min-height: 44px;
+  margin-top: 0.5rem;
+}
+.health-panel details {
+  margin: 1.5rem 0;
+}
+.health-panel li {
+  overflow-wrap: anywhere;
+  margin-bottom: 1.5rem;
+}
+.health-panel form label.check {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+}
+.health-panel .button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+/* M7A inherits paper/ink/sage. A finite session, no adherence or reward UI. */
+.practice-panel {
+  max-width: 900px;
+  padding: 36px;
+  margin-inline: auto;
+  overflow-wrap: anywhere;
+}
+.practice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.practice-header h1 {
+  margin: 0;
+}
+.practice-panel h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 1.65rem;
+  line-height: 1.3;
+  margin: 24px 0 12px;
+}
+.practice-panel p {
+  max-width: 68ch;
+}
+.practice-demo-badge {
+  display: inline-block;
+  color: var(--accent);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.9rem;
+}
+.practice-offer {
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
+}
+.practice-session {
+  max-width: 68ch;
+}
+.practice-progress {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.practice-step-text {
+  white-space: pre-wrap;
+  font-size: 1.15rem;
+  margin: 24px 0;
+}
+.practice-panel label {
+  display: block;
+}
+.practice-panel textarea {
+  width: 100%;
+  margin: 10px 0;
+  resize: vertical;
+  caret-color: var(--accent);
+}
+.practice-panel fieldset {
+  border: 1px solid var(--line);
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+.practice-panel .practice-choice,
+.practice-panel .practice-checkbox {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+.practice-panel input[type="checkbox"],
+.practice-panel input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.practice-actions,
+.practice-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+.practice-controls {
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.practice-history {
+  margin-top: 48px;
+}
+.practice-history ol {
+  padding: 0;
+  list-style: none;
+}
+.practice-history li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid var(--line);
+  padding: 20px 0;
+}
+.practice-history li p {
+  margin: 6px 0;
+  color: var(--muted);
+}
+.practice-history li button {
+  flex-shrink: 0;
+}
+.practice-responses dd {
+  white-space: pre-wrap;
+  margin: 8px 0 24px;
+}
+.practice-responses dt {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.practice-delete {
+  margin-top: 32px;
+}
+.practice-delete button {
+  margin: 0 12px 12px 0;
+}
+.practice-panel details {
+  margin: 24px 0;
+}
+.practice-panel summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.practice-panel ::selection {
+  background: #dce7d8;
+  color: #28372f;
+}
+@media (max-width: 700px) {
+  .practice-panel {
+    padding: 24px 16px;
+  }
+  .practice-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .practice-history li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .practice-actions button {
+    flex: 1 1 160px;
+  }
+}
+.practice-session h2:focus {
+  outline: 3px solid #577c36;
+  outline-offset: 3px;
+}

@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "base_revision": {
+      "minimum": 1,
+      "title": "Base Revision",
+      "type": "integer"
+    },
+    "action": {
+      "enum": [
+        "save",
+        "next",
+        "pause",
+        "resume",
+        "skip",
+        "stop",
+        "complete",
+        "delete"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "step_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step Id"
+    },
+    "response": {
+      "anyOf": [
+        {
+          "maxLength": 12000,
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Response"
+    }
+  },
+  "required": [
+    "operation_id",
+    "base_revision",
+    "action"
+  ],
+  "title": "Action",
+  "type": "object"
+}

@@ -17,6 +17,7 @@ Hash = Annotated[str, StringConstraints(pattern=r'^[0-9a-f]{64}$')]
 Sha = Annotated[str, StringConstraints(pattern=r'^[0-9a-f]{40}$')]
 PacketId = Annotated[str, StringConstraints(pattern=r'^R(?:0[1-9]|1[0-6])$')]
 FindingId = Annotated[str, StringConstraints(pattern=r'^RG-(?:0[1-9]|1[0-9]|2[0-7])$')]
+ClaimId = Annotated[str, StringConstraints(pattern=r'^claim:RG-(?:0[1-9]|1[0-9]|2[0-7])$')]
 SourceId = Annotated[str, StringConstraints(pattern=r'^gate:S(?:0[1-9]|1[0-6])$')]
 EXPECTED_PERMISSIONS = {'push_review_branch': False, 'push_main': True, 'merge_main': False,
                         'deploy': False, 'live_provider_calls': False, 'access_real_user_data': False}
@@ -154,7 +155,7 @@ class Approval(Strict):
     module_id: Text
     version: Text
     content_hash: Hash
-    claim_bindings: dict[str, Hash]
+    claim_bindings: dict[ClaimId, Hash]
     source_bindings: dict[SourceId, Hash]
     reviewer: Text
     reviewer_role: Literal['QUALIFIED_CLINICAL_REVIEWER', 'CONTENT_REVIEWER']
@@ -459,6 +460,8 @@ def validate_registry(data: dict, external: dict | None = None) -> dict:
         if m.finding_ids != expected_findings or m.claim_ids != ['claim:' + f for f in expected_findings]:
             errors.append('Incomplete module dependencies: ' + m.id)
         gates = approval_gates(m, sources, claims)
+        if m.rights.status == 'RIGHTS_CLEARED' and any(x in gates for x in ('EXACT_RIGHTS_REQUIRED', 'INCOMPATIBLE_RIGHTS')):
+            errors.append('Incomplete exact rights promotion: ' + m.id)
         expected_role = 'QUALIFIED_CLINICAL_REVIEWER' if m.id in CLINICAL_MODULES else 'CONTENT_REVIEWER'
         if (m.clinical_sensitive != (m.id in CLINICAL_MODULES) or m.required_reviewer_role != expected_role
                 or m.version != '0.1.0-draft' or m.intended_scope != m.boundary):
@@ -549,8 +552,20 @@ def validate_directory(root: Path) -> dict:
     return result
 
 
+def key_closed(value):
+    if isinstance(value, dict):
+        if 'patternProperties' in value:
+            value['additionalProperties'] = False
+        for child in value.values():
+            key_closed(child)
+    elif isinstance(value, list):
+        for child in value:
+            key_closed(child)
+    return value
+
+
 def schemas() -> dict:
-    return {name + '.schema.json': cls.model_json_schema() for name, cls in
+    return {name + '.schema.json': key_closed(cls.model_json_schema()) for name, cls in
             [('registry', Registry), ('receipt', Receipt), ('source', Source), ('claim', Claim),
              ('correction', Correction), ('module', Module), ('approval', Approval), ('attestation', Attestation)]}
 

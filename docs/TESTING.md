@@ -201,3 +201,28 @@ execution permission. Full logs are ignored under generated/. Hardware-only real
 fixture/input to pytest. See [Galaxy gate](M6_GALAXY_HEALTH_GATE.md); early actual hardware evidence
 must not be described as testing later native changes. Kotlin/XML/Gradle/properties are privacy-scanned;
 standard Android build/cache outputs are excluded, source/manifest and Git objects remain scanned.
+
+## M7A — generic practices
+
+```sh
+./scripts/m7a_demo.sh /private/tmp/personal-companion-m7a-synthetic-demo
+.venv/bin/python -m pytest -q
+npm --prefix apps/web run build
+npm --prefix apps/web test
+node scripts/verify_m7a_schemas.mjs
+.venv/bin/python scripts/m7_admission.py
+.venv/bin/python -m scripts.measure_m7a
+```
+
+Existing installed dependencies only; demo script builds UI and launches loopback with explicit
+synthetic-practices on a marked root. Normal serve omits the flag. No cloud/provider/phone/private data.
+Practice tests cover packages, registry/receipt drift, all states/restart/CAS/replay/restore/delete,
+actual process restart and built browser UX; original text fixtures only. Standalone Ajv independently
+rejects unknown namespace map keys. Full Python/browser + built React/unit checks required for M7A.
+M7A vault envelope schema7; historical migrations assert current SCHEMA while preserving rollback/data
+checks; Entry schema2 and health import schema1 unchanged. Practice sessions not in phone sync/export.
+Whole-vault SQLite backup includes user session data, no activation receipt/config; restore blocks
+runnable sessions and preserves terminal state/data. Old backups and residual pages may retain copies;
+no secure-erase claim. Synthetic screenshots in generated/m7a-ui and sanitized reports/evidence/M7A.
+Native Android rebuild NOT_RUN only if exact diff confirms apps/android-health untouched.
+See docs/M7A_CONTRACT.md and reports/M7A_PRACTICE_ENGINE_REPORT.md for final gate/evidence scope.

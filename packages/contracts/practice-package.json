@@ -1,0 +1,165 @@
+{
+  "$defs": {
+    "Choice": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "Choice",
+      "type": "object"
+    },
+    "Step": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "information",
+            "acknowledgement",
+            "short_text",
+            "long_text",
+            "single_choice",
+            "completion"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "optional": {
+          "title": "Optional",
+          "type": "boolean"
+        },
+        "next_step": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Next Step"
+        },
+        "choices": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "maxItems": 8,
+          "title": "Choices",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "text",
+        "optional",
+        "next_step"
+      ],
+      "title": "Step",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "module_id": {
+      "pattern": "^(?:synthetic:)?[a-z][a-z0-9_]{0,63}$",
+      "title": "Module Id",
+      "type": "string"
+    },
+    "module_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "title": "Module Version",
+      "type": "string"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "entry_step": {
+      "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+      "title": "Entry Step",
+      "type": "string"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/Step"
+      },
+      "maxItems": 16,
+      "minItems": 2,
+      "title": "Steps",
+      "type": "array"
+    },
+    "provenance": {
+      "enum": [
+        "ORIGINAL_SYNTHETIC",
+        "REVIEWED_PRODUCTION"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "admission_reference": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Admission Reference",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "module_id",
+    "module_version",
+    "content_hash",
+    "title",
+    "description",
+    "entry_step",
+    "steps",
+    "provenance",
+    "admission_reference"
+  ],
+  "title": "Package",
+  "type": "object"
+}

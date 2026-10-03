@@ -1,0 +1,151 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "kind": {
+      "enum": [
+        "SYNTHETIC_ENGINEERING_ONLY",
+        "PRODUCTION"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "module_id": {
+      "pattern": "^(?:synthetic:)?[a-z][a-z0-9_]{0,63}$",
+      "title": "Module Id",
+      "type": "string"
+    },
+    "module_version": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Module Version",
+      "type": "string"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "admission_identity": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Admission Identity",
+      "type": "string"
+    },
+    "technical_identity": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Technical Identity",
+      "type": "string"
+    },
+    "technical_evidence": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Technical Evidence",
+      "type": "string"
+    },
+    "review_scope": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Review Scope",
+      "type": "string"
+    },
+    "owner_activation_decision": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Owner Activation Decision",
+      "type": "string"
+    },
+    "activation_epoch": {
+      "minimum": 0,
+      "title": "Activation Epoch",
+      "type": "integer"
+    },
+    "created_at": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expires At"
+    },
+    "re_review_status": {
+      "enum": [
+        "CURRENT",
+        "STALE"
+      ],
+      "title": "Re Review Status",
+      "type": "string"
+    },
+    "approval_identity": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Approval Identity"
+    },
+    "rights_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Rights Hash"
+    },
+    "source_claim_identity": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source Claim Identity"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "module_id",
+    "module_version",
+    "content_hash",
+    "admission_identity",
+    "technical_identity",
+    "technical_evidence",
+    "review_scope",
+    "owner_activation_decision",
+    "activation_epoch",
+    "created_at",
+    "expires_at",
+    "re_review_status",
+    "approval_identity",
+    "rights_hash",
+    "source_claim_identity"
+  ],
+  "title": "RuntimeReceipt",
+  "type": "object"
+}

@@ -46,7 +46,8 @@
         }
       },
       "title": "Source Bindings",
-      "type": "object"
+      "type": "object",
+      "additionalProperties": false
     },
     "external_review_status": {
       "minLength": 1,

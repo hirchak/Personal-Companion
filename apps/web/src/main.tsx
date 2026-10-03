@@ -18,6 +18,7 @@ import { PhoneApp } from "./PhoneApp";
 import { AssistantPanel } from "./AssistantPanel";
 import { VoicePanel } from "./VoicePanel";
 import { CreativePanel } from "./CreativePanel";
+import { PracticePanel } from "./PracticePanel";
 import { HealthPanel } from "./HealthPanel";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { SpacePanel } from "./SpacePanel";
@@ -526,7 +527,18 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
           >
             Відгук
           </button>
-          <button className={surface === "health" ? "current" : ""} onClick={() => setSurface("health")}>Дані з годинника</button>
+          <button
+            className={surface === "practices" ? "current" : ""}
+            onClick={() => setSurface("practices")}
+          >
+            Практики
+          </button>
+          <button
+            className={surface === "health" ? "current" : ""}
+            onClick={() => setSurface("health")}
+          >
+            Дані з годинника
+          </button>
         </nav>
         <div className="sidebar-bottom">
           <p>
@@ -576,6 +588,9 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
         )}
         {surface === "feedback" && <FeedbackPanel csrf={csrf} />}
         {surface === "health" && <HealthPanel csrf={csrf} />}
+        {surface === "practices" && (
+          <PracticePanel csrf={csrf} onLeave={() => setSurface("journal")} />
+        )}
         <div hidden={surface !== "journal"}>
           <header>
             <div>

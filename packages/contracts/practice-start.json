@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "module_id": {
+      "pattern": "^(?:synthetic:)?[a-z][a-z0-9_]{0,63}$",
+      "title": "Module Id",
+      "type": "string"
+    },
+    "module_version": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Module Version",
+      "type": "string"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "operation_id",
+    "module_id",
+    "module_version",
+    "content_hash"
+  ],
+  "title": "Start",
+  "type": "object"
+}
