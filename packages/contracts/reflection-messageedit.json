@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "base_conversation_revision": {
+      "minimum": 1,
+      "title": "Base Conversation Revision",
+      "type": "integer"
+    },
+    "base_message_revision": {
+      "minimum": 1,
+      "title": "Base Message Revision",
+      "type": "integer"
+    },
+    "text": {
+      "maxLength": 12000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "operation_id",
+    "base_conversation_revision",
+    "base_message_revision",
+    "text"
+  ],
+  "title": "MessageEdit",
+  "type": "object"
+}

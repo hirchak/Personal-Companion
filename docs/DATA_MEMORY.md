@@ -67,7 +67,7 @@ Memory має evidence refs, confidence/status, актуальність і doma
 
 Почати з SQL/filter/FTS. Обрані джерела з бібліотеки знаходяться за протоколом/claim ID,
 а не за випадковим similarity. Embeddings/vector DB — тільки після виміряного retrieval gap.
-Embeddings приватних нотаток також приватні; не надсилати їх без дозволу провайдеру.
+External embeddings приватного змісту у M7B заборонені; пізніша зміна потребує окремого ADR і scoped owner consent.
 Obsidian/Markdown export — зручне представлення, не друге незалежне сховище стану.
 
 ## Аналітика
@@ -94,3 +94,37 @@ edit/reject/delete and downstream invalidation are working synthetic flows. Mode
 MODEL_SUGGESTED provenance with USER_CONFIRMED status. Explicit user correction becomes USER_EDITED,
 keeps originating job/suggestion but detaches obsolete active refs. Creative memory inference is denied.
 No embeddings, whole-journal profile or clinical label inference.
+
+## M7B: raw conversation authority і versioned goal/context
+
+Окремі таблиці conversations / conversation_messages / conversation_message_revisions
+зберігають точні UTC timestamps, provenance, PRIVATE_PERSONAL, CAS revision і source references.
+FREE й DEEP відокремлені від journal/practice. Envelope schema9 додає ці та reflection таблиці;
+entry schema2, health schema1 і practice schema1 не змінені. Старі дані мігруються лише на fixtures.
+
+ReflectionGoal має явний user_agreed текст, ACTIVE/PAUSED/COMPLETED, created_at/updated_at/
+completed_at та історію редакцій. Deep session goal_binding фіксує ID/revision; редагування
+навіть завершеної цілі не змінює старі snapshots або completed_at. Нова сесія використовує
+актуальну ACTIVE редакцію. Source message edit зберігає попередню редакцію; conversation delete
+каскадно прибирає messages/revisions/FTS rows, стирає текст залежних дайджестів і лишає
+мінімальні metadata receipts/tombstones. Старі backups/SQLite pages можуть містити копії;
+forensic secure erase не заявляється.
+
+conversation_digests — еквіваленти DailyConversationDigest і GoalContextDigest: ID, version,
+source message IDs/revisions, UTC range, generator version, MODEL_DERIVED, CURRENT/STALE.
+Source edit/delete або зміна goal робить залежний digest STALE з text=null. Raw message
+залишається авторитетом. У M7B генератор лише explicit synthetic excerpt fixture
+SYNTHETIC_EXCERPT_V1 / DETERMINISTIC_FIXTURE_NOT_LLM; це не модельний summary.
+
+retrieval_receipts містять точну goal revision/window/source refs/digest versions/method і
+serialized UTF8 JSON token/size budget, parts metadata без raw text. Retry з тим самим operation
+повертає ту саму вибірку або SOURCE_CHANGED, а не непомітно іншу історію.
+Локальне SQLite/filter/FTS5 retrieval bounded; зовнішні embeddings заборонені, mandatory
+vector DB/embeddings у M7B немає. Пізніші vectors потребують виміряного gap ADR.
+USER_CONFIRMED memory включається лише з explicit scope і точною revision. Journal/sleep/health
+контракти лишаються separately authorized narrow tools, доступ OFF. Topic suggestions
+MODEL_SUGGESTED, якщо будуть додані, не підтверджені memories/діагнози.
+Немає автоматичного conversation→journal/memory promotion.
+
+Один Conversation Controller + typed skills/одна model voice; live provider OFF, clinical active0,
+real private data OFF; M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).

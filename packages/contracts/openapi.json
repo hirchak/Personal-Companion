@@ -949,6 +949,514 @@
         }
       }
     },
+    "/api/v1/reflection/goals": {
+      "get": {
+        "summary": "Goals List",
+        "operationId": "goals_list_api_v1_reflection_goals_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Goals Create",
+        "operationId": "goals_create_api_v1_reflection_goals_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reflection/goals/{goal_id}": {
+      "get": {
+        "summary": "Goals Get",
+        "operationId": "goals_get_api_v1_reflection_goals__goal_id__get",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Goals Change",
+        "operationId": "goals_change_api_v1_reflection_goals__goal_id__post",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalChange"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reflection/context": {
+      "post": {
+        "summary": "Context Build",
+        "operationId": "context_build_api_v1_reflection_context_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContextRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reflection/expand": {
+      "post": {
+        "summary": "Context Expand",
+        "operationId": "context_expand_api_v1_reflection_expand_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Expansion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/messages/{message_id}/edit": {
+      "post": {
+        "summary": "Conversation Message Edit",
+        "operationId": "conversation_message_edit_api_v1_conversations__conversation_id__messages__message_id__edit_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "message_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Message Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/status": {
+      "get": {
+        "summary": "Conversation Status",
+        "operationId": "conversation_status_api_v1_conversations_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations": {
+      "get": {
+        "summary": "Conversation List",
+        "operationId": "conversation_list_api_v1_conversations_get",
+        "parameters": [
+          {
+            "name": "archived",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Archived"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Conversation Create",
+        "operationId": "conversation_create_api_v1_conversations_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewConversation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}": {
+      "get": {
+        "summary": "Conversation Get",
+        "operationId": "conversation_get_api_v1_conversations__conversation_id__get",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "After"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/messages": {
+      "post": {
+        "summary": "Conversation Send",
+        "operationId": "conversation_send_api_v1_conversations__conversation_id__messages_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/actions": {
+      "post": {
+        "summary": "Conversation Action",
+        "operationId": "conversation_action_api_v1_conversations__conversation_id__actions_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/practices/catalog": {
       "get": {
         "summary": "Practice Catalog",
@@ -3255,6 +3763,137 @@
         ],
         "title": "AudioDelete"
       },
+      "ContextRequest": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "goal": {
+            "$ref": "#/components/schemas/GoalRef"
+          },
+          "conversation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Conversation Id"
+          },
+          "window_start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Window Start"
+          },
+          "window_end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Window End"
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Query",
+            "default": ""
+          },
+          "token_budget": {
+            "type": "integer",
+            "maximum": 12000.0,
+            "minimum": 128.0,
+            "title": "Token Budget",
+            "default": 2000
+          },
+          "byte_budget": {
+            "type": "integer",
+            "maximum": 48000.0,
+            "minimum": 512.0,
+            "title": "Byte Budget",
+            "default": 8000
+          },
+          "max_sources": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Max Sources",
+            "default": 16
+          },
+          "prepare_synthetic_digests": {
+            "type": "boolean",
+            "title": "Prepare Synthetic Digests",
+            "default": false
+          },
+          "confirmed_memories": {
+            "items": {
+              "$ref": "#/components/schemas/GoalRef"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Confirmed Memories",
+            "default": []
+          },
+          "memory_scope": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "USER_CONFIRMED_EXPLICIT"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Memory Scope"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "goal",
+          "conversation_id"
+        ],
+        "title": "ContextRequest"
+      },
+      "ConversationAction": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Revision"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "archive",
+              "unarchive",
+              "delete"
+            ],
+            "title": "Action"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_revision",
+          "action"
+        ],
+        "title": "ConversationAction"
+      },
       "Create": {
         "properties": {
           "operation_id": {
@@ -4156,6 +4795,45 @@
         ],
         "title": "ExerciseFields"
       },
+      "Expansion": {
+        "properties": {
+          "receipt_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Receipt Id"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/GoalRef"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Sources"
+          },
+          "token_budget": {
+            "type": "integer",
+            "maximum": 12000.0,
+            "minimum": 128.0,
+            "title": "Token Budget",
+            "default": 1000
+          },
+          "byte_budget": {
+            "type": "integer",
+            "maximum": 48000.0,
+            "minimum": 512.0,
+            "title": "Byte Budget",
+            "default": 4000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "sources"
+        ],
+        "title": "Expansion"
+      },
       "Export": {
         "properties": {
           "plan_id": {
@@ -4334,6 +5012,111 @@
           "payload"
         ],
         "title": "FeedbackSave"
+      },
+      "GoalChange": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Revision"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ACTIVE",
+                  "PAUSED",
+                  "COMPLETED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "user_agreed": {
+            "type": "boolean",
+            "const": true,
+            "title": "User Agreed"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_revision",
+          "user_agreed"
+        ],
+        "title": "GoalChange"
+      },
+      "GoalCreate": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "user_agreed": {
+            "type": "boolean",
+            "const": true,
+            "title": "User Agreed"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "text",
+          "user_agreed"
+        ],
+        "title": "GoalCreate"
+      },
+      "GoalRef": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "revision"
+        ],
+        "title": "GoalRef"
       },
       "HTTPValidationError": {
         "properties": {
@@ -4621,6 +5404,79 @@
           "content"
         ],
         "title": "MemoryCreate"
+      },
+      "MessageEdit": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_conversation_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Conversation Revision"
+          },
+          "base_message_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Message Revision"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_conversation_revision",
+          "base_message_revision",
+          "text"
+        ],
+        "title": "MessageEdit"
+      },
+      "NewConversation": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "goal_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal Id"
+          },
+          "goal_revision": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id"
+        ],
+        "title": "NewConversation"
       },
       "Packet": {
         "properties": {
@@ -5035,6 +5891,44 @@
         "type": "object",
         "title": "Selector"
       },
+      "SendMessage": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Revision"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "source_reference": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VoiceSource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_revision",
+          "text"
+        ],
+        "title": "SendMessage"
+      },
       "SleepFields": {
         "properties": {
           "stages": {
@@ -5403,6 +6297,45 @@
         "additionalProperties": false,
         "type": "object",
         "title": "VoiceEmpty"
+      },
+      "VoiceSource": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "VOICE_TRANSCRIPT",
+            "title": "Kind"
+          },
+          "transcript_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Transcript Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Revision"
+          },
+          "audio_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Audio Hash"
+          },
+          "text_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Text Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "transcript_id",
+          "revision",
+          "audio_hash",
+          "text_hash"
+        ],
+        "title": "VoiceSource"
       }
     }
   }

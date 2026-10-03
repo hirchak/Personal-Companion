@@ -214,7 +214,7 @@ class Receipt(StrictModel):
 class VaultMetadata(StrictModel):
     vault_id: UUID
     owner_id: UUID
-    schema_version: Literal[2, 3, 4, 5, 6, 7]
+    schema_version: Literal[2, 3, 4, 5, 6, 7, 8, 9]
     restore_epoch: StrictInt = Field(ge=0)
     created_at_utc: datetime
     reconciliation: Literal['NONE', 'RESTORED_REQUIRES_RECONCILIATION']

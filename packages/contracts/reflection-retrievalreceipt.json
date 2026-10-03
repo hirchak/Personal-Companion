@@ -1,0 +1,243 @@
+{
+  "$defs": {
+    "ContextPartMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "GOAL_REVISION",
+            "CURRENT_TURN",
+            "GOAL_DIGEST",
+            "DAILY_DIGEST",
+            "FTS_RAW",
+            "FILTER_RAW",
+            "CONFIRMED_MEMORY"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/GoalRef"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "digest_version": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Digest Version"
+        },
+        "artifact_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Artifact Id"
+        },
+        "memory_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GoalRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "sources",
+        "digest_version",
+        "artifact_id",
+        "memory_ref"
+      ],
+      "title": "ContextPartMeta",
+      "type": "object"
+    },
+    "DigestVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "DAILY",
+            "GOAL"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "kind"
+      ],
+      "title": "DigestVersion",
+      "type": "object"
+    },
+    "GoalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "title": "GoalRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "goal": {
+      "$ref": "#/$defs/GoalRef"
+    },
+    "conversation_id": {
+      "format": "uuid",
+      "title": "Conversation Id",
+      "type": "string"
+    },
+    "window_start": {
+      "title": "Window Start",
+      "type": "string"
+    },
+    "window_end": {
+      "title": "Window End",
+      "type": "string"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/GoalRef"
+      },
+      "maxItems": 50,
+      "title": "Sources",
+      "type": "array"
+    },
+    "digest_versions": {
+      "items": {
+        "$ref": "#/$defs/DigestVersion"
+      },
+      "title": "Digest Versions",
+      "type": "array"
+    },
+    "retrieval_method": {
+      "const": "GOAL_CURRENT_DIGEST_FTS5_FILTER_V1",
+      "title": "Retrieval Method",
+      "type": "string"
+    },
+    "token_budget": {
+      "maximum": 12000,
+      "minimum": 128,
+      "title": "Token Budget",
+      "type": "integer"
+    },
+    "byte_budget": {
+      "maximum": 48000,
+      "minimum": 512,
+      "title": "Byte Budget",
+      "type": "integer"
+    },
+    "used_tokens_upper_bound": {
+      "minimum": 0,
+      "title": "Used Tokens Upper Bound",
+      "type": "integer"
+    },
+    "used_bytes_estimate": {
+      "minimum": 0,
+      "title": "Used Bytes Estimate",
+      "type": "integer"
+    },
+    "budget_scope": {
+      "const": "SERIALIZED_CONTEXT_PARTS_UTF8_JSON",
+      "title": "Budget Scope",
+      "type": "string"
+    },
+    "token_estimator": {
+      "const": "UTF8_BYTE_UPPER_BOUND_V1_NOT_MODEL_TOKENIZER",
+      "title": "Token Estimator",
+      "type": "string"
+    },
+    "confirmed_memory_refs": {
+      "items": {
+        "$ref": "#/$defs/GoalRef"
+      },
+      "title": "Confirmed Memory Refs",
+      "type": "array"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "raw_text_logged": {
+      "const": false,
+      "title": "Raw Text Logged",
+      "type": "boolean"
+    },
+    "parts_meta": {
+      "items": {
+        "$ref": "#/$defs/ContextPartMeta"
+      },
+      "title": "Parts Meta",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "goal",
+    "conversation_id",
+    "window_start",
+    "window_end",
+    "sources",
+    "digest_versions",
+    "retrieval_method",
+    "token_budget",
+    "byte_budget",
+    "used_tokens_upper_bound",
+    "used_bytes_estimate",
+    "budget_scope",
+    "token_estimator",
+    "confirmed_memory_refs",
+    "created_at",
+    "raw_text_logged",
+    "parts_meta"
+  ],
+  "title": "RetrievalReceipt",
+  "type": "object"
+}

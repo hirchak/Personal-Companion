@@ -28,6 +28,7 @@ export function EntryEditor({
           <textarea
             aria-label="Текст"
             autoFocus
+            data-sheet-focus
             rows={5}
             value={draft.raw_text}
             onChange={(e) => change("raw_text", e.target.value)}

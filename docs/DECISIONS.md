@@ -24,3 +24,16 @@
 Для зміни baseline створити ADR із альтернативами, impact на data/safety/compatibility,
 rollback і явним рішенням власника, коли змінюються межі або приватність.
 Routine internal refactor без зміни контрактів не потребує нового ADR.
+
+## M7B owner decisions — 2026-10-03
+
+[ADR-008-M7B-CONVERSATION-CONTEXT](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md): USER_REQUIREMENT,
+implementation candidate awaits independent review. Free Conversation + Deep Session; persistent
+explicit versioned editable ReflectionGoal exact revision binding; timestamped conversations/raw messages
+authority; goal-scoped longitudinal retrieval, source-bound DailyConversationDigest/GoalContextDigest,
+source edit/delete invalidation, metadata-only local RetrievalReceipt, deterministic budget.
+SQLite/filter/FTS5 first, NO mandatory embeddings/vector DB, NO external embeddings;
+measured retrieval-gap ADR required later. One Conversation Controller + typed skills/one model voice,
+no swarm, no automatic conversation→journal/memory. Live provider OFF, clinical active0,
+real private data OFF; M7C/M8 NOT_STARTED. Earlier M7B checkpoints are interim; late addenda
+belong to the same goal and require new final C/full regression before evidence-only R.

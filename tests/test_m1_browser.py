@@ -11,6 +11,7 @@ from playwright.sync_api import sync_playwright, expect
 from apps.core.api import create_app
 from apps.core.storage import REPO
 from test_m1_domain import isolated
+from ui_navigation import journal as go_journal, card_actions, feature
 
 PORT=8766
 ORIGIN=f'http://127.0.0.1:{PORT}'
@@ -50,7 +51,7 @@ def test_A09_browser_end_to_end(isolated):
             page.keyboard.press('Tab')
             expect(page.get_by_role('button',name='Відкрити щоденник')).to_be_focused()
             page.keyboard.press('Enter')
-            expect(page.get_by_role('heading',name='Ваш щоденник')).to_be_visible()
+            go_journal(page)
             expect(page.get_by_text('Почніть із кількох слів')).to_be_visible()
             raw='SYNTHETIC · Сад із паперу 🦉 <script>window.injected=1</script>'
             page.get_by_role('button',name='Додати запис').focus()
@@ -71,11 +72,11 @@ def test_A09_browser_end_to_end(isolated):
             expect(page.locator('.entry-text')).to_have_text(raw)
             assert page.evaluate('window.injected') is None
             assert page.evaluate('localStorage.length + sessionStorage.length')==0
-            page.get_by_role('button',name='Редагувати',exact=True).click()
+            card_actions(page);page.get_by_role('button',name='Редагувати',exact=True).click()
             page.get_by_label('Текст',exact=True).fill(raw+'\nSYNTHETIC зміна')
             page.get_by_role('button',name='Зберегти на Mac').click()
             expect(page.locator('.entry-text')).to_contain_text('SYNTHETIC зміна')
-            page.get_by_role('button',name='Історія',exact=True).click()
+            card_actions(page);page.get_by_role('button',name='Історія',exact=True).click()
             expect(page.locator('.history .entry-text')).to_have_text(raw)
             page.get_by_role('button',name='Закрити історію').click()
             page.get_by_label('Пошук',exact=True).fill('Сад')
@@ -85,7 +86,7 @@ def test_A09_browser_end_to_end(isolated):
             page.get_by_label('Пошук',exact=True).fill('')
             expect(page.locator('.entry')).to_have_count(1)
             # Optimistic conflict from a real second API writer.
-            page.get_by_role('button',name='Редагувати',exact=True).click()
+            card_actions(page);page.get_by_role('button',name='Редагувати',exact=True).click()
             e=app.state.journal.list()['items'][0]
             from apps.core.models import Patch
             app.state.journal.write('edit',e['id'],Patch(operation_id=uuid4(),base_revision=e['revision'],changes={'tags':['SYNTHETIC']}))
@@ -103,9 +104,9 @@ def test_A09_browser_end_to_end(isolated):
             page.get_by_role('button',name='Зберегти на Mac').click()
             expect(page.locator('.entry .metadata').first).to_contain_text('Творчість')
             assert dialogs and 'Настрій' in dialogs[0]
-            page.get_by_label('Вибрати',exact=True).focus()
+            card_actions(page);page.get_by_label('Вибрати для експорту',exact=True).focus()
             page.keyboard.press('Space')
-            expect(page.get_by_label('Вибрати',exact=True)).to_be_checked()
+            expect(page.get_by_label('Вибрати для експорту',exact=True)).to_be_checked()
             page.get_by_label('Додати історію').check()
             page.get_by_role('button',name='Переглянути експорт').click()
             expect(page.get_by_text('Точний склад:',exact=False)).to_be_visible()
@@ -138,13 +139,13 @@ def test_A09_browser_end_to_end(isolated):
             app,server,thread=start(isolated/'browser')
             page.reload(); expect(page.get_by_label('Код розблокування')).to_be_visible()
             page.get_by_label('Код розблокування').fill(app.state.auth.code)
-            page.get_by_role('button',name='Відкрити щоденник').click()
+            page.get_by_role('button',name='Відкрити щоденник').click();go_journal(page)
             expect(page.locator('.entry-text')).to_contain_text('SYNTHETIC зміна')
-            page.get_by_role('button',name='Видалити',exact=True).click()
+            card_actions(page);page.get_by_role('button',name='Видалити',exact=True).click()
             expect(page.locator('.entry')).to_have_count(0)
             page.get_by_role('button',name='Додати запис').click()
             page.get_by_label('Текст',exact=True).fill('SYNTHETIC unsaved must disappear')
-            page.get_by_role('button',name='Заблокувати').click()
+            feature(page,'Заблокувати')
             expect(page.get_by_label('Код розблокування')).to_be_visible()
             assert 'unsaved must disappear' not in page.locator('body').inner_text()
             page.reload(); expect(page.get_by_label('Код розблокування')).to_be_visible()
@@ -152,7 +153,7 @@ def test_A09_browser_end_to_end(isolated):
             stop(server,thread)
             app,server,thread=start(isolated/'browser')
             page.reload(); page.get_by_label('Код розблокування').fill(app.state.auth.code)
-            page.get_by_role('button',name='Відкрити щоденник').click()
+            page.get_by_role('button',name='Відкрити щоденник').click();go_journal(page)
             page.get_by_role('button',name='Додати запис').click()
             page.get_by_label('Текст',exact=True).fill('SYNTHETIC idle draft')
             page.clock.fast_forward(900001)

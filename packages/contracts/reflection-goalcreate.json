@@ -1,0 +1,28 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "text": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "user_agreed": {
+      "const": true,
+      "title": "User Agreed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "operation_id",
+    "text",
+    "user_agreed"
+  ],
+  "title": "GoalCreate",
+  "type": "object"
+}

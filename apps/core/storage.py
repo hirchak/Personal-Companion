@@ -10,7 +10,7 @@ from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 7
+SCHEMA = 9
 _ROOT_LOCKS = {}
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
@@ -175,6 +175,13 @@ class Store:
                 from .health import HEALTH_TABLES
                 for sql in HEALTH_TABLES:
                     c.execute(sql)
+                from .reflection import REFLECTION_TABLES,reflection_triggers
+                from .conversation import CONVERSATION_TABLES
+                for sql in CONVERSATION_TABLES:
+                    c.execute(sql)
+                for sql in REFLECTION_TABLES:
+                    c.execute(sql)
+                reflection_triggers(c)
                 from .practice import PRACTICE_TABLES
                 for sql in PRACTICE_TABLES:
                     c.execute(sql)
@@ -340,6 +347,10 @@ class Store:
                     self.check(dest)
                     from .practice import check_sessions
                     check_sessions(dest)
+                    from .conversation import check_conversations
+                    check_conversations(dest)
+                    from .reflection import check_reflection
+                    check_reflection(dest)
                     attachments=self.check_audio(dest)
                     meta = dict(dest.execute('SELECT * FROM vault_meta').fetchone())
                 finally: dest.close()
@@ -353,7 +364,7 @@ class Store:
                     shutil.copyfile(source,folder/a['file']);os.chmod(folder/a['file'],0o600)
                     if (folder/a['file']).stat().st_size!=a['byte_size'] or digest((folder/a['file']).read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
                     with (folder/a['file']).open('rb') as file:os.fsync(file.fileno())
-            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M7A',
+            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M7B',
                         'created_at_utc': now(), 'attachments': attachments,
                         'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
             (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
@@ -374,7 +385,7 @@ class Store:
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
             m=json.loads((b/'manifest.json').read_text())
-            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,6,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,6,7,8,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
             attachments=m['attachments']
             if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
             expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
@@ -386,6 +397,12 @@ class Store:
                 if m['schema_version']>=7:
                     from .practice import check_sessions
                     check_sessions(source)
+                if m['schema_version']>=8:
+                    from .conversation import check_conversations
+                    check_conversations(source)
+                if m['schema_version']>=9:
+                    from .reflection import check_reflection
+                    check_reflection(source)
                 required=cls.check_audio(source)
                 if attachments!=required:raise SafeError('AUDIO_REFERENCE_INTEGRITY')
             if attachments:
@@ -407,6 +424,8 @@ class Store:
                 c.execute("UPDATE vault_meta SET restore_epoch=restore_epoch+1,reconciliation='RESTORED_REQUIRES_RECONCILIATION'")
             with sqlite3.connect(temp/'journal.sqlite3') as c:
                 if m['schema_version']>=5:c.execute('UPDATE feedback_drafts SET approval=NULL')
+                if m['schema_version']>=8:
+                    c.execute('UPDATE conversation_receipts SET fingerprint=NULL')
                 if m['schema_version']>=7:
                     # Restore never resumes sessions or restores runtime activation decisions.
                     c.execute("UPDATE practice_sessions SET revision=revision+1,payload=json_set(payload,'$.state','BLOCKED_BY_ADMISSION','$.blocked_reason','RESTORE_REVALIDATION_REQUIRED','$.revision',revision+1) WHERE json_extract(payload,'$.state') IN ('ACTIVE','PAUSED')")

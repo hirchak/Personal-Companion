@@ -21,3 +21,43 @@ preview. Mode Operate, inherited paper/ink/sage/system-text/Georgia headings; no
 Optional device-local shelf uses original books/vase/print geometry, off by default and visually
 secondary. Clear 44px native controls, wrapping consent/hash/long text, reduced-motion static scene.
 No progress, scores, private preference motifs, external fonts/assets or copyrighted references.
+
+## Layout
+
+M7B is an ordinary extension of the paper/ink/sage world above. The M1/M2/M5 descriptions
+remain historical surface guidance; the current application shell uses a compact sticky
+top bar with **Розмова / Щоденник / Більше**, replacing the persistent section rail.
+The conversation is the launch surface. Journal filters and its tile/list switch stay
+inside the journal; practices, creative shelf, personal space and settings remain secondary.
+
+The conversation fills the available viewport below the measured header. A scrollable
+thread contains its toolbar, optional agreed-goal context and readable messages; the
+multiline composer stays below that thread. Message text is limited to a readable measure
+(76ch), with user text on a muted sage block and demo assistant text on the paper field.
+The empty question keeps the inherited Georgia heading and plain intent buttons.
+
+At narrow widths (650px and below), the three navigation actions occupy a separate
+top-bar row. Composer secondary actions share a row; send or local save occupies its own
+full-width row. The thread and expanded goal context scroll independently so the complete
+primary action remains reachable. Context height is bounded by the available viewport;
+this layout has synthetic browser evidence at 390×844, without physical-keyboard acceptance.
+Journal tiles use three columns, two at 1000px and below and one at 650px and below; list mode stays one column.
+
+## Components
+
+Native dialog sheets hold full journal entries, conversation history, goals, voice input
+and More. Desktop sheets are centered paper surfaces with quiet borders, rounded corners
+(12px), a restrained ambient shadow and a dim backdrop; journal detail and voice may use
+the wider sheet. Narrow-screen sheets fill the viewport with square corners and internal
+scrolling. Escape closes the dialog and closing restores focus to the prior control.
+
+Deep conversations show the explicitly agreed goal and pinned revision above messages.
+Past context is disclosed separately in an internally scrollable paper panel; goal creation,
+editing and revision history remain in the goals sheet. These surfaces inherit the existing
+body face, muted labels, text wrapping, visible focus rings and minimum 44px controls.
+
+The composer uses the incumbent paper field, ink text and sage primary action. Voice
+confirmation inserts text into this draft before explicit sending. Demo/OFF explanations
+remain visible beside capture: synthetic replies are labeled, while normal OFF offers
+local text saving without an assistant reply. M7A practice content/admission boundaries
+remain governed by their existing documentation; this navigation change does not revise them.

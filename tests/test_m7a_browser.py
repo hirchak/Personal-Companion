@@ -9,6 +9,7 @@ from apps.core.practice_contracts import Start,Action
 from apps.core.storage import REPO
 from test_m1_domain import isolated
 from test_m5_browser import unlock,watch,stop,ORIGIN,PORT
+from ui_navigation import feature, journal as go_journal
 
 OUT=REPO/'generated/m7a-ui'
 os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH',str(REPO/'generated/chromium'))
@@ -20,7 +21,7 @@ def server(root,demo=True):
  while not srv.started and time.monotonic()<deadline:time.sleep(.02)
  assert srv.started;return app,srv,t
 
-def catalog(p):p.get_by_role('button',name='Практики',exact=True).click();expect(p.get_by_role('heading',name='Практики',exact=True)).to_be_visible()
+def catalog(p):feature(p,'Практики');expect(p.get_by_role('heading',name='Практики',exact=True)).to_be_visible()
 def start(p):p.get_by_role('button',name='Почати демо',exact=True).click();expect(p.get_by_role('heading',name='Сесію відкрито',exact=True)).to_be_visible()
 def text(p):
  p.get_by_role('button',name='Далі',exact=True).click();p.get_by_label('Використовую лише вигадані дані',exact=True).check();p.get_by_role('button',name='Зберегти відповідь',exact=True).click();expect(p.get_by_role('status')).to_contain_text('Відповідь збережено');p.get_by_role('button',name='Далі',exact=True).click();expect(p.get_by_label('Тестовий текст',exact=True)).to_be_visible()
@@ -71,7 +72,7 @@ def test_built_stop_block_inert_response_and_normal_sections_accessible(isolated
    save(p,injection);app.state.practices.revoked=True;p.get_by_role('button',name='Далі',exact=True).click();expect(p.get_by_role('heading',name='Ця версія зараз недоступна')).to_be_visible();capture(p,'blocked')
    p.get_by_role('button',name='Збережені відповіді').click();expect(p.locator('.practice-responses')).to_contain_text(injection);assert not p.evaluate('!!window.m7aInjected')
    p.get_by_role('button',name='Зупинити практику').click();expect(p.get_by_role('heading',name='Практику зупинено')).to_be_visible();capture(p,'stopped')
-   p.get_by_role('button',name='Усі записи',exact=True).click();expect(p.get_by_role('heading',name='Ваш щоденник')).to_be_visible()
+   go_journal(p);expect(p.get_by_role('heading',name='Ваш щоденник')).to_be_visible()
    assert app.state.runtime.providers['mock'].executions==0 and not errors and not external;b.close()
  finally:stop(srv,t)
 

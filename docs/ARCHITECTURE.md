@@ -96,3 +96,29 @@ Git integration створює deployments із push; тому її не під�
 Repository/storage/provider interfaces, schema migrations і versioned exports дозволяють
 змінювати реалізації. PostgreSQL, relay, desktop shell, кілька користувачів — окремі ADR,
 а не приховані залежності V1. Контейнери, Redis і vector DB зараз не потрібні.
+
+## Чинна M7B conversation-first foundation
+
+Free Conversation / Deep Session є окремим local-first доменом. `conversation.py` — єдиний
+Conversation Controller для persistence/CAS/idempotency і responder boundary;
+`reflection.py` — deterministic goal/retrieval helper, не другий agent. React ConversationHome
+використовує той самий API й M4 PCMRecorder/VoicePanel/storage, без другого audio/ASR stack.
+Native modal sheets, internal journal filters і grid/list зберігають існуючий CRUD/export/history.
+
+SQLite envelope schema9 додає conversations/messages/revisions, ReflectionGoal/history,
+FTS5 unicode61 index, versioned source-bound DailyConversationDigest / GoalContextDigest equivalents
+і metadata-only RetrievalReceipt. Entry2/health1/practice1 contracts незмінні. Triggers атомарно
+оновлюють FTS і invalidation; backup integrity перевіряє goals/derived artifacts/receipts/index.
+Restore не відновлює synthetic/provider authorization. Розмова прив’язана до exact agreed goal
+revision, історія не переписується. Raw messages — source authority; digest MODEL_DERIVED.
+
+Context Builder bounded за serialized JSON UTF8 bytes/консервативним token budget:
+exact goal → current/recent turns → goal digest → daily digest → scoped FTS/filter raw sources;
+narrow source expansion та explicit USER_CONFIRMED memory. Default goal-created→now або
+explicit date range. Journal/sleep/health лише через separately authorized narrow tool contracts,
+у M7B OFF. Вся історія не вантажиться на кожний prompt. SQLite/filter/FTS first; mandatory
+vectors/embeddings відсутні, external embeddings заборонені. Later vectors тільки після measured-gap ADR.
+
+Один controller/одна model voice, typed skill stubs, no swarm; no automatic conversation→journal/memory.
+Live provider OFF, clinical active0, real private data OFF; M7C/M8 NOT_STARTED.
+Канонічний [contract](M7B_CONTRACT.md), [owner ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).

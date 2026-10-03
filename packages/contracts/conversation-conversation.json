@@ -1,0 +1,116 @@
+{
+  "$defs": {
+    "GoalBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "title": "GoalBinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "ACTIVE",
+        "ARCHIVED"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "created_utc": {
+      "title": "Created Utc",
+      "type": "string"
+    },
+    "updated_utc": {
+      "title": "Updated Utc",
+      "type": "string"
+    },
+    "provenance": {
+      "enum": [
+        "ORIGINAL_SYNTHETIC",
+        "USER_LOCAL"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "synthetic": {
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "privacy_class": {
+      "const": "PRIVATE_PERSONAL",
+      "title": "Privacy Class",
+      "type": "string"
+    },
+    "mode": {
+      "default": "FREE",
+      "enum": [
+        "FREE",
+        "DEEP"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "goal_binding": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/GoalBinding"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "state",
+    "revision",
+    "created_utc",
+    "updated_utc",
+    "provenance",
+    "synthetic",
+    "privacy_class"
+  ],
+  "title": "Conversation",
+  "type": "object"
+}

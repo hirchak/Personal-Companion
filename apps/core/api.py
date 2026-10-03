@@ -19,6 +19,10 @@ from .feedback import Feedback, PersonalSpace
 from .m5_contracts import CreativeSelection, CreativeDownload, FeedbackSave, FeedbackExact, FeedbackExport, SpaceUpdate
 from .health import HealthImport
 from .health_contracts import HealthApply, HealthAction
+from .reflection import Reflection
+from .reflection_contracts import GoalCreate, GoalChange, ContextRequest, Expansion, MessageEdit
+from .conversation import Conversations
+from .conversation_contracts import NewConversation, SendMessage, ConversationAction
 from .practice import PracticeEngine
 from .practice_contracts import Start as PracticeStart, Action as PracticeAction
 from .runtime import Runtime
@@ -62,7 +66,7 @@ class Auth:
             return s
 
 
-def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False):
+def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False):
     if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
     store = Store(root)
     journal, auth = Journal(store, clock), Auth(clock)
@@ -80,6 +84,10 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.health = health
     practices = PracticeEngine(store, synthetic_demo=synthetic_practices)
     app.state.practices = practices
+    conversations = Conversations(store, synthetic_demo=synthetic_conversations)
+    app.state.conversations = conversations
+    reflection = Reflection(conversations)
+    app.state.reflection = reflection
     host, origin = f'127.0.0.1:{port}', f'{scheme}://127.0.0.1:{port}'
     web = Path(web) if web else Path(__file__).resolve().parents[1] / 'web/dist'
 
@@ -186,6 +194,45 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
             ('/audio/{audio_id}/transcribe',voice_asr,['POST']),('/transcripts/{transcript_id}/edit',voice_edit,['POST']),
             ('/transcripts/{transcript_id}/cancel',voice_discard,['POST']),('/transcripts/{transcript_id}/confirm',voice_confirm,['POST'])]:
             app.add_api_route(prefix+path,endpoint,methods=methods)
+
+    @app.get('/api/v1/reflection/goals')
+    def goals_list(): return reflection.list()
+
+    @app.post('/api/v1/reflection/goals')
+    def goals_create(body: GoalCreate): return reflection.create(body)
+
+    @app.get('/api/v1/reflection/goals/{goal_id}')
+    def goals_get(goal_id: UUID): return reflection.get(goal_id)
+
+    @app.post('/api/v1/reflection/goals/{goal_id}')
+    def goals_change(goal_id: UUID, body: GoalChange): return reflection.change(goal_id,body)
+
+    @app.post('/api/v1/reflection/context')
+    def context_build(body: ContextRequest): return reflection.build(body)
+
+    @app.post('/api/v1/reflection/expand')
+    def context_expand(body: Expansion): return reflection.expand(body)
+
+    @app.post('/api/v1/conversations/{conversation_id}/messages/{message_id}/edit')
+    def conversation_message_edit(conversation_id: UUID,message_id: UUID,body: MessageEdit): return reflection.edit_message(conversation_id,message_id,body)
+
+    @app.get('/api/v1/conversations/status')
+    def conversation_status(): return conversations.mode()
+
+    @app.get('/api/v1/conversations')
+    def conversation_list(archived: bool = False, offset: int = Query(0,ge=0)): return conversations.list(archived,offset)
+
+    @app.post('/api/v1/conversations')
+    def conversation_create(body: NewConversation): return conversations.create(body)
+
+    @app.get('/api/v1/conversations/{conversation_id}')
+    def conversation_get(conversation_id: UUID, after: int = Query(0,ge=0)): return conversations.get(conversation_id,after)
+
+    @app.post('/api/v1/conversations/{conversation_id}/messages')
+    def conversation_send(conversation_id: UUID, body: SendMessage): return conversations.send(conversation_id,body)
+
+    @app.post('/api/v1/conversations/{conversation_id}/actions')
+    def conversation_action(conversation_id: UUID, body: ConversationAction): return conversations.action(conversation_id,body)
 
     @app.get('/api/v1/practices/catalog')
     def practice_catalog(): return practices.catalog()

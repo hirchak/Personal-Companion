@@ -226,3 +226,27 @@ runnable sessions and preserves terminal state/data. Old backups and residual pa
 no secure-erase claim. Synthetic screenshots in generated/m7a-ui and sanitized reports/evidence/M7A.
 Native Android rebuild NOT_RUN only if exact diff confirms apps/android-health untouched.
 See docs/M7A_CONTRACT.md and reports/M7A_PRACTICE_ENGINE_REPORT.md for final gate/evidence scope.
+
+## M7B — conversation-first and late longitudinal addenda
+
+Final C must include both owner addenda. Earlier checkpoints are interim. Run full M1–M7A + M7B
+Python/browser scope and built React/unit, then evidence-only R; no runtime/code changes in C→R.
+
+- `.venv/bin/python -m pytest -q`: conversations create/multi-turn/archive/delete/CAS/retry/OFF,
+  actual CLI HTTP process restart, exact source voice binding, backup/restore, goal history/pinning,
+  pause/complete/edit, FTS5/date range/budgets/receipt replay/source expansion/derived invalidation/integrity.
+- Browser desktop1440/390: primary home/navigation, journal filters/tiles/list preference/detail,
+  secondary feature access, generated audio recording/cancel/unavailable/fake explicit insert/send,
+  normal OFF, deep goal/context/history, response-loss and stale draft retry, bounded render metrics.
+- `npm --prefix apps/web run build`; `npm --prefix apps/web test`; existing independent Ajv checks
+  `node scripts/verify_m7a_schemas.mjs`; `.venv/bin/python scripts/m7_admission.py` keeps27 findings/clinical0.
+- `.venv/bin/python -m scripts.measure_m7b`: synthetic create/send/history/reopen/service restart,
+  bounded context builder/DB growth. Actual CLI restart is separately tested, no device/provider latency claim.
+- `.venv/bin/python scripts/build_chatgpt_context.py`; `check_docs.py --json`;
+  `check_privacy.py --include-generated`; exact staged diff/rights review before normal main push.
+
+Schema9 is the M7B vault envelope; M7A historical schema7 and entry2/health1/practice1 remain unchanged.
+Original synthetic screenshots/metrics only in public evidence. Real audio/conversation/private vault,
+real local ASR/physical virtual keyboard/provider/clinical/deploy tests NOT_RUN. Model-generated digest
+inference/tokenizer, consented narrow journal/sleep/health tools, clinical skills and vector retrieval
+DEFERRED for the precise reasons in [M7B contract](M7B_CONTRACT.md). No external embeddings.

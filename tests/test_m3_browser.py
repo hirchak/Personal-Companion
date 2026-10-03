@@ -11,6 +11,7 @@ from apps.core.storage import REPO
 from test_m1_domain import isolated
 from test_m2_browser import unlock_phone, capture
 from test_m3_runtime import Controlled
+from ui_navigation import journal as go_journal, tools, card_actions, feature
 
 PORT=8769
 ORIGIN=f'http://127.0.0.1:{PORT}'
@@ -26,9 +27,10 @@ def serve(root):
 
 def unlock(page,app):
     page.goto(ORIGIN+'/');page.get_by_label('Код розблокування').fill(app.state.auth.code);page.get_by_role('button',name='Відкрити щоденник').click()
-    expect(page.get_by_role('heading',name='Ваш щоденник',exact=True)).to_be_visible()
+    go_journal(page);tools(page)
 
 def propose(page,task):
+    card_actions(page)
     page.get_by_label('Завдання',exact=True).select_option(task)
     page.get_by_role('button',name='Переглянути точний контекст').click()
     expect(page.get_by_role('heading',name='Що отримає provider')).to_be_visible()
@@ -52,7 +54,7 @@ def test_M3_browser_consent_suggestions_memory_and_viewports(isolated):
         page.get_by_label('Додати власне налаштування').fill('SYNTHETIC · Показувати коротко')
         page.get_by_role('button',name='Зберегти пам’ять',exact=True).click();expect(page.locator('.memory-row')).to_have_count(1)
         assert app.state.runtime.providers['mock'].executions==0
-        page.get_by_label('Вибрати',exact=True).check();page.get_by_label('Увімкнути локальний synthetic mock').check()
+        card_actions(page);page.get_by_label('Вибрати для експорту',exact=True).check();page.get_by_label('Увімкнути локальний synthetic mock').check()
         page.get_by_label('SYNTHETIC · Показувати коротко',exact=True).check()
         page.get_by_role('button',name='Переглянути точний контекст').click()
         preview=page.get_by_role('region',name='Точний контекст');expect(preview).to_contain_text(raw);expect(preview).to_contain_text(id);expect(preview).to_contain_text('кількість provider tokens невідома')
@@ -81,7 +83,7 @@ def test_M3_browser_consent_suggestions_memory_and_viewports(isolated):
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         page.on('dialog',lambda d:d.accept());page.locator('.memory-row').first.get_by_role('button',name='Видалити пам’ять').click();expect(page.locator('.memory-row')).to_have_count(1)
         page.get_by_label('Увімкнути локальний synthetic mock').uncheck();expect(page.get_by_text('AI вимкнено · записи зберігаються незалежно')).to_be_visible()
-        page.get_by_role('button',name='Заблокувати',exact=True).click();expect(page.get_by_label('Код розблокування')).to_be_visible();assert 'Показувати джерела' not in page.locator('body').inner_text()
+        feature(page,'Заблокувати');expect(page.get_by_label('Код розблокування')).to_be_visible();assert 'Показувати джерела' not in page.locator('body').inner_text()
         assert not errors and not external
         browser.close()
     finally:
@@ -96,7 +98,7 @@ def test_M3_browser_job_cancel_and_phone_AI_independent_after_IDB_pair_failure(i
     try:
       with sync_playwright() as pw:
         browser=pw.chromium.launch(headless=True);owner=browser.new_context();page=owner.new_page();unlock(page,app)
-        page.get_by_label('Вибрати',exact=True).check();page.get_by_role('button',name='Помічник і пам’ять',exact=True).click();page.get_by_label('Увімкнути локальний synthetic mock').check()
+        card_actions(page);page.get_by_label('Вибрати для експорту',exact=True).check();page.get_by_role('button',name='Помічник і пам’ять',exact=True).click();page.get_by_label('Увімкнути локальний synthetic mock').check()
         propose(page,'capture_classify');expect(page.get_by_role('button',name='Скасувати завдання')).to_be_visible();page.get_by_role('button',name='Скасувати завдання').click();provider.release.set()
         expect(page.locator('.runtime-row')).to_contain_text('Скасовано');assert not app.state.runtime.suggestions()['items']
         app.state.runtime.set_mode('OFF')
@@ -134,13 +136,13 @@ def test_M3_mobile_long_memory_pending_confirmation_wraps(isolated):
     try:
       with sync_playwright() as pw:
         browser=pw.chromium.launch(headless=True);context=browser.new_context(viewport={'width':390,'height':844});page=context.new_page();unlock(page,app)
-        page.get_by_label('Вибрати',exact=True).check();page.get_by_role('button',name='Помічник і пам’ять',exact=True).click();page.get_by_label('Увімкнути локальний synthetic mock').check()
+        card_actions(page);page.get_by_label('Вибрати для експорту',exact=True).check();page.get_by_role('button',name='Помічник і пам’ять',exact=True).click();page.get_by_label('Увімкнути локальний synthetic mock').check()
         propose(page,'capture_classify');expect(page.get_by_role('button',name='Прийняти пропозицію',exact=True)).to_be_visible()
         labels=page.locator('.assistant-content label.check');assert labels.count()>=3
         assert labels.evaluate_all("els => els.every(e => getComputedStyle(e).whiteSpace === 'normal' && e.getBoundingClientRect().height >= 44)")
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         out=REPO/'generated/m3-ui';out.mkdir(parents=True,exist_ok=True);page.screenshot(path=str(out/'assistant-mobile-pending.png'),full_page=True)
-        expect(page.locator('footer')).to_contain_text('Зовнішній AI вимкнено · цей demo використовує лише вигадані записи.')
+        expect(page.locator('.assistant-content')).to_contain_text('Увімкнути локальний synthetic mock')
         browser.close()
     finally:
       server.should_exit=True;thread.join(8);assert not thread.is_alive()

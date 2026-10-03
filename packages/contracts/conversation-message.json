@@ -1,0 +1,139 @@
+{
+  "$defs": {
+    "VoiceSource": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "VOICE_TRANSCRIPT",
+          "title": "Kind",
+          "type": "string"
+        },
+        "transcript_id": {
+          "format": "uuid",
+          "title": "Transcript Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "audio_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Audio Hash",
+          "type": "string"
+        },
+        "text_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Text Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "transcript_id",
+        "revision",
+        "audio_hash",
+        "text_hash"
+      ],
+      "title": "VoiceSource",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "conversation_id": {
+      "format": "uuid",
+      "title": "Conversation Id",
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "USER",
+        "ASSISTANT"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "raw_text": {
+      "maxLength": 12000,
+      "minLength": 1,
+      "title": "Raw Text",
+      "type": "string"
+    },
+    "created_utc": {
+      "title": "Created Utc",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "provenance": {
+      "enum": [
+        "USER_AUTHORED",
+        "MOCK_SYNTHETIC"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "source_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/VoiceSource"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_message_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source Message Id"
+    },
+    "synthetic": {
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "privacy_class": {
+      "const": "PRIVATE_PERSONAL",
+      "title": "Privacy Class",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "conversation_id",
+    "role",
+    "raw_text",
+    "created_utc",
+    "revision",
+    "provenance",
+    "source_reference",
+    "source_message_id",
+    "synthetic",
+    "privacy_class"
+  ],
+  "title": "Message",
+  "type": "object"
+}

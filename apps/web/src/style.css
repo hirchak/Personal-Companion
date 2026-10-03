@@ -1122,3 +1122,524 @@ footer {
   outline: 3px solid #577c36;
   outline-offset: 3px;
 }
+/* M7B: one conversation home; inherited paper/ink/sage without dashboard rail. */
+.conversation-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 36px;
+  border-bottom: 1px solid var(--line);
+  background: #f7f7f0;
+}
+.app-topbar .wordmark {
+  font-size: 22px;
+  white-space: nowrap;
+}
+.app-topbar nav {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  overflow: visible;
+}
+.app-topbar nav button {
+  text-align: center;
+  white-space: nowrap;
+}
+.app-content {
+  max-width: 1240px;
+  padding: 36px;
+  margin: 0 auto;
+}
+.conversation-content {
+  padding: 20px 36px 0;
+}
+.conversation-home {
+  height: calc(var(--conversation-viewport, 100dvh) - 100px);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.conversation-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.conversation-toolbar h1 {
+  font-size: 24px;
+  margin: 0;
+}
+.conversation-toolbar > div {
+  display: flex;
+  gap: 8px;
+}
+.demo-status {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 12px 0 0;
+}
+.conversation-messages {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 60px;
+  padding: 24px 8px;
+  overscroll-behavior: contain;
+}
+.conversation-empty {
+  max-width: 800px;
+  margin: auto;
+  padding: clamp(32px, 7vh, 90px) 12px 24px;
+}
+.conversation-empty h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(30px, 3vw, 44px);
+  font-weight: 400;
+  line-height: 1.2;
+  max-width: 20ch;
+  margin-bottom: 24px;
+}
+.conversation-empty > p {
+  max-width: 62ch;
+  color: var(--muted);
+}
+.conversation-intents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+.conversation-message {
+  max-width: 76ch;
+  margin: 0 0 28px;
+  padding: 8px 0;
+}
+.conversation-message.message-user {
+  margin-left: auto;
+  max-width: min(76ch, 85%);
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: #e9eee2;
+}
+.message-role {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.conversation-message p {
+  margin: 8px 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+.conversation-composer {
+  flex-shrink: 0;
+  width: 100%;
+  border-top: 1px solid var(--line);
+  padding: 16px 0 max(20px, env(safe-area-inset-bottom));
+  background: #f7f7f0;
+}
+.conversation-composer textarea {
+  display: block;
+  width: 100%;
+  resize: vertical;
+  min-height: 78px;
+  max-height: 180px;
+  margin: 10px 0 12px;
+  caret-color: var(--accent);
+}
+.composer-privacy {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+.composer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.composer-actions button.primary {
+  margin-left: auto;
+}
+.composer-actions .hint {
+  margin-left: auto;
+  font-size: 0.8rem;
+}
+.composer-actions button:first-child {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+}
+.app-sheet {
+  width: min(620px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  margin: auto;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: inherit;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 18px 60px rgba(28, 46, 34, 0.18);
+}
+.app-sheet.sheet-wide {
+  width: min(960px, calc(100vw - 32px));
+}
+.app-sheet::backdrop {
+  background: rgba(28, 46, 34, 0.32);
+}
+.sheet-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.sheet-heading h2 {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  margin: 0;
+}
+.app-sheet input,
+.app-sheet textarea,
+.app-sheet select {
+  max-width: 100%;
+}
+.app-sheet .entry-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.more-menu {
+  display: grid;
+  gap: 8px;
+}
+.more-menu button {
+  text-align: left;
+  border: 1px solid var(--line);
+}
+.conversation-history {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+}
+.conversation-history li {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.conversation-history-open {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+}
+.conversation-history-open span {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.app-sheet summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 10px 0;
+}
+.journal-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0;
+}
+.journal-filters button[aria-pressed="true"],
+.journal-view-switch button[aria-pressed="true"] {
+  background: #d4dfcb;
+}
+.journal-view-switch {
+  display: flex;
+  gap: 8px;
+}
+.entries.journal-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.entries.journal-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.journal-card.entry {
+  margin: 0;
+  padding: 20px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+}
+.entry-open {
+  display: block;
+  text-align: left;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+.entry-open:hover {
+  background: transparent;
+}
+.entry-open .entry-text {
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+}
+.entry-menu {
+  text-align: right;
+  margin-top: 8px;
+}
+.entry-menu summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.entry-menu button {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  text-align: left;
+}
+.entry-menu .select-entry {
+  justify-content: flex-start;
+}
+.journal-tools,
+.settings-home details {
+  margin: 24px 0;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+@media (max-width: 1000px) {
+  .entries.journal-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .app-topbar {
+    padding: 12px 16px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .app-topbar .wordmark {
+    font-size: 20px;
+  }
+  .app-topbar nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .app-topbar nav button {
+    padding: 10px 12px;
+  }
+  .app-content {
+    padding: 24px 16px;
+  }
+  .conversation-content {
+    padding: 16px 12px 0;
+  }
+  .conversation-home {
+    height: calc(var(--conversation-viewport, 100dvh) - 128px);
+    min-height: 230px;
+  }
+  .conversation-toolbar {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .conversation-toolbar h1 {
+    font-size: 22px;
+  }
+  .conversation-toolbar > div {
+    gap: 4px;
+  }
+  .conversation-toolbar button {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+  .conversation-empty {
+    padding: 24px 8px;
+  }
+  .conversation-empty h2 {
+    font-size: 32px;
+  }
+  .conversation-messages {
+    padding: 20px 4px;
+  }
+  .conversation-message.message-user {
+    max-width: 95%;
+    padding: 12px 16px;
+  }
+  .composer-actions .hint {
+    display: none;
+  }
+  .composer-actions button {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+  .composer-actions button.primary {
+    flex: 1;
+  }
+  .app-sheet,
+  .app-sheet.sheet-wide {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    padding: 20px;
+  }
+  .more-menu {
+    display: grid;
+    overflow: visible;
+    margin: 0;
+  }
+  .entries.journal-tiles {
+    grid-template-columns: 1fr;
+  }
+  .list-heading {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .conversation-home,
+  .app-sheet {
+    scroll-behavior: auto;
+  }
+}
+
+.app-topbar,
+.conversation-toolbar {
+  margin-bottom: 0;
+}
+.conversation-home {
+  height: calc(
+    var(--conversation-viewport, 100dvh) - var(--app-header-height, 80px) - 20px
+  );
+}
+@media (max-width: 650px) {
+  .conversation-home {
+    height: calc(
+      var(--conversation-viewport, 100dvh) - var(--app-header-height, 104px) -
+        16px
+    );
+    min-height: 180px;
+  }
+  .app-sheet,
+  .app-sheet.sheet-wide {
+    max-width: none;
+    margin: 0;
+    inset: 0;
+  }
+}
+.deep-context {
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin: 16px 0;
+  overflow-y: auto;
+  max-height: 35vh;
+  flex-shrink: 0;
+  background: var(--paper);
+}
+.deep-context h2 {
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+.deep-context details {
+  margin: 12px 0;
+}
+.deep-context summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.deep-context input,
+.reflection-goals textarea {
+  max-width: 100%;
+  width: 100%;
+}
+.reflection-goals ul {
+  list-style: none;
+  padding: 0;
+}
+.reflection-goals li {
+  border-top: 1px solid var(--line);
+  padding: 20px 0;
+}
+.reflection-goals .goal-text,
+.deep-context p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 650px) {
+  .conversation-toolbar {
+    flex-wrap: wrap;
+  }
+  .conversation-toolbar > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .deep-context {
+    padding: 12px;
+  }
+}
+
+/* The thread can scroll independently while the explicit send action remains reachable. */
+.conversation-home {
+  min-height: 0;
+}
+.conversation-thread {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.conversation-thread .demo-status {
+  flex-shrink: 0;
+}
+@media (max-width: 650px) {
+  .composer-actions {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .composer-actions button.primary {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-left: 0;
+  }
+  .deep-context {
+    max-height: min(
+      35dvh,
+      max(100px, calc(var(--conversation-viewport, 100dvh) - 440px))
+    );
+  }
+}

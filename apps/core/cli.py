@@ -19,6 +19,7 @@ def main():
             s.add_argument('--port', type=int, default=8765)
             s.add_argument('--mode',choices=['local','m2-synthetic'],default='local')
             s.add_argument('--test-tls',action='store_true')
+            s.add_argument('--synthetic-conversations',action='store_true',help='Explicit deterministic conversation demo, marked synthetic root only')
             s.add_argument('--synthetic-practices',action='store_true',help='Explicit neutral practice fixtures on marked synthetic root only')
         if name == 'init':
             s.add_argument('--seed', action='store_true')
@@ -61,7 +62,7 @@ def main():
                 tls={'ssl_keyfile':str(key),'ssl_certfile':str(cert)}
                 scheme='https'
                 print('Synthetic TLS test only: no trust installation; actual Android route OFF.',flush=True)
-            app = create_app(args.root, args.port,m2=args.mode=='m2-synthetic',scheme=scheme,synthetic_practices=args.synthetic_practices)
+            app = create_app(args.root, args.port,m2=args.mode=='m2-synthetic',scheme=scheme,synthetic_practices=args.synthetic_practices,synthetic_conversations=args.synthetic_conversations)
             print(f'Open {scheme}://127.0.0.1:{args.port}\nOne-time unlock code (5 min): {app.state.auth.code}', flush=True)
             print('Stop: Ctrl+C. Lock/logout requires restart for a new one-time code.', flush=True)
             uvicorn.run(app, host='127.0.0.1', port=args.port, access_log=False, log_level='critical', **tls)

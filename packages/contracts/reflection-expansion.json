@@ -1,0 +1,62 @@
+{
+  "$defs": {
+    "GoalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "title": "GoalRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "receipt_id": {
+      "format": "uuid",
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/GoalRef"
+      },
+      "maxItems": 8,
+      "minItems": 1,
+      "title": "Sources",
+      "type": "array"
+    },
+    "token_budget": {
+      "default": 1000,
+      "maximum": 12000,
+      "minimum": 128,
+      "title": "Token Budget",
+      "type": "integer"
+    },
+    "byte_budget": {
+      "default": 4000,
+      "maximum": 48000,
+      "minimum": 512,
+      "title": "Byte Budget",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "receipt_id",
+    "sources"
+  ],
+  "title": "Expansion",
+  "type": "object"
+}

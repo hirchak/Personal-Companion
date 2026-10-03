@@ -1,0 +1,58 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "base_revision": {
+      "minimum": 1,
+      "title": "Base Revision",
+      "type": "integer"
+    },
+    "text": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Text"
+    },
+    "state": {
+      "anyOf": [
+        {
+          "enum": [
+            "ACTIVE",
+            "PAUSED",
+            "COMPLETED"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "State"
+    },
+    "user_agreed": {
+      "const": true,
+      "title": "User Agreed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "operation_id",
+    "base_revision",
+    "user_agreed"
+  ],
+  "title": "GoalChange",
+  "type": "object"
+}

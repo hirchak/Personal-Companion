@@ -1,0 +1,77 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "text": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "ACTIVE",
+        "PAUSED",
+        "COMPLETED"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "user_agreed": {
+      "const": true,
+      "title": "User Agreed",
+      "type": "boolean"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "title": "Updated At",
+      "type": "string"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Completed At"
+    },
+    "synthetic": {
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "privacy_class": {
+      "const": "PRIVATE_PERSONAL",
+      "title": "Privacy Class",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "text",
+    "state",
+    "revision",
+    "user_agreed",
+    "created_at",
+    "updated_at",
+    "completed_at",
+    "synthetic",
+    "privacy_class"
+  ],
+  "title": "ReflectionGoal",
+  "type": "object"
+}

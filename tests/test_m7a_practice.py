@@ -7,7 +7,7 @@ import pytest
 from pydantic import ValidationError
 from apps.core.practice import PracticeEngine, load_package, package_hash
 from apps.core.practice_contracts import Package,Start,Action,RuntimeReceipt
-from apps.core.storage import Store,SafeError,REPO,encode
+from apps.core.storage import Store,SafeError,REPO,encode,SCHEMA
 from apps.core.domain import Journal
 from test_m1_domain import isolated,create
 
@@ -247,7 +247,7 @@ def test_schema6_to7_migration_atomic_preserves_journal_and_health(engine):
  with engine.store.connect() as c:
   assert c.execute('SELECT schema_version FROM vault_meta').fetchone()[0]==6
   assert not c.execute("SELECT 1 FROM sqlite_master WHERE name='practice_sessions'").fetchone()
- upgraded=Store(engine.store.root);assert upgraded.meta()['schema_version']==7
+ upgraded=Store(engine.store.root);assert upgraded.meta()['schema_version']==SCHEMA
  assert Journal(upgraded).get(str(req.entry_id))['raw_text']=='SYNTHETIC before schema7 migration'
  assert HealthImport(upgraded).records()==before
 

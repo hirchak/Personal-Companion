@@ -7,6 +7,7 @@ from apps.core.api import create_app
 from apps.core.storage import REPO
 from test_m1_domain import isolated
 from test_m2_browser import PASSWORD,unlock_phone,capture
+from ui_navigation import journal as go_journal, feature
 
 
 def test_M2_owner_pairing_revoke_ui_and_synthetic_viewports(isolated):
@@ -19,8 +20,8 @@ def test_M2_owner_pairing_revoke_ui_and_synthetic_viewports(isolated):
     try:
       with sync_playwright() as pw:
         browser=pw.chromium.launch(headless=True);owner=browser.new_context();phone=browser.new_context(viewport={'width':390,'height':844})
-        root=owner.new_page();root.goto('http://127.0.0.1:8768/');root.get_by_label('Код розблокування').fill(app.state.auth.code);root.get_by_role('button',name='Відкрити щоденник').click();expect(root.get_by_role('heading',name='Ваш щоденник',exact=True)).to_be_visible()
-        root.get_by_role('button',name='Пристрої та PWA',exact=True).click();root.get_by_role('button',name='Створити запрошення').click();invite=root.locator('.pair-code').inner_text()
+        root=owner.new_page();root.goto('http://127.0.0.1:8768/');root.get_by_label('Код розблокування').fill(app.state.auth.code);root.get_by_role('button',name='Відкрити щоденник').click();go_journal(root)
+        feature(root,'Налаштування');root.get_by_role('button',name='Пристрої та PWA',exact=True).click();root.get_by_role('button',name='Створити запрошення').click();invite=root.locator('.pair-code').inner_text()
         page=phone.new_page();external=[];errors=[]
         phone.on('request',lambda r:external.append(r.url) if not r.url.startswith('http://127.0.0.1:8768/') else None)
         page.on('pageerror',lambda e:errors.append(str(e)))
@@ -29,7 +30,7 @@ def test_M2_owner_pairing_revoke_ui_and_synthetic_viewports(isolated):
         out=REPO/'generated/m2-ui';out.mkdir(parents=True,exist_ok=True);page.screenshot(path=str(out/'phone-offline.png'),full_page=True);assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
         page.set_viewport_size({'width':1440,'height':1000});page.screenshot(path=str(out/'desktop-phone.png'),full_page=True)
         # Refresh Mac settings, revoke is explicit and does not erase cached phone data.
-        root.get_by_role('button',name='Пристрої та PWA',exact=True).click();root.get_by_role('button',name='Пристрої та PWA',exact=True).click();root.on('dialog',lambda d:d.accept());root.get_by_role('button',name='Відкликати SYNTHETIC managed device').click()
+        feature(root,'Налаштування');root.get_by_role('button',name='Пристрої та PWA',exact=True).click();feature(root,'Налаштування');root.get_by_role('button',name='Пристрої та PWA',exact=True).click();root.on('dialog',lambda d:d.accept());root.get_by_role('button',name='Відкликати SYNTHETIC managed device').click()
         phone.set_offline(False);expect(page.get_by_role('heading',name='Потрібне явне узгодження')).to_be_visible();expect(page.locator('.entry-text').first).to_have_text('SYNTHETIC · паперовий сад 🦉')
         assert not external and not errors
         browser.close()

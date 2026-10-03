@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "revision"
+  ],
+  "title": "GoalRef",
+  "type": "object"
+}

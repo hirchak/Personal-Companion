@@ -1,0 +1,138 @@
+{
+  "$defs": {
+    "GoalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "title": "GoalRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "DAILY",
+        "GOAL"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "scope_key": {
+      "title": "Scope Key",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "CURRENT",
+        "STALE"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "provenance": {
+      "const": "MODEL_DERIVED",
+      "title": "Provenance",
+      "type": "string"
+    },
+    "synthetic": {
+      "const": true,
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "generator_version": {
+      "const": "SYNTHETIC_EXCERPT_V1",
+      "title": "Generator Version",
+      "type": "string"
+    },
+    "generator_kind": {
+      "const": "DETERMINISTIC_FIXTURE_NOT_LLM",
+      "title": "Generator Kind",
+      "type": "string"
+    },
+    "goal": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/GoalRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/GoalRef"
+      },
+      "maxItems": 12,
+      "title": "Sources",
+      "type": "array"
+    },
+    "window_start": {
+      "title": "Window Start",
+      "type": "string"
+    },
+    "window_end": {
+      "title": "Window End",
+      "type": "string"
+    },
+    "text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Text"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "scope_key",
+    "version",
+    "status",
+    "provenance",
+    "synthetic",
+    "generator_version",
+    "generator_kind",
+    "goal",
+    "sources",
+    "window_start",
+    "window_end",
+    "text",
+    "created_at"
+  ],
+  "title": "DerivedDigest",
+  "type": "object"
+}

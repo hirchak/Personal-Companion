@@ -8,6 +8,7 @@ from apps.core.storage import REPO
 from test_m1_domain import isolated
 from test_m4_voice import wav
 from test_m2_browser import unlock_phone,pair
+from ui_navigation import journal as go_journal, feature
 
 os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH',str(REPO/'generated/chromium'))
 PORT=8770;ORIGIN=f'http://127.0.0.1:{PORT}'
@@ -24,7 +25,7 @@ def context(pw,profile,file,width=1440):
       args=['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream',f'--use-file-for-fake-audio-capture={file}'],viewport={'width':width,'height':1000 if width>500 else 844})
 def mac_unlock(page,app):
     page.goto(ORIGIN+'/');page.get_by_label('Код розблокування').fill(app.state.auth.code);page.get_by_role('button',name='Відкрити щоденник').click()
-    expect(page.get_by_role('heading',name='Ваш щоденник',exact=True)).to_be_visible()
+    go_journal(page)
     page.get_by_text('Голосовий запис',exact=True).click()
 def record(page):
     page.get_by_role('button',name='Почати голосовий запис').click();expect(page.get_by_text('Записуємо ·',exact=False)).to_be_visible()
@@ -41,7 +42,7 @@ def test_M4_browser_Mac_microphone_transcript_retention_and_accessibility(isolat
         p.get_by_role('button',name='Продовжити запис').click();p.wait_for_timeout(800);p.get_by_role('button',name='Зупинити й зберегти аудіо').click()
         expect(p.locator('.voice-item')).to_have_count(1);expect(p.locator('.voice-item')).to_contain_text('Аудіо збережено на Mac')
         assert app.state.voice.list()['items'][0]['duration']>=.5 and not app.state.journal.list()['items']
-        p.reload();p.get_by_text('Голосовий запис',exact=True).click();expect(p.locator('.voice-item')).to_have_count(1)
+        p.reload();go_journal(p);p.get_by_text('Голосовий запис',exact=True).click();expect(p.locator('.voice-item')).to_have_count(1)
         p.get_by_role('button',name='Розпізнати локально').click();expect(p.get_by_role('alert')).to_contain_text('Локальна модель ще не встановлена')
         p.get_by_text('Локальне розпізнавання',exact=True).click();p.get_by_label('Використати synthetic fake ASR').check()
         p.get_by_role('button',name='Розпізнати локально').click();expect(p.get_by_label('Перевірити та виправити транскрипт')).to_be_visible()
@@ -49,7 +50,7 @@ def test_M4_browser_Mac_microphone_transcript_retention_and_accessibility(isolat
         p.get_by_role('button',name='Зберегти виправлення транскрипту').click()
         expect(p.get_by_text('Виправлення транскрипту збережено. Це ще не запис щоденника.',exact=True)).to_be_visible()
         assert not app.state.journal.list()['items']
-        p.reload();p.get_by_text('Голосовий запис',exact=True).click()
+        p.reload();go_journal(p);p.get_by_text('Голосовий запис',exact=True).click()
         expect(p.get_by_label('Перевірити та виправити транскрипт')).to_have_value('SYNTHETIC · Перевірений голосовий запис')
         out=REPO/'generated/m4-ui';out.mkdir(parents=True,exist_ok=True)
         p.screenshot(path=str(out/'voice-desktop-review.png'),full_page=True)

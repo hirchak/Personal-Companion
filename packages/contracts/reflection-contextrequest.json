@@ -1,0 +1,126 @@
+{
+  "$defs": {
+    "GoalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "title": "GoalRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "goal": {
+      "$ref": "#/$defs/GoalRef"
+    },
+    "conversation_id": {
+      "format": "uuid",
+      "title": "Conversation Id",
+      "type": "string"
+    },
+    "window_start": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Window Start"
+    },
+    "window_end": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Window End"
+    },
+    "query": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Query",
+      "type": "string"
+    },
+    "token_budget": {
+      "default": 2000,
+      "maximum": 12000,
+      "minimum": 128,
+      "title": "Token Budget",
+      "type": "integer"
+    },
+    "byte_budget": {
+      "default": 8000,
+      "maximum": 48000,
+      "minimum": 512,
+      "title": "Byte Budget",
+      "type": "integer"
+    },
+    "max_sources": {
+      "default": 16,
+      "maximum": 50,
+      "minimum": 1,
+      "title": "Max Sources",
+      "type": "integer"
+    },
+    "prepare_synthetic_digests": {
+      "default": false,
+      "title": "Prepare Synthetic Digests",
+      "type": "boolean"
+    },
+    "confirmed_memories": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/GoalRef"
+      },
+      "maxItems": 8,
+      "title": "Confirmed Memories",
+      "type": "array"
+    },
+    "memory_scope": {
+      "anyOf": [
+        {
+          "const": "USER_CONFIRMED_EXPLICIT",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Memory Scope"
+    }
+  },
+  "required": [
+    "operation_id",
+    "goal",
+    "conversation_id"
+  ],
+  "title": "ContextRequest",
+  "type": "object"
+}

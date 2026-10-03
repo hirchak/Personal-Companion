@@ -78,3 +78,31 @@ Three neutral tasks, canonical selected context/approval, strict schemas, bounde
 are implemented. No general tool dispatcher, free assistant chat or active clinical protocol. No live
 provider, hidden files/network/tools or automatic phone-triggered AI. Future architecture above is not
 an activation authorization.
+
+## M7B: один Conversation Controller, bounded longitudinal context
+
+Попередній M3 розділ описує історичний selected-journal runtime. M7B додає Free Conversation
+і Deep Session, не активуючи старі чи нові клінічні сценарії. Conversation Controller
+(`Conversations` + deterministic `Reflection` context service) керує permission/CAS/context/candidate
+validation. Один provider adapter/одна model voice у майбутньому; жодного multi-agent swarm.
+
+Контракти typed skills: core_reflection, deep_session, goal_setting, cbt_reflection,
+worry_rumination, sleep_review, nightmare_review, grounding, session_closure.
+Усі CONTRACT_ONLY_NOT_ACTIVE. Наявність контракту не дозволяє clinical content execution.
+
+Context Builder order: user-agreed ReflectionGoal exact revision → recent current turns →
+GoalContextDigest → DailyConversationDigest → локальні SQLite/FTS5/filter raw messages →
+narrow exact-source expansion; USER_CONFIRMED memory тільки explicit scope. Default range
+від goal.created_at до now або explicit user-selected window. Whole history у кожному prompt
+заборонена. Journal/sleep/health — окремо авторизовані вузькі tools; у M7B лише deny/stub contracts.
+
+Raw messages authority; digests MODEL_DERIVED/versioned/source-bound, edit/delete invalidates.
+Local RetrievalReceipt записує refs, digest versions, method, time window і serialized context
+budget без raw text logging. UTF8 byte upper bound є консервативним estimator, не model tokenizer.
+Mandatory embeddings/vector DB відсутні; external embeddings заборонені; later vector retrieval
+потребує measured gap ADR. No automatic conversation→journal/memory promotion.
+
+Deep UX показує ціль/revision і відмінність current conversation / relevant past context;
+editable goals/history/pause/complete працюють незалежно від provider. Responder OFF у звичайному
+режимі, explicit synthetic-only deterministic candidate у demo. Live provider OFF, clinical active0,
+real private data OFF, M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).

@@ -9,6 +9,7 @@ import {
   type Transcript,
 } from "./audio-types";
 import type { PhoneStore } from "./phone-store";
+import type { VoiceReference } from "./conversation-model";
 type Item = {
   id: string;
   state: string;
@@ -65,10 +66,16 @@ export function VoicePanel({
   csrf = "",
   phone,
   onJournalChange,
+  onInsert,
+  allowSyntheticAsr = true,
+  autoStart = false,
 }: {
   csrf?: string;
   phone?: PhoneStore;
   onJournalChange?: () => void;
+  onInsert?: (text: string, source: VoiceReference) => void;
+  allowSyntheticAsr?: boolean;
+  autoStart?: boolean;
 }) {
   const [items, setItems] = useState<Item[]>([]),
     [recording, setRecording] = useState(false),
@@ -89,6 +96,13 @@ export function VoicePanel({
     savedBegin = useRef<AudioBegin | null>(null),
     working = useRef(false);
   const pending = useRef(false);
+  const autoTriggered = useRef(false);
+  useEffect(() => {
+    if (autoStart && !autoTriggered.current) {
+      autoTriggered.current = true;
+      void start();
+    }
+  }, []);
   const confirmations = useRef<
     Record<string, { operation_id: string; entry_id: string }>
   >({});
@@ -290,7 +304,7 @@ export function VoicePanel({
   async function transcribe(item: Item) {
     await action(item.id, async () => {
       const result = await call(`/audio/${item.id}/transcribe`, {
-        mode: fake ? "FAKE" : "DISABLED",
+        mode: fake && allowSyntheticAsr ? "FAKE" : "DISABLED",
         language: "uk",
       });
       if (phone)
@@ -321,6 +335,30 @@ export function VoicePanel({
       });
       if (phone) await phone.refreshAudio(item.id);
       setNotice("Виправлення транскрипту збережено. Це ще не запис щоденника.");
+    });
+  }
+  async function insertTranscript(item: Item) {
+    const t = item.transcript!;
+    await action(item.id, async () => {
+      const changed = text[t.id] ?? t.edited ?? t.candidate ?? "";
+      let revision = t.revision;
+      if (changed !== (t.edited ?? t.candidate ?? "")) {
+        const saved = await call(`/transcripts/${t.id}/edit`, {
+          revision,
+          text: changed,
+        });
+        revision = saved.revision;
+      }
+      onInsert?.(changed, {
+        kind: "VOICE_TRANSCRIPT",
+        transcript_id: t.id,
+        revision,
+        audio_hash: item.content_hash,
+        text_hash: await audioHash(new TextEncoder().encode(changed)),
+      });
+      setNotice(
+        "Текст вставлено в поле розмови. Повідомлення ще не надіслане.",
+      );
     });
   }
   async function confirmTranscript(item: Item) {
@@ -359,8 +397,9 @@ export function VoicePanel({
     <section className="voice-panel" aria-label="Голосові записи">
       <h2>Записати голосом</h2>
       <p>
-        Аудіо лишається локально. Текст потрапить у щоденник після вашого
-        підтвердження.
+        {onInsert
+          ? "Аудіо залишається локально. Перевірте текст, вставте в поле й надішліть лише коли вирішите."
+          : "Аудіо лишається локально. Текст потрапить у щоденник після вашого підтвердження."}
       </p>
       {!recording && !starting && !draft && (
         <button
@@ -474,17 +513,20 @@ export function VoicePanel({
       <details>
         <summary>Локальне розпізнавання</summary>
         <p>
-          Реальна ASR-модель: не запущена. Немає cloud fallback. Synthetic тест
-          не вимірює точність українського мовлення.
+          Локальне розпізнавання ще не налаштовано. Реальна ASR-модель: не
+          запущена. Немає cloud fallback. Synthetic тест не вимірює точність
+          українського мовлення.
         </p>
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={fake}
-            onChange={(e) => setFake(e.target.checked)}
-          />
-          Використати synthetic fake ASR
-        </label>
+        {allowSyntheticAsr && (
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={fake}
+              onChange={(e) => setFake(e.target.checked)}
+            />
+            Використати synthetic fake ASR
+          </label>
+        )}
       </details>
       {phone && (
         <details>
@@ -649,20 +691,25 @@ export function VoicePanel({
                   Кандидат ASR · {t.engine} · {t.model ?? "модель невідома"}. Це
                   ще не ваш підтверджений запис.
                 </p>
-                <label>
-                  Оригінальне аудіо
-                  <select
-                    value={retention[item.id] ?? "KEEP"}
-                    onChange={(e) =>
-                      setRetention({ ...retention, [item.id]: e.target.value })
-                    }
-                  >
-                    <option value="KEEP">Зберегти аудіо</option>
-                    <option value="DELETE_AFTER_CONFIRM">
-                      Видалити після підтвердження тексту
-                    </option>
-                  </select>
-                </label>
+                {!onInsert && (
+                  <label>
+                    Оригінальне аудіо
+                    <select
+                      value={retention[item.id] ?? "KEEP"}
+                      onChange={(e) =>
+                        setRetention({
+                          ...retention,
+                          [item.id]: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="KEEP">Зберегти аудіо</option>
+                      <option value="DELETE_AFTER_CONFIRM">
+                        Видалити після підтвердження тексту
+                      </option>
+                    </select>
+                  </label>
+                )}
                 <button
                   disabled={Boolean(busy)}
                   onClick={() => void editTranscript(item)}
@@ -674,9 +721,15 @@ export function VoicePanel({
                     Boolean(busy) ||
                     !(text[t.id] ?? t.edited ?? t.candidate ?? "").trim()
                   }
-                  onClick={() => void confirmTranscript(item)}
+                  onClick={() =>
+                    void (onInsert
+                      ? insertTranscript(item)
+                      : confirmTranscript(item))
+                  }
                 >
-                  Підтвердити текст у щоденник
+                  {onInsert
+                    ? "Вставити текст у розмову"
+                    : "Підтвердити текст у щоденник"}
                 </button>
               </div>
             )}

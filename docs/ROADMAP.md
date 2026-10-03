@@ -8,8 +8,9 @@ M5: external ACCEPT for synthetic engineering (reports/M5_ARCHITECT_REVIEW.md).
 M6: external ACCEPT — engineering + bounded early hardware за C6/R6
 (reports/M6_ARCHITECT_REVIEW.md). M6-N01 OPEN: early0.6.0 PASS не закриває final0.6.1 hardware NOT_RUN.
 M7_PREP_EVIDENCE_ADMISSION: external ACCEPT preparation/tooling scope (reports/M7_PREP_ARCHITECT_REVIEW.md); clinical active=0.
-M7A_GENERIC_PRACTICE_ENGINE: AWAITING_REVIEW — deterministic generic engine + isolated synthetic demo.
-M7 clinical runtime/M7B і M8: NOT_STARTED; content/clinical activation permission немає.
+M7A_GENERIC_PRACTICE_ENGINE: external ACCEPT — synthetic engineering scope (reports/M7A_ARCHITECT_REVIEW.md).
+M7B_CONVERSATION_HOME: IN_PROGRESS — same goal includes binding longitudinal/deep-goal addenda.
+M7C/clinical activation і M8: NOT_STARTED; наступної goal/permission немає.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -89,3 +90,21 @@ Install на чистому сумісному Mac-профілі, restart/wake,
 Hosted personal shell, приватний relay, SaaS, native full app, shared accounts,
 додаткові AI, інтеграції календарів, sophisticated game world. Немає дозволу будувати
 їх, доки це не стало окремою ціллю й не пройшло privacy/rights review.
+
+## M7B — bounded conversation-first engineering
+
+Розмова/Щоденник/Більше; Free Conversation і Deep Session; versioned editable agreed goal/history,
+exact revision binding, timestamped persistent messages, source-bound DailyConversationDigest /
+GoalContextDigest, raw authority, edit/delete invalidation, local RetrievalReceipt і bounded
+SQLite/filter/FTS5 goal-scoped retrieval. One Conversation Controller + typed skill contracts,
+one future model voice; no swarm, no automatic journal/memory promotion. Mandatory embeddings/vector
+DB та external embeddings відсутні. Live provider OFF, clinical active0, real private data OFF.
+DoD: full synthetic regression, built desktop/390px UX, generated audio/explicit insertion, backup,
+restart, privacy, final C→evidence R→normal main push. AWAITING_REVIEW не означає ACCEPT.
+
+DEFERRED: genuine model-generated digest inference/provider tokenizer (live runtime permission OFF),
+clinical typed skill execution (all27 findings OPEN; rights/content/admission gates), separately consented
+journal/sleep/health tool activation (real private data permission OFF), vector retrieval (no measured gap ADR),
+real local ASR/device keyboard smoke (no installed authorized model/private audio/phone test).
+Foundation/stubs and synthetic tests виконуються зараз; ці gaps не блокують незалежні M7B tests.
+M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](adr/ADR-008-M7B-CONVERSATION-CONTEXT.md).

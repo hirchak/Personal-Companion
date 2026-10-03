@@ -1,0 +1,41 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "goal_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Goal Id"
+    },
+    "goal_revision": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Goal Revision"
+    }
+  },
+  "required": [
+    "operation_id"
+  ],
+  "title": "NewConversation",
+  "type": "object"
+}

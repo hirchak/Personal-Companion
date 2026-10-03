@@ -18,6 +18,8 @@ import { PhoneApp } from "./PhoneApp";
 import { AssistantPanel } from "./AssistantPanel";
 import { VoicePanel } from "./VoicePanel";
 import { CreativePanel } from "./CreativePanel";
+import { Sheet } from "./Sheet";
+import { ConversationHome } from "./ConversationHome";
 import { PracticePanel } from "./PracticePanel";
 import { HealthPanel } from "./HealthPanel";
 import { FeedbackPanel } from "./FeedbackPanel";
@@ -147,7 +149,29 @@ function App() {
   );
 }
 function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
-  const [surface, setSurface] = useState("journal");
+  const [surface, setSurface] = useState("conversation");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [detail, setDetail] = useState<Entry | null>(null);
+  const [journalView, setJournalView] = useState<"tiles" | "list">(() => {
+    try {
+      return localStorage.getItem("personal-companion-journal-view-v1") ===
+        "list"
+        ? "list"
+        : "tiles";
+    } catch {
+      return "tiles";
+    }
+  });
+  function navigate(value: string) {
+    setMenuOpen(false);
+    setSurface(value);
+  }
+  function changeView(value: "tiles" | "list") {
+    setJournalView(value);
+    try {
+      localStorage.setItem("personal-companion-journal-view-v1", value);
+    } catch {}
+  }
   const [creativeSelection, setCreativeSelection] = useState<Set<string>>(
     new Set(),
   );
@@ -392,6 +416,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
         setEditing(null);
         setDraft(blank());
         operation.current = null;
+        setDetail(null);
         setNotice("Збережено на Mac");
         setPlan(null);
         await load();
@@ -439,6 +464,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
         setSelected((s) => new Set([...s].filter((id) => id !== entry.id)));
         setHistory(null);
         setPlan(null);
+        setDetail(null);
         setNotice("Запис та історію видалено");
         await load();
       }
@@ -482,92 +508,120 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
     setDraft((d) => ({ ...d, [key]: value }));
   }
   return (
-    <div className="workspace">
-      <aside className="sidebar">
+    <div className="workspace conversation-shell">
+      <header className="app-topbar">
         <a className="wordmark" href="/">
-          Особистий <br />
-          простір
+          Особистий простір
         </a>
-        <p className="side-note">
-          Думки, яким можна
-          <br />
-          дати місце.
-        </p>
-        <nav aria-label="Розділи щоденника">
+        <nav aria-label="Основна навігація">
           <button
-            className={surface === "journal" && !filter ? "current" : ""}
+            className={surface === "conversation" ? "current" : ""}
+            onClick={() => navigate("conversation")}
+          >
+            Розмова
+          </button>
+          <button
+            className={surface === "journal" ? "current" : ""}
             onClick={() => {
-              setSurface("journal");
+              navigate("journal");
               setFilter("");
             }}
           >
-            Усі записи
-          </button>
-          {Object.entries(names).map(([k, v]) => (
-            <button
-              key={k}
-              className={surface === "journal" && filter === k ? "current" : ""}
-              onClick={() => {
-                setSurface("journal");
-                setFilter(k);
-              }}
-            >
-              {v}
-            </button>
-          ))}
-          <button
-            className={surface === "creative" ? "current" : ""}
-            onClick={() => setSurface("creative")}
-          >
-            Творча полиця
+            Щоденник
           </button>
           <button
-            className={surface === "feedback" ? "current" : ""}
-            onClick={() => setSurface("feedback")}
+            aria-haspopup="dialog"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
           >
-            Відгук
-          </button>
-          <button
-            className={surface === "practices" ? "current" : ""}
-            onClick={() => setSurface("practices")}
-          >
-            Практики
-          </button>
-          <button
-            className={surface === "health" ? "current" : ""}
-            onClick={() => setSurface("health")}
-          >
-            Дані з годинника
+            Більше
           </button>
         </nav>
-        <div className="sidebar-bottom">
-          <p>
-            Synthetic demo
-            <br />
-            Лише на цьому Mac
-          </p>
-          <button
-            onClick={() => {
-              void lock();
+      </header>
+      {menuOpen && (
+        <Sheet title="Більше" onClose={() => setMenuOpen(false)}>
+          <nav className="more-menu" aria-label="Другорядні розділи">
+            <button onClick={() => navigate("practices")}>Практики</button>
+            <button onClick={() => navigate("space")}>Мій простір</button>
+            <button onClick={() => navigate("creative")}>Творча полиця</button>
+            <button
+              onClick={() => {
+                navigate("journal");
+                setFilter("creative");
+              }}
+            >
+              Творчі записи
+            </button>
+            <button onClick={() => navigate("settings")}>Налаштування</button>
+            <button
+              onClick={() => {
+                navigate("health");
+              }}
+            >
+              Дані з годинника
+            </button>
+            <button onClick={() => navigate("feedback")}>Відгук</button>
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                void lock();
+              }}
+            >
+              Заблокувати
+            </button>
+          </nav>
+        </Sheet>
+      )}
+      <main
+        className={
+          "journal app-content" +
+          (surface === "conversation" ? " conversation-content" : "")
+        }
+      >
+        {surface === "space" && (
+          <SpacePanel
+            value={space}
+            save={async (base: number, state: Space) => {
+              const r = await api("personal-space", csrf, "POST", {
+                base_version: base,
+                state,
+              });
+              const s = await r.json();
+              if (active.current)
+                setSpace((old) => (s.version >= old.version ? s : old));
             }}
-          >
-            Заблокувати
-          </button>
-        </div>
-      </aside>
-      <main className="journal">
-        <SpacePanel
-          value={space}
-          save={async (base: number, state: Space) => {
-            const r = await api("personal-space", csrf, "POST", {
-              base_version: base,
-              state,
-            });
-            const s = await r.json();
-            if (active.current)
-              setSpace((old) => (s.version >= old.version ? s : old));
-          }}
-        />
+          />
+        )}
+        {surface === "conversation" && (
+          <ConversationHome
+            csrf={csrf}
+            onPractice={() => navigate("practices")}
+          />
+        )}
+        {surface === "settings" && (
+          <section className="settings-home">
+            <h1>Налаштування</h1>
+            <h2>Підключення</h2>
+            <button onClick={() => navigate("health")}>Health Connect</button>
+            <MacSyncSettings csrf={csrf} />
+            <h2>Про застосунок</h2>
+            <button onClick={() => navigate("feedback")}>Відгук</button>
+            <details>
+              <summary>Статус та інструменти</summary>
+              <p>
+                Локальний test-stage. Live AI і клінічні практики вимкнені.
+                Health Connect: Sleep/Steps/Exercise лише для окремо дозволеного
+                bridge.
+              </p>
+              <AssistantPanel
+                csrf={csrf}
+                selected={selected}
+                onChanged={load}
+              />
+            </details>
+            <button onClick={() => void lock()}>Заблокувати</button>
+          </section>
+        )}
         {surface === "creative" && (
           <>
             <CreativePanel
@@ -591,300 +645,387 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
         {surface === "practices" && (
           <PracticePanel csrf={csrf} onLeave={() => setSurface("journal")} />
         )}
-        <div hidden={surface !== "journal"}>
-          <header>
-            <div>
-              <h1>{filter ? names[filter as Kind] : "Ваш щоденник"}</h1>
-              <p>
-                Записуйте у своєму ритмі. Усі поля, крім тексту, добровільні.
-              </p>
-            </div>
-            <button className="primary add" onClick={() => open("new")}>
-              <span aria-hidden="true">+</span> Додати запис
-            </button>
-          </header>
-          <details className="voice-disclosure">
-            <summary>Голосовий запис</summary>
-            <VoicePanel
-              csrf={csrf}
-              onJournalChange={() => {
-                void load();
-              }}
-            />
-          </details>
-          <AssistantPanel csrf={csrf} selected={selected} onChanged={load} />
-          <section className="filters" aria-label="Пошук і фільтри">
-            <label className="search">
-              Пошук
-              <input
-                type="search"
-                placeholder="Знайти думку чи ідею…"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                maxLength={200}
+        {surface === "journal" && (
+          <div>
+            <header>
+              <div>
+                <h1>Ваш щоденник</h1>
+                <p>
+                  Записуйте у своєму ритмі. Усі поля, крім тексту, добровільні.
+                </p>
+              </div>
+              <button className="primary add" onClick={() => open("new")}>
+                <span aria-hidden="true">+</span> Додати запис
+              </button>
+            </header>
+            <details className="voice-disclosure">
+              <summary>Голосовий запис</summary>
+              <VoicePanel
+                csrf={csrf}
+                onJournalChange={() => {
+                  void load();
+                }}
               />
-            </label>
-            <details>
-              <summary>Теги та дати</summary>
-              <div className="field-row">
-                <label>
-                  Тег
-                  <input value={tag} onChange={(e) => setTag(e.target.value)} />
-                </label>
-                <label>
-                  Від дати
-                  <input
-                    type="date"
-                    value={from}
-                    onChange={(e) => setFrom(e.target.value)}
-                  />
-                </label>
-                <label>
-                  До дати
-                  <input
-                    type="date"
-                    value={to}
-                    onChange={(e) => setTo(e.target.value)}
-                  />
-                </label>
-              </div>
             </details>
-          </section>
-          {error && (
-            <p className="error" role="alert">
-              {error}
-            </p>
-          )}
-          {notice && (
-            <p className="notice" role="status">
-              {notice}
-            </p>
-          )}
-          {editing && (
-            <EntryEditor
-              title={editing === "new" ? "Нова нотатка" : "Редагувати запис"}
-              draft={draft}
-              change={change}
-              save={save}
-              cancel={() => {
-                setEditing(null);
-                setDraft(blank());
-              }}
-              busy={busy}
-              saveLabel="Зберегти на Mac"
-              onRefresh={
-                conflict && editing !== "new"
-                  ? async () => {
-                      try {
-                        const r = await api("entries/" + editing.id, csrf);
-                        open(await r.json());
-                      } catch (err) {
-                        failed(err);
-                      }
-                    }
-                  : undefined
-              }
-            />
-          )}
-          {history !== null && (
-            <section className="history">
-              <div className="actions">
-                <h2>Історія запису</h2>
-                <button onClick={() => setHistory(null)}>
-                  Закрити історію
-                </button>
-              </div>
-              {history.length ? (
-                history.map((x) => (
-                  <article key={x.revision}>
-                    <p className="metadata">
-                      Версія {x.revision} · {names[x.type]}
-                    </p>
-                    <p className="entry-text">{x.raw_text}</p>
-                  </article>
-                ))
-              ) : (
-                <p>Попередніх версій ще немає.</p>
-              )}
-              {historyAfter !== null && (
+            <details className="journal-tools">
+              <summary>Локальні інструменти</summary>
+              <AssistantPanel
+                csrf={csrf}
+                selected={selected}
+                onChanged={load}
+              />
+            </details>
+            <nav className="journal-filters" aria-label="Фільтри щоденника">
+              {[
+                ["", "Усі"],
+                ["inbox", "Думки"],
+                ["daily", "День"],
+                ["sleep", "Сон"],
+              ].map(([value, label]) => (
                 <button
-                  onClick={() => {
-                    void showHistory({ id: historyId } as Entry, true);
-                  }}
+                  key={label}
+                  aria-pressed={filter === value}
+                  onClick={() => setFilter(value)}
                 >
-                  Ще версії
+                  {label}
                 </button>
-              )}
-            </section>
-          )}
-          <div className="list-heading">
-            <h2>{q ? "Результати пошуку" : "Останні записи"}</h2>
-            <span>{entries.length} на екрані</span>
-          </div>
-          {loading && <p role="status">Завантажуємо записи…</p>}
-          {!loading && !entries.length && (
-            <div className="empty">
-              <h2>
-                {q ? "Поки нічого не знайдено" : "Почніть із кількох слів"}
-              </h2>
-              <p>
-                {q
-                  ? "Спробуйте інше слово або змініть фільтри."
-                  : "Не потрібна ідеальна думка. Достатньо того, що хочеться зберегти."}
-              </p>
-            </div>
-          )}
-          <div className="entries">
-            {entries.map((entry) => (
-              <article className="entry" key={entry.id}>
-                <div className="entry-top">
-                  <p className="metadata">
-                    {names[entry.type]} ·{" "}
-                    {entry.local_date ||
-                      new Intl.DateTimeFormat("uk", {
-                        day: "numeric",
-                        month: "long",
-                      }).format(new Date(entry.created_at_utc))}{" "}
-                    · версія {entry.revision}
-                  </p>
-                  <label className="select-entry">
+              ))}
+            </nav>
+            <section className="filters" aria-label="Пошук і фільтри">
+              <label className="search">
+                Пошук
+                <input
+                  type="search"
+                  placeholder="Знайти думку чи ідею…"
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  maxLength={200}
+                />
+              </label>
+              <details>
+                <summary>Теги та дати</summary>
+                <div className="field-row">
+                  <label>
+                    Тег
                     <input
-                      type="checkbox"
-                      checked={selected.has(entry.id)}
-                      onChange={(e) => {
-                        setSelected((s) => {
-                          const n = new Set(s);
-                          e.target.checked
-                            ? n.add(entry.id)
-                            : n.delete(entry.id);
-                          return n;
-                        });
-                        setPlan(null);
-                      }}
+                      value={tag}
+                      onChange={(e) => setTag(e.target.value)}
                     />
-                    Вибрати
+                  </label>
+                  <label>
+                    Від дати
+                    <input
+                      type="date"
+                      value={from}
+                      onChange={(e) => setFrom(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    До дати
+                    <input
+                      type="date"
+                      value={to}
+                      onChange={(e) => setTo(e.target.value)}
+                    />
                   </label>
                 </div>
-                <p className="entry-text">{entry.raw_text}</p>
-                {entry.tags.length > 0 && (
-                  <p className="tags">{entry.tags.join(" · ")}</p>
-                )}
-                {typed[entry.type]
-                  .filter((k) => entry[k as keyof Entry] != null)
+              </details>
+            </section>
+            {error && !editing && (
+              <p className="error" role="alert">
+                {error}
+              </p>
+            )}
+            {notice && (
+              <p className="notice" role="status">
+                {notice}
+              </p>
+            )}
+            {editing && (
+              <Sheet
+                title={editing === "new" ? "Нова нотатка" : "Редагувати запис"}
+                onClose={() => {
+                  setEditing(null);
+                  setDraft(blank());
+                }}
+              >
+                {error && <p role="alert">{error}</p>}
+                <EntryEditor
+                  title={
+                    editing === "new" ? "Нова нотатка" : "Редагувати запис"
+                  }
+                  draft={draft}
+                  change={change}
+                  save={save}
+                  cancel={() => {
+                    setEditing(null);
+                    setDraft(blank());
+                  }}
+                  busy={busy}
+                  saveLabel="Зберегти на Mac"
+                  onRefresh={
+                    conflict && editing !== "new"
+                      ? async () => {
+                          try {
+                            const r = await api("entries/" + editing.id, csrf);
+                            open(await r.json());
+                          } catch (err) {
+                            failed(err);
+                          }
+                        }
+                      : undefined
+                  }
+                />
+                <button onClick={() => void lock()}>Заблокувати</button>
+              </Sheet>
+            )}
+            {history !== null && (
+              <Sheet title="Історія запису" onClose={() => setHistory(null)}>
+                <section className="history">
+                  <div className="actions">
+                    <h2>Історія запису</h2>
+                    <button onClick={() => setHistory(null)}>
+                      Закрити історію
+                    </button>
+                  </div>
+                  {history.length ? (
+                    history.map((x) => (
+                      <article key={x.revision}>
+                        <p className="metadata">
+                          Версія {x.revision} · {names[x.type]}
+                        </p>
+                        <p className="entry-text">{x.raw_text}</p>
+                      </article>
+                    ))
+                  ) : (
+                    <p>Попередніх версій ще немає.</p>
+                  )}
+                  {historyAfter !== null && (
+                    <button
+                      onClick={() => {
+                        void showHistory({ id: historyId } as Entry, true);
+                      }}
+                    >
+                      Ще версії
+                    </button>
+                  )}
+                </section>
+              </Sheet>
+            )}
+            <div className="list-heading">
+              <h2>{q ? "Результати пошуку" : "Останні записи"}</h2>
+              <div
+                className="journal-view-switch"
+                role="group"
+                aria-label="Вигляд щоденника"
+              >
+                <button
+                  aria-pressed={journalView === "tiles"}
+                  onClick={() => changeView("tiles")}
+                >
+                  Плитки
+                </button>
+                <button
+                  aria-pressed={journalView === "list"}
+                  onClick={() => changeView("list")}
+                >
+                  Список
+                </button>
+              </div>
+            </div>
+            {loading && <p role="status">Завантажуємо записи…</p>}
+            {!loading && !entries.length && (
+              <div className="empty">
+                <h2>
+                  {q ? "Поки нічого не знайдено" : "Почніть із кількох слів"}
+                </h2>
+                <p>
+                  {q
+                    ? "Спробуйте інше слово або змініть фільтри."
+                    : "Не потрібна ідеальна думка. Достатньо того, що хочеться зберегти."}
+                </p>
+              </div>
+            )}
+            <div className={"entries journal-" + journalView}>
+              {entries.map((entry) => (
+                <article className="entry journal-card" key={entry.id}>
+                  <button
+                    className="entry-open"
+                    onClick={() => {
+                      setDetail(entry);
+                      setHistory(null);
+                      setEditing(null);
+                    }}
+                    aria-label={"Відкрити запис: " + names[entry.type]}
+                  >
+                    <p className="metadata">
+                      {names[entry.type]} ·{" "}
+                      {entry.local_date ||
+                        new Intl.DateTimeFormat("uk", {
+                          day: "numeric",
+                          month: "long",
+                        }).format(new Date(entry.created_at_utc))}
+                    </p>
+                    <p className="entry-text">
+                      {Array.from(entry.raw_text).slice(0, 180).join("")}
+                      {Array.from(entry.raw_text).length > 180 ? "…" : ""}
+                    </p>
+                    {entry.tags.length > 0 && (
+                      <p className="tags">{entry.tags.join(" · ")}</p>
+                    )}
+                  </button>
+                  <details className="entry-menu">
+                    <summary aria-label="Дії запису">Дії</summary>
+                    <button onClick={() => open(entry)}>Редагувати</button>
+                    <button onClick={() => void showHistory(entry)}>
+                      Історія
+                    </button>
+                    <button onClick={() => void remove(entry)}>Видалити</button>
+                    <label className="select-entry">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(entry.id)}
+                        onChange={(e) => {
+                          setSelected((old) => {
+                            const n = new Set(old);
+                            e.target.checked
+                              ? n.add(entry.id)
+                              : n.delete(entry.id);
+                            return n;
+                          });
+                          setPlan(null);
+                        }}
+                      />
+                      Вибрати для експорту
+                    </label>
+                  </details>
+                </article>
+              ))}
+            </div>
+            {detail && !editing && history === null && (
+              <Sheet title="Запис" onClose={() => setDetail(null)} wide>
+                <p className="metadata">
+                  {names[detail.type]} ·{" "}
+                  {detail.local_date ||
+                    new Date(detail.created_at_utc).toLocaleString(
+                      "uk-UA",
+                    )}{" "}
+                  · версія {detail.revision}
+                </p>
+                <p className="entry-text">{detail.raw_text}</p>
+                {detail.tags.length > 0 && <p>{detail.tags.join(" · ")}</p>}
+                {typed[detail.type]
+                  .filter((k) => detail[k as keyof Entry] != null)
                   .map((k) => (
-                    <p className="metadata" key={k}>
-                      {fieldNames[k]}:{" "}
-                      {k === "creative_kind"
-                        ? creativeNames[String(entry[k as keyof Entry])]
-                        : String(entry[k as keyof Entry])}
+                    <p key={k}>
+                      {fieldNames[k]}: {String(detail[k as keyof Entry])}
                     </p>
                   ))}
-                {entry.reported_interval_seconds != null && (
-                  <p className="metadata">
+                {detail.reported_interval_seconds != null && (
+                  <p>
                     Інтервал за введеними оцінками:{" "}
-                    {Math.round(entry.reported_interval_seconds / 60)} хв
+                    {Math.round(detail.reported_interval_seconds / 60)} хв
                   </p>
                 )}
-                <div className="entry-actions">
-                  <button onClick={() => open(entry)}>Редагувати</button>
+                <div className="actions">
                   <button
                     onClick={() => {
-                      void showHistory(entry);
+                      open(detail);
+                      setDetail(null);
+                    }}
+                  >
+                    Редагувати
+                  </button>
+                  <button
+                    onClick={() => {
+                      void showHistory(detail);
+                      setDetail(null);
                     }}
                   >
                     Історія
                   </button>
-                  <button
-                    className="danger"
-                    onClick={() => {
-                      void remove(entry);
-                    }}
-                  >
-                    Видалити
-                  </button>
+                  <button onClick={() => void remove(detail)}>Видалити</button>
                 </div>
-              </article>
-            ))}
-          </div>
-          {cursor && (
-            <button
-              disabled={loading}
-              onClick={() => {
-                void load(true);
-              }}
-            >
-              Ще записи
-            </button>
-          )}
-          {selected.size > 0 && (
-            <section className="export" aria-label="Вибраний експорт">
-              <h2>Експорт вибраних записів</h2>
-              <p>
-                Вибрано: {selected.size}. Файл завантажиться на цей комп’ютер.
-              </p>
-              <label className="check">
-                <input
-                  type="checkbox"
-                  checked={includeHistory}
-                  onChange={(e) => {
-                    setIncludeHistory(e.target.checked);
-                    setPlan(null);
-                  }}
-                />
-                Додати історію
-              </label>
+              </Sheet>
+            )}
+            {cursor && (
               <button
+                disabled={loading}
                 onClick={() => {
-                  void preview();
+                  void load(true);
                 }}
               >
-                Переглянути експорт
+                Ще записи
               </button>
-              {plan && (
-                <div>
-                  <p>{plan.warning}</p>
-                  <p>
-                    Точний склад: {plan.count} записів ·{" "}
-                    {plan.sections.map((k) => names[k]).join(", ")}
-                  </p>
-                  <ul>
-                    {plan.refs.map((x) => (
-                      <li key={x.id}>
-                        {x.id} · версія {x.revision}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="actions">
-                    <button
-                      onClick={() => {
-                        void download("json");
-                      }}
-                    >
-                      Завантажити JSON
-                    </button>
-                    <button
-                      onClick={() => {
-                        void download("markdown");
-                      }}
-                    >
-                      Завантажити Markdown
-                    </button>
-                    <button onClick={() => setPlan(null)}>
-                      Скасувати експорт
-                    </button>
+            )}
+            {selected.size > 0 && (
+              <section className="export" aria-label="Вибраний експорт">
+                <h2>Експорт вибраних записів</h2>
+                <p>
+                  Вибрано: {selected.size}. Файл завантажиться на цей комп’ютер.
+                </p>
+                <label className="check">
+                  <input
+                    type="checkbox"
+                    checked={includeHistory}
+                    onChange={(e) => {
+                      setIncludeHistory(e.target.checked);
+                      setPlan(null);
+                    }}
+                  />
+                  Додати історію
+                </label>
+                <button
+                  onClick={() => {
+                    void preview();
+                  }}
+                >
+                  Переглянути експорт
+                </button>
+                {plan && (
+                  <div>
+                    <p>{plan.warning}</p>
+                    <p>
+                      Точний склад: {plan.count} записів ·{" "}
+                      {plan.sections.map((k) => names[k]).join(", ")}
+                    </p>
+                    <ul>
+                      {plan.refs.map((x) => (
+                        <li key={x.id}>
+                          {x.id} · версія {x.revision}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="actions">
+                      <button
+                        onClick={() => {
+                          void download("json");
+                        }}
+                      >
+                        Завантажити JSON
+                      </button>
+                      <button
+                        onClick={() => {
+                          void download("markdown");
+                        }}
+                      >
+                        Завантажити Markdown
+                      </button>
+                      <button onClick={() => setPlan(null)}>
+                        Скасувати експорт
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
-            </section>
-          )}
-          <MacSyncSettings csrf={csrf} />
-          <footer>
-            Чернетки живуть лише у відкритій вкладці. Reload або блокування
-            прибирає незбережений текст.
-            <br />
-            Зовнішній AI вимкнено · цей demo використовує лише вигадані записи.
-          </footer>
-        </div>
+                )}
+              </section>
+            )}
+
+            <footer>
+              Чернетки живуть лише у відкритій вкладці. Reload або блокування
+              прибирає незбережений текст.
+            </footer>
+          </div>
+        )}
       </main>
     </div>
   );
