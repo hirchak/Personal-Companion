@@ -1,0 +1,42 @@
+{
+  "implementation_sha": "52f8691167239487b0689202d462a9035242ab16",
+  "report_commit": "IMMEDIATE_EVIDENCE_ONLY_SUCCESSOR_SHA_IN_FINAL_RESPONSE",
+  "checkpoint": "PRE_PUSH",
+  "push_main_authorized": true,
+  "expected_remote_before_push": "7516c9487346d8c3f0cc0b6224bdfe7354f5153a",
+  "staged_paths_reviewed": [
+    "HANDOFF.md",
+    "STATE.md",
+    "devlog/2026-10-03-M7-PREP.md",
+    "docs/ROADMAP.md",
+    "reports/M7_PREP_EVIDENCE_ADMISSION_REPORT.md",
+    "reports/evidence/M7_PREP/EXACT_C_CHECKS.json",
+    "reports/evidence/M7_PREP/EXACT_C_PRIVACY.json",
+    "reports/evidence/M7_PREP/INPUT_RECEIPT.json",
+    "reports/evidence/M7_PREP/SCOPE_AND_COMPLETION_AUDIT.json",
+    "reports/evidence/M7_PREP/SNAPSHOT_CHECK.json"
+  ],
+  "evidence_only_allowlist": "PASS",
+  "code_registry_schema_app_permissions_changed_after_C": false,
+  "privacy": {
+    "status": "PASS",
+    "errors": [],
+    "metrics": {
+      "worktree_text_files": 358,
+      "git_objects": 991,
+      "git_text_objects": 694
+    },
+    "git_scope": "SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED",
+    "generated_included": true,
+    "limitations": "Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded."
+  },
+  "material_rights_review": "Owner-provided short synthesis/metadata + own tooling/tests; no RAW/articles/scales/private materials",
+  "publication_commands": [
+    "git push origin main:main",
+    "git ls-remote origin refs/heads/main",
+    "git fetch origin main",
+    "git rev-parse origin/main"
+  ],
+  "push_status_at_creation": "NOT_YET_RUN; live exact R/push/equality receipt in final response",
+  "CI": "NOT_RUN_NO_WORKFLOW"
+}
