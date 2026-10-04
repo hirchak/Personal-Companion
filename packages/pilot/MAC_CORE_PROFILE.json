@@ -1,0 +1,21 @@
+{
+  "profile_id": "MAC_CORE_PILOT_V1",
+  "profile_version": 1,
+  "activation": "NOT_STARTED_REQUIRES_SEPARATE_OWNER_GOAL",
+  "journal": "ON",
+  "creative": "ON",
+  "local_search": "ON",
+  "backup_restore": "ON",
+  "private_ai": "OFF",
+  "clinical_self_help": "OFF",
+  "health_to_ai": "OFF",
+  "health_bridge": "OFF",
+  "human_voice_asr": "OFF",
+  "cloud_asr": "NONE",
+  "external_embeddings": "OFF",
+  "telemetry": "NONE",
+  "cloud_sync": "NONE",
+  "publication": "NONE",
+  "phone": "REQUIRES_SEPARATE_PRIVATE_TRANSPORT_GATE",
+  "private_data_root": "NOT_CREATED"
+}

@@ -1,4 +1,4 @@
-# M8A: upgrade, backup, restore і rollback
+# M8B: upgrade, backup, restore і rollback
 
 Усі приклади — synthetic roots. Зупиніть foreground server (Ctrl+C). Running data lock відхилить операцію.
 Збережіть trusted package + expected manifest hash для попередньої сумісної версії. Немає auto-update.
@@ -33,3 +33,19 @@ Restore збільшує restore epoch/reconciliation, анулює pairing/appr
 Health reconnect; не відновлює activation чи inference. Перевірте домени перед зміною operator-selected root.
 Невдалий restore не стирає backup/існуючий root; partial outputs не використовуйте як installed root.
 Оригінальний проблемний root лишається для recovery; не видаляйте його за замовчуванням.
+
+
+## M8B release-aware provenance
+
+New release backups format3 bind exact producing manifest/release/Git, source release reference, snapshot schema,
+creation time і snapshot-only SQLite attestation. При upgrade backup створює NEW verified manager; source release
+може бути OLD. Snapshot checksum охоплює attestation; restore перевіряє exact equality/compatibility перед roots.
+Receipt повертає `backup_manifest_hash`; збережіть окремо. Для сильнішої unsigned перевірки додайте
+`--backup-manifest-hash "$TRUSTED_BACKUP_HASH"` до restore/rollback. Across-release producer default не вгадується:
+додайте `--producer-manifest-hash "$TRUSTED_PRODUCER_HASH"`, якщо target package має інший manifest hash.
+Це checksums із trusted hashes, не підпис/notarization.
+
+Generic historical Store backups format1/2 не отримують вигаданий producer і зберігають історичний app_version.
+Release restore відхиляє їх за замовчуванням; deliberate compatibility choice `--allow-legacy-backup` дає
+LEGACY_UNKNOWN_PRODUCER та звичайну typed snapshot validation. Не застосовувати цю опцію для обходу corrupt
+format3 provenance. Новий private pilot тут не дозволений; див. PILOT_HANDOFF.md.

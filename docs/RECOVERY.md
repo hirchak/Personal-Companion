@@ -2,7 +2,7 @@
 
 | Збій | Що збережено | Безпечна дія |
 |---|---|---|
-| App не стартує / prerequisite відсутній | Data root | preflight; перевірте exact Python/dependencies, не встановлюйте system software в M8A |
+| App не стартує / prerequisite відсутній | Data root | preflight; перевірте exact Python/runtime lock, не встановлюйте system software в M8B |
 | Wrong/future schema | Оригінальна DB, backup | Сумісний trusted package; не downgrade DB in-place |
 | Corrupt package/hash/missing asset | Vault | Відновіть exact verified package; не змінюйте hashes щоб обійти gate |
 | Stale frontend | Vault, mounted draft; encrypted phone store | Скопіюйте draft; explicit verified update/reload. Не очищайте IDB як fix |
@@ -16,9 +16,9 @@
 | Health Connect unavailable | Journal/creative, explicit missing state | Optional/source reconnect після окремої hardware goal; missing ≠ zero |
 | Root busy | Vault, live foreground process | Зупиніть саме свій server Ctrl+C; lock inode не видаляти, довільний PID не kill |
 
-## M8B readiness checklist — NOT_STARTED
+## Actual private pilot checklist — NOT_STARTED
 
-M8A не є пілотом. До M8B потрібні explicit owner goal + відповідні дозволи/рішення:
+M8A не є пілотом. M8B synthetic Mac dry run дозволений окремою goal; до ACTUAL PRIVATE PILOT усе ще потрібні explicit owner goal + відповідні дозволи/рішення:
 
 - Встановити/запустити exact package на реальному Mac, перевірити prerequisites/FileVault/access/backup policy.
 - Використовувати конкретний real private data root; згода власниці даних на data flow/retention.
@@ -34,3 +34,9 @@ M8A не є пілотом. До M8B потрібні explicit owner goal + ві
 
 Це checklist, не запит дозволів зараз. Clean Mac, S24 Ultra/Watch7/Health0.6.1, real Android conditions,
 human UA ASR/private HTTPS/Tailscale залишаються NOT_RUN/HARDWARE_UNVERIFIED; synthetic smoke їх не закриває.
+
+
+M8B: `PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED` блокує actual private core pilot; synthetic Mac dry run окремий.
+`PHONE_PRIVATE_TRANSPORT_REQUIRED` блокує phone pilot; optional AI/ASR/Health/clinical не блокують корисний core
+автоматично. Exact operator/readiness handoff: [PILOT_HANDOFF](PILOT_HANDOFF.md). Там немає команди активації
+private root. Backup provenance mismatch → відмова; не переписувати manifest/checksums щоб обійти gate.

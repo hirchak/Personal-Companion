@@ -1,4 +1,4 @@
-"""M8A local, unsigned, synthetic-only release lifecycle. No dependency installation/network."""
+"""M8B local, unsigned, synthetic-only release lifecycle. No dependency installation/network."""
 from __future__ import annotations
 import argparse
 from contextlib import contextmanager
@@ -19,10 +19,7 @@ from uuid import uuid4
 from .storage import Store, SafeError, MARKER, SCHEMA, REPO, safe_path, empty_target, encode, digest
 from .voice import durable_write, fsync_dir
 
-DEFAULTS = {'provider': 'OFF', 'clinical_active': 0, 'specialists': 'OFF', 'health_to_ai': 'OFF',
-            'cloud_asr': 'NONE', 'real_private_provider': 'OFF', 'external_embeddings': 'OFF',
-            'publication': 'NONE', 'cloud_sync': 'NONE', 'telemetry': 'NONE', 'provider_fallback': 'NONE'}
-CONTRACT = 2
+from .release_metadata import DEFAULTS,CONTRACT,identity,validate_manifest,check_backup_provenance
 INSTALL_MARKER = 'M8A_SYNTHETIC_INSTALL_V1'
 
 def read_json(path):
@@ -46,9 +43,6 @@ def file_hashes(root):
             result[p.relative_to(root).as_posix()] = digest(p.read_bytes())
     return result
 
-def identity(manifest):
-    return digest(encode({k: v for k, v in manifest.items() if k != 'manifest_hash'}).encode())
-
 def package_path(path):
     p=Path(path).absolute()
     if p.is_relative_to(REPO/'generated/releases') or (p == REPO and (p/'release-manifest.json').is_file() and not (p/'.git').exists()):
@@ -62,21 +56,11 @@ def package_path(path):
 def validate_package(package, expected_hash):
     package = package_path(package)
     m = read_json(package / 'release-manifest.json')
-    try:
-        if set(m) != {'format', 'release_id', 'git_commit', 'schema_version', 'python_input_hash',
-                      'web_lock_hash', 'platform', 'defaults', 'compatibility', 'files', 'manifest_hash'}: raise ValueError()
-        if m['format'] != 1 or m['defaults'] != DEFAULTS or m['schema_version'] != SCHEMA: raise ValueError()
-        if not re.fullmatch(r'[0-9a-f]{40}', m['git_commit']): raise ValueError()
-        if m['release_id'] != 'M8A-' + m['git_commit']: raise ValueError()
-        if m['compatibility'] != {'schema_min': 2, 'schema_max': SCHEMA, 'web_contract': CONTRACT, 'downgrade': 'FRESH_ROOT_BACKUP_ONLY'}: raise ValueError()
-        if m['platform'] != {'os': 'Darwin', 'architecture': 'arm64', 'python': '3.13', 'dependencies': 'EXACT_REQUIREMENTS_LOCK', 'self_contained': False}: raise ValueError()
-        if identity(m) != m['manifest_hash'] or m['manifest_hash'] != expected_hash: raise ValueError()
-        if file_hashes(package) != m['files']: raise ValueError()
-        required = {'launch.py', 'apps/core/release.py', 'apps/core/storage.py', 'apps/core/api.py',
-                    'apps/web/dist/index.html', 'apps/web/dist/phone/sw.js', 'requirements.lock', 'apps/web/package-lock.json'}
-        if not required <= m['files'].keys(): raise ValueError()
-        if m['python_input_hash'] != m['files']['requirements.lock'] or m['web_lock_hash'] != m['files']['apps/web/package-lock.json']: raise ValueError()
-    except (KeyError, ValueError, TypeError): raise SafeError('RELEASE_INTEGRITY') from None
+    validate_manifest(m)
+    if m['manifest_hash']!=expected_hash or file_hashes(package)!=m['files']:raise SafeError('RELEASE_INTEGRITY')
+    if m['format']==2:
+        from .pilot_readiness import validate_profile
+        validate_profile(package/'packages/pilot/MAC_CORE_PROFILE.json')
     return m
 
 def prepare(output):
@@ -100,7 +84,7 @@ def prepare(output):
     try:
         tracked = git('ls-files').splitlines()
         prefixes = ('apps/core/', 'skills/conversation/', 'packages/practices/synthetic/', 'research/admission/')
-        specific = {'requirements.lock', 'apps/web/package-lock.json', 'scripts/m7_admission.py',
+        specific = {'requirements.lock','requirements.runtime.lock','packages/pilot/MAC_CORE_PROFILE.json', 'apps/web/package-lock.json', 'scripts/m7_admission.py',
                     'apps/web/src/PracticePanel.tsx', 'apps/web/src/practice-model.ts', 'apps/web/src/style.css'}
         for name in tracked:
             if name in specific or name.startswith(prefixes):
@@ -110,9 +94,9 @@ def prepare(output):
         shutil.copytree(REPO/'apps/web/dist', temp/'apps/web/dist')
         (temp/'launch.py').write_text("import sys\nfrom pathlib import Path\nsys.dont_write_bytecode=True\nsys.path.insert(0,str(Path(__file__).resolve().parent))\nfrom apps.core.release import main\nmain()\n")
         files = file_hashes(temp)
-        m = {'format': 1, 'release_id': 'M8A-'+commit, 'git_commit': commit, 'schema_version': SCHEMA,
-             'python_input_hash': files['requirements.lock'], 'web_lock_hash': files['apps/web/package-lock.json'],
-             'platform': {'os': 'Darwin', 'architecture': 'arm64', 'python': '3.13', 'dependencies': 'EXACT_REQUIREMENTS_LOCK', 'self_contained': False},
+        m = {'format': 2, 'release_id': 'M8B-'+commit, 'git_commit': commit, 'schema_version': SCHEMA,
+             'python_input_hash': files['requirements.lock'], 'runtime_input_hash': files['requirements.runtime.lock'], 'web_lock_hash': files['apps/web/package-lock.json'],
+             'platform': {'os': 'Darwin', 'architecture': 'arm64', 'python': '3.13', 'dependencies': 'EXACT_RUNTIME_LOCK', 'self_contained': False},
              'defaults': DEFAULTS, 'compatibility': {'schema_min': 2, 'schema_max': SCHEMA, 'web_contract': CONTRACT, 'downgrade': 'FRESH_ROOT_BACKUP_ONLY'}, 'files': files}
         m['manifest_hash'] = identity(m)
         (temp/'release-manifest.json').write_text(encode(m))
@@ -165,13 +149,15 @@ def runtime_checks(package):
     platform_ok = platform.system() == 'Darwin' and platform.machine() == 'arm64'
     checks.append({'gate': 'platform', 'status': 'PASS' if platform_ok else 'INCOMPATIBLE'})
     checks.append({'gate': 'python', 'status': 'PASS' if sys.version_info[:2] == (3, 13) else 'INCOMPATIBLE', 'version': platform.python_version()})
-    for line in (package/'requirements.lock').read_text().splitlines():
+    manifest=read_json(package/'release-manifest.json')
+    dependency_file='requirements.runtime.lock' if manifest['format']==2 else 'requirements.lock'
+    for line in (package/dependency_file).read_text().splitlines():
         name, version = line.split('==')
         try: available = importlib.metadata.version(name) == version
         except importlib.metadata.PackageNotFoundError: available = False
         checks.append({'gate': 'dependency:'+name, 'status': 'PASS' if available else 'INCOMPATIBLE'})
     checks += [{'gate': 'local_asr', 'status': 'OPTIONAL_UNAVAILABLE', 'reason': 'NO_WEIGHTS_OR_ENGINE_PACKAGED'},
-               {'gate': 'phone_health_transport', 'status': 'NOT_RUN', 'reason': 'REAL_HARDWARE_AND_TRANSPORT_NOT_AUTHORIZED'}]
+               {'gate': 'phone_health_transport', 'status': 'NOT_RUN', 'reason': 'PHONE_TRANSPORT_AND_HEALTH_SEPARATE_GATES'}]
     return checks
 
 def preflight(package, expected_hash, app, data, port=8765):
@@ -208,7 +194,7 @@ def selected(app, data):
     app, data = separated(app, data)
     if receipt(app)['data_root'] != str(data): raise SafeError('DATA_ROOT_MISMATCH')
     active = read_json(app/'active.json')
-    if set(active) != {'release_id', 'manifest_hash'} or not re.fullmatch(r'M8A-[0-9a-f]{40}', active['release_id']): raise SafeError('INVALID_METADATA')
+    if set(active) != {'release_id', 'manifest_hash'} or not re.fullmatch(r'M8[AB]-[0-9a-f]{40}', active['release_id']): raise SafeError('INVALID_METADATA')
     package = app/'releases'/active['release_id']
     return package, validate_package(package, active['manifest_hash'])
 
@@ -249,11 +235,21 @@ def old_store(data):
     s.attachment_lock=threading.RLock(); s.fail_commit=False; s.commit_error=None
     return s
 
-def verify_backup(backup):
+def check_writer(manifest):
+    # Attribute producing build to actual writer sources, not just active app labels.
+    for name,expected in manifest['files'].items():
+        if name.startswith('apps/core/') and name.endswith('.py'):
+            if expected!=digest((REPO/name).read_bytes()):raise SafeError('BACKUP_WRITER_RELEASE_MISMATCH')
+
+def verify_backup(backup,expected_producer_hash=None,expected_backup_hash=None,allow_legacy=False):
     backup=safe_path(backup); m=read_json(backup/'manifest.json')
-    if m.get('files', {}).get('snapshot.sqlite3') != digest((backup/'snapshot.sqlite3').read_bytes()): raise SafeError('CHECKSUM_MISMATCH')
+    if not isinstance(m.get('files'),dict) or m['files'].get('snapshot.sqlite3') != digest((backup/'snapshot.sqlite3').read_bytes()): raise SafeError('CHECKSUM_MISMATCH')
+    if expected_backup_hash is not None and digest((backup/'manifest.json').read_bytes())!=expected_backup_hash:raise SafeError('BACKUP_MANIFEST_CHECKSUM')
+    if m.get('backup_format')!=3 and not allow_legacy:raise SafeError('LEGACY_BACKUP_REQUIRES_EXPLICIT_APPROVAL')
     with sqlite3.connect((backup/'snapshot.sqlite3').as_uri()+'?mode=ro',uri=True) as c:
         c.row_factory=sqlite3.Row; Store.check(c)
+        if m.get('backup_format')==3:check_backup_provenance(m,c,expected_producer_hash)
+        elif 'release_provenance' in m or c.execute("SELECT 1 FROM sqlite_master WHERE name='release_backup_provenance'").fetchone():raise SafeError('BACKUP_RELEASE_PROVENANCE')
         if c.execute('PRAGMA integrity_check').fetchone()[0]!='ok': raise SafeError('DATABASE_INTEGRITY')
     return m
 
@@ -270,8 +266,9 @@ def upgrade(package, expected_hash, app, data, backup, *, fail_migration=False):
         if backup.exists(): raise SafeError('TARGET_MUST_BE_NEW')
         m = validate_package(package, expected_hash)
         stage(package, app, m)  # Missing assets/storage failure happens before touching data.
-        old_store(data).backup(backup)
-        verify_backup(backup)
+        check_writer(m)
+        old_store(data).backup(backup,release_context={'producer':m,'source':previous})
+        verify_backup(backup,m['manifest_hash'])
         # Durable pending marker precedes migration. Interrupted operation requires explicit recovery.
         durable_write(app/'upgrade-pending.json', encode({'from': previous['release_id'], 'to': m['release_id'], 'backup_verified': True}).encode())
         try:
@@ -282,31 +279,31 @@ def upgrade(package, expected_hash, app, data, backup, *, fail_migration=False):
         except BaseException:
             # Transactional migration preserves prior DB; marker and consistent backup remain.
             raise
-    return {'status': 'PASS', 'operation': 'UPGRADE', 'schema_from': version, 'schema_to': SCHEMA, 'backup': 'VERIFIED', 'defaults': DEFAULTS}
+    return {'status': 'PASS', 'operation': 'UPGRADE', 'schema_from': version, 'schema_to': SCHEMA, 'backup': 'VERIFIED', 'backup_manifest_hash':digest((backup/'manifest.json').read_bytes()), 'defaults': DEFAULTS}
 
-def restore(package, expected_hash, backup, app, data):
+def restore(package, expected_hash, backup, app, data, *, expected_producer_hash=None,expected_backup_hash=None,allow_legacy=False):
     app, data = separated(app, data)
     with operation_lock(data):
         require_preflight(package, expected_hash, app, data)
         empty_target(app)
         if app.exists() or data.exists(): raise SafeError('RESTORE_REQUIRES_NEW_ROOTS')
-        verify_backup(backup)
+        metadata=verify_backup(backup,expected_producer_hash or expected_hash,expected_backup_hash,allow_legacy)
         m=validate_package(package, expected_hash)
         app.mkdir(mode=0o700)
         durable_write(app/'installation.json', encode({'kind': INSTALL_MARKER, 'data_root': str(data)}).encode())
         stage(package, app, m)
         Store.restore(backup, data)
         inspect_data(data); activate(app, m)
-    return {'status': 'PASS', 'operation': 'FRESH_ROOT_RESTORE_OR_ROLLBACK', 'defaults': DEFAULTS}
+    return {'status': 'PASS', 'operation': 'FRESH_ROOT_RESTORE_OR_ROLLBACK', 'backup_provenance':'VERIFIED' if metadata['backup_format']==3 else 'LEGACY_UNKNOWN_PRODUCER', 'defaults': DEFAULTS}
 
 def backup(app, data, target):
     with operation_lock(data):
-        selected(app, data); inspect_data(data)
+        _,m=selected(app,data); inspect_data(data);check_writer(m)
         target=safe_path(target)
         for p in (safe_path(app),safe_path(data)):
             if target==p or target.is_relative_to(p) or p.is_relative_to(target): raise SafeError('BACKUP_PATH_OVERLAP')
-        old_store(data).backup(target); verify_backup(target)
-    return {'status': 'PASS', 'operation': 'BACKUP'}
+        old_store(data).backup(target,release_context={'producer':m,'source':m}); verify_backup(target,m['manifest_hash'])
+    return {'status':'PASS','operation':'BACKUP','release_id':m['release_id'],'producing_manifest_hash':m['manifest_hash'],'backup_manifest_hash':digest((target/'manifest.json').read_bytes())}
 
 def uninstall(app, data):
     app, data=separated(app, data)
@@ -359,24 +356,29 @@ def run_server(package, expected_hash, app_root, data, port):
 def main():
     os.umask(0o077)
     p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest='command',required=True)
-    for command in ('prepare','preflight','install','upgrade','restore','rollback','backup','start','uninstall','delete-synthetic-data','_serve'):
+    for command in ('prepare','preflight','mac-preflight','install','upgrade','restore','rollback','backup','start','uninstall','delete-synthetic-data','_serve'):
         s=sub.add_parser(command)
         if command=='prepare': s.add_argument('--output',type=Path,required=True); continue
         if command=='delete-synthetic-data':
             s.add_argument('--data',type=Path,required=True); s.add_argument('--confirm',required=True); continue
-        if command in {'preflight','install','upgrade','restore','rollback','_serve'}:
+        if command in {'preflight','mac-preflight','install','upgrade','restore','rollback','_serve'}:
             s.add_argument('--package',type=Path,required=True); s.add_argument('--manifest-hash',required=True)
         s.add_argument('--app',type=Path,required=True)
         s.add_argument('--data',type=Path,required=True)
-        if command in {'preflight','start','_serve'}: s.add_argument('--port',type=int,default=8765)
+        if command in {'preflight','mac-preflight','start','_serve'}: s.add_argument('--port',type=int,default=8765)
         if command in {'upgrade','restore','rollback','backup'}: s.add_argument('--backup',type=Path,required=True)
+        if command in {'restore','rollback'}:
+            s.add_argument('--producer-manifest-hash');s.add_argument('--backup-manifest-hash');s.add_argument('--allow-legacy-backup',action='store_true')
     a=p.parse_args()
     try:
         if a.command=='prepare': result=prepare(a.output)
         elif a.command=='preflight': result=preflight(a.package,a.manifest_hash,a.app,a.data,a.port)
+        elif a.command=='mac-preflight':
+            from .pilot_readiness import reference_mac_preflight
+            result=reference_mac_preflight(a.package,a.manifest_hash,a.app,a.data,a.port)
         elif a.command=='install': result=install(a.package,a.manifest_hash,a.app,a.data)
         elif a.command=='upgrade': result=upgrade(a.package,a.manifest_hash,a.app,a.data,a.backup)
-        elif a.command in {'restore','rollback'}: result=restore(a.package,a.manifest_hash,a.backup,a.app,a.data)
+        elif a.command in {'restore','rollback'}: result=restore(a.package,a.manifest_hash,a.backup,a.app,a.data,expected_producer_hash=a.producer_manifest_hash,expected_backup_hash=a.backup_manifest_hash,allow_legacy=a.allow_legacy_backup)
         elif a.command=='backup': result=backup(a.app,a.data,a.backup)
         elif a.command=='uninstall': result=uninstall(a.app,a.data)
         elif a.command=='delete-synthetic-data': result=delete_synthetic_data(a.data,a.confirm)

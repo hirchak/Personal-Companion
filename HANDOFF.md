@@ -1,20 +1,16 @@
-# M8A — AWAITING_REVIEW; stop after publication
+# M8B — IN_PROGRESS; actual reference Mac, synthetic only
 
-Base0eaac55783a8cc9aa400db238f78bafdf91623e7; final C38d3ed69839a8fc876c50b900552ad38d965c5cd.
-Evidence-only R follows; record actual R in final delivery, no recursive self-hash. M7D external ACCEPT durable.
-Read current goal/contract/report and docs/INSTALL.md, UPGRADE.md, RECOVERY.md, UNINSTALL.md / ADR-011.
-Exact ignored package generated/releases/M8A-38d3ed69839a8fc876c50b900552ad38d965c5cd/;
-manifest326ef01c1338eac05c3417714edf599255d944382118b30d0eadde3d39d142e4, schema11/web2.
-Existing Darwin arm64/Python3.13 + exact requirements; Node/npm/dependencies only for build, no installs/downloads.
-Final C648Python/43Chromium/50web/build/Ajv/admission/docs/context/privacy PASS; actual installed package
-fresh/start/stop/immediate restart/interrupted inference+ASR/backup/upgrade/rollback/restore/uninstall KEEP DATA PASS.
-Roots separated; one OS data lock/foreground exec, no orphan daemon. Preflight→staged app→verified consistent backup→
-pending marker→transaction migration→active pointer; failure retains backup/DB/old pointer, start refuses.
-Rollback into fresh roots, no in-place downgrade. Genuine schema2 plus labeled schema10/two-release fixtures, not old binaries.
-N01 CLOSED_ENGINEERING; N02 OPEN/nonblocking with verified FORMAL_VY contract/pronoun guard; verb/human register unverified.
-ProviderOFF/clinical0/five candidatesOFF/privateOFF/health-to-AIOFF/cloudASRNONE; no new live calls/M7C budget reuse.
-M7C-N02 private-provider HARD gate OPEN; human UA ASR/Health final0.6.1/clean physical hardware NOT_RUN.
-All27 findingsOPEN; M7D evidence/ledger immutable48/48. CI NOT_CONFIGURED/NOT_RUN.
-Full tracked/evidence tree review and regenerated snapshot before R/push. Standing normal FF main push authorized;
-no force/merge/release/tag/deploy/auth/private/hardware/system/autostart. M8B checklist only, NOT_STARTED.
-Verify origin/main==R and STOP for independent architect review.
+Base08d8efdd01dbcf8ddcdbdd6fcd6bd8361b75062a; external M8A ACCEPT exact C38d3ed6/R08d8efdd durable.
+Read prompts/M8B_REAL_HARDWARE_SYNTHETIC_DRY_RUN.md, docs/M8B_CONTRACT.md, ADR-012, PILOT_HANDOFF.md.
+No real/private data/audio/Health, providers/auth/PAYG/system/global installs/network/trust/deploy/release/tag/autostart.
+Manifest format2 M8B-C binds runtime12-lock separately from full development lock. Old M8A format1 kept.
+Release backups format3 bind exact actual writer build + old/current source release/schema/time and SQLite snapshot
+attestation; independent expected producer/optional backup receipt hash; legacy generic format1/2 explicit unknown.
+Driver uses pip-free temp venv and copies existing12 pinned libraries; verifies pytest/Playwright/httpx absence.
+Actual-Mac mac-preflight only non-sensitive OS/macOS/arm64/Python/model/chip/port/writability/disk-class facts.
+Profile inactive. Current Store synthetic-only: MAC_CORE_PILOT NOT_READY / PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED.
+Phone NEEDS_TRANSPORT_GATE / PHONE_PRIVATE_TRANSPORT_REQUIRED; no inspected private endpoints/config or setup.
+Optional M7C-N02 privateAI HARD gate / human UA M7C-N03 / Health0.6.1 M6-N01 / clinical27OPEN remain independent.
+M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW; FORMAL_VY unchanged. Clinical0/specialistsOFF/health-to-AIOFF/privateOFF.
+Next C→full/relevant exact-C regression→real-reference-Mac synthetic install/lifecycle→R/privacy→normal FF main
+push→origin/main==R→STOP. No actual private pilot/next goal automatically starts; CI absent remains NOT_RUN.

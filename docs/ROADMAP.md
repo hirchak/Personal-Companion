@@ -12,8 +12,8 @@ M7A_GENERIC_PRACTICE_ENGINE: external ACCEPT — synthetic engineering scope (re
 M7B_CONVERSATION_HOME: external ACCEPT — synthetic engineering scope; binding longitudinal/deep-goal addenda included.
 M7C: external ACCEPT — live-synthetic engineering + local ASR capability.
 M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality evaluation + synthetic local-ASR guard.
-M8A: AWAITING_REVIEW — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
-M8B: NOT_STARTED; no actual private pilot/release/system install permission. Clinical active0.
+M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
+M8B: IN_PROGRESS — real-reference-Mac synthetic dry run; no actual private pilot/release/system install permission. Clinical active0.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -144,3 +144,13 @@ M8A final C38d3ed69839a8fc876c50b900552ad38d965c5cd:648Python/43Chromium/50web/b
 package lifecycle PASS; release manifest identity and exact outcomes in reports/evidence/M8A.
 N01 CLOSED_ENGINEERING; N02 OPEN with formal policy implemented (verb/human register quality unverified).
 M8A AWAITING_REVIEW; M8B NOT_STARTED. No public Release/tag/deploy/private or hardware acceptance.
+
+
+## M8B owner goal — 2026-10-04
+
+M8A external ACCEPT exact C38d3ed6/R08d8efdd durable in reports/M8A_ARCHITECT_REVIEW.md.
+Authorized actual Mac only/SYNTHETIC dry run. New release-aware backup/runtime-only lock, sanitized preflight,
+exact-C Mac install/recovery lifecycle and inactive operator profile/handoff. Current authority:
+prompts/M8B_REAL_HARDWARE_SYNTHETIC_DRY_RUN.md / docs/M8B_CONTRACT.md.
+Actual private pilot NOT_STARTED; current Store is synthetic-only (PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED).
+Phone NEEDS_TRANSPORT_GATE; optional provider/human ASR/Health/clinical remain independent OFF/NOT_RUN gates.

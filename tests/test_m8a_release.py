@@ -310,6 +310,6 @@ def test_application_replacement_then_failed_migration_old_fixture_rollback(pack
     with pytest.raises(sqlite3.OperationalError):r.upgrade(next_package,m['manifest_hash'],app,data,isolated/'replacement backup',fail_migration=True)
     assert r.read_json(app/'active.json')==old_pointer and len(list((app/'releases').iterdir()))==2
     assert r.inspect_data(data)==10
-    r.restore(p,h,isolated/'replacement backup',isolated/'old application root',isolated/'rollback domain root')
+    r.restore(p,h,isolated/'replacement backup',isolated/'old application root',isolated/'rollback domain root',expected_producer_hash=m['manifest_hash'])
     assert_domains(isolated/'rollback domain root',ids)
     assert r.selected(isolated/'old application root',isolated/'rollback domain root')[1]['manifest_hash']==h

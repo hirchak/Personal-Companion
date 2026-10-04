@@ -328,12 +328,17 @@ class Store:
         with self.connect() as c:
             return dict(c.execute('SELECT * FROM vault_meta').fetchone())
 
-    def backup(self, target):
+    def backup(self, target, *, release_context=None):
         with self.attachment_lock:
-            return self._backup(target)
+            return self._backup(target, release_context=release_context)
 
-    def _backup(self, target):
+    def _backup(self, target, *, release_context=None):
         p = empty_target(target)
+        created=now();release_info=None
+        if release_context is not None:
+            from .release_metadata import validate_manifest
+            if set(release_context)!={'producer','source'}:raise SafeError('BACKUP_RELEASE_PROVENANCE')
+            validate_manifest(release_context['producer']);validate_manifest(release_context['source'])
         if p.exists(): raise SafeError('TARGET_MUST_BE_NEW')
         temp = p.with_name(p.name + '.partial-' + str(uuid4()))
         temp.mkdir(mode=0o700)
@@ -358,6 +363,12 @@ class Store:
                         dest.execute("UPDATE transcripts SET state='FAILED',error='ASR_RESTORE_RETRY_REQUIRED' WHERE state IN ('TRANSCRIPTION_QUEUED','TRANSCRIBING')")
                     if 'audio' in tables: dest.execute("UPDATE audio SET state='CANCELLED' WHERE state='UPLOADING'")
                     if 'audio_chunks' in tables: dest.execute('DELETE FROM audio_chunks')
+                    if 'release_backup_provenance' in tables:dest.execute('DROP TABLE release_backup_provenance')
+                    if release_context is not None:
+                        from .release_metadata import provenance
+                        release_info=provenance(release_context['producer'],release_context['source'],version,created)
+                        dest.execute('CREATE TABLE release_backup_provenance(payload TEXT NOT NULL)')
+                        dest.execute('INSERT INTO release_backup_provenance VALUES(?)',(encode(release_info),))
                     dest.commit();dest.execute('PRAGMA journal_mode=DELETE')
                     self.check(dest)
                     if version >= 7:
@@ -389,8 +400,10 @@ class Store:
                     if (folder/a['file']).stat().st_size!=a['byte_size'] or digest((folder/a['file']).read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
                     with (folder/a['file']).open('rb') as file:os.fsync(file.fileno())
             manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M7D',
-                        'created_at_utc': now(), 'attachments': attachments,
+                        'created_at_utc': created, 'attachments': attachments,
                         'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
+            if release_info is not None:
+                manifest.update(backup_format=3,app_version=release_info['producing_manifest']['release_id'],release_provenance=release_info)
             (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
             from .voice import fsync_dir
             for file in (temp/'snapshot.sqlite3',temp/'manifest.json'):
@@ -409,7 +422,8 @@ class Store:
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
             m=json.loads((b/'manifest.json').read_text())
-            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,6,7,8,9,10,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format'] not in {1,2,3} or m['schema_version'] not in {2,3,4,5,6,7,8,9,10,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format']!=3 and 'release_provenance' in m:raise SafeError('BACKUP_RELEASE_PROVENANCE')
             attachments=m['attachments']
             if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
             expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
@@ -418,6 +432,10 @@ class Store:
             with sqlite3.connect(f'file:{b / "snapshot.sqlite3"}?mode=ro&immutable=1',uri=True) as source:
                 source.row_factory=sqlite3.Row;cls.check(source)
                 if source.execute('SELECT schema_version FROM vault_meta').fetchone()[0]!=m['schema_version']:raise SafeError('UNSUPPORTED_SCHEMA')
+                if m['backup_format']==3:
+                    from .release_metadata import check_backup_provenance
+                    check_backup_provenance(m,source)
+                elif source.execute("SELECT 1 FROM sqlite_master WHERE name='release_backup_provenance'").fetchone():raise SafeError('BACKUP_RELEASE_PROVENANCE')
                 if m['schema_version']>=7:
                     from .practice import check_sessions
                     check_sessions(source)
@@ -451,6 +469,7 @@ class Store:
             if attachments:shutil.copytree(b/'audio',temp/'audio')
             (temp/'synthetic.json').write_text(encode(MARKER))
             with sqlite3.connect(temp/'journal.sqlite3') as c:
+                if m['backup_format']==3:c.execute('DROP TABLE release_backup_provenance')
                 c.execute("UPDATE vault_meta SET restore_epoch=restore_epoch+1,reconciliation='RESTORED_REQUIRES_RECONCILIATION'")
             with sqlite3.connect(temp/'journal.sqlite3') as c:
                 if m['schema_version']>=5:c.execute('UPDATE feedback_drafts SET approval=NULL')

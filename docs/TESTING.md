@@ -300,3 +300,19 @@ M8A final-C outcomes:648Python (43Chromium,36M8A),50web/build and actual package
 38d3ed69839a8fc876c50b900552ad38d965c5cd. reports/evidence/M8A/EXACT_C_CHECKS.json records commands,
 exit codes/environment; LIFECYCLE.json distinguishes actual installed package from schema/release simulations.
 CI NOT_CONFIGURED/NOT_RUN; physical Mac/Android/Health/human voice gates remain NOT_RUN.
+
+
+## M8B — real-reference-Mac synthetic dry run
+
+`python -m pytest -q tests/test_m8b_readiness.py` covers format3 provenance/attestation/tamper/wrong-producer/trust
+hash/historical compatibility, runtime-only manifest/preflight missing dev dependencies, inactive profile and sanitized
+Mac preflight schema/independent readiness. Existing M8A cross-release rollback now supplies explicit trusted producer
+hash; its original frozen evidence stays unchanged. Full M1–M8A Python/Chromium + web/build/schema/admission/privacy.
+
+`PYTHONPATH=. python scripts/verify_m8b.py` on exact clean final C builds M8B package; copies existing12 pinned
+runtime distributions into disposable pip-free venv, confirms pytest/Playwright/httpx absent and executes package
+mac-preflight/install/start/usage/stop/restart/backup/restore/safe failure/rollback/upgrade/uninstall KEEP DATA on actual
+Mac, with real existing Chromium. Only synthetic roots, no install/download/private voice/Health/providers.
+Public sanitized results: reports/evidence/M8B. Driver package/runtime/DB/backups remain ignored and roots cleaned.
+Actual Galaxy/Watch/Health/human UA/private HTTPS are NOT_RUN. Do not reinterpret software projections as old binaries.
+MAC_CORE_PILOT depends on separate private-root runtime gate; MAC_SYNTHETIC_DRY_RUN is an independent result.
