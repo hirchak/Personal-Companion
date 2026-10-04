@@ -1,0 +1,64 @@
+{
+  "M7D": {
+    "goal": "M7D_OWNER_2026_10_04",
+    "maximum": 48,
+    "total_requests": 48,
+    "remaining": 0,
+    "routes": [
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "COMPLETED",
+        "requests": 14
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "FAILED",
+        "requests": 17
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-sol",
+        "outcome": "COMPLETED",
+        "requests": 16
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-sol",
+        "outcome": "FAILED",
+        "requests": 1
+      }
+    ],
+    "raw_payload_logged": false
+  },
+  "M7C_unchanged": {
+    "goal": "M7C_OWNER_2026_10_03",
+    "maximum": 100,
+    "total_requests": 94,
+    "remaining": 6,
+    "routes": [
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "COMPLETED",
+        "requests": 58
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "FAILED",
+        "requests": 1
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6.1-sol",
+        "outcome": "COMPLETED",
+        "requests": 35
+      }
+    ],
+    "raw_payload_logged": false
+  },
+  "new_billing_auth_or_PAYG": false,
+  "all_attempts_retained": true
+}

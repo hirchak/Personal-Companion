@@ -121,7 +121,9 @@ M7C exact evidence: [runtime report](../reports/M7C_CONVERSATION_RUNTIME_REPORT.
 
 M7C external ACCEPT is scoped live-synthetic engineering + local ASR capability only; see
 `reports/M7C_ARCHITECT_REVIEW.md`. Earlier M7D NOT_STARTED entries are historical checkpoints.
-M7D IN_PROGRESS: source-bound Working Map, session focus/phases and continuity, exact selected-context
+M7D AWAITING_REVIEW: source-bound Working Map, session focus/phases and continuity, exact selected-context
 preview, neutral skills2.0, supported stronger synthetic model evaluation48 ceiling, PCM non-speech guard,
 five qualification metadata packages OFF. No clinical review/activation; all27 findings OPEN; real data OFF.
 M7C-N02 provider privacy hard gate OPEN, M6-N01 final0.6.1hardware NOT_RUN; M8 NOT_STARTED.
+
+M7D final evidence: reports/M7D_DEEP_SESSION_REPORT.md; C 56b03bd3594a6d6630864904b6d99e46242de95a. Native ledger48/48, all failures retained; provider choice/private/clinical/hardware gates pending. M8 NOT_STARTED.

@@ -1,0 +1,80 @@
+{
+  "implementation_sha": "56b03bd3594a6d6630864904b6d99e46242de95a",
+  "provenance": "ORIGINAL_SYNTHETIC_ONLY",
+  "hidden_reasoning_private_audio_RAW_models_auth_DB": "NONE_IN_EVIDENCE",
+  "source_review": "All original synthetic response text inspected or preserved as explicitly failed metadata; no third-party therapeutic content or clinical effectiveness ratings. Privacy heuristics supplemented by source/rights review.",
+  "files": {
+    "ASR_GUARD.json": {
+      "sha256": "755f74bf8eae749001d50732e194a9b483b371f4a8b5d36d3755beb966f568ff",
+      "bytes": 4950
+    },
+    "EVIDENCE_ONLY_CHECKS.json": {
+      "sha256": "97812194dd2fdfb585aaa17cc5923f2d10499cc8ee04945f25c1bcf3bf20993c",
+      "bytes": 1589
+    },
+    "EXACT_C_CHECKS.json": {
+      "sha256": "11cda2c4b70ebec9eeea8ace785d6e35173cd57d786440136fa6233a541e38e8",
+      "bytes": 2959
+    },
+    "FINAL_RUNTIME_SMOKE.json": {
+      "sha256": "43631f37f0baf0aaf02eaa011eb9665e8ce6d35110f16cb1d1e14855ca70c781",
+      "bytes": 7663
+    },
+    "INTERIM_39968D2_FAILURES.json": {
+      "sha256": "e42e0390bb82fb1fb8ce0d8ef45bed21269f46290f46fd19e9f8548fa0cf49e4",
+      "bytes": 41100
+    },
+    "INTERIM_D1CDE4E_REVIEW.json": {
+      "sha256": "4993252ae0718d2d4705314c60156d889180ff2093132a84d070df307249094e",
+      "bytes": 109899
+    },
+    "INTERIM_EE371FE_REVIEW.json": {
+      "sha256": "62e5066b5dee353deba30bf0b16934f998b161586546b835865ac58de59ee687",
+      "bytes": 80911
+    },
+    "LEDGER_SUMMARY.json": {
+      "sha256": "7772a806fa2ce411a4cb2afbe3f55d4f32d3832d45872065e58d7cde9cb757b4",
+      "bytes": 1408
+    },
+    "LUNA_MAX_REVIEW.json": {
+      "sha256": "7b92bb8d4c3293e1b15e26eb9559502a2b4ab2b2afc9807e4abbdbb0d9d19605",
+      "bytes": 48630
+    },
+    "OFF_DEMO_SMOKE.json": {
+      "sha256": "0512007d5318928f005e5596c2fe3e7b87877af9df24504dc27354c83c8a6065",
+      "bytes": 501
+    },
+    "PERFORMANCE.json": {
+      "sha256": "5e6be2a974a7f80fd1dd558a8546f7055668e4f5eab90d07a9bc456b9198782e",
+      "bytes": 751
+    },
+    "PROVIDER_CAPABILITIES.json": {
+      "sha256": "813fa7e0d891316f47c499a61226eba06edce376fa374a59e711963aadd2ff24",
+      "bytes": 687
+    },
+    "RUNTIME_SOURCE_EQUIVALENCE.json": {
+      "sha256": "55cf5ace3fe769a2d14044dd7cfff16b03a4fa309f64d06ba7a66a65f2a977e4",
+      "bytes": 4535
+    },
+    "SOL_ULTRA_REVIEW.json": {
+      "sha256": "7b9b4ac8ecb03aef423fea0a253ca107803d5d170db8ee1e30d57e7baeaf2345",
+      "bytes": 244179
+    },
+    "SUMMARY.json": {
+      "sha256": "b94351a34f4e45ea270149f574517a75c667365f5e14daa14c902e327e5f7b1a",
+      "bytes": 1192
+    },
+    "map-desktop.png": {
+      "sha256": "7e81c3e4525f2a77d9fa0158a8964379d8e37ea67e52cbb77809577de1a9b1d7",
+      "bytes": 134270
+    },
+    "map-mobile.png": {
+      "sha256": "219a312ee3d67ea76c66de084c17b912df46de8489d2743b3ff6067bcc500200",
+      "bytes": 57779
+    },
+    "session-mobile.png": {
+      "sha256": "fddfe8274a69dd97011fa3726cbb73cc2262fd96cdc8828e0a110f8d902a34a4",
+      "bytes": 52380
+    }
+  }
+}

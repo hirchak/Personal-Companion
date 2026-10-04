@@ -1,0 +1,49 @@
+{
+  "implementation_sha": "56b03bd3594a6d6630864904b6d99e46242de95a",
+  "stage": "EVIDENCE_ONLY_R",
+  "checks": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_doc_tools.py",
+      "exit_code": 0,
+      "tests": 21
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py --json",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "scope": "all local objects incl staged; current public files/snapshots/built UI"
+    },
+    {
+      "command": "git diff --cached --check and evidence-only whitelist",
+      "exit_code": 0
+    }
+  ],
+  "privacy_result": {
+    "status": "PASS",
+    "errors": [],
+    "metrics": {
+      "worktree_text_files": 552,
+      "git_objects": 1645,
+      "git_text_objects": 1194
+    },
+    "git_scope": "SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED",
+    "generated_included": true,
+    "limitations": "Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded."
+  },
+  "docs_result": {
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "metrics": {
+      "files_checked": 651,
+      "json_checked": 217,
+      "local_links_checked": 264,
+      "research_prompts": 16,
+      "snapshot_source_files": 43
+    },
+    "scope": "Documentation structure only; not exhaustive privacy, security, clinical or app verification."
+  }
+}

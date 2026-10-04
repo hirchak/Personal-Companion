@@ -1,0 +1,156 @@
+{
+  "scope": "BOUNDED_ORIGINAL_SYNTHETIC_TTS_ONLY",
+  "engine": {
+    "engine": "whisper.cpp",
+    "version": "1.9.4-dev",
+    "model": "small-multilingual",
+    "model_hash": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
+    "binary_hash": "54d1e7bf2e36ec29bdf70b87a45e26158396d5004909d16d5ad76e51920b566c",
+    "languages": [
+      "uk"
+    ],
+    "available": true,
+    "status": "LOCAL_SYNTHETIC_ONLY",
+    "supported_input": [
+      "audio/wav"
+    ],
+    "cloud_asr": false,
+    "scope": "M7D_ORIGINAL_SYNTHETIC_AUDIO_ONLY",
+    "speech_guard": "PCM_SIGNAL_V1"
+  },
+  "new_model_download_bytes": 0,
+  "cloud_ASR": "NONE",
+  "human_UA_quality": "NOT_RUN",
+  "raw_audio": "IGNORED_LOCAL_ONLY",
+  "guard_version": "PCM_SIGNAL_V1",
+  "false_normal_acceptances": 0,
+  "false_rejections": 0,
+  "speech_review_required": 0,
+  "rows": [
+    {
+      "case": "silence",
+      "expected_speech": false,
+      "guard": {
+        "state": "NO_SPEECH",
+        "reason": "NEAR_SILENCE",
+        "rms": 0.0,
+        "version": "PCM_SIGNAL_V1"
+      },
+      "whisper_invoked": false,
+      "error": "NO_SPEECH",
+      "candidate_text": "",
+      "candidate_sendable_without_review": false,
+      "latency_seconds": 0.0014,
+      "audio_sha256": "d303811b8c84619667cd0501342f84ec6cbe69f7aa3856dcf52fabda374c92b8",
+      "audio_bytes": 96044,
+      "WER": null,
+      "CER": null
+    },
+    {
+      "case": "noise",
+      "expected_speech": false,
+      "guard": {
+        "state": "NO_SPEECH",
+        "reason": "FLAT_BROADBAND_NOISE",
+        "rms": 0.02646,
+        "crossing_rate": 0.5009,
+        "energy_variation": 0.1685,
+        "version": "PCM_SIGNAL_V1"
+      },
+      "whisper_invoked": false,
+      "error": "NO_SPEECH",
+      "candidate_text": "",
+      "candidate_sendable_without_review": false,
+      "latency_seconds": 0.0063,
+      "audio_sha256": "6cb34a0a31518139451b6bc2da0fd02395d9bd96689e590ddcfb095db526296c",
+      "audio_bytes": 96044,
+      "WER": null,
+      "CER": null
+    },
+    {
+      "case": "quiet_speech",
+      "expected_speech": true,
+      "guard": {
+        "state": "SPEECH_DETECTED",
+        "reason": "MODULATED_SIGNAL",
+        "rms": 0.003504,
+        "crossing_rate": 0.0528,
+        "energy_variation": 1.6504,
+        "version": "PCM_SIGNAL_V1"
+      },
+      "whisper_invoked": true,
+      "error": null,
+      "candidate_text": "Це вигаданий приклад персонаж малює паперовий сад.",
+      "candidate_sendable_without_review": true,
+      "latency_seconds": 1.9173,
+      "audio_sha256": "5f4353ecb1b4fe172593863a3c2e7a490fdf57f94fb97ba0fd33553ac6709c31",
+      "audio_bytes": 115894,
+      "WER": 0.0,
+      "CER": 0.0
+    },
+    {
+      "case": "normal_speech",
+      "expected_speech": true,
+      "guard": {
+        "state": "SPEECH_DETECTED",
+        "reason": "MODULATED_SIGNAL",
+        "rms": 0.140179,
+        "crossing_rate": 0.0524,
+        "energy_variation": 1.6506,
+        "version": "PCM_SIGNAL_V1"
+      },
+      "whisper_invoked": true,
+      "error": null,
+      "candidate_text": "Це вигаданий приклад персонаж малює паперовий сад.",
+      "candidate_sendable_without_review": true,
+      "latency_seconds": 1.9063,
+      "audio_sha256": "0d4bf3244e405fa7c7211c8146c55a414ff42efe211862ed27691095a5ec0f07",
+      "audio_bytes": 115894,
+      "WER": 0.0,
+      "CER": 0.0
+    },
+    {
+      "case": "short_speech",
+      "expected_speech": true,
+      "guard": {
+        "state": "SPEECH_DETECTED",
+        "reason": "MODULATED_SIGNAL",
+        "rms": 0.124999,
+        "crossing_rate": 0.053,
+        "energy_variation": 1.7996,
+        "version": "PCM_SIGNAL_V1"
+      },
+      "whisper_invoked": true,
+      "error": null,
+      "candidate_text": "Поперовий сад",
+      "candidate_sendable_without_review": true,
+      "latency_seconds": 1.6419,
+      "audio_sha256": "def69a34cebab7f45ab42324eac80b64ee9df182b0a428062e0f28021255a42f",
+      "audio_bytes": 37514,
+      "WER": 0.5,
+      "CER": 0.0769
+    },
+    {
+      "case": "padded_speech",
+      "expected_speech": true,
+      "guard": {
+        "state": "SPEECH_DETECTED",
+        "reason": "MODULATED_SIGNAL",
+        "rms": 0.112506,
+        "crossing_rate": 0.0522,
+        "energy_variation": 2.0566,
+        "version": "PCM_SIGNAL_V1"
+      },
+      "whisper_invoked": true,
+      "error": null,
+      "candidate_text": "Це вигаданий приклад персона жмалює паперовий сад.",
+      "candidate_sendable_without_review": true,
+      "latency_seconds": 1.8193,
+      "audio_sha256": "a34f952931af40802fb049212445658a1ffbd1888d17c7f6e673a251c6053586",
+      "audio_bytes": 179894,
+      "WER": 0.2857,
+      "CER": 0.0408
+    }
+  ],
+  "limits": "Energy/crossing/modulation heuristic. Complex noise, music, tones, microphone conditions unverified. No perfect VAD claim."
+}

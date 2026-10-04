@@ -1,0 +1,26 @@
+{
+  "provenance": "ORIGINAL_SYNTHETIC",
+  "scope": "LOCAL_BOUND_SERVICE_SQLITE_ONLY; no hardware/provider forecast",
+  "rows": [
+    {
+      "free_conversations": 25,
+      "map_update_ms": 1.533,
+      "source_edit_plus_stale_view_ms": 2.753,
+      "range_context_with_map_ms": 4.868,
+      "later_session_reopen_ms": 1.261,
+      "history50_ms": 1.315,
+      "service_restart_map_read_ms": 4.928,
+      "db_growth_bytes": 45056
+    },
+    {
+      "free_conversations": 100,
+      "map_update_ms": 1.788,
+      "source_edit_plus_stale_view_ms": 2.846,
+      "range_context_with_map_ms": 7.49,
+      "later_session_reopen_ms": 1.245,
+      "history50_ms": 1.706,
+      "service_restart_map_read_ms": 4.883,
+      "db_growth_bytes": 192512
+    }
+  ]
+}

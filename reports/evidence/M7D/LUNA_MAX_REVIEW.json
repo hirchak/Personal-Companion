@@ -1,0 +1,1285 @@
+{
+  "implementation_sha": "1c1571050d7f11210cb6325d7f8de7bc1d61d8b7",
+  "catalog": {
+    "models": [
+      {
+        "model": "gpt-6.1-sol",
+        "supported_efforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ]
+      },
+      {
+        "model": "gpt-6-sol",
+        "supported_efforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ]
+      },
+      {
+        "model": "gpt-6-luna",
+        "supported_efforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      }
+    ],
+    "access": "CATALOG_ONLY_NOT_COMPLETED_INFERENCE_ENTITLEMENT",
+    "source": "INSTALLED_CODEX_APP_SERVER_MODEL_LIST",
+    "payg": false,
+    "new_auth": false
+  },
+  "corpus_sha256": "7300c89cc52064117073a8854f9046b56248df3ddeea5f50f7bdac54390c2f7e",
+  "model": "gpt-6-luna",
+  "effort": "max",
+  "profile": "gpt-6-luna:max",
+  "attempt_count": 3,
+  "valid": 3,
+  "failed": 0,
+  "latency_ms": {
+    "median": 45857.021,
+    "max": 58657.946
+  },
+  "rows": [
+    {
+      "scenario_id": "LONGITUDINAL",
+      "case_ids": [
+        "D01_THREE_DAYS",
+        "D02_FREE_RELEVANT",
+        "D03_FREE_DISTRACTOR",
+        "D04_REJECTED",
+        "D05_NEW_EVIDENCE",
+        "D09_CONFLICT",
+        "D10_SELF_CRITICISM",
+        "D11_SOCIAL_AMBIGUITY",
+        "D12_OPTIONS",
+        "D13_UNDERSTAND_ONLY",
+        "D14_CHANGE_MIND",
+        "D15_CLOSURE"
+      ],
+      "synthetic_session_day": 1,
+      "turn": 1,
+      "model": "gpt-6-luna",
+      "effort": "max",
+      "profile": "gpt-6-luna:max",
+      "goal": {
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "text": "ORIGINAL SYNTHETIC · Зрозуміти, чому розмови про чернетку на роботі мене зачіпають.",
+          "state": "ACTIVE",
+          "revision": 1,
+          "user_agreed": true,
+          "created_at": "2026-09-04T08:08:11.610631+00:00",
+          "updated_at": "2026-10-04T08:08:11.608850+00:00",
+          "completed_at": null,
+          "synthetic": true,
+          "privacy_class": "PRIVATE_PERSONAL"
+        },
+        "history": []
+      },
+      "pinned_goal_revision": {
+        "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+        "revision": 1
+      },
+      "session_focus": "ORIGINAL SYNTHETIC · Розмова про чернетку / сесія 1",
+      "selected_context": {
+        "type": "GOAL_START",
+        "timezone": "Europe/Warsaw",
+        "window_start": "2026-09-04T08:08:11.610631+00:00",
+        "window_end": "2026-10-04T08:08:11.625522+00:00"
+      },
+      "relevant_prior_context": [
+        {
+          "kind": "GOAL_REVISION",
+          "text": "ORIGINAL SYNTHETIC · Зрозуміти, чому розмови про чернетку на роботі мене зачіпають.",
+          "sources": [],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "FTS_RAW",
+          "text": "ORIGINAL SYNTHETIC · Колега попросив грубу чернетку, а не готовий результат.",
+          "sources": [
+            {
+              "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "FTS_RAW",
+          "text": "ORIGINAL SYNTHETIC · Персонаж придбав синє горнятко.",
+          "sources": [
+            {
+              "id": "4771256c-51cb-51a9-9c47-b11aa2249d0c",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        }
+      ],
+      "working_map_before": null,
+      "user_text": "ORIGINAL SYNTHETIC · Перший вигаданий день: колега сказав «ще не готово?». Я подумав, що він незадоволений мною. Хочу зрозуміти це, не виправляти.",
+      "assistant_candidate": {
+        "assistant_text": "На тлі згадки про запит грубої чернетки «ще не готово?» могло прозвучати як оцінка тебе, а не просто запит про стан. Але з цих слів самих по собі не можна встановити, що мав на увазі колега. Що в цій репліці найбільше підштовхнуло тебе до такого прочитання?",
+        "closure": null,
+        "goal_suggestion": null,
+        "source_refs": [
+          "s0",
+          "s2"
+        ],
+        "topics": [
+          "work",
+          "self_reflection"
+        ],
+        "working_map": {
+          "items": [
+            {
+              "kind": "OBSERVATION",
+              "provenance": "USER_STATED",
+              "source_refs": [
+                "s2"
+              ],
+              "text": "Я подумав, що він незадоволений мною."
+            },
+            {
+              "kind": "ACTION",
+              "provenance": "USER_STATED",
+              "source_refs": [
+                "s2"
+              ],
+              "text": "Хочу зрозуміти це, не виправляти."
+            },
+            {
+              "kind": "HYPOTHESIS",
+              "provenance": "MODEL_HYPOTHESIS",
+              "source_refs": [
+                "s0",
+                "s2"
+              ],
+              "text": "Можливо, контраст між проханням про грубу чернетку й запитанням про готовність пов’язав для тебе статус роботи з оцінкою особисто тебе."
+            }
+          ]
+        }
+      },
+      "working_map_after": {
+        "conversation_id": "ce48b014-807c-5415-b154-c7b77f65bf4a",
+        "created_at": "2026-10-04T08:08:57.473339+00:00",
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "revision": 1
+        },
+        "items": [
+          {
+            "id": "2a6e8c46-a89d-43ed-a92f-e68378d839bb",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Я подумав, що він незадоволений мною."
+          },
+          {
+            "id": "ee21ddbe-f26e-4687-8265-358be8b87c38",
+            "kind": "ACTION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Хочу зрозуміти це, не виправляти."
+          },
+          {
+            "id": "5a5365d9-5689-4d5b-b726-a97a6f1bb0ee",
+            "kind": "HYPOTHESIS",
+            "provenance": "MODEL_HYPOTHESIS",
+            "sources": [
+              {
+                "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+                "revision": 1
+              },
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Можливо, контраст між проханням про грубу чернетку й запитанням про готовність пов’язав для тебе статус роботи з оцінкою особисто тебе."
+          }
+        ],
+        "provenance": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+        "provider_model": "gpt-6-luna",
+        "provider_route": "CODEX_SUBSCRIPTION",
+        "request_hash": "73209809b1836d1e4dc7caf01cc0649e3cb0ad0ddcd19ee4652bad0e8cbfae7d",
+        "schema_version": 1,
+        "skills": [
+          {
+            "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+            "skill_id": "core_reflection",
+            "version": "2.0.0"
+          },
+          {
+            "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+            "skill_id": "deep_session",
+            "version": "2.1.0"
+          }
+        ],
+        "version": 1
+      },
+      "closure": null,
+      "state": "COMPLETED",
+      "error": null,
+      "request_metadata": {
+        "clinical_active": 0,
+        "consent_scope": "M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY",
+        "context_hash": "fed376d74652800af1cd16d340038a863640b46a6eb90119b41325ea75fad4e6",
+        "input_byte_budget": 48000,
+        "map_snapshot_hash": "deed2339f5cc49de303209e8bdeff876c6a354b201684ac928f16f4562732841",
+        "mode": "DEEP",
+        "provider_effort": "max",
+        "provider_model": "gpt-6-luna",
+        "provider_profile": "gpt-6-luna:max",
+        "provider_route": "CODEX_SUBSCRIPTION",
+        "purpose": "REFLECT",
+        "request_id": "3fb98254-b3ba-5e57-a8f2-b4f43ccb1b92",
+        "response_schema": "M7C_CONVERSATION_CANDIDATE_V1",
+        "retrieval_receipt_id": "44b17195-9733-5f53-84e6-1fb5a8aeea8c",
+        "schema_version": 1,
+        "selected_context_hash": "c27b29c52bd0cbd5878c89ff626df340e0336f7ed3a2ade1175aa207398f94d5",
+        "selected_receipt_id": "e8bbae34-c739-42de-8260-76de13af5cce",
+        "selected_skills": [
+          {
+            "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+            "skill_id": "core_reflection",
+            "version": "2.0.0"
+          },
+          {
+            "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+            "skill_id": "deep_session",
+            "version": "2.1.0"
+          }
+        ],
+        "selected_window_end": "2026-10-04T08:08:11.625522+00:00",
+        "selected_window_start": "2026-09-04T08:08:11.610631+00:00",
+        "selection_timezone": "Europe/Warsaw",
+        "selection_type": "GOAL_START",
+        "synthetic": true,
+        "timeout_seconds": 120,
+        "tools": []
+      },
+      "provider_reported": {
+        "attempt_id": "23ba44b7-5a49-493f-9b6d-6c8de1bcc6a4",
+        "auth_type": "EXISTING_CHATGPT",
+        "effort": "max",
+        "elapsed_ms": 45666.91,
+        "frame_hash": "1db69fa9da02d8fcbfdd3a519f2cd6add6822514012824037182b88e9507c62c",
+        "model": "gpt-6-luna",
+        "profile": "gpt-6-luna:max",
+        "route": "CODEX_SUBSCRIPTION",
+        "streaming_actual": true,
+        "usage": {
+          "cachedInputTokens": 0,
+          "inputTokens": 10217,
+          "outputTokens": 2401,
+          "totalTokens": 12618
+        }
+      },
+      "attempt_count": 1,
+      "wall_ms": 45857.021,
+      "deterministic_violations": [],
+      "no_downstream_mutation": true,
+      "qualitative_review": "PENDING_OWNER_ARCHITECT",
+      "real_private_data": false,
+      "hidden_reasoning": false
+    },
+    {
+      "scenario_id": "LONGITUDINAL",
+      "case_ids": [
+        "D01_THREE_DAYS",
+        "D02_FREE_RELEVANT",
+        "D03_FREE_DISTRACTOR",
+        "D04_REJECTED",
+        "D05_NEW_EVIDENCE",
+        "D09_CONFLICT",
+        "D10_SELF_CRITICISM",
+        "D11_SOCIAL_AMBIGUITY",
+        "D12_OPTIONS",
+        "D13_UNDERSTAND_ONLY",
+        "D14_CHANGE_MIND",
+        "D15_CLOSURE"
+      ],
+      "synthetic_session_day": 1,
+      "turn": 2,
+      "model": "gpt-6-luna",
+      "effort": "max",
+      "profile": "gpt-6-luna:max",
+      "goal": {
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "text": "ORIGINAL SYNTHETIC · Зрозуміти, чому розмови про чернетку на роботі мене зачіпають.",
+          "state": "ACTIVE",
+          "revision": 1,
+          "user_agreed": true,
+          "created_at": "2026-09-04T08:08:11.610631+00:00",
+          "updated_at": "2026-10-04T08:08:11.608850+00:00",
+          "completed_at": null,
+          "synthetic": true,
+          "privacy_class": "PRIVATE_PERSONAL"
+        },
+        "history": []
+      },
+      "pinned_goal_revision": {
+        "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+        "revision": 1
+      },
+      "session_focus": "ORIGINAL SYNTHETIC · Розмова про чернетку / сесія 1",
+      "selected_context": {
+        "type": "GOAL_START",
+        "timezone": "Europe/Warsaw",
+        "window_start": "2026-09-04T08:08:11.610631+00:00",
+        "window_end": "2026-10-04T08:08:57.494612+00:00"
+      },
+      "relevant_prior_context": [
+        {
+          "kind": "GOAL_REVISION",
+          "text": "ORIGINAL SYNTHETIC · Зрозуміти, чому розмови про чернетку на роботі мене зачіпають.",
+          "sources": [],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "CURRENT_TURN",
+          "text": "ORIGINAL SYNTHETIC · Перший вигаданий день: колега сказав «ще не готово?». Я подумав, що він незадоволений мною. Хочу зрозуміти це, не виправляти.",
+          "sources": [
+            {
+              "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "CURRENT_TURN",
+          "text": "На тлі згадки про запит грубої чернетки «ще не готово?» могло прозвучати як оцінка тебе, а не просто запит про стан. Але з цих слів самих по собі не можна встановити, що мав на увазі колега. Що в цій репліці найбільше підштовхнуло тебе до такого прочитання?",
+          "sources": [
+            {
+              "id": "9c096d96-542f-51fe-91be-53f4a6d38c73",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "FTS_RAW",
+          "text": "ORIGINAL SYNTHETIC · Колега попросив грубу чернетку, а не готовий результат.",
+          "sources": [
+            {
+              "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "FTS_RAW",
+          "text": "ORIGINAL SYNTHETIC · Персонаж придбав синє горнятко.",
+          "sources": [
+            {
+              "id": "4771256c-51cb-51a9-9c47-b11aa2249d0c",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        }
+      ],
+      "working_map_before": {
+        "conversation_id": "ce48b014-807c-5415-b154-c7b77f65bf4a",
+        "created_at": "2026-10-04T08:08:57.490055+00:00",
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "revision": 1
+        },
+        "items": [
+          {
+            "id": "2a6e8c46-a89d-43ed-a92f-e68378d839bb",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Я подумав, що він незадоволений мною."
+          },
+          {
+            "id": "ee21ddbe-f26e-4687-8265-358be8b87c38",
+            "kind": "ACTION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Хочу зрозуміти це, не виправляти."
+          },
+          {
+            "id": "5a5365d9-5689-4d5b-b726-a97a6f1bb0ee",
+            "kind": "HYPOTHESIS",
+            "provenance": "MODEL_HYPOTHESIS",
+            "sources": [
+              {
+                "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+                "revision": 1
+              },
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "REJECTED",
+            "text": "Можливо, контраст між проханням про грубу чернетку й запитанням про готовність пов’язав для тебе статус роботи з оцінкою особисто тебе."
+          }
+        ],
+        "provenance": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+        "provider_model": "USER_ACTION",
+        "provider_route": "LOCAL_EXPLICIT_USER",
+        "request_hash": "f97407931a2454efcfcc3238116b06831cc52fd97d119824e04034870aa9a047",
+        "schema_version": 1,
+        "skills": [],
+        "version": 2
+      },
+      "user_text": "ORIGINAL SYNTHETIC · Ні, справа не в прагненні ідеальності. Відхиляю це припущення. Я вже робив недосконалі чернетки; мене зачепив саме тон.",
+      "assistant_candidate": {
+        "assistant_text": "Зрозумів: ти вже робив недосконалі чернетки, а зачепив саме тон репліки. Що в ньому вирізнилося для тебе?",
+        "closure": null,
+        "goal_suggestion": null,
+        "source_refs": [
+          "s0",
+          "s4"
+        ],
+        "topics": [
+          "work",
+          "self_reflection"
+        ],
+        "working_map": {
+          "items": [
+            {
+              "kind": "OBSERVATION",
+              "provenance": "USER_STATED",
+              "source_refs": [
+                "s4"
+              ],
+              "text": "Ні, справа не в прагненні ідеальності."
+            },
+            {
+              "kind": "OBSERVATION",
+              "provenance": "USER_STATED",
+              "source_refs": [
+                "s4"
+              ],
+              "text": "мене зачепив саме тон."
+            }
+          ]
+        }
+      },
+      "working_map_after": {
+        "conversation_id": "ce48b014-807c-5415-b154-c7b77f65bf4a",
+        "created_at": "2026-10-04T08:09:35.552085+00:00",
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "revision": 1
+        },
+        "items": [
+          {
+            "id": "2a6e8c46-a89d-43ed-a92f-e68378d839bb",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Я подумав, що він незадоволений мною."
+          },
+          {
+            "id": "ee21ddbe-f26e-4687-8265-358be8b87c38",
+            "kind": "ACTION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Хочу зрозуміти це, не виправляти."
+          },
+          {
+            "id": "5a5365d9-5689-4d5b-b726-a97a6f1bb0ee",
+            "kind": "HYPOTHESIS",
+            "provenance": "MODEL_HYPOTHESIS",
+            "sources": [
+              {
+                "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+                "revision": 1
+              },
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "REJECTED",
+            "text": "Можливо, контраст між проханням про грубу чернетку й запитанням про готовність пов’язав для тебе статус роботи з оцінкою особисто тебе."
+          },
+          {
+            "id": "874285f9-2f00-4291-b0a6-8dfd7991eaf8",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Ні, справа не в прагненні ідеальності."
+          },
+          {
+            "id": "7d6ea145-fa66-47a5-a16c-76e44cd3cb3c",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "мене зачепив саме тон."
+          }
+        ],
+        "provenance": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+        "provider_model": "gpt-6-luna",
+        "provider_route": "CODEX_SUBSCRIPTION",
+        "request_hash": "d48afc34671892c0f25eda0179efdfcb8f200dbc4408d2a3f71b0fb0852ba781",
+        "schema_version": 1,
+        "skills": [
+          {
+            "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+            "skill_id": "core_reflection",
+            "version": "2.0.0"
+          },
+          {
+            "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+            "skill_id": "deep_session",
+            "version": "2.1.0"
+          }
+        ],
+        "version": 3
+      },
+      "closure": null,
+      "state": "COMPLETED",
+      "error": null,
+      "request_metadata": {
+        "clinical_active": 0,
+        "consent_scope": "M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY",
+        "context_hash": "0f069c51c4094903928cc1c9a3e153ed2881743efff788a6a59e103ba19bb834",
+        "input_byte_budget": 48000,
+        "map_snapshot_hash": "37f3dd79f839e95dcf09dc9d4912c619e6ece17d3cbbcbad860cef2c192f28ac",
+        "mode": "DEEP",
+        "provider_effort": "max",
+        "provider_model": "gpt-6-luna",
+        "provider_profile": "gpt-6-luna:max",
+        "provider_route": "CODEX_SUBSCRIPTION",
+        "purpose": "REFLECT",
+        "request_id": "7174cd0c-ee6a-5eaa-9e9a-298bcd7d1470",
+        "response_schema": "M7C_CONVERSATION_CANDIDATE_V1",
+        "retrieval_receipt_id": "9ffce34b-3e6a-544b-bbaf-226efabe716a",
+        "schema_version": 1,
+        "selected_context_hash": "b16f5e9fa73989bfe4ec86ac0104cd7b69ce4ffed7c9e0bbd66fb68566a3eb69",
+        "selected_receipt_id": "04dfa7b2-23e1-4790-9896-bd1759f78151",
+        "selected_skills": [
+          {
+            "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+            "skill_id": "core_reflection",
+            "version": "2.0.0"
+          },
+          {
+            "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+            "skill_id": "deep_session",
+            "version": "2.1.0"
+          }
+        ],
+        "selected_window_end": "2026-10-04T08:08:57.494612+00:00",
+        "selected_window_start": "2026-09-04T08:08:11.610631+00:00",
+        "selection_timezone": "Europe/Warsaw",
+        "selection_type": "GOAL_START",
+        "synthetic": true,
+        "timeout_seconds": 120,
+        "tools": []
+      },
+      "provider_reported": {
+        "attempt_id": "abf6dc9e-2115-441e-be18-c0bc70a49405",
+        "auth_type": "EXISTING_CHATGPT",
+        "effort": "max",
+        "elapsed_ms": 37995.267,
+        "frame_hash": "1db69fa9da02d8fcbfdd3a519f2cd6add6822514012824037182b88e9507c62c",
+        "model": "gpt-6-luna",
+        "profile": "gpt-6-luna:max",
+        "route": "CODEX_SUBSCRIPTION",
+        "streaming_actual": true,
+        "usage": {
+          "cachedInputTokens": 0,
+          "inputTokens": 10552,
+          "outputTokens": 1964,
+          "totalTokens": 12516
+        }
+      },
+      "attempt_count": 1,
+      "wall_ms": 38060.593,
+      "deterministic_violations": [],
+      "no_downstream_mutation": true,
+      "qualitative_review": "PENDING_OWNER_ARCHITECT",
+      "real_private_data": false,
+      "hidden_reasoning": false
+    },
+    {
+      "scenario_id": "LONGITUDINAL",
+      "case_ids": [
+        "D01_THREE_DAYS",
+        "D02_FREE_RELEVANT",
+        "D03_FREE_DISTRACTOR",
+        "D04_REJECTED",
+        "D05_NEW_EVIDENCE",
+        "D09_CONFLICT",
+        "D10_SELF_CRITICISM",
+        "D11_SOCIAL_AMBIGUITY",
+        "D12_OPTIONS",
+        "D13_UNDERSTAND_ONLY",
+        "D14_CHANGE_MIND",
+        "D15_CLOSURE"
+      ],
+      "synthetic_session_day": 1,
+      "turn": 3,
+      "model": "gpt-6-luna",
+      "effort": "max",
+      "profile": "gpt-6-luna:max",
+      "goal": {
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "text": "ORIGINAL SYNTHETIC · Зрозуміти, чому розмови про чернетку на роботі мене зачіпають.",
+          "state": "ACTIVE",
+          "revision": 1,
+          "user_agreed": true,
+          "created_at": "2026-09-04T08:08:11.610631+00:00",
+          "updated_at": "2026-10-04T08:08:11.608850+00:00",
+          "completed_at": null,
+          "synthetic": true,
+          "privacy_class": "PRIVATE_PERSONAL"
+        },
+        "history": []
+      },
+      "pinned_goal_revision": {
+        "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+        "revision": 1
+      },
+      "session_focus": "ORIGINAL SYNTHETIC · Розмова про чернетку / сесія 1",
+      "selected_context": {
+        "type": "GOAL_START",
+        "timezone": "Europe/Warsaw",
+        "window_start": "2026-09-04T08:08:11.610631+00:00",
+        "window_end": "2026-10-04T08:09:35.568731+00:00"
+      },
+      "relevant_prior_context": [
+        {
+          "kind": "GOAL_REVISION",
+          "text": "ORIGINAL SYNTHETIC · Зрозуміти, чому розмови про чернетку на роботі мене зачіпають.",
+          "sources": [],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "CURRENT_TURN",
+          "text": "ORIGINAL SYNTHETIC · Перший вигаданий день: колега сказав «ще не готово?». Я подумав, що він незадоволений мною. Хочу зрозуміти це, не виправляти.",
+          "sources": [
+            {
+              "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "CURRENT_TURN",
+          "text": "На тлі згадки про запит грубої чернетки «ще не готово?» могло прозвучати як оцінка тебе, а не просто запит про стан. Але з цих слів самих по собі не можна встановити, що мав на увазі колега. Що в цій репліці найбільше підштовхнуло тебе до такого прочитання?",
+          "sources": [
+            {
+              "id": "9c096d96-542f-51fe-91be-53f4a6d38c73",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "CURRENT_TURN",
+          "text": "ORIGINAL SYNTHETIC · Ні, справа не в прагненні ідеальності. Відхиляю це припущення. Я вже робив недосконалі чернетки; мене зачепив саме тон.",
+          "sources": [
+            {
+              "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "CURRENT_TURN",
+          "text": "Зрозумів: ти вже робив недосконалі чернетки, а зачепив саме тон репліки. Що в ньому вирізнилося для тебе?",
+          "sources": [
+            {
+              "id": "2fe3f56c-651b-5791-a8ab-e878b93b9e56",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "FTS_RAW",
+          "text": "ORIGINAL SYNTHETIC · Колега попросив грубу чернетку, а не готовий результат.",
+          "sources": [
+            {
+              "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        },
+        {
+          "kind": "FTS_RAW",
+          "text": "ORIGINAL SYNTHETIC · Персонаж придбав синє горнятко.",
+          "sources": [
+            {
+              "id": "4771256c-51cb-51a9-9c47-b11aa2249d0c",
+              "revision": 1
+            }
+          ],
+          "digest_version": null,
+          "artifact_id": null,
+          "memory_ref": null
+        }
+      ],
+      "working_map_before": {
+        "conversation_id": "ce48b014-807c-5415-b154-c7b77f65bf4a",
+        "created_at": "2026-10-04T08:09:35.552085+00:00",
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "revision": 1
+        },
+        "items": [
+          {
+            "id": "2a6e8c46-a89d-43ed-a92f-e68378d839bb",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Я подумав, що він незадоволений мною."
+          },
+          {
+            "id": "ee21ddbe-f26e-4687-8265-358be8b87c38",
+            "kind": "ACTION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Хочу зрозуміти це, не виправляти."
+          },
+          {
+            "id": "5a5365d9-5689-4d5b-b726-a97a6f1bb0ee",
+            "kind": "HYPOTHESIS",
+            "provenance": "MODEL_HYPOTHESIS",
+            "sources": [
+              {
+                "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+                "revision": 1
+              },
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "REJECTED",
+            "text": "Можливо, контраст між проханням про грубу чернетку й запитанням про готовність пов’язав для тебе статус роботи з оцінкою особисто тебе."
+          },
+          {
+            "id": "874285f9-2f00-4291-b0a6-8dfd7991eaf8",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Ні, справа не в прагненні ідеальності."
+          },
+          {
+            "id": "7d6ea145-fa66-47a5-a16c-76e44cd3cb3c",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "мене зачепив саме тон."
+          }
+        ],
+        "provenance": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+        "provider_model": "gpt-6-luna",
+        "provider_route": "CODEX_SUBSCRIPTION",
+        "request_hash": "d48afc34671892c0f25eda0179efdfcb8f200dbc4408d2a3f71b0fb0852ba781",
+        "schema_version": 1,
+        "skills": [
+          {
+            "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+            "skill_id": "core_reflection",
+            "version": "2.0.0"
+          },
+          {
+            "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+            "skill_id": "deep_session",
+            "version": "2.1.0"
+          }
+        ],
+        "version": 3
+      },
+      "user_text": "ORIGINAL SYNTHETIC · Явно прошу підсумувати сьогоднішню сесію.",
+      "assistant_candidate": {
+        "assistant_text": "Ось короткий підсумок сесії.",
+        "closure": {
+          "clearer": "Тебе зачепив саме тон, а не прагнення ідеальності; ти також зазначив, що вже робив недосконалі чернетки. Це не встановлює, що саме мав на увазі колега.",
+          "discussed": [
+            "Колега попросив грубу чернетку; почувши «ще не готово?», ти подумав, що він незадоволений тобою.",
+            "Ти хочеш зрозуміти, чому ця розмова зачепила, а не виправляти це."
+          ],
+          "possible_steps": [
+            "Якщо захочеш продовжити, можна повернутися до того, що саме в тоні вирізнилося; або залишити це питання відкритим."
+          ],
+          "unresolved": "Що саме в тоні вирізнилося для тебе — поки не з’ясовано."
+        },
+        "goal_suggestion": null,
+        "source_refs": [
+          "s0",
+          "s2",
+          "s3",
+          "s4",
+          "s6"
+        ],
+        "topics": [
+          "work",
+          "self_reflection"
+        ],
+        "working_map": {
+          "items": [
+            {
+              "kind": "OBSERVATION",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s4",
+                "s0"
+              ],
+              "text": "Після прохання про грубу чернетку слова «ще не готово?» викликали думку, що колега незадоволений тобою."
+            },
+            {
+              "kind": "OBSERVATION",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s2"
+              ],
+              "text": "Ти відкинув пояснення прагненням ідеальності, зазначив, що вже робив недосконалі чернетки, і назвав тон тим, що зачепило."
+            },
+            {
+              "kind": "ACTION",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s0"
+              ],
+              "text": "Намір — зрозуміти цю реакцію, а не виправляти її."
+            },
+            {
+              "kind": "UNRESOLVED",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s3"
+              ],
+              "text": "Що саме в тоні вирізнилося — поки не уточнено."
+            }
+          ]
+        }
+      },
+      "working_map_after": {
+        "conversation_id": "ce48b014-807c-5415-b154-c7b77f65bf4a",
+        "created_at": "2026-10-04T08:10:34.224214+00:00",
+        "goal": {
+          "id": "f8d9a54a-57a3-53fe-8b79-e8fbd20c71ba",
+          "revision": 1
+        },
+        "items": [
+          {
+            "id": "2a6e8c46-a89d-43ed-a92f-e68378d839bb",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Я подумав, що він незадоволений мною."
+          },
+          {
+            "id": "ee21ddbe-f26e-4687-8265-358be8b87c38",
+            "kind": "ACTION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Хочу зрозуміти це, не виправляти."
+          },
+          {
+            "id": "5a5365d9-5689-4d5b-b726-a97a6f1bb0ee",
+            "kind": "HYPOTHESIS",
+            "provenance": "MODEL_HYPOTHESIS",
+            "sources": [
+              {
+                "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+                "revision": 1
+              },
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "REJECTED",
+            "text": "Можливо, контраст між проханням про грубу чернетку й запитанням про готовність пов’язав для тебе статус роботи з оцінкою особисто тебе."
+          },
+          {
+            "id": "874285f9-2f00-4291-b0a6-8dfd7991eaf8",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Ні, справа не в прагненні ідеальності."
+          },
+          {
+            "id": "7d6ea145-fa66-47a5-a16c-76e44cd3cb3c",
+            "kind": "OBSERVATION",
+            "provenance": "USER_STATED",
+            "sources": [
+              {
+                "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "мене зачепив саме тон."
+          },
+          {
+            "id": "056471e4-3eb0-46bc-ac02-cf154dfd37a0",
+            "kind": "OBSERVATION",
+            "provenance": "MODEL_DERIVED_SUMMARY",
+            "sources": [
+              {
+                "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+                "revision": 1
+              },
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Після прохання про грубу чернетку слова «ще не готово?» викликали думку, що колега незадоволений тобою."
+          },
+          {
+            "id": "23259249-b71a-4f88-bd3f-3a5f6c3b7ae6",
+            "kind": "OBSERVATION",
+            "provenance": "MODEL_DERIVED_SUMMARY",
+            "sources": [
+              {
+                "id": "2d3483ac-476e-515b-a688-a5497537c2db",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Ти відкинув пояснення прагненням ідеальності, зазначив, що вже робив недосконалі чернетки, і назвав тон тим, що зачепило."
+          },
+          {
+            "id": "85e9b1aa-0e84-4a8a-96c6-42e722a85b6b",
+            "kind": "ACTION",
+            "provenance": "MODEL_DERIVED_SUMMARY",
+            "sources": [
+              {
+                "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Намір — зрозуміти цю реакцію, а не виправляти її."
+          },
+          {
+            "id": "66bdb337-0194-41b9-ba19-6bc151b575c7",
+            "kind": "UNRESOLVED",
+            "provenance": "MODEL_DERIVED_SUMMARY",
+            "sources": [
+              {
+                "id": "2fe3f56c-651b-5791-a8ab-e878b93b9e56",
+                "revision": 1
+              }
+            ],
+            "state": "CURRENT",
+            "text": "Що саме в тоні вирізнилося — поки не уточнено."
+          }
+        ],
+        "provenance": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+        "provider_model": "gpt-6-luna",
+        "provider_route": "CODEX_SUBSCRIPTION",
+        "request_hash": "aaec2994278ad7f28ea37c537bfca22a122cc4f36b6da1f693a164ecbd85eb4d",
+        "schema_version": 1,
+        "skills": [
+          {
+            "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+            "skill_id": "core_reflection",
+            "version": "2.0.0"
+          },
+          {
+            "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+            "skill_id": "deep_session",
+            "version": "2.1.0"
+          },
+          {
+            "content_hash": "d09d93cf2a9fa9bc1d7a5a8be47949280671d9b8bb9c733ed43b2a08c140a7fc",
+            "skill_id": "session_closure",
+            "version": "2.0.0"
+          }
+        ],
+        "version": 4
+      },
+      "closure": {
+        "clearer": "Тебе зачепив саме тон, а не прагнення ідеальності; ти також зазначив, що вже робив недосконалі чернетки. Це не встановлює, що саме мав на увазі колега.",
+        "discussed": [
+          "Колега попросив грубу чернетку; почувши «ще не готово?», ти подумав, що він незадоволений тобою.",
+          "Ти хочеш зрозуміти, чому ця розмова зачепила, а не виправляти це."
+        ],
+        "possible_steps": [
+          "Якщо захочеш продовжити, можна повернутися до того, що саме в тоні вирізнилося; або залишити це питання відкритим."
+        ],
+        "unresolved": "Що саме в тоні вирізнилося для тебе — поки не з’ясовано."
+      },
+      "state": "COMPLETED",
+      "error": null,
+      "request_metadata": {
+        "clinical_active": 0,
+        "consent_scope": "M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY",
+        "context_hash": "db25be2bf74c8dc4da7881f8b85d576e385ebe4655f5e94aacc99fe7bc69ea5d",
+        "input_byte_budget": 48000,
+        "map_snapshot_hash": "953445ed50cc0a73113fd388c5502b9a0a9c5a74ef9b5855c0f817426bf16072",
+        "mode": "DEEP",
+        "provider_effort": "max",
+        "provider_model": "gpt-6-luna",
+        "provider_profile": "gpt-6-luna:max",
+        "provider_route": "CODEX_SUBSCRIPTION",
+        "purpose": "CLOSURE",
+        "request_id": "0d6229ac-fb20-5992-bba6-8cebf86a0cf3",
+        "response_schema": "M7C_CONVERSATION_CANDIDATE_V1",
+        "retrieval_receipt_id": "2e1426fc-a45b-521c-8d82-0a8e6d5d4768",
+        "schema_version": 1,
+        "selected_context_hash": "5d073628f80e613c0eb0170e8a8824445ac90e791ee1a6ecca2973b1b06992d2",
+        "selected_receipt_id": "502b41c0-9eb7-4bc2-b14a-738da13e7c92",
+        "selected_skills": [
+          {
+            "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+            "skill_id": "core_reflection",
+            "version": "2.0.0"
+          },
+          {
+            "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+            "skill_id": "deep_session",
+            "version": "2.1.0"
+          },
+          {
+            "content_hash": "d09d93cf2a9fa9bc1d7a5a8be47949280671d9b8bb9c733ed43b2a08c140a7fc",
+            "skill_id": "session_closure",
+            "version": "2.0.0"
+          }
+        ],
+        "selected_window_end": "2026-10-04T08:09:35.568731+00:00",
+        "selected_window_start": "2026-09-04T08:08:11.610631+00:00",
+        "selection_timezone": "Europe/Warsaw",
+        "selection_type": "GOAL_START",
+        "synthetic": true,
+        "timeout_seconds": 120,
+        "tools": []
+      },
+      "provider_reported": {
+        "attempt_id": "e9d45e60-5e7e-45b9-9b55-439d133bbe73",
+        "auth_type": "EXISTING_CHATGPT",
+        "effort": "max",
+        "elapsed_ms": 58547.888,
+        "frame_hash": "1db69fa9da02d8fcbfdd3a519f2cd6add6822514012824037182b88e9507c62c",
+        "model": "gpt-6-luna",
+        "profile": "gpt-6-luna:max",
+        "route": "CODEX_SUBSCRIPTION",
+        "streaming_actual": true,
+        "usage": {
+          "cachedInputTokens": 0,
+          "inputTokens": 10974,
+          "outputTokens": 2553,
+          "totalTokens": 13527
+        }
+      },
+      "attempt_count": 1,
+      "wall_ms": 58657.946,
+      "deterministic_violations": [],
+      "no_downstream_mutation": true,
+      "qualitative_review": "PENDING_OWNER_ARCHITECT",
+      "real_private_data": false,
+      "hidden_reasoning": false
+    }
+  ],
+  "controls": [
+    {
+      "scenario": "LONGITUDINAL",
+      "explicit_synthetic_user_rejection": {
+        "id": "5a5365d9-5689-4d5b-b726-a97a6f1bb0ee",
+        "kind": "HYPOTHESIS",
+        "provenance": "MODEL_HYPOTHESIS",
+        "sources": [
+          {
+            "id": "fbb2aa6c-0aa5-54a3-88e7-af15653640b7",
+            "revision": 1
+          },
+          {
+            "id": "4115901f-78e4-5d68-aa01-6dab38d12796",
+            "revision": 1
+          }
+        ],
+        "state": "CURRENT",
+        "text": "Можливо, контраст між проханням про грубу чернетку й запитанням про готовність пов’язав для тебе статус роботи з оцінкою особисто тебе."
+      },
+      "after_version": 2
+    }
+  ],
+  "ledger": {
+    "goal": "M7D_OWNER_2026_10_04",
+    "maximum": 48,
+    "total_requests": 31,
+    "remaining": 17,
+    "routes": [
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "COMPLETED",
+        "requests": 14
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "FAILED",
+        "requests": 17
+      }
+    ],
+    "raw_payload_logged": false
+  },
+  "quality_dimensions": [
+    "relevance",
+    "depth",
+    "continuity",
+    "non_repetition",
+    "question_quality",
+    "rejected_hypothesis_respect",
+    "historical_context_use",
+    "uncertainty",
+    "source_fidelity",
+    "Ukrainian_naturalness",
+    "options_usefulness",
+    "over_formulaic_behavior",
+    "safety_boundaries"
+  ],
+  "qualitative_review": "PENDING_OWNER_ARCHITECT; deterministic compliance does not establish quality",
+  "new_auth": false,
+  "PAYG": false,
+  "private_provider_suitability": "NOT_VERIFIED_M7C_N02",
+  "hidden_reasoning_logged": false
+}

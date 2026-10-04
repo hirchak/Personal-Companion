@@ -1,0 +1,120 @@
+{
+  "native_evaluation_commit": "1c1571050d7f11210cb6325d7f8de7bc1d61d8b7",
+  "final_implementation_commit": "56b03bd3594a6d6630864904b6d99e46242de95a",
+  "status": "PASS_IDENTICAL_NATIVE_REQUEST_PROVIDER_SKILLS_VALIDATION_RUNTIME",
+  "changed_adapters": [
+    "apps/core/api.py",
+    "apps/core/cli.py"
+  ],
+  "change": "M7D factory/CLI timeout120 matching existing eval120; legacy defaults60 unchanged. New runtime smoke is separate. Original evaluation commit association is retained, not rewritten.",
+  "files": [
+    {
+      "file": "apps/core/conversation_controller.py",
+      "evaluation_blob": "c4d293897a2f3a51fe59aba852cc29684a34b95c",
+      "final_blob": "c4d293897a2f3a51fe59aba852cc29684a34b95c",
+      "identical": true
+    },
+    {
+      "file": "apps/core/conversation_runtime_contracts.py",
+      "evaluation_blob": "f2d8e267f1f6a0d38a411ea320071dd71dbcb1db",
+      "final_blob": "f2d8e267f1f6a0d38a411ea320071dd71dbcb1db",
+      "identical": true
+    },
+    {
+      "file": "apps/core/deep_session.py",
+      "evaluation_blob": "22e203f34edd05bca66e4be7277c93bc9be01494",
+      "final_blob": "22e203f34edd05bca66e4be7277c93bc9be01494",
+      "identical": true
+    },
+    {
+      "file": "apps/core/deep_session_contracts.py",
+      "evaluation_blob": "f53a46e0f6ed5493d8ed86c5c22951203d5e5145",
+      "final_blob": "f53a46e0f6ed5493d8ed86c5c22951203d5e5145",
+      "identical": true
+    },
+    {
+      "file": "apps/core/reflection.py",
+      "evaluation_blob": "e6ad191d68cf5025cda236d7180830342cf6b27f",
+      "final_blob": "e6ad191d68cf5025cda236d7180830342cf6b27f",
+      "identical": true
+    },
+    {
+      "file": "apps/core/reflection_contracts.py",
+      "evaluation_blob": "4baad5413590757ef6f1e2fb07b8222a7af90555",
+      "final_blob": "4baad5413590757ef6f1e2fb07b8222a7af90555",
+      "identical": true
+    },
+    {
+      "file": "apps/core/conversation.py",
+      "evaluation_blob": "0258b7073f967c3b4a2b56f4014ae619f35d9dc6",
+      "final_blob": "0258b7073f967c3b4a2b56f4014ae619f35d9dc6",
+      "identical": true
+    },
+    {
+      "file": "apps/core/conversation_contracts.py",
+      "evaluation_blob": "2de4752ee1401190d7ce50e744afb764137a2de9",
+      "final_blob": "2de4752ee1401190d7ce50e744afb764137a2de9",
+      "identical": true
+    },
+    {
+      "file": "apps/core/conversation_skills.py",
+      "evaluation_blob": "322341a971338fe61d8772895d0faa3ed75c74c0",
+      "final_blob": "322341a971338fe61d8772895d0faa3ed75c74c0",
+      "identical": true
+    },
+    {
+      "file": "apps/core/codex_conversation_provider.py",
+      "evaluation_blob": "c33d0973cd822268fb7496b4dac14021d98b3770",
+      "final_blob": "c33d0973cd822268fb7496b4dac14021d98b3770",
+      "identical": true
+    },
+    {
+      "file": "apps/core/live_evaluation_budget.py",
+      "evaluation_blob": "be5eeab739caa9df7b1a647b97d1f354f8f7ecb9",
+      "final_blob": "be5eeab739caa9df7b1a647b97d1f354f8f7ecb9",
+      "identical": true
+    },
+    {
+      "file": "scripts/evaluate_m7d_providers.py",
+      "evaluation_blob": "b5f8693b8788638f44adf507722dea222b5cf8e3",
+      "final_blob": "b5f8693b8788638f44adf507722dea222b5cf8e3",
+      "identical": true
+    },
+    {
+      "file": "research/evals/M7D_SYNTHETIC_DEEP.json",
+      "evaluation_blob": "842ddf1380bc2eabd4fb1a159326447751b14e8d",
+      "final_blob": "842ddf1380bc2eabd4fb1a159326447751b14e8d",
+      "identical": true
+    },
+    {
+      "file": "skills/conversation/session_closure.json",
+      "evaluation_blob": "de5253ef4f9a2ca5be969f59d90799dbd27cfa35",
+      "final_blob": "de5253ef4f9a2ca5be969f59d90799dbd27cfa35",
+      "identical": true
+    },
+    {
+      "file": "skills/conversation/core_reflection.json",
+      "evaluation_blob": "d67b671117b4c4cc746cbcef8e0aebbe7a11fc89",
+      "final_blob": "d67b671117b4c4cc746cbcef8e0aebbe7a11fc89",
+      "identical": true
+    },
+    {
+      "file": "skills/conversation/deep_session.json",
+      "evaluation_blob": "dd5ddf1011bda557c766ba329ef596dc194d3954",
+      "final_blob": "dd5ddf1011bda557c766ba329ef596dc194d3954",
+      "identical": true
+    },
+    {
+      "file": "skills/conversation/goal_setting.json",
+      "evaluation_blob": "a545dd3b41ff918356f501cd2bd0afd1d9928a3f",
+      "final_blob": "a545dd3b41ff918356f501cd2bd0afd1d9928a3f",
+      "identical": true
+    },
+    {
+      "file": "skills/conversation/controller_frame.json",
+      "evaluation_blob": "9b3e25e77f99063e18c5314fb75a4365144e825a",
+      "final_blob": "9b3e25e77f99063e18c5314fb75a4365144e825a",
+      "identical": true
+    }
+  ]
+}

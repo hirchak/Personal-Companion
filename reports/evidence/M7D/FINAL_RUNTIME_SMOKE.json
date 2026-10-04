@@ -1,0 +1,218 @@
+{
+  "implementation_sha": "56b03bd3594a6d6630864904b6d99e46242de95a",
+  "scenario": "ACTUAL_API_FACTORY_120S_LAST_NATIVE_SMOKE",
+  "model": "gpt-6-sol",
+  "effort": "ultra",
+  "timeout_seconds": 120,
+  "state": "COMPLETED",
+  "error": null,
+  "user_text": "ORIGINAL SYNTHETIC · Колега попросив грубу чернетку й сказав «ще не готово?». Я прочитав його тон як невдоволення. Хочу зрозуміти це, не виправляти.",
+  "goal": "ORIGINAL SYNTHETIC · Зрозуміти, як персонаж прочитав тон колеги.",
+  "selected_context": {
+    "type": "LAST_7_DAYS",
+    "timezone": "Europe/Warsaw",
+    "window_start": "2026-09-27T08:54:58.067507+00:00",
+    "window_end": "2026-10-04T08:54:58.067507+00:00"
+  },
+  "request_metadata": {
+    "clinical_active": 0,
+    "consent_scope": "M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY",
+    "context_hash": "0da3862ba841bf4086a4a6f312a85778a1ff042e434ab36c7768b54f10aa47dc",
+    "input_byte_budget": 48000,
+    "map_snapshot_hash": "429b425b3acb689f040b96243262467990f8c916028755e6f1d93a24cf3e0213",
+    "mode": "DEEP",
+    "provider_effort": "ultra",
+    "provider_model": "gpt-6-sol",
+    "provider_profile": "gpt-6-sol:ultra",
+    "provider_route": "CODEX_SUBSCRIPTION",
+    "purpose": "REFLECT",
+    "request_id": "d847e246-d971-585b-88f8-27ac6776d8b8",
+    "response_schema": "M7C_CONVERSATION_CANDIDATE_V1",
+    "retrieval_receipt_id": "e19c1a0d-e8cc-5afd-8898-479e8717839e",
+    "schema_version": 1,
+    "selected_context_hash": "fb8a6293178131a79d328d27a4ceae3d919899611547459bd9d3341489a4c281",
+    "selected_receipt_id": "2a6286ff-5a44-4291-9ab4-c5b3788bca45",
+    "selected_skills": [
+      {
+        "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+        "skill_id": "core_reflection",
+        "version": "2.0.0"
+      },
+      {
+        "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+        "skill_id": "deep_session",
+        "version": "2.1.0"
+      }
+    ],
+    "selected_window_end": "2026-10-04T08:54:58.067507+00:00",
+    "selected_window_start": "2026-09-27T08:54:58.067507+00:00",
+    "selection_timezone": "Europe/Warsaw",
+    "selection_type": "LAST_7_DAYS",
+    "synthetic": true,
+    "timeout_seconds": 120,
+    "tools": []
+  },
+  "provider_reported": {
+    "attempt_id": "cb0ad7ce-afa9-4d38-96b1-ddde21ab99aa",
+    "auth_type": "EXISTING_CHATGPT",
+    "effort": "ultra",
+    "elapsed_ms": 58436.616,
+    "frame_hash": "1db69fa9da02d8fcbfdd3a519f2cd6add6822514012824037182b88e9507c62c",
+    "model": "gpt-6-sol",
+    "profile": "gpt-6-sol:ultra",
+    "route": "CODEX_SUBSCRIPTION",
+    "streaming_actual": true,
+    "usage": {
+      "cachedInputTokens": 7168,
+      "inputTokens": 10154,
+      "outputTokens": 2094,
+      "totalTokens": 12248
+    }
+  },
+  "candidate": {
+    "assistant_text": "Колега попросив грубу чернетку й сказав «ще не готово?», а ви прочитали його тон як невдоволення. Залишімося з тим, як склалося це враження, без пошуку способу щось виправити. Що саме в його словах або тоні підказало вам невдоволення?",
+    "closure": null,
+    "goal_suggestion": null,
+    "source_refs": [
+      "s0"
+    ],
+    "topics": [
+      "work",
+      "self_reflection"
+    ],
+    "working_map": {
+      "items": [
+        {
+          "kind": "OBSERVATION",
+          "provenance": "MODEL_DERIVED_SUMMARY",
+          "source_refs": [
+            "s0"
+          ],
+          "text": "Колега попросив грубу чернетку й сказав «ще не готово?»."
+        },
+        {
+          "kind": "OBSERVATION",
+          "provenance": "MODEL_DERIVED_SUMMARY",
+          "source_refs": [
+            "s0"
+          ],
+          "text": "Тон колеги було сприйнято як невдоволення; його справжній намір не встановлено."
+        },
+        {
+          "kind": "TAKEAWAY",
+          "provenance": "MODEL_DERIVED_SUMMARY",
+          "source_refs": [
+            "s0"
+          ],
+          "text": "Зараз важливо зрозуміти це прочитання тону, а не виправляти ситуацію."
+        }
+      ]
+    }
+  },
+  "working_map_after": {
+    "conversation_id": "32702c10-8241-5ea2-b634-c91260b2f0a8",
+    "created_at": "2026-10-04T08:55:56.590404+00:00",
+    "goal": {
+      "id": "e7973962-581e-56d4-b755-a2560fa052bb",
+      "revision": 1
+    },
+    "items": [
+      {
+        "id": "bfdfeb0d-540e-4e8c-a63e-643f8f7d8294",
+        "kind": "OBSERVATION",
+        "provenance": "MODEL_DERIVED_SUMMARY",
+        "sources": [
+          {
+            "id": "7af5ec9a-a97a-5705-bc9a-678324e51b0f",
+            "revision": 1
+          }
+        ],
+        "state": "CURRENT",
+        "text": "Колега попросив грубу чернетку й сказав «ще не готово?»."
+      },
+      {
+        "id": "fbc9104b-68e8-4e71-a3ee-b163a8522a81",
+        "kind": "OBSERVATION",
+        "provenance": "MODEL_DERIVED_SUMMARY",
+        "sources": [
+          {
+            "id": "7af5ec9a-a97a-5705-bc9a-678324e51b0f",
+            "revision": 1
+          }
+        ],
+        "state": "CURRENT",
+        "text": "Тон колеги було сприйнято як невдоволення; його справжній намір не встановлено."
+      },
+      {
+        "id": "1247164d-ef0f-46ef-a73d-ce22f7dc1087",
+        "kind": "TAKEAWAY",
+        "provenance": "MODEL_DERIVED_SUMMARY",
+        "sources": [
+          {
+            "id": "7af5ec9a-a97a-5705-bc9a-678324e51b0f",
+            "revision": 1
+          }
+        ],
+        "state": "CURRENT",
+        "text": "Зараз важливо зрозуміти це прочитання тону, а не виправляти ситуацію."
+      }
+    ],
+    "provenance": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+    "provider_model": "gpt-6-sol",
+    "provider_route": "CODEX_SUBSCRIPTION",
+    "request_hash": "c6177b5a9487bb19a46436d14d0ee1810bd4b748e1665dfa3038b4ac07f62f37",
+    "schema_version": 1,
+    "skills": [
+      {
+        "content_hash": "044fb49c6c5920b16d2d203bc1e4bdff464611b2d14a138695427e50787fa5f8",
+        "skill_id": "core_reflection",
+        "version": "2.0.0"
+      },
+      {
+        "content_hash": "205ca8e840e0ab65ddd2a8aadc22f54471e7dce703ad21cef84adfba58c85af5",
+        "skill_id": "deep_session",
+        "version": "2.1.0"
+      }
+    ],
+    "version": 1
+  },
+  "elapsed_ms": 58525.837,
+  "no_downstream_mutation": true,
+  "ledger": {
+    "goal": "M7D_OWNER_2026_10_04",
+    "maximum": 48,
+    "total_requests": 48,
+    "remaining": 0,
+    "routes": [
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "COMPLETED",
+        "requests": 14
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "FAILED",
+        "requests": 17
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-sol",
+        "outcome": "COMPLETED",
+        "requests": 16
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-sol",
+        "outcome": "FAILED",
+        "requests": 1
+      }
+    ],
+    "raw_payload_logged": false
+  },
+  "real_private_data": false,
+  "hidden_reasoning": false,
+  "new_auth": false,
+  "PAYG": false
+}

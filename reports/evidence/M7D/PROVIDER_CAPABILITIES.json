@@ -1,0 +1,40 @@
+{
+  "models": [
+    {
+      "model": "gpt-6.1-sol",
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max",
+        "ultra"
+      ]
+    },
+    {
+      "model": "gpt-6-sol",
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max",
+        "ultra"
+      ]
+    },
+    {
+      "model": "gpt-6-luna",
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ]
+    }
+  ],
+  "access": "CATALOG_ONLY_NOT_COMPLETED_INFERENCE_ENTITLEMENT",
+  "source": "INSTALLED_CODEX_APP_SERVER_MODEL_LIST",
+  "payg": false,
+  "new_auth": false
+}

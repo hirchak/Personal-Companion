@@ -1,0 +1,86 @@
+{
+  "implementation_sha": "56b03bd3594a6d6630864904b6d99e46242de95a",
+  "OS": "Darwin",
+  "machine": "arm64",
+  "python": "Python 3.13.2",
+  "checks": [
+    {
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0,
+      "elapsed_seconds": 0.303,
+      "log_sha256": "1db7edb19f6b21df2f757366736652bf89d29c3d1d0242be93ecb0d3e5af7588"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q",
+      "exit_code": 0,
+      "elapsed_seconds": 152.531,
+      "log_sha256": "d1613fb9cb27c26f0206ace9e305259d4e18da168b01ec403bff87bd507e8d8e"
+    },
+    {
+      "command": "npm --prefix apps/web run build",
+      "exit_code": 0,
+      "elapsed_seconds": 2.394,
+      "log_sha256": "9418914f05760f369bae0b9df26e67ef3dcb6b7200524b0b196bfaa528f45190"
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0,
+      "elapsed_seconds": 3.377,
+      "log_sha256": "3e5c0b0b216fe1520047119a5248fd64ab808a828d23effc9efbf7d385b493de"
+    },
+    {
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "elapsed_seconds": 0.103,
+      "log_sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d"
+    },
+    {
+      "command": "node scripts/verify_m7c_schemas.mjs",
+      "exit_code": 0,
+      "elapsed_seconds": 0.069,
+      "log_sha256": "b688daa486a388bea4e9ae5a702d4ba14f7c843f6205a4d4c9d35eb1412a33b8"
+    },
+    {
+      "command": "node scripts/verify_m7d_schemas.mjs",
+      "exit_code": 0,
+      "elapsed_seconds": 0.065,
+      "log_sha256": "15af5a8d57f49f0fcf855986bef6b29bc8213f982f93dee0c9761fbced65a1d1"
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "elapsed_seconds": 0.164,
+      "log_sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde"
+    },
+    {
+      "command": ".venv/bin/python scripts/qualify_m7d_skills.py --check",
+      "exit_code": 0,
+      "elapsed_seconds": 0.032,
+      "log_sha256": "c37dfdc41e720cf36d5960a135232675f670268152a7afe3f6304f32113c9432"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py --json",
+      "exit_code": 0,
+      "elapsed_seconds": 0.25,
+      "log_sha256": "34de3668c62d2db3f06cbb11f73651116f26f7e40f9deaa6a2513f04be29d002"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "elapsed_seconds": 17.719,
+      "log_sha256": "eaeeeb4f4cfbeb2050c57b36a826a5f583245735548a9e55a1527376b0e98473"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.measure_m7d",
+      "exit_code": 0,
+      "elapsed_seconds": 0.665,
+      "log_sha256": "4775c6dc7dd98ef68e7635e6c10631f662c0e99a0a8ffe2526808914d6ed062c"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.benchmark_m7d_asr",
+      "exit_code": 0,
+      "elapsed_seconds": 7.922,
+      "log_sha256": "0f11e08201bd0da9fdca491fb42088efa06c6a722f2c4919e1c5f0b1785bafe5"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "implementation_sha": "d1cde4eacfc60a631b8a06fb5e0fdde05a8de6d6",
+  "status": "PASS",
+  "actual_script": "./scripts/m7d_demo.sh <fresh synthetic root>",
+  "provider": "OFF",
+  "new_live_attempts": 0,
+  "local_ASR": "EXISTING_PINNED_SMALL_AVAILABLE_PCM_SIGNAL_V1",
+  "fixture_map_inspection": true,
+  "synthetic_explicit_rejection": true,
+  "session_close_goal_active": true,
+  "fixture_map_not_live_evidence": true,
+  "auth_or_root_values_published": false,
+  "server_stopped_after_check": true
+}
