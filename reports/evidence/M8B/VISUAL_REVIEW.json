@@ -1,0 +1,13 @@
+{
+  "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "status": "PASS",
+  "source": "ACTUAL_MAC_CHROMIUM_ORIGINAL_SYNTHETIC",
+  "captures": [
+    "mac-journal.png",
+    "chromium-narrow.png"
+  ],
+  "rounds": 1,
+  "assessment": "Existing paper/ink/sage preserved; synthetic journal save and narrow view readable; no clipping observed.",
+  "GALAXY": "NOT_RUN",
+  "private_material": "NONE"
+}

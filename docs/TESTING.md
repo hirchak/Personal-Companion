@@ -316,3 +316,8 @@ Mac, with real existing Chromium. Only synthetic roots, no install/download/priv
 Public sanitized results: reports/evidence/M8B. Driver package/runtime/DB/backups remain ignored and roots cleaned.
 Actual Galaxy/Watch/Health/human UA/private HTTPS are NOT_RUN. Do not reinterpret software projections as old binaries.
 MAC_CORE_PILOT depends on separate private-root runtime gate; MAC_SYNTHETIC_DRY_RUN is an independent result.
+
+M8B exact-C outcomes:667Python (43Chromium,19M8B)/50web/build/schema/admission/docs/privacy PASS at
+434b1cd5ad857776bbfd9b3799a0abddec2858f6. MAC_PREFLIGHT/MAC_LIFECYCLE evidence records actual Mac27.0/M2,
+new runtime-only environment without pytest/Playwright/httpx/pip, and genuine accepted M8A package upgrade/rollback.
+No physical Galaxy/human/Health verification; no private activation. CI remains NOT_CONFIGURED/NOT_RUN.

@@ -1,0 +1,19 @@
+{
+  "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "PHONE_PILOT": "NEEDS_TRANSPORT_GATE",
+  "gate": "PHONE_PRIVATE_TRANSPORT_REQUIRED",
+  "authorized_existing_route": "NOT_ESTABLISHED_IN_REPOSITORY_OR_RUNTIME_CONTRACT",
+  "tailscale_cli_present": false,
+  "private_configuration_or_account_data_read": false,
+  "network_trust_system_changes": 0,
+  "GALAXY": "NOT_RUN",
+  "PWA_candidate": {
+    "storage_schema": 2,
+    "encryption": "NATIVE_PBKDF2_AES_GCM",
+    "shell_cache": "LOCAL_STATIC_ONLY",
+    "update": "EXPLICIT_WAITING_ACTIVATION_AND_EXACT_BACKEND_BUILD_HEADER",
+    "automatic_provider_health_clinical_activation": false,
+    "evidence": "Source + build + existing M2/Chromium/web regressions; not Galaxy hardware"
+  },
+  "next_action": "Separate scoped owner transport goal: choose exact private HTTPS route, authorize required client/account/config/trust changes, adapt exact Host/Origin/auth and run Galaxy synthetic-only smoke. No public exposure."
+}

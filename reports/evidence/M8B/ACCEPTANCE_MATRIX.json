@@ -1,0 +1,121 @@
+{
+  "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "review_status": "AWAITING_REVIEW_NOT_SELF_ACCEPTED",
+  "M8A_N01": "CLOSED_ENGINEERING",
+  "M8A_N02": "CLOSED_ENGINEERING",
+  "criteria": [
+    {
+      "id": "M8B-A01",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "M8A_ARCHITECT_REVIEW.md",
+      "note": ""
+    },
+    {
+      "id": "M8B-A02",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A03",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A04",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A05",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "MAC_LIFECYCLE.json + EXACT_C_CHECKS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A06",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "MAC_LIFECYCLE.json + EXACT_C_CHECKS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A07",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "MAC_LIFECYCLE.json + EXACT_C_CHECKS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A08",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "MAC_LIFECYCLE.json + EXACT_C_CHECKS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A09",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A10",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A11",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A12",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A13",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": "Independent core private profile NOT_READY; phone NEEDS_TRANSPORT_GATE; optional gates unchanged."
+    },
+    {
+      "id": "M8B-A14",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A15",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "MAC_LIFECYCLE.json + EXACT_C_CHECKS.json",
+      "note": ""
+    },
+    {
+      "id": "M8B-A16",
+      "engineering_status": "PASS",
+      "scope": "SYNTHETIC_ENGINEERING_NOT_PRIVATE_PILOT_ACCEPTANCE",
+      "evidence": "tests/test_m8b_readiness.py / docs/PILOT_HANDOFF.md / PHONE_READINESS.json",
+      "note": "Final C/R origin equality recorded in delivery verification after R."
+    }
+  ],
+  "actual_private_pilot": "NOT_STARTED"
+}

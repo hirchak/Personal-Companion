@@ -1,0 +1,141 @@
+{
+  "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "base_sha": "08d8efdd01dbcf8ddcdbdd6fcd6bd8361b75062a",
+  "environment": {
+    "OS": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "node": "v26.8.2"
+  },
+  "checks": [
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 160.305,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "test"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 4.593,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify_m7a_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.51,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify_m7c_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.089,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify_m7d_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.114,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/m7_admission.py"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.179,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/qualify_m7d_skills.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.048,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_docs.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.61,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "<REPO>/apps/web",
+        "run",
+        "build"
+      ],
+      "environment_overrides": {
+        "PC_BUILD_COMMIT": "434b1cd5ad857776bbfd9b3799a0abddec2858f6"
+      },
+      "exit_code": 0,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS",
+      "sanitization": "Repository absolute prefix replaced with <REPO>; otherwise actual build argv.",
+      "invoked_by": "release.prepare"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/verify_m8b.py"
+      ],
+      "environment_overrides": {
+        "PYTHONPATH": "."
+      },
+      "exit_code": 0,
+      "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "status": "PASS",
+      "scope": "REAL_REFERENCE_MAC_SYNTHETIC_ONLY"
+    }
+  ],
+  "scope": "ORIGINAL_SYNTHETIC_NO_PROVIDERS",
+  "summary": {
+    "python": 667,
+    "Chromium_in_python": 43,
+    "M8B_python": 19,
+    "web": 50,
+    "actual_Mac_package_browser": "PASS",
+    "live_provider_calls": 0,
+    "private_data_used": false,
+    "warnings": [
+      "Existing Starlette/anyio BlockingPortal deprecation"
+    ]
+  }
+}

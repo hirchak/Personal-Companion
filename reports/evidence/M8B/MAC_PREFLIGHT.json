@@ -1,0 +1,103 @@
+{
+  "format": 1,
+  "scope": "REAL_REFERENCE_MAC_SYNTHETIC_ONLY",
+  "status": "PASS",
+  "release_id": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "manifest_hash": "8abf581164f1d6984f71f28394994f54ca738d62136ddca41c71da6759cc7cbb",
+  "runtime_input_hash": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+  "facts": {
+    "os": "Darwin",
+    "macos_version": "27.0",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "hardware_model": "Mac14,15",
+    "chip": "Apple M2"
+  },
+  "target_schema": 11,
+  "disk_space_class": "AT_LEAST_10_GIB",
+  "checks": [
+    {
+      "gate": "platform",
+      "status": "PASS"
+    },
+    {
+      "gate": "python",
+      "status": "PASS",
+      "version": "3.13.2"
+    },
+    {
+      "gate": "dependency:annotated-types",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:anyio",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:click",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:fastapi",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:h11",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:idna",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:pydantic",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:pydantic_core",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:starlette",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:typing-inspection",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:typing_extensions",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:uvicorn",
+      "status": "PASS"
+    },
+    {
+      "gate": "local_asr",
+      "status": "OPTIONAL_UNAVAILABLE",
+      "reason": "NO_WEIGHTS_OR_ENGINE_PACKAGED"
+    },
+    {
+      "gate": "phone_health_transport",
+      "status": "NOT_RUN",
+      "reason": "PHONE_TRANSPORT_AND_HEALTH_SEPARATE_GATES"
+    },
+    {
+      "gate": "application_path",
+      "status": "PASS"
+    },
+    {
+      "gate": "data_path",
+      "status": "PASS"
+    },
+    {
+      "gate": "loopback_port",
+      "status": "PASS"
+    }
+  ],
+  "private_data_used": false,
+  "live_provider_calls": 0,
+  "hardware_generalization": "TESTED_MACHINE_ONLY_NOT_ALL_MACS",
+  "data_schema_version": null
+}

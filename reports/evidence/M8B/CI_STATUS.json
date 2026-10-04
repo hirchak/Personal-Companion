@@ -1,0 +1,8 @@
+{
+  "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "command": "gh run list --limit 5 --json databaseId,headSha,status,conclusion",
+  "exit_code": 0,
+  "runs": [],
+  "tracked_workflows": [],
+  "status": "NOT_CONFIGURED_NOT_RUN"
+}

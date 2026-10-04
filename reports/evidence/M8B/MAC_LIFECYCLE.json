@@ -1,0 +1,420 @@
+{
+  "status": "PASS",
+  "scope": "REAL_REFERENCE_MAC_ORIGINAL_SYNTHETIC_ONLY",
+  "base_sha": "08d8efdd01dbcf8ddcdbdd6fcd6bd8361b75062a",
+  "implementation_sha": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "release_id": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+  "manifest_hash": "8abf581164f1d6984f71f28394994f54ca738d62136ddca41c71da6759cc7cbb",
+  "runtime_input_hash": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+  "checks": {
+    "runtime_only": {
+      "status": "PASS",
+      "method": "COPY_EXISTING_PINNED_RUNTIME_ONLY_PIP_FREE_TEMP_ENVIRONMENT",
+      "packages": [
+        {
+          "package": "annotated-types",
+          "version": "0.8.0"
+        },
+        {
+          "package": "anyio",
+          "version": "4.15.1"
+        },
+        {
+          "package": "click",
+          "version": "8.5.0"
+        },
+        {
+          "package": "fastapi",
+          "version": "0.115.12"
+        },
+        {
+          "package": "h11",
+          "version": "0.16.0"
+        },
+        {
+          "package": "idna",
+          "version": "3.20"
+        },
+        {
+          "package": "pydantic",
+          "version": "2.11.3"
+        },
+        {
+          "package": "pydantic_core",
+          "version": "2.33.1"
+        },
+        {
+          "package": "starlette",
+          "version": "0.46.2"
+        },
+        {
+          "package": "typing-inspection",
+          "version": "0.4.4"
+        },
+        {
+          "package": "typing_extensions",
+          "version": "4.16.0"
+        },
+        {
+          "package": "uvicorn",
+          "version": "0.34.2"
+        }
+      ],
+      "no_downloads_or_package_manager_installs": true,
+      "test_client_packages_absent": {
+        "pytest": true,
+        "playwright": true,
+        "httpx": true,
+        "pip": true
+      }
+    },
+    "actual_mac_preflight": {
+      "format": 1,
+      "scope": "REAL_REFERENCE_MAC_SYNTHETIC_ONLY",
+      "status": "PASS",
+      "release_id": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "manifest_hash": "8abf581164f1d6984f71f28394994f54ca738d62136ddca41c71da6759cc7cbb",
+      "runtime_input_hash": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+      "facts": {
+        "os": "Darwin",
+        "macos_version": "27.0",
+        "architecture": "arm64",
+        "python": "3.13.2",
+        "hardware_model": "Mac14,15",
+        "chip": "Apple M2"
+      },
+      "target_schema": 11,
+      "disk_space_class": "AT_LEAST_10_GIB",
+      "checks": [
+        {
+          "gate": "platform",
+          "status": "PASS"
+        },
+        {
+          "gate": "python",
+          "status": "PASS",
+          "version": "3.13.2"
+        },
+        {
+          "gate": "dependency:annotated-types",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:anyio",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:click",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:fastapi",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:h11",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:idna",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:pydantic",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:pydantic_core",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:starlette",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:typing-inspection",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:typing_extensions",
+          "status": "PASS"
+        },
+        {
+          "gate": "dependency:uvicorn",
+          "status": "PASS"
+        },
+        {
+          "gate": "local_asr",
+          "status": "OPTIONAL_UNAVAILABLE",
+          "reason": "NO_WEIGHTS_OR_ENGINE_PACKAGED"
+        },
+        {
+          "gate": "phone_health_transport",
+          "status": "NOT_RUN",
+          "reason": "PHONE_TRANSPORT_AND_HEALTH_SEPARATE_GATES"
+        },
+        {
+          "gate": "application_path",
+          "status": "PASS"
+        },
+        {
+          "gate": "data_path",
+          "status": "PASS"
+        },
+        {
+          "gate": "loopback_port",
+          "status": "PASS"
+        }
+      ],
+      "private_data_used": false,
+      "live_provider_calls": 0,
+      "hardware_generalization": "TESTED_MACHINE_ONLY_NOT_ALL_MACS",
+      "data_schema_version": null
+    },
+    "install": {
+      "status": "PASS",
+      "operation": "CLEAN_SYNTHETIC_ROOT",
+      "release_id": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "defaults": {
+        "provider": "OFF",
+        "clinical_active": 0,
+        "specialists": "OFF",
+        "health_to_ai": "OFF",
+        "cloud_asr": "NONE",
+        "real_private_provider": "OFF",
+        "external_embeddings": "OFF",
+        "publication": "NONE",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "provider_fallback": "NONE"
+      }
+    },
+    "fresh_defaults": {
+      "provider": "OFF",
+      "private_ai": "OFF",
+      "clinical_active": 0,
+      "five_specialists": "OFF",
+      "health_to_ai": "OFF",
+      "health_permissions": "NOT_REQUESTED",
+      "human_asr": "OFF",
+      "cloud_asr": "NONE"
+    },
+    "local_search": {
+      "status": "PASS",
+      "scope": "ORIGINAL_SYNTHETIC_LOCAL_SQLITE"
+    },
+    "Chromium": {
+      "status": "PASS",
+      "physical_scope": "REFERENCE_MAC_ONLY",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "page_errors": 0,
+      "non_loopback_requests": 0,
+      "GALAXY": "NOT_RUN"
+    },
+    "restart_defaults": {
+      "provider": "OFF",
+      "private_ai": "OFF",
+      "clinical_active": 0,
+      "five_specialists": "OFF",
+      "health_to_ai": "OFF",
+      "health_permissions": "NOT_REQUESTED",
+      "human_asr": "OFF",
+      "cloud_asr": "NONE"
+    },
+    "restart": {
+      "status": "PASS",
+      "state_durable": true,
+      "no_duplicate_mutation": true,
+      "stop_immediate_port_rebind": true
+    },
+    "backup": {
+      "status": "PASS",
+      "operation": "BACKUP",
+      "release_id": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "producing_manifest_hash": "8abf581164f1d6984f71f28394994f54ca738d62136ddca41c71da6759cc7cbb",
+      "backup_manifest_hash": "70e6f0942901b928a8592ddc9bd21db5225511c5a6d6c8eb4b4c223ab499e281"
+    },
+    "backup_provenance": {
+      "status": "PASS",
+      "backup_format": 3,
+      "producing_release": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "producer_manifest_hash": "8abf581164f1d6984f71f28394994f54ca738d62136ddca41c71da6759cc7cbb",
+      "source_release": {
+        "git_commit": "434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+        "manifest_hash": "8abf581164f1d6984f71f28394994f54ca738d62136ddca41c71da6759cc7cbb",
+        "release_id": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+        "schema_version": 11
+      },
+      "created_at_utc": "2026-10-04T14:32:56.747810+00:00",
+      "snapshot_binding": "SQLITE_ATTESTATION_AND_CHECKSUM_VERIFIED"
+    },
+    "tampered_provenance": {
+      "status": "PASS",
+      "restore": "REJECTED_BEFORE_ROOT_CREATION"
+    },
+    "restore": {
+      "status": "PASS",
+      "operation": "FRESH_ROOT_RESTORE_OR_ROLLBACK",
+      "backup_provenance": "VERIFIED",
+      "defaults": {
+        "provider": "OFF",
+        "clinical_active": 0,
+        "specialists": "OFF",
+        "health_to_ai": "OFF",
+        "cloud_asr": "NONE",
+        "real_private_provider": "OFF",
+        "external_embeddings": "OFF",
+        "publication": "NONE",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "provider_fallback": "NONE"
+      }
+    },
+    "restored_defaults": {
+      "provider": "OFF",
+      "private_ai": "OFF",
+      "clinical_active": 0,
+      "five_specialists": "OFF",
+      "health_to_ai": "OFF",
+      "health_permissions": "NOT_REQUESTED",
+      "human_asr": "OFF",
+      "cloud_asr": "NONE"
+    },
+    "failed_upgrade": {
+      "status": "PASS",
+      "fixture": "SCHEMA10_PROJECTION_NOT_HISTORICAL_BINARY",
+      "data_transaction": "ROLLED_BACK",
+      "active_pointer": "UNCHANGED",
+      "backup": "VERIFIED",
+      "pending_start_gate": "PRESENT"
+    },
+    "rollback": {
+      "status": "PASS",
+      "operation": "FRESH_ROOT_RESTORE_OR_ROLLBACK",
+      "backup_provenance": "VERIFIED",
+      "defaults": {
+        "provider": "OFF",
+        "clinical_active": 0,
+        "specialists": "OFF",
+        "health_to_ai": "OFF",
+        "cloud_asr": "NONE",
+        "real_private_provider": "OFF",
+        "external_embeddings": "OFF",
+        "publication": "NONE",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "provider_fallback": "NONE"
+      }
+    },
+    "rollback_defaults": {
+      "provider": "OFF",
+      "private_ai": "OFF",
+      "clinical_active": 0,
+      "five_specialists": "OFF",
+      "health_to_ai": "OFF",
+      "health_permissions": "NOT_REQUESTED",
+      "human_asr": "OFF",
+      "cloud_asr": "NONE"
+    },
+    "upgrade": {
+      "status": "PASS",
+      "operation": "UPGRADE",
+      "schema_from": 11,
+      "schema_to": 11,
+      "backup": "VERIFIED",
+      "backup_manifest_hash": "6daa378ce525a0979b0c83f9a281425525a7c59752b216cd5e89122e062c5f38",
+      "defaults": {
+        "provider": "OFF",
+        "clinical_active": 0,
+        "specialists": "OFF",
+        "health_to_ai": "OFF",
+        "cloud_asr": "NONE",
+        "real_private_provider": "OFF",
+        "external_embeddings": "OFF",
+        "publication": "NONE",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "provider_fallback": "NONE"
+      }
+    },
+    "uninstall": {
+      "status": "PASS",
+      "operation": "REMOVE_RUNTIME_KEEP_DATA",
+      "data_preserved": true,
+      "backups_preserved": true,
+      "domain_integrity": "PASS"
+    },
+    "reinstall_restore": "DEMONSTRATED_FRESH_RESTORE_AND_ROLLBACK_ROOTS",
+    "actual_cross_release_upgrade_rollback": {
+      "status": "PASS",
+      "old_release_id": "M8A-38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "old_manifest_hash": "326ef01c1338eac05c3417714edf599255d944382118b30d0eadde3d39d142e4",
+      "new_release_id": "M8B-434b1cd5ad857776bbfd9b3799a0abddec2858f6",
+      "producer_manifest_hash": "8abf581164f1d6984f71f28394994f54ca738d62136ddca41c71da6759cc7cbb",
+      "source_manifest_hash": "326ef01c1338eac05c3417714edf599255d944382118b30d0eadde3d39d142e4",
+      "new_runtime": "RUNTIME_ONLY_12",
+      "legacy_rollback_runtime": "EXISTING_HISTORICAL_FULL_LOCK_ENVIRONMENT",
+      "roots": "DISPOSABLE_SYNTHETIC_ONLY"
+    }
+  },
+  "timings_ms": {
+    "runtime_existing_copy": 491.171,
+    "preflight": 565.4,
+    "fresh_install": 305.514,
+    "startup_readiness": 789.853,
+    "backup": 314.418,
+    "restore": 320.868,
+    "rollback": 321.955,
+    "upgrade": 422.983
+  },
+  "pilot_profile": {
+    "profile_id": "MAC_CORE_PILOT_V1",
+    "profile_version": 1,
+    "activation": "NOT_STARTED_REQUIRES_SEPARATE_OWNER_GOAL",
+    "journal": "ON",
+    "creative": "ON",
+    "local_search": "ON",
+    "backup_restore": "ON",
+    "private_ai": "OFF",
+    "clinical_self_help": "OFF",
+    "health_to_ai": "OFF",
+    "health_bridge": "OFF",
+    "human_voice_asr": "OFF",
+    "cloud_asr": "NONE",
+    "external_embeddings": "OFF",
+    "telemetry": "NONE",
+    "cloud_sync": "NONE",
+    "publication": "NONE",
+    "phone": "REQUIRES_SEPARATE_PRIVATE_TRANSPORT_GATE",
+    "private_data_root": "NOT_CREATED"
+  },
+  "readiness": {
+    "MAC_CORE_PILOT": "NOT_READY",
+    "MAC_SYNTHETIC_DRY_RUN": "READY",
+    "blocking_core_gate": "PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED",
+    "decision_scope": "ENGINEERING_HANDOFF_ONLY_NOT_PRIVATE_PILOT_AUTHORIZATION",
+    "PHONE_PILOT": "NEEDS_TRANSPORT_GATE",
+    "phone_gate": "PHONE_PRIVATE_TRANSPORT_REQUIRED",
+    "PRIVATE_AI": "BLOCKED_M7C_N02",
+    "HUMAN_UA_ASR": "NOT_RUN_M7C_N03",
+    "HEALTH_WATCH": "NOT_RUN_M6_N01",
+    "CLINICAL_SELF_HELP": "OFF_27_FINDINGS_OPEN",
+    "actual_private_pilot": "NOT_STARTED",
+    "profile_activation": "NOT_STARTED",
+    "private_data_root": "NOT_CREATED",
+    "requirements_before_activation": [
+      "EXPLICIT_OWNER_PILOT_GOAL",
+      "DATA_OWNER_CONSENT",
+      "PRIVATE_ROOT_RUNTIME_PROFILE_AND_STORAGE_APPROVAL",
+      "BACKUP_STORAGE_AND_RETENTION_DECISION"
+    ]
+  },
+  "private_data_used": false,
+  "live_provider_calls": 0,
+  "system_installs": 0,
+  "network_or_trust_changes": 0,
+  "private_pilot": "NOT_STARTED"
+}

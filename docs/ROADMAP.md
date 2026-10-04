@@ -13,7 +13,7 @@ M7B_CONVERSATION_HOME: external ACCEPT — synthetic engineering scope; binding 
 M7C: external ACCEPT — live-synthetic engineering + local ASR capability.
 M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality evaluation + synthetic local-ASR guard.
 M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
-M8B: IN_PROGRESS — real-reference-Mac synthetic dry run; no actual private pilot/release/system install permission. Clinical active0.
+M8B: AWAITING_REVIEW — real-reference-Mac synthetic dry run; no actual private pilot/release/system install permission. Clinical active0.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -154,3 +154,8 @@ exact-C Mac install/recovery lifecycle and inactive operator profile/handoff. Cu
 prompts/M8B_REAL_HARDWARE_SYNTHETIC_DRY_RUN.md / docs/M8B_CONTRACT.md.
 Actual private pilot NOT_STARTED; current Store is synthetic-only (PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED).
 Phone NEEDS_TRANSPORT_GATE; optional provider/human ASR/Health/clinical remain independent OFF/NOT_RUN gates.
+
+M8B final C434b1cd5ad857776bbfd9b3799a0abddec2858f6:667Python/43Chromium/19M8B/50web/build plus actual Mac
+runtime-only/lifecycle and accepted old M8A cross-release upgrade/rollback PASS. N01/N02 CLOSED_ENGINEERING.
+MAC_SYNTHETIC_DRY_RUN READY; MAC_CORE_PILOT NOT_READY / PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED;
+PHONE_PILOT NEEDS_TRANSPORT_GATE. Independent optional AI/ASR/Health/clinical gates unchanged. No actual private pilot.

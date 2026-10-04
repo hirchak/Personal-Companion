@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "metrics": {
+    "files_checked": 715,
+    "json_checked": 249,
+    "local_links_checked": 308,
+    "research_prompts": 16,
+    "snapshot_source_files": 43
+  },
+  "scope": "Documentation structure only; not exhaustive privacy, security, clinical or app verification."
+}
