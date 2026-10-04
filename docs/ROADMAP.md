@@ -180,3 +180,7 @@ External architect M8C ACCEPT, scope private-local Mac core engineering, exact C
 reports/M8C_ARCHITECT_REVIEW.md. Separate explicit owner/data-owner goal authorizes own NEW EMPTY
 core-only local vault/preflight/init/start/browser; activation IN_PROGRESS, pilot NOT_STARTED until init.
 No further engineering milestone; all optional module gates unchanged. No private content access or import.
+
+Owner/data-owner post-ACCEPT activation COMPLETE: native private-preflight PASS, new empty vault initialized,
+protected backup target ready, accepted core app running locally; ACTUAL_PRIVATE_PILOT STARTED.
+No samples/import/private-content reading; future developer content access remains NONE. Optional modules OFF.
