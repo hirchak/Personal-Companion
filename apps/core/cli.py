@@ -74,6 +74,7 @@ def main():
                 from .codex_conversation_provider import CodexConversationProvider
                 from .live_evaluation_budget import M7DEvaluationBudget
                 if args.conversation_effort!='low' and not args.m7d_synthetic:raise SafeError('M7D_EFFORT_SCOPE_REQUIRED')
+                if args.m7d_synthetic and (args.conversation_model,args.conversation_effort) not in {('gpt-6-luna','max'),('gpt-6-sol','ultra')}:raise SafeError('M7D_PROFILE_NOT_EVALUATED')
                 provider=CodexConversationProvider(args.conversation_model,budget=M7DEvaluationBudget() if args.m7d_synthetic else None,effort=args.conversation_effort)
             if args.local_asr:
                 from .whisper_local_asr import WhisperLocalASR

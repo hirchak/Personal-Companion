@@ -14,15 +14,18 @@ from apps.core.deep_session_contracts import SessionAction,MapAction,DeepContext
 from apps.core.conversation_runtime_contracts import InferenceStart
 
 OUT=REPO/'generated/m7d-provider-eval'
-def run(model,effort,sha):
+def run(model,effort,sha,scenarios=None):
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()==sha
  assert not subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip(),'EXACT_C_REQUIRES_CLEAN_SOURCE'
  corpus_path=REPO/'research/evals/M7D_SYNTHETIC_DEEP.json';corpus=json.loads(corpus_path.read_text());budget=M7DEvaluationBudget()
- assert budget.summary()['remaining']>=corpus['per_model_attempts'],'INSUFFICIENT_PERSISTENT_M7D_BUDGET'
+ cases=[s for s in corpus['runs'] if not scenarios or s['id'] in scenarios]
+ assert not scenarios or set(scenarios)<={s['id'] for s in corpus['runs']},'UNKNOWN_SCENARIO'
+ planned=sum(len(turns) for s in cases for turns in s['sessions'])
+ assert budget.summary()['remaining']>=planned,'INSUFFICIENT_PERSISTENT_M7D_BUDGET'
  provider=CodexConversationProvider(model,budget=budget,effort=effort);catalog=provider.discover()
  assert effort in next(m['supported_efforts'] for m in catalog['models'] if m['model']==model)
  OUT.mkdir(parents=True,exist_ok=True);rows=[];controls=[];file=OUT/(model+'-'+effort+'.json')
- for scenario in corpus['runs']:
+ for scenario in cases:
   root=Path(tempfile.mkdtemp(prefix='m7d-original-synthetic-eval-',dir=Path(tempfile.gettempdir()).resolve()))
   try:
    c=ConversationController(Conversations(Store(root/'data'),True),provider,timeout=120)
@@ -73,4 +76,4 @@ def run(model,effort,sha):
  result={'implementation_sha':sha,'catalog':catalog,'corpus_sha256':digest(corpus_path.read_bytes()),'model':model,'effort':effort,'profile':provider.profile,'attempt_count':sum(r['attempt_count'] for r in rows),'valid':len(valid),'failed':len(rows)-len(valid),'latency_ms':{'median':statistics.median(lat) if lat else None,'max':max(lat) if lat else None},'rows':rows,'controls':controls,'ledger':budget.summary(),'quality_dimensions':corpus['human_dimensions'],'qualitative_review':'PENDING_OWNER_ARCHITECT; deterministic compliance does not establish quality','new_auth':False,'PAYG':False,'private_provider_suitability':'NOT_VERIFIED_M7C_N02','hidden_reasoning_logged':False}
  file.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');return result
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--model',required=True,choices=['gpt-6-luna','gpt-6-sol','gpt-6.1-sol']);p.add_argument('--effort',required=True);p.add_argument('--implementation-sha',required=True);a=p.parse_args();run(a.model,a.effort,a.implementation_sha)
+ p=argparse.ArgumentParser();p.add_argument('--model',required=True,choices=['gpt-6-luna','gpt-6-sol','gpt-6.1-sol']);p.add_argument('--effort',required=True);p.add_argument('--implementation-sha',required=True);p.add_argument('--scenario',action='append');a=p.parse_args();run(a.model,a.effort,a.implementation_sha,a.scenario)

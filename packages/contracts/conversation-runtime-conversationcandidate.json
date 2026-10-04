@@ -62,12 +62,14 @@
           "type": "string"
         },
         "text": {
+          "description": "For USER_STATED only: exact unchanged substring of the CURRENT user message, not a paraphrase or interpretation. For paraphrases choose MODEL_DERIVED_SUMMARY.",
           "maxLength": 800,
           "minLength": 1,
           "title": "Text",
           "type": "string"
         },
         "provenance": {
+          "description": "HYPOTHESIS kind requires MODEL_HYPOTHESIS; all other kinds cannot use MODEL_HYPOTHESIS. USER_STATED requires an exact current-user quote and OBSERVATION/FEELING/ACTION kind. Prefer MODEL_DERIVED_SUMMARY for every paraphrase. Never USER_CONFIRMED.",
           "enum": [
             "USER_STATED",
             "MODEL_HYPOTHESIS",
@@ -77,6 +79,7 @@
           "type": "string"
         },
         "source_refs": {
+          "description": "Exact supplied sNN aliases only. USER_STATED must cite only current_message_ref; historical roles may be unknown. Other items cite their actual supporting supplied context.",
           "items": {
             "pattern": "^s[0-9]{1,2}$",
             "type": "string"

@@ -269,8 +269,8 @@ OFFLINE_FIXTURE, not live quality evidence. `npm --prefix apps/web run build`; `
 context snapshot/doc/privacy checks. Commands/exit codes/exact C environment go in M7D report.
 
 Separate live authorized synthetic: `PYTHONPATH=. .venv/bin/python scripts/evaluate_m7d_providers.py
---model gpt-6-luna --effort max --implementation-sha <C>` and gpt-6-sol --effort ultra, total planned34 attempts
-under persistent48 ceiling; no implicit retries, no auth extraction, no fallback/PAYG. Catalog max must
+--model gpt-6-luna --effort max --implementation-sha <C>` and gpt-6-sol --effort ultra, initial planned34 attempts
+under persistent48 ceiling; no implicit retries, no auth extraction, no fallback/PAYG. After20 retained interim attempts, final bounded selection is Luna LONGITUDINAL/FREE/ROLE11 + Sol full17; total ceiling48. Catalog setting must
 be supported before any turn. Model/effort/route/profile, receipt/map and failure evidence are retained.
 Human quality dimensions are review prompts, not clinical outcomes or an LLM score.
 

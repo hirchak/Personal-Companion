@@ -22,9 +22,9 @@ class MapItem(Strict):
 
 class MapCandidateItem(Strict):
     kind: Literal['OBSERVATION','FEELING','ACTION','HYPOTHESIS','QUESTION','CHANGE','OPTION','TAKEAWAY','UNRESOLVED']
-    text: Text
-    provenance: Literal['USER_STATED','MODEL_HYPOTHESIS','MODEL_DERIVED_SUMMARY']
-    source_refs: Annotated[list[Annotated[str,StringConstraints(pattern=r'^s[0-9]{1,2}$')]], Field(min_length=1,max_length=8)]
+    text: Text = Field(description='For USER_STATED only: exact unchanged substring of the CURRENT user message, not a paraphrase or interpretation. For paraphrases choose MODEL_DERIVED_SUMMARY.')
+    provenance: Literal['USER_STATED','MODEL_HYPOTHESIS','MODEL_DERIVED_SUMMARY'] = Field(description='HYPOTHESIS kind requires MODEL_HYPOTHESIS; all other kinds cannot use MODEL_HYPOTHESIS. USER_STATED requires an exact current-user quote and OBSERVATION/FEELING/ACTION kind. Prefer MODEL_DERIVED_SUMMARY for every paraphrase. Never USER_CONFIRMED.')
+    source_refs: Annotated[list[Annotated[str,StringConstraints(pattern=r'^s[0-9]{1,2}$')]], Field(min_length=1,max_length=8,description='Exact supplied sNN aliases only. USER_STATED must cite only current_message_ref; historical roles may be unknown. Other items cite their actual supporting supplied context.')]
     _text = field_validator('text')(SendMessage.bounded_text.__func__)
     @model_validator(mode='after')
     def authority(self):
