@@ -99,4 +99,4 @@ def test_configured_runtime_deadline_matches_higher_effort_evaluation(isolated):
  c=app.state.conversation_controller;p=c.conversations.create(NewConversation(operation_id=uuid4()));r=c.send(p['conversation']['id'],InferenceStart(operation_id=uuid4(),base_revision=1,text='ORIGINAL SYNTHETIC deadline fixture',synthetic_test_ack=True),launch=False)
  assert r['inference_job']['request_metadata']['timeout_seconds']==120
  c.run(r['inference_job']['id']);assert c.get(p['conversation']['id'],r['inference_job']['id'])['state']=='COMPLETED'
- legacy=create_app(isolated/'legacy-runtime-timeout',m7c_synthetic=True);assert legacy.state.conversation_controller.timeout==60
+ legacy=create_app(isolated/'legacy-runtime-timeout',m7c_synthetic=True,synthetic_conversations=True);assert legacy.state.conversation_controller.timeout==60
