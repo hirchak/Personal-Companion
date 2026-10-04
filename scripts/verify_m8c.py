@@ -188,7 +188,12 @@ def main():
         try:checks['upgrade_restart_defaults']=defaults(client)
         finally:stop(process,client)
         if a.previous_package:
-            old=r.package_path(a.previous_package);old_m=r.validate_package(old,r.read_json(old/'release-manifest.json')['manifest_hash'])
+            source=r.package_path(a.previous_package)
+            old_m=r.validate_package(source,r.read_json(source/'release-manifest.json')['manifest_hash'])
+            # A packaged manager has its own REPO boundary. Stage the independently verified
+            # previous public source package outside Git, exactly as an operator would.
+            old=work/'previous verified source package';shutil.copytree(source,old)
+            r.validate_package(old,old_m['manifest_hash'])
             assert old_m['format']==3 and old_m['git_commit']!=commit
             old_app,old_data=work/'old real package app',work/'old private synthetic data'
             command('initialize-private','--package',old,'--manifest-hash',old_m['manifest_hash'],'--app',old_app,'--data',old_data,*init_args(old_data),manager=old)
