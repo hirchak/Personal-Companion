@@ -79,7 +79,7 @@ def main():
             if args.local_asr:
                 from .whisper_local_asr import WhisperLocalASR
                 local_asr=WhisperLocalASR()
-            app = create_app(args.root, args.port,m7c_synthetic=args.m7c_synthetic or args.m7d_synthetic,conversation_provider=provider,local_asr=local_asr,m2=args.mode=='m2-synthetic',scheme=scheme,synthetic_practices=args.synthetic_practices,synthetic_conversations=args.synthetic_conversations or args.m7c_synthetic or args.m7d_synthetic)
+            app = create_app(args.root, args.port,conversation_timeout=120 if args.m7d_synthetic else 60,m7c_synthetic=args.m7c_synthetic or args.m7d_synthetic,conversation_provider=provider,local_asr=local_asr,m2=args.mode=='m2-synthetic',scheme=scheme,synthetic_practices=args.synthetic_practices,synthetic_conversations=args.synthetic_conversations or args.m7c_synthetic or args.m7d_synthetic)
             print(f'Open {scheme}://127.0.0.1:{args.port}\nOne-time unlock code (5 min): {app.state.auth.code}', flush=True)
             print('Stop: Ctrl+C. Lock/logout requires restart for a new one-time code.', flush=True)
             uvicorn.run(app, host='127.0.0.1', port=args.port, access_log=False, log_level='critical', **tls)

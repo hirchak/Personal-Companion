@@ -45,7 +45,7 @@ normalized text cannot be regenerated as current. Semantic paraphrase quality re
 criterion, not a claimed perfect semantic detector. Source-less entries are denied.
 
 Map capacity40, candidate8, snapshot20 items/2 closures/16KB; source receipt max50; provider input48KB;
-output24KB; deadline120s; one foreground request/conversation. At capacity, explicit IRRELEVANT and source-invalid model items may move to immutable history;
+output24KB; M7D CLI/eval deadline120s (legacy M7C default60 unchanged); one foreground request/conversation. At capacity, explicit IRRELEVANT and source-invalid model items may move to immutable history;
 exact-text rejection/irrelevance tombstones stay binding across versions. Remaining capacity exhaustion
 pauses for review instead of discarding confirmed/rejected provenance. Snapshot prioritizes rejected
 hypotheses and user-confirmed takeaways within its bounded window. Older goal revisions stay pinned; new

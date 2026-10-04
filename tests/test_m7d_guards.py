@@ -88,3 +88,15 @@ def test_main_question_guard_does_not_count_exact_context_quotes(text,expected):
  from apps.core.conversation_controller import main_question_count
  payload={'context':[{'text':'ORIGINAL SYNTHETIC · Колега сказав «ще не готово?».'}],'reflection_state':None}
  assert main_question_count(text,payload)==expected
+
+
+def test_configured_runtime_deadline_matches_higher_effort_evaluation(isolated):
+ from apps.core.api import create_app
+ from apps.core.conversation_contracts import NewConversation
+ from apps.core.conversation_runtime_contracts import InferenceStart
+ from test_m7c_controller import FixtureProvider
+ app=create_app(isolated/'bounded-runtime-timeout',m7c_synthetic=True,synthetic_conversations=True,conversation_provider=FixtureProvider(),conversation_timeout=120)
+ c=app.state.conversation_controller;p=c.conversations.create(NewConversation(operation_id=uuid4()));r=c.send(p['conversation']['id'],InferenceStart(operation_id=uuid4(),base_revision=1,text='ORIGINAL SYNTHETIC deadline fixture',synthetic_test_ack=True),launch=False)
+ assert r['inference_job']['request_metadata']['timeout_seconds']==120
+ c.run(r['inference_job']['id']);assert c.get(p['conversation']['id'],r['inference_job']['id'])['state']=='COMPLETED'
+ legacy=create_app(isolated/'legacy-runtime-timeout',m7c_synthetic=True);assert legacy.state.conversation_controller.timeout==60
