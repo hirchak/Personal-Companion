@@ -394,3 +394,31 @@ def test_private_backup_relabelled_legacy_still_refused_before_roots(vault,isola
     assert not newapp.exists() and not newdata.exists()
     with pytest.raises(SafeError,match='ROOT_KIND_MISMATCH'):Store.restore(target,newdata)
     assert not newdata.exists()
+
+
+@pytest.mark.parametrize('field,value',[('backup_format',4.0),('schema_version',11.0)])
+def test_backup_numeric_type_corruption_before_target_creation(vault,isolated,field,value):
+    pkg,h,app,data,b=vault;target=b/'backup';r.backup(app,data,target,root_kind=KIND)
+    m=r.read_json(target/'manifest.json');m[field]=value;(target/'manifest.json').write_text(encode(m))
+    new=isolated/'rejected';newapp=isolated/'rejected app'
+    with pytest.raises(SafeError):r.restore(pkg,h,target,newapp,new,**args(new,b))
+    assert not newapp.exists() and not new.exists()
+
+@pytest.mark.parametrize('field',['compatibility','platform','defaults'])
+def test_release_numeric_boolean_metadata_exact_types(private_package,field):
+    pkg,_=private_package;m=r.read_json(pkg/'release-manifest.json')
+    if field=='compatibility':m[field]['schema_min']=2.0
+    if field=='platform':m[field]['self_contained']=0
+    if field=='defaults':m[field]['clinical_active']=False
+    m['manifest_hash']=r.identity(m);(pkg/'release-manifest.json').write_text(encode(m))
+    with pytest.raises(SafeError,match='RELEASE_INTEGRITY'):r.validate_package(pkg,m['manifest_hash'])
+
+
+def test_backup_duplicate_metadata_rejected_before_targets(vault,isolated):
+    pkg,h,app,data,b=vault;target=b/'backup';r.backup(app,data,target,root_kind=KIND)
+    manifest=target/'manifest.json';text=manifest.read_text();text=text.replace('"backup_format":4','"backup_format":4,"backup_format":4');manifest.write_text(text)
+    new=isolated/'reject';newapp=isolated/'reject app'
+    with pytest.raises(SafeError):r.restore(pkg,h,target,newapp,new,**args(new,b))
+    assert not newapp.exists() and not new.exists()
+    with pytest.raises(SafeError):Store.restore(target,new)
+    assert not new.exists()

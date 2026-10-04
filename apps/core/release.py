@@ -16,7 +16,7 @@ import subprocess
 import sys
 import threading
 from uuid import uuid4
-from .storage import Store, SafeError, MARKER, SCHEMA, REPO, safe_path, empty_target, encode, digest, check_synthetic_marker
+from .storage import Store, SafeError, MARKER, SCHEMA, REPO, safe_path, empty_target, encode, digest, check_synthetic_marker, read_object
 from .voice import durable_write, fsync_dir
 
 from .release_metadata import DEFAULTS,CONTRACT,identity,validate_manifest,check_backup_provenance
@@ -25,17 +25,7 @@ INSTALL_MARKER = 'M8A_SYNTHETIC_INSTALL_V1'
 PRIVATE_INSTALL_MARKER = 'M8C_PRIVATE_LOCAL_INSTALL_V1'
 
 def read_json(path):
-    try:
-        def unique(items):
-            result = {}
-            for k, v in items:
-                if k in result: raise ValueError()
-                result[k] = v
-            return result
-        value=json.loads(Path(path).read_text(), object_pairs_hook=unique)
-        if not isinstance(value,dict): raise ValueError()
-        return value
-    except (OSError, ValueError, TypeError): raise SafeError('INVALID_METADATA') from None
+    return read_object(path)
 
 def file_hashes(root):
     result = {}
@@ -266,6 +256,7 @@ def check_writer(manifest):
 
 def verify_backup(backup,expected_producer_hash=None,expected_backup_hash=None,allow_legacy=False):
     backup=safe_path(backup); m=read_json(backup/'manifest.json')
+    if type(m.get('backup_format')) is not int or type(m.get('schema_version')) is not int:raise SafeError('BACKUP_METADATA_TYPES')
     if not isinstance(m.get('files'),dict) or m['files'].get('snapshot.sqlite3') != digest((backup/'snapshot.sqlite3').read_bytes()): raise SafeError('CHECKSUM_MISMATCH')
     if expected_backup_hash is not None and digest((backup/'manifest.json').read_bytes())!=expected_backup_hash:raise SafeError('BACKUP_MANIFEST_CHECKSUM')
     if m.get('backup_format') not in {3,4} and not allow_legacy:raise SafeError('LEGACY_BACKUP_REQUIRES_EXPLICIT_APPROVAL')

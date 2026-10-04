@@ -30,7 +30,7 @@ def encode(value):
 def digest(data):
     return hashlib.sha256(data).hexdigest()
 
-def check_synthetic_marker(root):
+def read_object(path):
     def unique(items):
         result={}
         for key,value in items:
@@ -38,9 +38,15 @@ def check_synthetic_marker(root):
             result[key]=value
         return result
     try:
-        value=json.loads((Path(root)/'synthetic.json').read_text(),object_pairs_hook=unique)
-        if encode(value)!=encode(MARKER):raise ValueError()
-    except (OSError,ValueError,TypeError):raise SafeError('UNKNOWN_ROOT') from None
+        value=json.loads(Path(path).read_text(),object_pairs_hook=unique)
+        if not isinstance(value,dict):raise ValueError()
+        return value
+    except (OSError,ValueError,TypeError):raise SafeError('INVALID_METADATA') from None
+
+def check_synthetic_marker(root):
+    try:
+        if encode(read_object(Path(root)/'synthetic.json'))!=encode(MARKER):raise ValueError()
+    except (SafeError,ValueError,TypeError):raise SafeError('UNKNOWN_ROOT') from None
 
 def safe_path(path):
     p = Path(path).absolute()
@@ -487,7 +493,8 @@ class Store:
         private = RootKind(root_kind) == RootKind.PRIVATE_LOCAL
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
-            m=json.loads((b/'manifest.json').read_text())
+            m=read_object(b/'manifest.json')
+            if type(m.get('backup_format')) is not int or type(m.get('schema_version')) is not int:raise SafeError('BACKUP_METADATA_TYPES')
             if private != (m.get('backup_format')==4):raise SafeError('ROOT_KIND_MISMATCH')
             if private:
                 from .local_private import RootReceipt, owner_only, require_volume

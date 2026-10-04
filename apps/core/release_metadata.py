@@ -19,8 +19,8 @@ def validate_manifest(m):
         if encode(m['defaults'])!=encode(DEFAULTS) or type(m['schema_version']) is not int or m['schema_version']!=SCHEMA:raise ValueError()
         if not re.fullmatch('[0-9a-f]{40}',m['git_commit']):raise ValueError()
         if m['release_id']!=({1:'M8A-',2:'M8B-',3:'M8C-'}[m['format']])+m['git_commit']:raise ValueError()
-        if m['compatibility']!={'schema_min':2,'schema_max':SCHEMA,'web_contract':CONTRACT,'downgrade':'FRESH_ROOT_BACKUP_ONLY'}:raise ValueError()
-        if m['platform']!={'os':'Darwin','architecture':'arm64','python':'3.13','dependencies':'EXACT_REQUIREMENTS_LOCK' if old else 'EXACT_RUNTIME_LOCK','self_contained':False}:raise ValueError()
+        if encode(m['compatibility'])!=encode({'schema_min':2,'schema_max':SCHEMA,'web_contract':CONTRACT,'downgrade':'FRESH_ROOT_BACKUP_ONLY'}):raise ValueError()
+        if encode(m['platform'])!=encode({'os':'Darwin','architecture':'arm64','python':'3.13','dependencies':'EXACT_REQUIREMENTS_LOCK' if old else 'EXACT_RUNTIME_LOCK','self_contained':False}):raise ValueError()
         if not isinstance(m['files'],dict) or not m['files']:raise ValueError()
         for p,h in m['files'].items():
             if not p or p.startswith('/') or '..' in p.split('/') or not re.fullmatch('[0-9a-f]{64}',h):raise ValueError()
@@ -73,6 +73,7 @@ def validate_provenance(value):
 
 def check_backup_provenance(manifest,connection,expected_producer_hash=None):
     try:
+        if type(manifest['backup_format']) is not int or type(manifest['schema_version']) is not int:raise ValueError()
         value=validate_provenance(manifest['release_provenance'])
         if manifest['backup_format']!=value['backup_format'] or manifest['schema_version']!=value['snapshot_schema'] or manifest['created_at_utc']!=value['created_at_utc'] or manifest['app_version']!=value['producing_manifest']['release_id']:raise ValueError()
         private=value['version']==2
