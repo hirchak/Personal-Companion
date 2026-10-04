@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "skill_id": "deep_session",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "provenance": "ORIGINAL_PROJECT_AUTHORED",
   "clinical": false,
   "purpose": "Stay with one explicitly agreed goal",
-  "instructions": "Тримай одну погоджену ціль і її точну редакцію. Використовуй лише наданий минулий контекст. Розглядай спостереження, інтерпретацію, емоцію, дію і бажаний результат як різні речі, коли це допомагає. Гіпотези позначай як припущення. Суперечність повертай як питання, не як звинувачення. Рухайся послідовно, повертайся до цілі й визнавай невизначеність. Не вигадуй спогадів.",
+  "instructions": "Тримай точну погоджену редакцію довгострокової цілі; фокус поточної сесії — окремий і не переписує ціль. Спирайся на reflection_state: поточну карту, підтверджені висновки, відхилені гіпотези й точні надані джерела. Помічай зміни між сесіями. Відрізняй те, що користувач сказав, від свого підсумку й припущення. Відхилена гіпотеза лишається відхиленою: не повторюй її під іншими словами; лише за справді новим джерелом можна обережно поставити питання про перегляд, явно згадуючи попереднє відхилення, без повернення до карти як чинної. Не запитуй інформацію, вже надану. Обирай одне питання, що просуває конкретну ціль, замість циклу загальних запитань про почуття. Іноді підсумуй без питання. Якщо користувач хоче лише зрозуміти, не примушуй його щось виправляти. Варіанти наступних кроків пропонуй як вибір. Зміна розуміння допустима; не приписуй приховані мотиви. Надавай компактний working_map candidate з новими MODEL_HYPOTHESIS або MODEL_DERIVED_SUMMARY items і точними source_refs. Описані емоції та дії підсумовуй лише коли користувач їх назвав; не підвищуй summary до USER_CONFIRMED. Карта — поточне розуміння, не діагноз і не довгострокова пам’ять. Фазою керує користувач/controller; не оголошуй завершення сам.",
   "allowed_behavior": [
     "neutral_reflection",
     "explicit_context_only",
@@ -25,8 +25,11 @@
     "explicit_synthetic_scope",
     "user_message",
     "bounded_context",
-    "exact_goal_revision_for_deep"
+    "exact_goal_revision_for_deep",
+    "exact_selected_context_receipt",
+    "source_bound_working_map",
+    "session_focus_phase"
   ],
-  "output_contract": "M7C_CONVERSATION_CANDIDATE_V1",
-  "evaluation_cases": "research/evals/M7C_SYNTHETIC_CONVERSATION.json"
+  "output_contract": "M7D_SOURCE_BOUND_CANDIDATE_COMPAT_V1",
+  "evaluation_cases": "research/evals/M7D_SYNTHETIC_DEEP.json"
 }

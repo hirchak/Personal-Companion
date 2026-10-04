@@ -29,6 +29,7 @@ const states: Record<string, string> = {
   TRANSCRIPTION_QUEUED: "Очікує транскрипції",
   TRANSCRIBING: "Розпізнаємо локально",
   TRANSCRIPT_READY: "Кандидат · перевірте текст",
+  REVIEW_REQUIRED: "Мовлення непевне · потрібен явний перегляд",
   CONFIRMED: "Текст підтверджено",
   DELETED: "Аудіо видалено",
 };
@@ -602,7 +603,7 @@ export function VoicePanel({
             {t && (
               <p role="status">
                 {states[t.state] ?? t.state}
-                {t.error === "NOTHING_RECOGNIZED"
+                {["NOTHING_RECOGNIZED", "NO_SPEECH"].includes(t.error ?? "")
                   ? " · Нічого не розпізнано. Перевірте запис."
                   : t.error
                     ? " · Повторіть локальне розпізнавання."
@@ -648,6 +649,7 @@ export function VoicePanel({
                   "TRANSCRIPTION_QUEUED",
                   "TRANSCRIBING",
                   "TRANSCRIPT_READY",
+                  "REVIEW_REQUIRED",
                 ].includes(t.state) && (
                   <button
                     disabled={Boolean(busy)}
@@ -687,8 +689,19 @@ export function VoicePanel({
                 </button>
               </details>
             )}
-            {t?.state === "TRANSCRIPT_READY" && (
+            {t && ["TRANSCRIPT_READY", "REVIEW_REQUIRED"].includes(t.state) && (
               <div className="voice-review">
+                {t.state === "REVIEW_REQUIRED" && (
+                  <>
+                    <p role="alert">
+                      Не вдалося впевнено відрізнити мовлення від шуму.
+                      Перевірте текст перед вставленням.
+                    </p>
+                    <button onClick={() => void editTranscript(item)}>
+                      Я перевірив текст · підтвердити перегляд
+                    </button>
+                  </>
+                )}
                 <label>
                   Перевірити та виправити транскрипт
                   <textarea
@@ -730,6 +743,7 @@ export function VoicePanel({
                 <button
                   disabled={
                     Boolean(busy) ||
+                    t.state === "REVIEW_REQUIRED" ||
                     !(text[t.id] ?? t.edited ?? t.candidate ?? "").trim()
                   }
                   onClick={() =>

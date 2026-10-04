@@ -1457,6 +1457,188 @@
         }
       }
     },
+    "/api/v1/conversations/{conversation_id}/deep-session": {
+      "get": {
+        "summary": "Deep Session Get",
+        "operationId": "deep_session_get_api_v1_conversations__conversation_id__deep_session_get",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/deep-session/actions": {
+      "post": {
+        "summary": "Deep Session Action",
+        "operationId": "deep_session_action_api_v1_conversations__conversation_id__deep_session_actions_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/working-map/actions": {
+      "post": {
+        "summary": "Working Map Action",
+        "operationId": "working_map_action_api_v1_conversations__conversation_id__working_map_actions_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MapAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/context-preview": {
+      "post": {
+        "summary": "Deep Context Preview",
+        "operationId": "deep_context_preview_api_v1_conversations__conversation_id__context_preview_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeepContextPreview"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/conversations/{conversation_id}/inference": {
       "post": {
         "summary": "Conversation Infer",
@@ -4014,6 +4196,33 @@
         ],
         "title": "AudioDelete"
       },
+      "ContextBinding": {
+        "properties": {
+          "receipt_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Receipt Id"
+          },
+          "context_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Context Hash"
+          },
+          "preview_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Preview Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "context_hash",
+          "preview_hash"
+        ],
+        "title": "ContextBinding"
+      },
       "ContextRequest": {
         "properties": {
           "operation_id": {
@@ -4050,6 +4259,18 @@
               }
             ],
             "title": "Window End"
+          },
+          "selection_type": {
+            "type": "string",
+            "enum": [
+              "LEGACY",
+              "GOAL_START",
+              "LAST_7_DAYS",
+              "LAST_30_DAYS",
+              "CUSTOM"
+            ],
+            "title": "Selection Type",
+            "default": "LEGACY"
           },
           "query": {
             "type": "string",
@@ -4120,6 +4341,53 @@
           "conversation_id"
         ],
         "title": "ContextRequest"
+      },
+      "ContextSelection": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "GOAL_START",
+              "LAST_7_DAYS",
+              "LAST_30_DAYS",
+              "CUSTOM"
+            ],
+            "title": "Type",
+            "default": "GOAL_START"
+          },
+          "timezone": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Timezone",
+            "default": "Europe/Warsaw"
+          },
+          "window_start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Window Start"
+          },
+          "window_end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Window End"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ContextSelection"
       },
       "ConversationAction": {
         "properties": {
@@ -4298,6 +4566,38 @@
           "fields"
         ],
         "title": "CreativeSelection"
+      },
+      "DeepContextPreview": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Revision"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "selection": {
+            "$ref": "#/components/schemas/ContextSelection"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_revision",
+          "text",
+          "selection"
+        ],
+        "title": "DeepContextPreview"
       },
       "Delete": {
         "properties": {
@@ -5659,6 +5959,16 @@
                 "type": "null"
               }
             ]
+          },
+          "context_binding": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContextBinding"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -5730,6 +6040,63 @@
           "source_revision"
         ],
         "title": "JournalPointPreview"
+      },
+      "MapAction": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Version"
+          },
+          "item_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Item Id"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "irrelevant",
+              "confirm",
+              "clarify"
+            ],
+            "title": "Action"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 800,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "user_confirmed": {
+            "type": "boolean",
+            "const": true,
+            "title": "User Confirmed"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_version",
+          "item_id",
+          "action",
+          "user_confirmed"
+        ],
+        "title": "MapAction"
       },
       "MemoryChange": {
         "properties": {
@@ -6330,6 +6697,70 @@
           "text"
         ],
         "title": "SendMessage"
+      },
+      "SessionAction": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Base Revision"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "focus",
+              "phase",
+              "pause",
+              "resume",
+              "close"
+            ],
+            "title": "Action"
+          },
+          "focus": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 800,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Focus"
+          },
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "AGREE_FOCUS",
+                  "EXPLORE",
+                  "SYNTHESIZE",
+                  "NEXT_STEP",
+                  "CLOSING"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "base_revision",
+          "action"
+        ],
+        "title": "SessionAction"
       },
       "SleepFields": {
         "properties": {

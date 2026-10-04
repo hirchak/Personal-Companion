@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "skill_id": "worry_rumination",
+  "version": "0.1.0-candidate",
+  "status": "CANDIDATE_METADATA_ONLY",
+  "activation_state": "OFF",
+  "runtime_instructions": null,
+  "purpose": "Future reviewed practical-problem versus repetitive-worry boundaries.",
+  "intended_problem_class": "worry_rumination",
+  "registry_path": "research/admission/registry.json",
+  "registry_sha256": "8aab44e94922ef3860e2777a9611cf574b9bb65d46fd9b4c9d5f9d2e2fa5a1df",
+  "admission_dependencies": [
+    {
+      "id": "worry_rumination",
+      "version": "0.1.0-draft",
+      "research_packets": [
+        "R06",
+        "R09",
+        "R11"
+      ],
+      "claim_ids": [
+        "claim:RG-01",
+        "claim:RG-02",
+        "claim:RG-13",
+        "claim:RG-15",
+        "claim:RG-17",
+        "claim:RG-18",
+        "claim:RG-19",
+        "claim:RG-20",
+        "claim:RG-26",
+        "claim:RG-27"
+      ],
+      "finding_ids": [
+        "RG-01",
+        "RG-02",
+        "RG-13",
+        "RG-15",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "missing_gates": [
+        "ACCOUNTABLE_APPROVAL_REQUIRED",
+        "ACCOUNTABLE_CONTENT_REVIEW",
+        "APPLICABILITY_REVIEW_REQUIRED",
+        "CLAIM_APPLICABILITY_AND_FINDING_RESOLUTION",
+        "CONTENT_REVIEW_REQUIRED",
+        "EVIDENCE_REVIEW_REQUIRED",
+        "EXACT_ID_VERSION_CONTENT_HASH",
+        "EXACT_RIGHTS_LANGUAGE_USE_SCOPE",
+        "EXACT_RIGHTS_REQUIRED",
+        "EXACT_TECHNICAL_EVIDENCE",
+        "EXACT_TECHNICAL_EVIDENCE_REQUIRED",
+        "FINDING:RG-01",
+        "FINDING:RG-02",
+        "FINDING:RG-13",
+        "FINDING:RG-15",
+        "FINDING:RG-17",
+        "FINDING:RG-18",
+        "FINDING:RG-19",
+        "FINDING:RG-20",
+        "FINDING:RG-26",
+        "FINDING:RG-27",
+        "MISSING_CONTENT_HASH",
+        "SEPARATE_OWNER_ACTIVATION_PERMISSION",
+        "UNRESOLVED_CLAIM"
+      ],
+      "rights": {
+        "status": "NOT_REVIEWED",
+        "basis": null,
+        "locator": null,
+        "material_hash": null,
+        "language": null,
+        "use_scope": null,
+        "reviewed_by": null,
+        "reviewed_on": null
+      },
+      "evidence_status": "NOT_REVIEWED",
+      "content_status": "NOT_REVIEWED",
+      "required_reviewer_role": "QUALIFIED_CLINICAL_REVIEWER",
+      "activation_status": "OFF",
+      "exact_content_hash": null,
+      "qualified_clinical_review_record": null
+    }
+  ],
+  "research_packet_ids": [
+    "R06",
+    "R09",
+    "R11"
+  ],
+  "claim_ids": [
+    "claim:RG-01",
+    "claim:RG-02",
+    "claim:RG-13",
+    "claim:RG-15",
+    "claim:RG-17",
+    "claim:RG-18",
+    "claim:RG-19",
+    "claim:RG-20",
+    "claim:RG-26",
+    "claim:RG-27"
+  ],
+  "unresolved_finding_ids": [
+    "RG-01",
+    "RG-02",
+    "RG-13",
+    "RG-15",
+    "RG-17",
+    "RG-18",
+    "RG-19",
+    "RG-20",
+    "RG-26",
+    "RG-27"
+  ],
+  "rights_status": "NOT_CLEARED_FOR_RUNTIME_CONTENT",
+  "evidence_status": "UNRESOLVED_CANONICAL_FINDINGS",
+  "qualified_content_review_required": true,
+  "local_RAW_status": "MANIFEST_ONLY_NOT_LOCALLY_RECEIVED",
+  "allowed_future_behaviors": [
+    "EXACT_ACCOUNTABLE_REVIEWED_CONTENT_ONLY",
+    "USER_CAN_REJECT_PAUSE_STOP",
+    "SOURCE_BOUND_UNCERTAINTY",
+    "EXPLICIT_USER_RECOMMENDATION_PREVIEW"
+  ],
+  "forbidden_behaviors": [
+    "clinical_activation",
+    "diagnosis",
+    "licensed_therapist_claim",
+    "private_data",
+    "health_to_AI",
+    "automatic_practice",
+    "automatic_memory",
+    "reassurance_loop",
+    "unreviewed_worry_postponement"
+  ],
+  "input_requirements": [
+    "exact_goal_revision",
+    "explicit_user_scope",
+    "source_revisions",
+    "exact_content_version_hash",
+    "accountable_evidence_content_rights_approval",
+    "separate_owner_activation_permission"
+  ],
+  "stop_pause_requirements": [
+    "user_stop_immediate",
+    "missing_admission_fail_closed",
+    "stale_source_pause_review",
+    "unsupported_private_scope_deny"
+  ],
+  "output_schema_proposal": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "candidate_text",
+      "source_refs",
+      "practice_reference"
+    ],
+    "properties": {
+      "candidate_text": {
+        "type": "string",
+        "maxLength": 1200
+      },
+      "source_refs": {
+        "type": "array",
+        "maxItems": 8,
+        "items": {
+          "type": "string"
+        }
+      },
+      "practice_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Exact M7A admitted ID/version/hash; inert recommendation only"
+      }
+    }
+  },
+  "synthetic_eval_cases": [
+    "worry_rumination_OFF_DENIAL",
+    "worry_rumination_STALE_ADMISSION",
+    "worry_rumination_NO_HEALTH_ACCESS",
+    "worry_rumination_TEXT_CANNOT_EXECUTE_PRACTICE"
+  ],
+  "practice_link": "candidate -> UI -> explicit user click -> M7A exact admission -> package; no model execution"
+}

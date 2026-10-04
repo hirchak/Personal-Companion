@@ -1,0 +1,66 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "base_revision": {
+      "minimum": 1,
+      "title": "Base Revision",
+      "type": "integer"
+    },
+    "action": {
+      "enum": [
+        "focus",
+        "phase",
+        "pause",
+        "resume",
+        "close"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "focus": {
+      "anyOf": [
+        {
+          "maxLength": 800,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Focus"
+    },
+    "phase": {
+      "anyOf": [
+        {
+          "enum": [
+            "AGREE_FOCUS",
+            "EXPLORE",
+            "SYNTHESIZE",
+            "NEXT_STEP",
+            "CLOSING"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Phase"
+    }
+  },
+  "required": [
+    "operation_id",
+    "base_revision",
+    "action"
+  ],
+  "title": "SessionAction",
+  "type": "object"
+}

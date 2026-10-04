@@ -59,6 +59,19 @@ export function chatError(code: string) {
     return "Розмова змінилася в іншому вікні. Перегляньте актуальні повідомлення; ваш текст залишився в полі.";
   if (code === "CONVERSATION_DELETED")
     return "Цю розмову вже видалено. Почніть нову.";
+  if (
+    [
+      "PREVIEW_CHANGED",
+      "CONTEXT_CHANGED",
+      "MAP_CHANGED",
+      "SESSION_CHANGED",
+      "CONTEXT_PREVIEW_REQUIRED",
+      "SOURCE_CHANGED",
+    ].includes(code)
+  )
+    return "Контекст або карта змінилися. Перегляньте їх ще раз; повідомлення лишилося в полі.";
+  if (code === "SESSION_NOT_OPEN")
+    return "Сесію призупинено або закрито. Поверніться до неї чи почніть наступну.";
   if (code.includes("VOICE_SOURCE") || code.includes("SYNTHETIC_SOURCE"))
     return "Транскрипт змінився або недоступний у цьому режимі. Перевірте його ще раз; текст залишився в полі.";
   return "Не вдалося завершити дію. Текст залишився тут; перевірте локальний сервер і повторіть.";

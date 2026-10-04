@@ -61,6 +61,18 @@
       "default": null,
       "title": "Window End"
     },
+    "selection_type": {
+      "default": "LEGACY",
+      "enum": [
+        "LEGACY",
+        "GOAL_START",
+        "LAST_7_DAYS",
+        "LAST_30_DAYS",
+        "CUSTOM"
+      ],
+      "title": "Selection Type",
+      "type": "string"
+    },
     "query": {
       "default": "",
       "maxLength": 200,

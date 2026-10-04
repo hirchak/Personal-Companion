@@ -257,3 +257,24 @@ DEFERRED for the precise reasons in [M7B contract](M7B_CONTRACT.md). No external
 Deterministic/offline: `.venv/bin/python -m pytest -q` (full M1–M7B plus M7C, including Chromium), `npm --prefix apps/web run build`, `npm --prefix apps/web test`, `node scripts/verify_m7a_schemas.mjs`, `.venv/bin/python scripts/m7_admission.py`, `.venv/bin/python scripts/check_docs.py --json`, generated schema parity/context and privacy checks. M7C tests cover source/hash/goal binding, provider OFF, no automatic writes/tools/fallback, output rejection, cancellation/timeout/retry, persistent100-call ledger, restart/backup, N01 supersession/legacy repair, IANA/DST/day identity, ASR fixture boundary and explicit USER journal preview/confirm. Offline FixtureProvider is never live evidence.
 
 Separated explicit live tools (not pytest): `PYTHONPATH=. .venv/bin/python scripts/evaluate_m7c_providers.py --model gpt-6-luna --implementation-sha <C>` (repeat for selected existing-auth model), `PYTHONPATH=. .venv/bin/python scripts/verify_m7c_voice_live.py --implementation-sha <C>`, `PYTHONPATH=. .venv/bin/python scripts/verify_m7c_asr_isolation.py`, `PYTHONPATH=. .venv/bin/python scripts/benchmark_m7c_asr.py`. These require the authorized synthetic environment; ledger never resets. Full eval21 cases/26 turns per model; no LLM quality judge. Actual ASR measures original Lesya TTS vs known references; silence/noise have no WER/CER. Human UA/device keyboard/clinical/real-data tests remain NOT_RUN. Final C association and command exit statuses are recorded in reports/evidence/M7C; tests PASS do not activate modules.
+
+## M7D owner scope — 2026-10-04
+
+Full deterministic `.venv/bin/python -m pytest -q` includes existing M1–M7C contracts and Chromium plus
+M7D map version/provenance/source edit/delete/reject/confirm/history/restart/backup, goal/focus/phase,
+range preview/draft hash/model binding and signal/admission/48-ledger tests. Browser fixtures remain
+OFFLINE_FIXTURE, not live quality evidence. `npm --prefix apps/web run build`; `npm --prefix apps/web test`;
+`node scripts/verify_m7c_schemas.mjs`; `node scripts/verify_m7d_schemas.mjs`; schema generation parity;
+`PYTHONPATH=. .venv/bin/python scripts/qualify_m7d_skills.py --check`; canonical admission validator;
+context snapshot/doc/privacy checks. Commands/exit codes/exact C environment go in M7D report.
+
+Separate live authorized synthetic: `PYTHONPATH=. .venv/bin/python scripts/evaluate_m7d_providers.py
+--model gpt-6-luna --effort max --implementation-sha <C>` and gpt-6-sol --effort ultra, total planned34 attempts
+under persistent48 ceiling; no implicit retries, no auth extraction, no fallback/PAYG. Catalog max must
+be supported before any turn. Model/effort/route/profile, receipt/map and failure evidence are retained.
+Human quality dimensions are review prompts, not clinical outcomes or an LLM score.
+
+`PYTHONPATH=. .venv/bin/python scripts/benchmark_m7d_asr.py` reuses M7C original local Lesya TTS assets and
+existing pinned whisper.cpp small. Silence/noise/quiet/normal/short/padded speech; no new model download,
+cloud or human audio. Human UA quality NOT_RUN. Signal heuristic is not perfect VAD. `measure_m7d.py`
+measures bounded local synthetic maps/invalidation/context/reopen/history/growth; no private/hardware claims.

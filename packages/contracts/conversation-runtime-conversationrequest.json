@@ -1,5 +1,48 @@
 {
   "$defs": {
+    "ClosureCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "discussed": {
+          "items": {
+            "maxLength": 600,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Discussed",
+          "type": "array"
+        },
+        "clearer": {
+          "maxLength": 1000,
+          "title": "Clearer",
+          "type": "string"
+        },
+        "unresolved": {
+          "maxLength": 600,
+          "title": "Unresolved",
+          "type": "string"
+        },
+        "possible_steps": {
+          "items": {
+            "maxLength": 600,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Possible Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "discussed",
+        "clearer",
+        "unresolved",
+        "possible_steps"
+      ],
+      "title": "ClosureCandidate",
+      "type": "object"
+    },
     "ProviderContextPart": {
       "additionalProperties": false,
       "properties": {
@@ -35,6 +78,43 @@
         "source_refs"
       ],
       "title": "ProviderContextPart",
+      "type": "object"
+    },
+    "ProviderMapItem": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        },
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "text",
+        "provenance",
+        "state",
+        "source_refs"
+      ],
+      "title": "ProviderMapItem",
       "type": "object"
     },
     "ProviderPayload": {
@@ -115,6 +195,17 @@
           "pattern": "^[0-9a-f]{64}$",
           "title": "Controller Frame Hash",
           "type": "string"
+        },
+        "reflection_state": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProviderReflectionState"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -131,6 +222,67 @@
         "controller_frame_hash"
       ],
       "title": "ProviderPayload",
+      "type": "object"
+    },
+    "ProviderPriorClosure": {
+      "additionalProperties": false,
+      "properties": {
+        "closure": {
+          "$ref": "#/$defs/ClosureCandidate"
+        },
+        "source_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "closure",
+        "source_refs"
+      ],
+      "title": "ProviderPriorClosure",
+      "type": "object"
+    },
+    "ProviderReflectionState": {
+      "additionalProperties": false,
+      "properties": {
+        "focus": {
+          "title": "Focus",
+          "type": "string"
+        },
+        "phase": {
+          "title": "Phase",
+          "type": "string"
+        },
+        "map_version": {
+          "title": "Map Version",
+          "type": "integer"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/ProviderMapItem"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "prior_closures": {
+          "items": {
+            "$ref": "#/$defs/ProviderPriorClosure"
+          },
+          "title": "Prior Closures",
+          "type": "array"
+        }
+      },
+      "required": [
+        "focus",
+        "phase",
+        "map_version",
+        "items",
+        "prior_closures"
+      ],
+      "title": "ProviderReflectionState",
       "type": "object"
     },
     "RuntimeSkill": {
@@ -261,8 +413,94 @@
       "title": "Provider Model",
       "type": "string"
     },
+    "provider_effort": {
+      "default": "low",
+      "title": "Provider Effort",
+      "type": "string"
+    },
+    "provider_profile": {
+      "default": "M7C_COMPAT_LOW",
+      "title": "Provider Profile",
+      "type": "string"
+    },
+    "selection_type": {
+      "default": "GOAL_START",
+      "title": "Selection Type",
+      "type": "string"
+    },
+    "selection_timezone": {
+      "default": "Europe/Warsaw",
+      "title": "Selection Timezone",
+      "type": "string"
+    },
+    "selected_window_start": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Window Start"
+    },
+    "selected_window_end": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Window End"
+    },
+    "selected_receipt_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Receipt Id"
+    },
+    "selected_context_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Context Hash"
+    },
+    "map_snapshot_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Map Snapshot Hash"
+    },
     "consent_scope": {
-      "const": "M7C_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY",
+      "enum": [
+        "M7C_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY",
+        "M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY"
+      ],
       "title": "Consent Scope",
       "type": "string"
     },

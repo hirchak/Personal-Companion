@@ -1663,3 +1663,12 @@ footer {
   cursor: pointer;
 }
 .journal-point-choice { display: flex; align-items: flex-start; gap: .65rem; margin: .8rem 0; overflow-wrap: anywhere; }
+
+/* M7D follows the incumbent paper/ink/sage Operate surface. */
+.deep-session-panel { display: grid; gap: .65rem; padding: .8rem 1rem; border-bottom: 1px solid var(--line); }
+.deep-session-panel > label { display: grid; gap: .3rem; }
+.deep-session-panel input, .deep-session-panel select { width: 100%; min-height: 44px; }
+.context-dates { display: flex; flex-wrap: wrap; gap: .65rem; }
+.context-dates label { flex: 1 1 180px; min-width: 0; }
+.map-item { padding: 1rem 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.map-item p { max-width: 68ch; }

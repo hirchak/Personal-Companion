@@ -1,0 +1,58 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation_id": {
+      "format": "uuid",
+      "title": "Operation Id",
+      "type": "string"
+    },
+    "base_version": {
+      "minimum": 1,
+      "title": "Base Version",
+      "type": "integer"
+    },
+    "item_id": {
+      "format": "uuid",
+      "title": "Item Id",
+      "type": "string"
+    },
+    "action": {
+      "enum": [
+        "reject",
+        "irrelevant",
+        "confirm",
+        "clarify"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "text": {
+      "anyOf": [
+        {
+          "maxLength": 800,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Text"
+    },
+    "user_confirmed": {
+      "const": true,
+      "title": "User Confirmed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "operation_id",
+    "base_version",
+    "item_id",
+    "action",
+    "user_confirmed"
+  ],
+  "title": "MapAction",
+  "type": "object"
+}

@@ -17,13 +17,16 @@ class WhisperLocalASR:
         self.validate()
     def validate(self):
         if self.binary.is_symlink() or self.model.is_symlink() or digest(self.binary.read_bytes())!=self.binary_hash or self.model.stat().st_size!=487601967 or digest(self.model.read_bytes())!=self.model_hash:raise SafeError('LOCAL_ASR_MODEL_INTEGRITY')
-    def metadata(self):return {'engine':'whisper.cpp','version':self.version,'model':'small-multilingual','model_hash':self.model_hash,'binary_hash':self.binary_hash,'languages':['uk'],'available':True,'status':'LOCAL_SYNTHETIC_ONLY','supported_input':['audio/wav'],'cloud_asr':False,'scope':'M7C_ORIGINAL_SYNTHETIC_AUDIO_ONLY'}
+    def metadata(self):return {'engine':'whisper.cpp','version':self.version,'model':'small-multilingual','model_hash':self.model_hash,'binary_hash':self.binary_hash,'languages':['uk'],'available':True,'status':'LOCAL_SYNTHETIC_ONLY','supported_input':['audio/wav'],'cloud_asr':False,'scope':'M7D_ORIGINAL_SYNTHETIC_AUDIO_ONLY','speech_guard':'PCM_SIGNAL_V1'}
     def profile(self,work):
         q=lambda p:json.dumps(str(p))
         return '\n'.join(['(version 1)','(allow default)','(deny network*)','(deny file-read-data)','(deny file-write*)','(deny process-exec)','(allow file-read-data (literal "/"))','(allow process-fork)','(allow process-exec (literal '+q(self.binary)+'))','(allow sysctl-read)','(allow mach-lookup)','(allow file-read-data (subpath "/System") (subpath "/usr/lib") (subpath "/Library/Apple") (subpath "/private/var/db/dyld") (subpath "/dev") (literal "/etc/localtime") (literal '+q(self.binary)+') (literal '+q(self.model)+') (literal '+q(self.binary.parent)+') (literal '+q(work.parent)+') (subpath '+q(work)+'))','(allow file-write* (subpath '+q(work)+') (literal "/dev/null"))'])
     def transcribe(self,data,language,cancel,deadline):
         if language!='uk':raise SafeError('LOCAL_ASR_LANGUAGE_DENIED')
         if cancel.is_set():raise SafeError('CANCELLED')
+        from .speech_presence import speech_presence
+        guard=speech_presence(data)
+        if guard['state']=='NO_SPEECH':raise SafeError('NO_SPEECH')
         self.validate();self.executions+=1
         work=Path(tempfile.mkdtemp(prefix='m7c-whisper-synthetic-',dir=Path(tempfile.gettempdir()).resolve()));source=work/'input.wav';source.write_bytes(data);source.chmod(0o600);profile=work/'sandbox.sb';profile.write_text(self.profile(work));output=work/'candidate'
         args=[str(self.sandbox),'-f',str(profile),str(self.binary),'-m',str(self.model),'-f',str(source),'-l','uk','-t','4','-ng','-nf','-oj','-of',str(output)]
@@ -49,7 +52,7 @@ class WhisperLocalASR:
             if not isinstance(segments,list) or len(segments)>100:raise SafeError('ASR_OUTPUT_INVALID')
             text=''.join(s['text'] for s in segments).strip()
             if len(text)>8000:raise SafeError('ASR_OUTPUT_INVALID')
-            return {'text':text,'language':'uk'}
+            return {'text':text,'language':'uk','speech_state':guard['state']}
         finally:
             sel.close()
             if process:

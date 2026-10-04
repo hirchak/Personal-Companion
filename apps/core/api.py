@@ -23,6 +23,7 @@ from .conversation_controller import ConversationController
 from .conversation_runtime_contracts import InferenceStart,InferenceAction,JournalPointPreview,JournalPointConfirm
 from .reflection import Reflection
 from .reflection_contracts import GoalCreate, GoalChange, ContextRequest, Expansion, MessageEdit
+from .deep_session_contracts import DeepContextPreview,MapAction,SessionAction
 from .conversation import Conversations
 from .conversation_contracts import NewConversation, SendMessage, ConversationAction
 from .practice import PracticeEngine
@@ -241,6 +242,24 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
 
     @app.post('/api/v1/conversations/{conversation_id}/actions')
     def conversation_action(conversation_id: UUID, body: ConversationAction): return conversations.action(conversation_id,body)
+
+    def require_deep():
+        if not controller:raise SafeError('M7D_RUNTIME_OFF',403)
+        return controller.deep
+
+    @app.get('/api/v1/conversations/{conversation_id}/deep-session')
+    def deep_session_get(conversation_id:UUID):return require_deep().read(conversation_id)
+
+    @app.post('/api/v1/conversations/{conversation_id}/deep-session/actions')
+    def deep_session_action(conversation_id:UUID,body:SessionAction):return require_deep().session_action(conversation_id,body)
+
+    @app.post('/api/v1/conversations/{conversation_id}/working-map/actions')
+    def working_map_action(conversation_id:UUID,body:MapAction):return require_deep().action(conversation_id,body)
+
+    @app.post('/api/v1/conversations/{conversation_id}/context-preview')
+    def deep_context_preview(conversation_id:UUID,body:DeepContextPreview):
+        require_deep()
+        return controller.preview_context(conversation_id,body)
 
     @app.post('/api/v1/conversations/{conversation_id}/inference')
     def conversation_infer(conversation_id:UUID,body:InferenceStart):

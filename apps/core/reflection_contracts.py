@@ -54,6 +54,7 @@ class ContextRequest(Strict):
     conversation_id:UID
     window_start:str|None=None
     window_end:str|None=None
+    selection_type:Literal['LEGACY','GOAL_START','LAST_7_DAYS','LAST_30_DAYS','CUSTOM']='LEGACY'
     query:Annotated[str,StringConstraints(max_length=200)]=''
     token_budget:Annotated[int,Field(ge=128,le=12000)]=2000
     byte_budget:Annotated[int,Field(ge=512,le=48000)]=8000

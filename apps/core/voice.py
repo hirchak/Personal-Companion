@@ -172,12 +172,15 @@ class Voice:
                 row=self._row(c,t['audio_id'],auth);self.verify_file(row)
                 c.execute("UPDATE transcripts SET state='TRANSCRIBING',updated=? WHERE id=?",(now(),tid))
                 data=self.path(row['id']).read_bytes()
-            # Signal precheck, not medical VAD. Low-energy never even invokes fake/actual ASR.
-            if row['signal']=='LOW_ENERGY':raise SafeError('NOTHING_RECOGNIZED')
+            # Legacy energy precheck for fixture engines; guarded local ASR handles quiet signals separately.
+            if row['signal']=='LOW_ENERGY' and not self.engines[mode].metadata().get('speech_guard'):raise SafeError('NOTHING_RECOGNIZED')
             value=self.engines[mode].transcribe(data,t['language_setting'],cancel,start+self.timeout)
             if time.monotonic()>=start+self.timeout:raise SafeError('ASR_TIMEOUT')
-            if not isinstance(value,dict) or set(value)!={'text','language'} or value['language'] not in {'uk',None} or not isinstance(value['text'],str) or len(value['text'])>8000:
+            if not isinstance(value,dict) or set(value) not in ({'text','language'},{'text','language','speech_state'}) or value['language'] not in {'uk',None} or not isinstance(value['text'],str) or len(value['text'])>8000:
                 raise SafeError('ASR_OUTPUT_INVALID')
+            speech=value.get('speech_state','SPEECH_DETECTED')
+            if speech not in {'SPEECH_DETECTED','UNCERTAIN','NO_SPEECH'}:raise SafeError('ASR_OUTPUT_INVALID')
+            if speech=='NO_SPEECH':raise SafeError('NO_SPEECH')
             text=value['text'];text.encode('utf-8')
             if not text.strip() or any(ord(x)<32 and x not in '\n\t\r' for x in text):raise SafeError('NOTHING_RECOGNIZED')
             with self.lock,self.store.transaction() as c:
@@ -185,7 +188,7 @@ class Voice:
                 current=c.execute('SELECT state FROM transcripts WHERE id=?',(tid,)).fetchone()
                 if cancel.is_set() or not current or current[0]!='TRANSCRIBING' or row['state']!='MAC_AUDIO_CONFIRMED':return
                 self.verify_file(row)
-                c.execute("UPDATE transcripts SET state='TRANSCRIPT_READY',candidate=?,language_result=?,elapsed=?,updated=? WHERE id=?",(text,value['language'],time.monotonic()-start,now(),tid))
+                c.execute("UPDATE transcripts SET state=?,candidate=?,language_result=?,error=?,elapsed=?,updated=? WHERE id=?",('REVIEW_REQUIRED' if speech=='UNCERTAIN' else 'TRANSCRIPT_READY',text,value['language'],'SPEECH_UNCERTAIN' if speech=='UNCERTAIN' else None,time.monotonic()-start,now(),tid))
         except (SafeError, OSError, sqlite3.Error, ValueError, UnicodeError) as exc:
             code=exc.code if isinstance(exc,SafeError) else 'ASR_FAILED'
             with self.lock,self.store.transaction() as c:
@@ -200,8 +203,8 @@ class Voice:
     def edit(self,tid,body,auth=None):
         with self.lock,self.store.transaction() as c:
             t=self._transcript(c,tid,auth)
-            if t['state']!='TRANSCRIPT_READY' or t['revision']!=body.revision:raise SafeError('TRANSCRIPT_CHANGED',409)
-            c.execute('UPDATE transcripts SET edited=?,revision=revision+1,updated=? WHERE id=?',(body.text,now(),str(tid)))
+            if t['state'] not in {'TRANSCRIPT_READY','REVIEW_REQUIRED'} or t['revision']!=body.revision:raise SafeError('TRANSCRIPT_CHANGED',409)
+            c.execute("UPDATE transcripts SET state='TRANSCRIPT_READY',error=NULL,edited=?,revision=revision+1,updated=? WHERE id=?",(body.text,now(),str(tid)))
         return {'state':'TRANSCRIPT_READY','revision':body.revision+1}
     def cancel_transcript(self,tid,auth=None):
         with self.lock,self.store.transaction() as c:

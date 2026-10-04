@@ -25,3 +25,9 @@ class LiveEvaluationBudget:
         with self.connect() as c:
             rows=[dict(r) for r in c.execute('SELECT route,model,outcome,count(*) AS requests FROM attempts WHERE goal=? GROUP BY route,model,outcome',(self.goal,))]
         total=sum(r['requests'] for r in rows);return {'goal':self.goal,'maximum':self.maximum,'total_requests':total,'remaining':self.maximum-total,'routes':rows,'raw_payload_logged':False}
+
+class M7DEvaluationBudget(LiveEvaluationBudget):
+    maximum=48
+    goal='M7D_OWNER_2026_10_04'
+    def __init__(self,path=None):
+        super().__init__(path or REPO/'generated/m7d-live-evaluation-ledger.sqlite3')

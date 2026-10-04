@@ -10,7 +10,7 @@ from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
 
-SCHEMA = 10
+SCHEMA = 11
 _ROOT_LOCKS = {}
 MARKER = {'kind': 'SYNTHETIC_M1', 'format': 1}
 REPO = Path(__file__).resolve().parents[2]
@@ -184,6 +184,8 @@ class Store:
                 reflection_triggers(c)
                 from .conversation_controller import RUNTIME_TABLES
                 for sql in RUNTIME_TABLES:c.execute(sql)
+                from .deep_session import DEEP_TABLES
+                for sql in DEEP_TABLES:c.execute(sql)
                 from .practice import PRACTICE_TABLES
                 for sql in PRACTICE_TABLES:
                     c.execute(sql)
@@ -267,6 +269,10 @@ class Store:
                 if not {'health_records','health_revisions','health_state'} <= tables:raise SafeError('INCOMPLETE_SCHEMA')
                 from .health import check_health
                 check_health(c)
+            if metadata.schema_version>=11:
+                if not {'deep_sessions','working_maps','deep_actions','deep_context_previews'} <= tables:raise SafeError('INCOMPLETE_SCHEMA')
+                from .deep_session import check_deep
+                check_deep(c)
             owner = str(metadata.owner_id)
             for table in ('entries', 'tombstones', 'operation_receipts'):
                 if c.execute(f'SELECT count(*) FROM {table} WHERE owner_id IS NULL OR owner_id!=?', (owner,)).fetchone()[0]:
@@ -308,7 +314,7 @@ class Store:
             for t in c.execute('SELECT * FROM transcripts'):
                 audio=c.execute('SELECT * FROM audio WHERE id=?',(t['audio_id'],)).fetchone()
                 if not audio or audio['content_hash']!=t['audio_hash']:raise ValueError()
-                if t['state'] not in {'TRANSCRIPTION_QUEUED','TRANSCRIBING','TRANSCRIPT_READY','CONFIRMED','FAILED','CANCELLED'}:raise ValueError()
+                if t['state'] not in {'TRANSCRIPTION_QUEUED','TRANSCRIBING','TRANSCRIPT_READY','REVIEW_REQUIRED','CONFIRMED','FAILED','CANCELLED'}:raise ValueError()
                 # A confirmed note can subsequently be edited/deleted normally; historical provenance
                 # must refer to its matching current/revision/tombstone, never an unrelated entry.
                 if t['state']=='CONFIRMED':
@@ -356,6 +362,8 @@ class Store:
                     check_reflection(dest)
                     from .conversation_controller import check_inferences
                     check_inferences(dest)
+                    from .deep_session import check_deep
+                    check_deep(dest)
                     attachments=self.check_audio(dest)
                     meta = dict(dest.execute('SELECT * FROM vault_meta').fetchone())
                 finally: dest.close()
@@ -369,7 +377,7 @@ class Store:
                     shutil.copyfile(source,folder/a['file']);os.chmod(folder/a['file'],0o600)
                     if (folder/a['file']).stat().st_size!=a['byte_size'] or digest((folder/a['file']).read_bytes())!=a['content_hash']:raise SafeError('AUDIO_CHECKSUM')
                     with (folder/a['file']).open('rb') as file:os.fsync(file.fileno())
-            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M7C',
+            manifest = {'backup_format': 2, 'schema_version': meta['schema_version'], 'app_version':'M7D',
                         'created_at_utc': now(), 'attachments': attachments,
                         'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
             (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
@@ -390,7 +398,7 @@ class Store:
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
             m=json.loads((b/'manifest.json').read_text())
-            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,6,7,8,9,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format'] not in {1,2} or m['schema_version'] not in {2,3,4,5,6,7,8,9,10,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
             attachments=m['attachments']
             if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
             expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
@@ -411,6 +419,9 @@ class Store:
                 if m['schema_version']>=10:
                     from .conversation_controller import check_inferences
                     check_inferences(source)
+                if m['schema_version']>=11:
+                    from .deep_session import check_deep
+                    check_deep(source)
                 required=cls.check_audio(source)
                 if attachments!=required:raise SafeError('AUDIO_REFERENCE_INTEGRITY')
             if attachments:

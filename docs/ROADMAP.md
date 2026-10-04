@@ -116,3 +116,12 @@ M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](adr/ADR-008-M7B-CONVERSAT
 M7B external ACCEPT — synthetic engineering scope, C f143dc9f82bb356ca10cbb4034cb8126ecf42aa3 / R73ec6064107d3d25475bb7454d96a2bd964ee77c. M7C is AWAITING_REVIEW in the currently authorized bounded preparation/runtime-evaluation goal; earlier M7B “M7C NOT_STARTED/live OFF” text is its historical checkpoint. M7C implements neutral controller, N01/N02, genuine synthetic provider evaluation and local ASR. Deferred: human/private voice quality and final hardware gate, real-user/provider activation, model-derived digest generation/tokenizer, clinical skills and all27 research admissions, MiniMax pending safe existing route, optional embeddings pending measured-gap ADR. M7D/M8 NOT_STARTED; no automatic continuation.
 
 M7C exact evidence: [runtime report](../reports/M7C_CONVERSATION_RUNTIME_REPORT.md). N01/N02 CLOSED engineering;94/100requests, private activation/clinical0 unchanged.
+
+## M7D owner goal — 2026-10-04
+
+M7C external ACCEPT is scoped live-synthetic engineering + local ASR capability only; see
+`reports/M7C_ARCHITECT_REVIEW.md`. Earlier M7D NOT_STARTED entries are historical checkpoints.
+M7D IN_PROGRESS: source-bound Working Map, session focus/phases and continuity, exact selected-context
+preview, neutral skills2.0, supported stronger synthetic model evaluation48 ceiling, PCM non-speech guard,
+five qualification metadata packages OFF. No clinical review/activation; all27 findings OPEN; real data OFF.
+M7C-N02 provider privacy hard gate OPEN, M6-N01 final0.6.1hardware NOT_RUN; M8 NOT_STARTED.

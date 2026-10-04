@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "GoalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "title": "GoalRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "conversation_id": {
+      "format": "uuid",
+      "title": "Conversation Id",
+      "type": "string"
+    },
+    "goal": {
+      "$ref": "#/$defs/GoalRef"
+    },
+    "revision": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "focus": {
+      "default": "",
+      "maxLength": 800,
+      "title": "Focus",
+      "type": "string"
+    },
+    "phase": {
+      "default": "OPEN",
+      "enum": [
+        "OPEN",
+        "AGREE_FOCUS",
+        "EXPLORE",
+        "SYNTHESIZE",
+        "NEXT_STEP",
+        "CLOSING",
+        "PAUSED",
+        "CLOSED"
+      ],
+      "title": "Phase",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "title": "Updated At",
+      "type": "string"
+    },
+    "closed_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Closed At"
+    },
+    "closure_job_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Closure Job Id"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "goal",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "DeepSession",
+  "type": "object"
+}

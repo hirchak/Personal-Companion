@@ -7,6 +7,12 @@ import {
 import { Sheet } from "./Sheet";
 import { VoicePanel } from "./VoicePanel";
 import { InferencePanel } from "./InferencePanel";
+import {
+  DeepSessionPanel,
+  deepCall,
+  type ContextSelection,
+  type DeepPreview,
+} from "./DeepSessionPanel";
 import { JournalPoint } from "./JournalPoint";
 import {
   chatError,
@@ -42,6 +48,15 @@ export function ConversationHome({
   const [goalRefresh, setGoalRefresh] = useState(0);
   const [goalPreset, setGoalPreset] = useState("");
   const [journalOpen, setJournalOpen] = useState(false);
+  const [contextSelection, setContextSelection] = useState<ContextSelection>({
+    type: "GOAL_START",
+    timezone:
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Warsaw",
+  });
+  const [contextPreview, setContextPreview] = useState<DeepPreview | null>(
+    null,
+  );
+  const [sessionBlocked, setSessionBlocked] = useState(false);
   const alive = useRef(true),
     working = useRef(false),
     generation = useRef(0),
@@ -76,6 +91,10 @@ export function ConversationHome({
     }
   }
   function selection(p: ConversationPage | null) {
+    if (p?.conversation.id !== page?.conversation.id) {
+      setContextPreview(null);
+      setSessionBlocked(false);
+    }
     setPage(p);
     try {
       p
@@ -196,7 +215,7 @@ export function ConversationHome({
     override?: string,
   ) {
     const input = override ?? text;
-    if (working.current || !validChatText(input)) return;
+    if (working.current || sessionBlocked || !validChatText(input)) return;
     working.current = true;
     setBusy(true);
     setError("");
@@ -211,7 +230,24 @@ export function ConversationHome({
         creating.current = null;
         if (alive.current && seq === generation.current) selection(current);
       }
+      let binding = null;
+      if (status?.mode && current!.conversation.mode === "DEEP") {
+        const preview =
+          (override ? null : contextPreview) ??
+          (await deepCall(csrf, current!.conversation.id, "context-preview", {
+            operation_id: crypto.randomUUID(),
+            base_revision: current!.conversation.revision,
+            text: sent,
+            selection: contextSelection,
+          }));
+        binding = {
+          receipt_id: preview.receipt_id,
+          context_hash: preview.context_hash,
+          preview_hash: preview.preview_hash,
+        };
+      }
       const body = {
+        ...(binding ? { context_binding: binding } : {}),
         base_revision: current!.conversation.revision,
         text: sent,
         source_reference: source,
@@ -237,6 +273,7 @@ export function ConversationHome({
         selection(fresh);
         setText("");
         setSource(null);
+        setContextPreview(null);
         setGoalsOpen(false);
         pending.current = null;
         if (status?.responder === "OFF")
@@ -362,7 +399,7 @@ export function ConversationHome({
               page?.conversation.mode === "DEEP" &&
               hasMessages && (
                 <button
-                  disabled={busy || inferenceActive}
+                  disabled={busy || inferenceActive || sessionBlocked}
                   onClick={() =>
                     void send(
                       "CLOSURE",
@@ -380,7 +417,8 @@ export function ConversationHome({
           </div>
         </header>
         {page?.conversation.mode === "DEEP" &&
-          page.conversation.goal_binding && (
+          page.conversation.goal_binding &&
+          !status?.mode && (
             <DeepContext
               key={page.conversation.id}
               csrf={csrf}
@@ -390,6 +428,23 @@ export function ConversationHome({
               refreshVersion={goalRefresh}
             />
           )}
+        {status?.mode && page?.conversation.mode === "DEEP" && (
+          <DeepSessionPanel
+            key={page.conversation.id}
+            csrf={csrf}
+            id={page.conversation.id}
+            revision={page.conversation.revision}
+            draft={text}
+            selection={contextSelection}
+            onSelection={setContextSelection}
+            preview={contextPreview}
+            onPreview={setContextPreview}
+            onSession={(s) =>
+              setSessionBlocked(["CLOSED", "PAUSED"].includes(s.phase))
+            }
+            onNext={() => setGoalsOpen(true)}
+          />
+        )}
         {status?.synthetic_demo && (
           <p className="demo-status">
             {status.mode === "LIVE_SYNTHETIC"
@@ -484,7 +539,31 @@ export function ConversationHome({
               setGoalPreset(value);
               setGoalsOpen(true);
             }}
-            onClose={() => void action(page.conversation, "archive")}
+            onClose={() => {
+              if (page.conversation.mode === "DEEP")
+                void deepCall(csrf, page.conversation.id, "deep-session")
+                  .then((d) =>
+                    deepCall(
+                      csrf,
+                      page.conversation.id,
+                      "deep-session/actions",
+                      {
+                        operation_id: crypto.randomUUID(),
+                        base_revision: d.session.revision,
+                        action: "close",
+                      },
+                    ),
+                  )
+                  .then(() => {
+                    setSessionBlocked(true);
+                    setGoalRefresh((v) => v + 1);
+                    return action(page.conversation, "archive");
+                  })
+                  .catch(() =>
+                    setError("Сесію не закрито. Перевірте карту й повторіть."),
+                  );
+              else void action(page.conversation, "archive");
+            }}
             onJournal={() => setJournalOpen(true)}
           />
         )}
@@ -519,7 +598,10 @@ export function ConversationHome({
           id="conversation-text"
           ref={composer}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+            setContextPreview(null);
+          }}
           disabled={
             busy || inferenceActive || page?.conversation.state === "ARCHIVED"
           }
@@ -664,7 +746,12 @@ export function ConversationHome({
         </Sheet>
       )}
       {journalOpen && page && (
-        <JournalPoint csrf={csrf} conversationId={page.conversation.id} messages={page.messages} onClose={() => setJournalOpen(false)} />
+        <JournalPoint
+          csrf={csrf}
+          conversationId={page.conversation.id}
+          messages={page.messages}
+          onClose={() => setJournalOpen(false)}
+        />
       )}
       {voice && (
         <Sheet title="Голосовий ввід" onClose={() => setVoice(null)} wide>

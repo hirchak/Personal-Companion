@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "GoalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "title": "GoalRef",
+      "type": "object"
+    },
+    "MapItem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "OBSERVATION",
+            "FEELING",
+            "ACTION",
+            "HYPOTHESIS",
+            "QUESTION",
+            "CHANGE",
+            "OPTION",
+            "TAKEAWAY",
+            "UNRESOLVED"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 800,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "provenance": {
+          "enum": [
+            "USER_STATED",
+            "USER_CONFIRMED",
+            "MODEL_HYPOTHESIS",
+            "MODEL_DERIVED_SUMMARY",
+            "COMPUTED"
+          ],
+          "title": "Provenance",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/GoalRef"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Sources",
+          "type": "array"
+        },
+        "state": {
+          "default": "CURRENT",
+          "enum": [
+            "CURRENT",
+            "REJECTED",
+            "IRRELEVANT",
+            "STALE"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "text",
+        "provenance",
+        "sources"
+      ],
+      "title": "MapItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "goal": {
+      "$ref": "#/$defs/GoalRef"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "conversation_id": {
+      "format": "uuid",
+      "title": "Conversation Id",
+      "type": "string"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/MapItem"
+      },
+      "maxItems": 40,
+      "title": "Items",
+      "type": "array"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "provider_model": {
+      "title": "Provider Model",
+      "type": "string"
+    },
+    "provider_route": {
+      "title": "Provider Route",
+      "type": "string"
+    },
+    "skills": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Skills",
+      "type": "array"
+    },
+    "request_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Request Hash",
+      "type": "string"
+    },
+    "provenance": {
+      "const": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+      "default": "SOURCE_BOUND_NEUTRAL_REFLECTION",
+      "title": "Provenance",
+      "type": "string"
+    }
+  },
+  "required": [
+    "goal",
+    "version",
+    "conversation_id",
+    "items",
+    "created_at",
+    "provider_model",
+    "provider_route",
+    "skills",
+    "request_hash"
+  ],
+  "title": "WorkingMap",
+  "type": "object"
+}

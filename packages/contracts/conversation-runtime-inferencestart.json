@@ -1,5 +1,32 @@
 {
   "$defs": {
+    "ContextBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "receipt_id": {
+          "format": "uuid",
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "context_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Context Hash",
+          "type": "string"
+        },
+        "preview_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Preview Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "receipt_id",
+        "context_hash",
+        "preview_hash"
+      ],
+      "title": "ContextBinding",
+      "type": "object"
+    },
     "VoiceSource": {
       "additionalProperties": false,
       "properties": {
@@ -77,6 +104,17 @@
       "anyOf": [
         {
           "$ref": "#/$defs/VoiceSource"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "context_binding": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContextBinding"
         },
         {
           "type": "null"

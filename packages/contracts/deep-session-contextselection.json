@@ -1,0 +1,49 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "default": "GOAL_START",
+      "enum": [
+        "GOAL_START",
+        "LAST_7_DAYS",
+        "LAST_30_DAYS",
+        "CUSTOM"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "timezone": {
+      "default": "Europe/Warsaw",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Timezone",
+      "type": "string"
+    },
+    "window_start": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Window Start"
+    },
+    "window_end": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Window End"
+    }
+  },
+  "title": "ContextSelection",
+  "type": "object"
+}

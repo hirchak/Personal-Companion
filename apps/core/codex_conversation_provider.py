@@ -15,11 +15,11 @@ ALLOWED_MODELS=('gpt-6.1-sol','gpt-6-sol','gpt-6-luna')
 class CodexConversationProvider:
     route='CODEX_SUBSCRIPTION'
     live=True
-    def __init__(self,model='gpt-6-luna',executable=None,budget=None):
+    def __init__(self,model='gpt-6-luna',executable=None,budget=None,effort='low'):
         if model not in ALLOWED_MODELS:raise SafeError('MODEL_NOT_ALLOWLISTED',403)
-        self.model=model;self.executable=executable or shutil.which('codex');self.budget=budget or LiveEvaluationBudget()
+        self.model=model;self.effort=effort;self.profile=model+':'+effort;self.executable=executable or shutil.which('codex');self.budget=budget or LiveEvaluationBudget()
         if not self.executable:raise SafeError('CODEX_CLI_UNAVAILABLE',503)
-    def metadata(self):return {'route':self.route,'model':self.model,'auth_type':'EXISTING_CHATGPT_CLI_ONLY','live':True,'availability':'CAPABILITY_REQUIRES_COMPLETED_INFERENCE','streaming':True,'tools':[],'fallback':False,'payg':False,'host_policy':'SDK_HOST_WORKING_AGREEMENTS_PRESENT; NO_APPLICATION_VAULT_ACCESS'}
+    def metadata(self):return {'route':self.route,'model':self.model,'effort':self.effort,'profile':self.profile,'auth_type':'EXISTING_CHATGPT_CLI_ONLY','live':True,'availability':'CAPABILITY_REQUIRES_COMPLETED_INFERENCE','streaming':True,'tools':[],'fallback':False,'payg':False,'host_policy':'SDK_HOST_WORKING_AGREEMENTS_PRESENT; NO_APPLICATION_VAULT_ACCESS'}
     def spec(self,work):
         args=[self.executable,'app-server','--listen','stdio://','-c','project_doc_max_bytes=0','-c','web_search="disabled"','-c','analytics.enabled=false','-c','otel.log_user_prompt=false','-c','default_permissions="m7c_no_data"','-c','permissions.m7c_no_data.filesystem={":root"="deny",":minimal"="read"}','-c','permissions.m7c_no_data.network.enabled=false','-c','model_provider="m7c_existing_chatgpt"','-c','model_providers.m7c_existing_chatgpt.name="Existing ChatGPT subscription"','-c','model_providers.m7c_existing_chatgpt.requires_openai_auth=true','-c','model_providers.m7c_existing_chatgpt.wire_api="responses"','-c','model_providers.m7c_existing_chatgpt.request_max_retries=0','-c','model_providers.m7c_existing_chatgpt.stream_max_retries=0']
         for feature in DISABLED_FEATURES:args+=['--disable',feature]
@@ -27,6 +27,45 @@ class CodexConversationProvider:
         # Preserve standard OS values; never inherit parent Codex task, provider/API key, auth or plugin env.
         env={k:os.environ[k] for k in ('PATH','HOME','TMPDIR','SYSTEMROOT') if k in os.environ};env['LANG']='en_US.UTF-8'
         return {'args':args,'cwd':str(work),'env':env,'shell':False}
+    @staticmethod
+    def supported_settings(catalog,model):
+        matches=[m for m in catalog.get('data',[]) if m.get('model')==model or m.get('id')==model]
+        if len(matches)!=1:raise SafeError('MODEL_CAPABILITY_UNVERIFIED',403)
+        return [v['reasoningEffort'] for v in matches[0].get('supportedReasoningEfforts',[]) if isinstance(v,dict) and isinstance(v.get('reasoningEffort'),str)]
+    def discover(self):
+        """Read-only supported RPC catalog; no auth fields, prompt, or inference turn."""
+        work=Path(tempfile.mkdtemp(prefix='m7d-capabilities-',dir=Path(tempfile.gettempdir()).resolve()))
+        process=None;sel=selectors.DefaultSelector();buf=bytearray();total=0;deadline=time.monotonic()+20
+        try:
+            process=subprocess.Popen(**self.spec(work),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,start_new_session=True)
+            sel.register(process.stdout,selectors.EVENT_READ)
+            def exchange(id,method,params):
+                nonlocal buf,total
+                process.stdin.write((encode({'id':id,'method':method,'params':params})+'\n').encode());process.stdin.flush()
+                while time.monotonic()<deadline:
+                    if b'\n' in buf:
+                        line,rest=buf.split(b'\n',1);buf=bytearray(rest);event=json.loads(line)
+                        if 'method' in event and 'id' in event:raise SafeError('PROVIDER_TOOL_REQUEST_DENIED',403)
+                        if event.get('id')==id:
+                            if 'error' in event:raise SafeError('PROVIDER_RPC_FAILED')
+                            return event['result']
+                    elif sel.select(.05):
+                        chunk=os.read(process.stdout.fileno(),8192);total+=len(chunk)
+                        if not chunk or total>262144:raise SafeError('PROVIDER_PROTOCOL_INVALID')
+                        buf.extend(chunk)
+                raise SafeError('PROVIDER_TIMEOUT')
+            exchange(1,'initialize',{'clientInfo':{'name':'personal_companion_synthetic_capabilities','version':'0.7.0'},'capabilities':{'experimentalApi':True}})
+            process.stdin.write((encode({'method':'initialized','params':{}})+'\n').encode());process.stdin.flush()
+            catalog=exchange(2,'model/list',{'includeHidden':False})
+            return {'models':[{'model':m,'supported_efforts':self.supported_settings(catalog,m)} for m in ALLOWED_MODELS],'access':'CATALOG_ONLY_NOT_COMPLETED_INFERENCE_ENTITLEMENT','source':'INSTALLED_CODEX_APP_SERVER_MODEL_LIST','payg':False,'new_auth':False}
+        finally:
+            sel.close()
+            if process:
+                if process.poll() is None:os.killpg(process.pid,signal.SIGTERM)
+                try:process.wait(timeout=2)
+                except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=2)
+                process.stdin.close();process.stdout.close()
+            shutil.rmtree(work)
     def execute(self,payload,response_schema,cancel,deadline,on_delta=None):
         from .conversation_runtime_contracts import ProviderPayload
         body=ProviderPayload.model_validate(payload).model_dump(mode='json');encoded=encode(body)
@@ -70,12 +109,15 @@ class CodexConversationProvider:
             existing_chatgpt=(account.get('account') or {}).get('type')=='chatgpt'
             del account
             if not existing_chatgpt:raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
+            send(30,'model/list',{'includeHidden':False});catalog=reply(30)
+            settings=self.supported_settings(catalog,self.model)
+            if self.effort not in settings:raise SafeError('PROVIDER_EFFORT_UNSUPPORTED',403)
             send(3,'thread/start',{'model':self.model,'cwd':str(work),'ephemeral':True,'permissions':'m7c_no_data','approvalPolicy':'never','baseInstructions':frame['base_instructions'],'developerInstructions':frame['developer_instructions'],'environments':[],'runtimeWorkspaceRoots':[],'selectedCapabilityRoots':[],'dynamicTools':[],'allowProviderModelFallback':False})
             info=reply(3)
             if info.get('model')!=self.model or info.get('runtimeWorkspaceRoots') or info.get('activePermissionProfile',{}).get('id')!='m7c_no_data':raise SafeError('PROVIDER_ISOLATION_UNVERIFIED',403)
             thread_id=info['thread']['id'];profile_verified=True
             attempt=str(uuid4());self.budget.reserve(attempt,self.route,self.model)
-            send(4,'turn/start',{'threadId':thread_id,'model':self.model,'effort':'low','environments':[],'runtimeWorkspaceRoots':[],'input':[{'type':'text','text':encoded}],'outputSchema':response_schema})
+            send(4,'turn/start',{'threadId':thread_id,'model':self.model,'effort':self.effort,'environments':[],'runtimeWorkspaceRoots':[],'input':[{'type':'text','text':encoded}],'outputSchema':response_schema})
             while True:
                 event=incoming()
                 if event.get('id')==4:
@@ -99,7 +141,7 @@ class CodexConversationProvider:
                     if status!='completed':raise SafeError('PROVIDER_TURN_FAILED')
                     result=final_text if final_text is not None else text
                     self.budget.finish(attempt,'COMPLETED')
-                    return {'text':result,'attempt_id':attempt,'elapsed_ms':round((time.monotonic()-started)*1000,3),'usage':usage,'route':self.route,'model':self.model,'auth_type':'EXISTING_CHATGPT','profile_verified':profile_verified,'streaming_actual':bool(text),'frame_hash':frame_hash}
+                    return {'text':result,'attempt_id':attempt,'elapsed_ms':round((time.monotonic()-started)*1000,3),'usage':usage,'route':self.route,'model':self.model,'effort':self.effort,'profile':self.profile,'auth_type':'EXISTING_CHATGPT','profile_verified':profile_verified,'streaming_actual':bool(text),'frame_hash':frame_hash}
         except BaseException as exc:
             if attempt:self.budget.finish(attempt,'CANCELLED' if isinstance(exc,SafeError) and exc.code=='CANCELLED' else 'FAILED')
             if isinstance(exc,SafeError):exc.inference_attempt_id=attempt
