@@ -12,6 +12,38 @@ from .live_evaluation_budget import LiveEvaluationBudget
 DISABLED_FEATURES=('shell_tool','unified_exec','code_mode_host','apps','plugins','multi_agent','view_image','computer_use','browser_use','hooks','memories','workspace_dependencies','skill_search','sleep_tool','daemon_auto_start','unbounded_connection_retries')
 ALLOWED_MODELS=('gpt-6.1-sol','gpt-6-sol','gpt-6-luna')
 
+def strict_response_schema(schema):
+    """OpenAI strict output requires every property, including nullable optional fields.
+
+    Domain parsing remains backward-compatible with existing M7C persisted candidates.
+    """
+    value=json.loads(json.dumps(schema))
+    def visit(node):
+        if isinstance(node,dict):
+            node.pop('default',None)
+            if node.get('type')=='object' and 'properties' in node:
+                node['required']=list(node['properties']);node['additionalProperties']=False
+            for v in node.values():visit(v)
+        elif isinstance(node,list):
+            for v in node:visit(v)
+    visit(value);return value
+
+def safe_failure(error):
+    """Allowlisted classification only; never expose arbitrary account/server error text."""
+    if not isinstance(error,dict):return {'category':'UNCLASSIFIED_PROVIDER_TURN_FAILURE'}
+    message=str(error.get('message','')).casefold()
+    category='UNCLASSIFIED_PROVIDER_TURN_FAILURE'
+    if 'invalid schema' in message or ('schema' in message and 'required' in message):category='INVALID_STRUCTURED_SCHEMA'
+    elif 'reasoning' in message and ('unsupported' in message or 'not supported' in message or 'invalid' in message):category='REASONING_EFFORT_REJECTED'
+    elif 'quota' in message or 'usage limit' in message or 'rate limit' in message:category='SUBSCRIPTION_LIMIT_REACHED'
+    elif 'authentication' in message or 'unauthorized' in message:category='EXISTING_AUTH_ROUTE_UNAVAILABLE'
+    info=error.get('codexErrorInfo');result={'category':category}
+    if isinstance(info,str) and info.isalpha() and len(info)<80:result['rpc_error_kind']=info
+    if isinstance(info,dict):
+        for k,v in info.items():
+            if k in {'httpConnectionFailed','responseStreamConnectionFailed','responseStreamDisconnected','responseTooManyFailedAttempts'} and isinstance(v,dict) and isinstance(v.get('httpStatusCode'),int):result['http_status']=v['httpStatusCode']
+    return result
+
 class CodexConversationProvider:
     route='CODEX_SUBSCRIPTION'
     live=True
@@ -117,7 +149,7 @@ class CodexConversationProvider:
             if info.get('model')!=self.model or info.get('runtimeWorkspaceRoots') or info.get('activePermissionProfile',{}).get('id')!='m7c_no_data':raise SafeError('PROVIDER_ISOLATION_UNVERIFIED',403)
             thread_id=info['thread']['id'];profile_verified=True
             attempt=str(uuid4());self.budget.reserve(attempt,self.route,self.model)
-            send(4,'turn/start',{'threadId':thread_id,'model':self.model,'effort':self.effort,'environments':[],'runtimeWorkspaceRoots':[],'input':[{'type':'text','text':encoded}],'outputSchema':response_schema})
+            send(4,'turn/start',{'threadId':thread_id,'model':self.model,'effort':self.effort,'environments':[],'runtimeWorkspaceRoots':[],'input':[{'type':'text','text':encoded}],'outputSchema':strict_response_schema(response_schema)})
             while True:
                 event=incoming()
                 if event.get('id')==4:
@@ -138,7 +170,8 @@ class CodexConversationProvider:
                     usage={k:v for k,v in total.items() if k in {'inputTokens','cachedInputTokens','outputTokens','totalTokens'} and isinstance(v,int)}
                 if method=='turn/completed':
                     status=params.get('turn',{}).get('status')
-                    if status!='completed':raise SafeError('PROVIDER_TURN_FAILED')
+                    if status!='completed':
+                        failure=SafeError('PROVIDER_TURN_FAILED');failure.provider_failure=safe_failure(params.get('turn',{}).get('error'));raise failure
                     result=final_text if final_text is not None else text
                     self.budget.finish(attempt,'COMPLETED')
                     return {'text':result,'attempt_id':attempt,'elapsed_ms':round((time.monotonic()-started)*1000,3),'usage':usage,'route':self.route,'model':self.model,'effort':self.effort,'profile':self.profile,'auth_type':'EXISTING_CHATGPT','profile_verified':profile_verified,'streaming_actual':bool(text),'frame_hash':frame_hash}

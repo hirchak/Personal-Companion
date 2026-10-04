@@ -265,7 +265,7 @@ class ConversationController:
                 if row:
                     d=self.row(c,id)
                     if result_metadata:d['provider_result']=result_metadata
-                    elif getattr(exc,'inference_attempt_id',None):d['provider_result']={'attempt_id':exc.inference_attempt_id}
+                    elif getattr(exc,'inference_attempt_id',None):d['provider_result']={'attempt_id':exc.inference_attempt_id,**({'provider_failure':exc.provider_failure} if getattr(exc,'provider_failure',None) else {})}
                     if d['state'] in {'QUEUED','RUNNING'}:d['state']='CANCELLED' if cancel.is_set() else 'FAILED';d['error']=error;d['revision']+=1;self.persist(c,d)
                     elif result_metadata or getattr(exc,'inference_attempt_id',None):d['revision']+=1;self.persist(c,d)
         finally:self.previews.pop(id,None)

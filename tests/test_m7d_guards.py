@@ -66,3 +66,14 @@ def test_uncertain_voice_requires_explicit_review_before_insertion(isolated):
  v.edit(t['id'],TranscriptEdit(revision=t['revision'],text=t['candidate']));assert v.get(id)['transcript']['state']=='TRANSCRIPT_READY'
  assert not app.state.journal.list()['items'] and not app.state.conversations.list()['items']
  id,_=save(v,tone(signal='silence'));job=v.enqueue(id,ASRRequest(mode='LOCAL'));v.run(job['transcript_id'],'LOCAL');t=v.get(id)['transcript'];assert t['state']=='FAILED' and t['error']=='NO_SPEECH' and t['candidate'] is None
+
+
+def test_strict_provider_schema_requires_nullable_map_and_error_redaction():
+ from apps.core.codex_conversation_provider import strict_response_schema,safe_failure
+ from apps.core.conversation_runtime_contracts import ConversationCandidate
+ schema=ConversationCandidate.model_json_schema();strict=strict_response_schema(schema)
+ assert 'working_map' not in schema['required'] and 'working_map' in strict['required']
+ assert strict['additionalProperties'] is False and 'default' not in strict['properties']['working_map']
+ assert 'null' in str(strict['properties']['working_map'])
+ error={'message':'Invalid schema: required must include working_map ORIGINAL_SYNTHETIC_ACCOUNT_SENTINEL','codexErrorInfo':'badRequest'}
+ assert safe_failure(error)=={'category':'INVALID_STRUCTURED_SCHEMA','rpc_error_kind':'badRequest'} and 'SENTINEL' not in json.dumps(safe_failure(error))

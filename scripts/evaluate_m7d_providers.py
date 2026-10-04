@@ -56,7 +56,11 @@ def run(model,effort,sha):
      if d['state']!='COMPLETED' and attempt_id:budget.finish(attempt_id,'CANCELLED' if d['state']=='CANCELLED' else 'FAILED')
      row={'scenario_id':scenario['id'],'case_ids':scenario['case_ids'],'synthetic_session_day':session_index+1,'turn':turn_index+1,'model':model,'effort':effort,'profile':provider.profile,'goal':c.context.get(p['conversation']['goal_binding']['id']) if g else None,'pinned_goal_revision':p['conversation']['goal_binding'],'session_focus':before['session']['focus'] if before else None,'selected_context':preview['selection'] if preview else 'FREE_RECENT','relevant_prior_context':preview['context'] if preview else [],'working_map_before':before['map'] if before else None,'user_text':text,'assistant_candidate':d['candidate'],'working_map_after':after['map'] if after else None,'closure':d['candidate']['closure'] if d['candidate'] else None,'state':d['state'],'error':d['error'],'request_metadata':d['request_metadata'],'provider_reported':reported,'attempt_count':int(bool(attempt_id)),'wall_ms':round((time.monotonic()-started)*1000,3),'deterministic_violations':[] if d['state']=='COMPLETED' else [d['error']],'no_downstream_mutation':all(v==0 for v in counts.values()),'qualitative_review':'PENDING_OWNER_ARCHITECT','real_private_data':False,'hidden_reasoning':False}
      rows.append(row);file.write_text(json.dumps({'implementation_sha':sha,'catalog':catalog,'corpus_sha256':digest(corpus_path.read_bytes()),'rows':rows,'controls':controls,'ledger':budget.summary()},ensure_ascii=False,indent=2)+'\n');print(model,effort,scenario['id'],session_index+1,turn_index+1,d['state'],d['error'],flush=True)
-     if d['state']!='COMPLETED':break
+     if d['state']!='COMPLETED':
+      category=reported.get('provider_failure',{}).get('category')
+      if category in {'INVALID_STRUCTURED_SCHEMA','REASONING_EFFORT_REJECTED','SUBSCRIPTION_LIMIT_REACHED','EXISTING_AUTH_ROUTE_UNAVAILABLE'}:
+       raise RuntimeError('CONFIGURATION_STOP:'+category+'; preserved rows and persistent ledger')
+      break
      if scenario['id']=='LONGITUDINAL' and session_index==0 and turn_index==0:
       m=after['map'];hyp=next((i for i in (m or {}).get('items',[]) if i['kind']=='HYPOTHESIS' and i['state']=='CURRENT'),None)
       if hyp:
