@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "implementation_sha": "a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "scope": "FINAL_PACKAGE_PRIVATE_LOCAL_WITH_ORIGINAL_SYNTHETIC_CONTENT",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "actual_galaxy": "NOT_RUN",
+  "private_label": true,
+  "journal_landing": true,
+  "synthetic_content_visible_after_refresh": true,
+  "nonloopback_requests": 0,
+  "page_errors": 0,
+  "Host_Origin_CSRF_build_negatives": "PASS",
+  "cleanup": "COMPLETE",
+  "real_private_data_used": 0
+}

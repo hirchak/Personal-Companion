@@ -1,0 +1,146 @@
+{
+  "format": 1,
+  "scope": "PRIVATE_LOCAL_SECURITY_TESTED_MAC_ONLY",
+  "status": "PASS",
+  "release_id": "M8C-a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "manifest_hash": "4fcd18f31bd647f5bbd96ad30eb92cb47d59a1ff7cf4ef0be60c5010259fcc65",
+  "runtime_input_hash": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+  "os": "Darwin",
+  "architecture": "arm64",
+  "python": "3.13.2",
+  "root_kind": "PRIVATE_LOCAL",
+  "checks": [
+    {
+      "gate": "platform",
+      "status": "PASS"
+    },
+    {
+      "gate": "python",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:annotated-types",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:anyio",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:click",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:fastapi",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:h11",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:idna",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:pydantic",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:pydantic_core",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:starlette",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:typing-inspection",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:typing_extensions",
+      "status": "PASS"
+    },
+    {
+      "gate": "dependency:uvicorn",
+      "status": "PASS"
+    },
+    {
+      "gate": "local_asr",
+      "status": "OPTIONAL_UNAVAILABLE"
+    },
+    {
+      "gate": "phone_health_transport",
+      "status": "NOT_RUN"
+    },
+    {
+      "gate": "application_owner_only_permissions",
+      "status": "PASS"
+    },
+    {
+      "gate": "data_owner_only_permissions",
+      "status": "PASS"
+    },
+    {
+      "gate": "backup_owner_only_permissions",
+      "status": "PASS"
+    },
+    {
+      "gate": "data_volume",
+      "status": "PASS"
+    },
+    {
+      "gate": "backup_volume",
+      "status": "PASS"
+    },
+    {
+      "gate": "writable_space",
+      "status": "PASS"
+    },
+    {
+      "gate": "loopback",
+      "status": "PASS"
+    },
+    {
+      "gate": "exact_release_and_private_profile",
+      "status": "PASS"
+    },
+    {
+      "gate": "path_safety_app_data_separation",
+      "status": "PASS"
+    },
+    {
+      "gate": "runtime_off_defaults",
+      "status": "PASS"
+    }
+  ],
+  "storage_protection": "VERIFIED_FILEVAULT_VOLUME",
+  "backup_protection": "VERIFIED_FILEVAULT_VOLUME",
+  "application_level_database_encryption": "NOT_IMPLEMENTED",
+  "application_level_backup_encryption": "NOT_IMPLEMENTED",
+  "runtime_profile": {
+    "profile_id": "MAC_PRIVATE_LOCAL_CORE_V1",
+    "profile_version": 1,
+    "journal": "ON",
+    "creative": "ON",
+    "local_search": "ON",
+    "backup_restore": "ON",
+    "explicit_local_export": "ON",
+    "private_ai": "OFF",
+    "conversation_inference": "OFF",
+    "specialists": "OFF",
+    "clinical_active": 0,
+    "health_to_ai": "OFF",
+    "health_bridge": "OFF",
+    "human_voice_asr": "OFF",
+    "cloud_asr": "NONE",
+    "external_embeddings": "OFF",
+    "phone": "OFF",
+    "cloud_sync": "NONE",
+    "telemetry": "NONE",
+    "publication": "NONE",
+    "automatic_external_sharing": "NONE",
+    "provider_fallback": "NONE"
+  }
+}

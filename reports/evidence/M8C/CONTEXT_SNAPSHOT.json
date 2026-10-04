@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "mechanism": ".venv/bin/python scripts/build_chatgpt_context.py",
+  "source_commit": "a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "snapshot_manifest_sha256": "2a439d53a6dd00c0a5fcd3bca9d09080829b190e5ae285e0de623328effe1878",
+  "current_goal_contract_report_included": true,
+  "snapshot_only_not_live_sync": true
+}

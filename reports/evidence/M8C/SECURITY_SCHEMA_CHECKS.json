@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "checks": 5,
+  "oracle": "Existing independent Ajv2020, actual final private preflight and structural negatives"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "implementation_sha": "a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "scope": "MANUAL_STAGED_PUBLIC_TREE_AND_MATERIAL_RIGHTS_REVIEW",
+  "material": "ORIGINAL_CODE_DOCS_SANITIZED_STATUS_HASHES_ORIGINAL_SYNTHETIC_SCREENSHOTS",
+  "private_vault_paths_receipts_db_backups_audio_health_unlock_secrets_present": false,
+  "generated_runtime_release_archives_tracked": false,
+  "historical_evidence_preserved": true,
+  "screenshots_content": "ORIGINAL_SYNTHETIC_ONLY",
+  "data_owner_actual_pilot": "NOT_STARTED",
+  "evidence_only_diff": true
+}

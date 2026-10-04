@@ -1,0 +1,357 @@
+{
+  "status": "PASS",
+  "scope": "PRIVATE_LOCAL_RUNTIME_WITH_SYNTHETIC_CONTENT",
+  "implementation_sha": "a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "release_id": "M8C-a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "manifest_hash": "4fcd18f31bd647f5bbd96ad30eb92cb47d59a1ff7cf4ef0be60c5010259fcc65",
+  "runtime_lock_hash": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+  "checks": {
+    "runtime_only": {
+      "status": "PASS",
+      "method": "COPY_EXISTING_PINNED_RUNTIME_ONLY_PIP_FREE_TEMP_ENVIRONMENT",
+      "packages": [
+        {
+          "package": "annotated-types",
+          "version": "0.8.0"
+        },
+        {
+          "package": "anyio",
+          "version": "4.15.1"
+        },
+        {
+          "package": "click",
+          "version": "8.5.0"
+        },
+        {
+          "package": "fastapi",
+          "version": "0.115.12"
+        },
+        {
+          "package": "h11",
+          "version": "0.16.0"
+        },
+        {
+          "package": "idna",
+          "version": "3.20"
+        },
+        {
+          "package": "pydantic",
+          "version": "2.11.3"
+        },
+        {
+          "package": "pydantic_core",
+          "version": "2.33.1"
+        },
+        {
+          "package": "starlette",
+          "version": "0.46.2"
+        },
+        {
+          "package": "typing-inspection",
+          "version": "0.4.4"
+        },
+        {
+          "package": "typing_extensions",
+          "version": "4.16.0"
+        },
+        {
+          "package": "uvicorn",
+          "version": "0.34.2"
+        }
+      ],
+      "no_downloads_or_package_manager_installs": true,
+      "test_client_packages_absent": {
+        "pytest": true,
+        "playwright": true,
+        "httpx": true,
+        "pip": true
+      }
+    },
+    "explicit_private_initialization": {
+      "status": "PASS",
+      "operation": "EXPLICIT_PRIVATE_LOCAL_INITIALIZATION",
+      "root_kind": "PRIVATE_LOCAL",
+      "release_id": "M8C-a00a14277974b7f6c25846d0eb7a23879f86183a",
+      "application_level_encryption": "NOT_IMPLEMENTED"
+    },
+    "fresh_defaults": {
+      "status": "PASS",
+      "profile": {
+        "profile_id": "MAC_PRIVATE_LOCAL_CORE_V1",
+        "profile_version": 1,
+        "journal": "ON",
+        "creative": "ON",
+        "local_search": "ON",
+        "backup_restore": "ON",
+        "explicit_local_export": "ON",
+        "private_ai": "OFF",
+        "conversation_inference": "OFF",
+        "specialists": "OFF",
+        "clinical_active": 0,
+        "health_to_ai": "OFF",
+        "health_bridge": "OFF",
+        "human_voice_asr": "OFF",
+        "cloud_asr": "NONE",
+        "external_embeddings": "OFF",
+        "phone": "OFF",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "publication": "NONE",
+        "automatic_external_sharing": "NONE",
+        "provider_fallback": "NONE"
+      },
+      "provider_environment_cannot_activate": true
+    },
+    "journal_edit_search_creative_provenance": {
+      "status": "PASS",
+      "content": "ORIGINAL_SYNTHETIC_ONLY",
+      "privacy": "PRIVATE_PERSONAL",
+      "provenance": "USER_REPORTED"
+    },
+    "Chromium": {
+      "status": "PASS",
+      "scope": "REFERENCE_MAC_CHROMIUM_NOT_GALAXY",
+      "nonloopback_requests": 0,
+      "page_errors": 0,
+      "private_label": true,
+      "journal_landing": true,
+      "unsupported_controls_hidden": true,
+      "lock": true
+    },
+    "restart_durability_auth": {
+      "status": "PASS",
+      "new_unlock_required": true,
+      "history_tombstones": true,
+      "defaults": {
+        "status": "PASS",
+        "profile": {
+          "profile_id": "MAC_PRIVATE_LOCAL_CORE_V1",
+          "profile_version": 1,
+          "journal": "ON",
+          "creative": "ON",
+          "local_search": "ON",
+          "backup_restore": "ON",
+          "explicit_local_export": "ON",
+          "private_ai": "OFF",
+          "conversation_inference": "OFF",
+          "specialists": "OFF",
+          "clinical_active": 0,
+          "health_to_ai": "OFF",
+          "health_bridge": "OFF",
+          "human_voice_asr": "OFF",
+          "cloud_asr": "NONE",
+          "external_embeddings": "OFF",
+          "phone": "OFF",
+          "cloud_sync": "NONE",
+          "telemetry": "NONE",
+          "publication": "NONE",
+          "automatic_external_sharing": "NONE",
+          "provider_fallback": "NONE"
+        },
+        "provider_environment_cannot_activate": true
+      }
+    },
+    "actual_package_idle_lock": {
+      "status": "PASS",
+      "idle_seconds": 900,
+      "absolute_seconds": 28800,
+      "ui_and_api_locked": true,
+      "clock": "CHROMIUM_CONTROLLED_CLOCK_NOT_REAL_15MIN_WAIT"
+    },
+    "private_backup": {
+      "status": "PASS",
+      "backup_format": 4,
+      "protection": "VERIFIED_FILEVAULT_VOLUME_OWNER_ONLY",
+      "archive_encryption": "NOT_IMPLEMENTED",
+      "producing_manifest_hash": "4fcd18f31bd647f5bbd96ad30eb92cb47d59a1ff7cf4ef0be60c5010259fcc65",
+      "backup_manifest_hash": "20a384c58e322f7769dcf6991c284f93108abf58e095eeb93121cf9b55deae2a"
+    },
+    "restore": {
+      "status": "PASS",
+      "operation": "FRESH_ROOT_RESTORE_OR_ROLLBACK",
+      "backup_provenance": "VERIFIED",
+      "defaults": {
+        "provider": "OFF",
+        "clinical_active": 0,
+        "specialists": "OFF",
+        "health_to_ai": "OFF",
+        "cloud_asr": "NONE",
+        "real_private_provider": "OFF",
+        "external_embeddings": "OFF",
+        "publication": "NONE",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "provider_fallback": "NONE"
+      }
+    },
+    "restore_restart_defaults": {
+      "status": "PASS",
+      "profile": {
+        "profile_id": "MAC_PRIVATE_LOCAL_CORE_V1",
+        "profile_version": 1,
+        "journal": "ON",
+        "creative": "ON",
+        "local_search": "ON",
+        "backup_restore": "ON",
+        "explicit_local_export": "ON",
+        "private_ai": "OFF",
+        "conversation_inference": "OFF",
+        "specialists": "OFF",
+        "clinical_active": 0,
+        "health_to_ai": "OFF",
+        "health_bridge": "OFF",
+        "human_voice_asr": "OFF",
+        "cloud_asr": "NONE",
+        "external_embeddings": "OFF",
+        "phone": "OFF",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "publication": "NONE",
+        "automatic_external_sharing": "NONE",
+        "provider_fallback": "NONE"
+      },
+      "provider_environment_cannot_activate": true
+    },
+    "failed_upgrade": {
+      "status": "PASS",
+      "scope": "DISPOSABLE_SCHEMA10_TRANSACTION_FAILURE_PROJECTION",
+      "backup_verified": true,
+      "pointer_preserved": true,
+      "pending_marker": true,
+      "startup_refused": "UPGRADE_RECOVERY_REQUIRED"
+    },
+    "rollback": {
+      "status": "PASS",
+      "operation": "FRESH_ROOT_RESTORE_OR_ROLLBACK",
+      "backup_provenance": "VERIFIED",
+      "defaults": {
+        "provider": "OFF",
+        "clinical_active": 0,
+        "specialists": "OFF",
+        "health_to_ai": "OFF",
+        "cloud_asr": "NONE",
+        "real_private_provider": "OFF",
+        "external_embeddings": "OFF",
+        "publication": "NONE",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "provider_fallback": "NONE"
+      }
+    },
+    "rollback_restart_defaults": {
+      "status": "PASS",
+      "profile": {
+        "profile_id": "MAC_PRIVATE_LOCAL_CORE_V1",
+        "profile_version": 1,
+        "journal": "ON",
+        "creative": "ON",
+        "local_search": "ON",
+        "backup_restore": "ON",
+        "explicit_local_export": "ON",
+        "private_ai": "OFF",
+        "conversation_inference": "OFF",
+        "specialists": "OFF",
+        "clinical_active": 0,
+        "health_to_ai": "OFF",
+        "health_bridge": "OFF",
+        "human_voice_asr": "OFF",
+        "cloud_asr": "NONE",
+        "external_embeddings": "OFF",
+        "phone": "OFF",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "publication": "NONE",
+        "automatic_external_sharing": "NONE",
+        "provider_fallback": "NONE"
+      },
+      "provider_environment_cannot_activate": true
+    },
+    "upgrade": {
+      "status": "PASS",
+      "operation": "UPGRADE",
+      "schema_from": 11,
+      "schema_to": 11,
+      "backup": "VERIFIED",
+      "backup_manifest_hash": "1669d7a2199856c7cf72372287827e930d8d696c48fdbee398dc9993c3a5d19b",
+      "defaults": {
+        "provider": "OFF",
+        "clinical_active": 0,
+        "specialists": "OFF",
+        "health_to_ai": "OFF",
+        "cloud_asr": "NONE",
+        "real_private_provider": "OFF",
+        "external_embeddings": "OFF",
+        "publication": "NONE",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "provider_fallback": "NONE"
+      }
+    },
+    "upgrade_restart_defaults": {
+      "status": "PASS",
+      "profile": {
+        "profile_id": "MAC_PRIVATE_LOCAL_CORE_V1",
+        "profile_version": 1,
+        "journal": "ON",
+        "creative": "ON",
+        "local_search": "ON",
+        "backup_restore": "ON",
+        "explicit_local_export": "ON",
+        "private_ai": "OFF",
+        "conversation_inference": "OFF",
+        "specialists": "OFF",
+        "clinical_active": 0,
+        "health_to_ai": "OFF",
+        "health_bridge": "OFF",
+        "human_voice_asr": "OFF",
+        "cloud_asr": "NONE",
+        "external_embeddings": "OFF",
+        "phone": "OFF",
+        "cloud_sync": "NONE",
+        "telemetry": "NONE",
+        "publication": "NONE",
+        "automatic_external_sharing": "NONE",
+        "provider_fallback": "NONE"
+      },
+      "provider_environment_cannot_activate": true
+    },
+    "genuine_cross_release": {
+      "status": "PASS",
+      "previous_release": "M8C-3eade011e7ba8f2b14c48baddc4fda58f257fe5c",
+      "previous_manifest_hash": "3d03cc975960d42f6cd643c2740e85ff20b65a1e1662e9cd9c3c1852d65cf4e8",
+      "new_release": "M8C-a00a14277974b7f6c25846d0eb7a23879f86183a",
+      "new_producer_hash": "4fcd18f31bd647f5bbd96ad30eb92cb47d59a1ff7cf4ef0be60c5010259fcc65",
+      "backup_source_hash": "3d03cc975960d42f6cd643c2740e85ff20b65a1e1662e9cd9c3c1852d65cf4e8",
+      "old_application_actual_restart": "PASS"
+    },
+    "uninstall_keep_data": {
+      "status": "PASS",
+      "operation": "REMOVE_RUNTIME_KEEP_DATA",
+      "data_preserved": true,
+      "backups_preserved": true
+    },
+    "explicit_disposable_private_delete": {
+      "status": "PASS",
+      "operation": "EXPLICIT_PRIVATE_LOCAL_DATA_DELETE",
+      "secure_erasure": "NOT_CLAIMED",
+      "backups_deleted": false
+    },
+    "actual_private_pilot": "NOT_STARTED",
+    "actual_private_root": "NOT_CREATED"
+  },
+  "timings_ms": {
+    "runtime_copy": 728.592,
+    "private_security_preflight": 1366.597,
+    "initialization": 1915.022,
+    "startup": 2296.215,
+    "private_backup": 909.472,
+    "private_restore": 2032.509,
+    "private_rollback": 2256.389,
+    "private_upgrade": 2164.285
+  },
+  "cleanup": "COMPLETE",
+  "real_private_data_used": 0,
+  "live_provider_calls": 0,
+  "system_changes": 0,
+  "phone_health_audio_activation": 0
+}

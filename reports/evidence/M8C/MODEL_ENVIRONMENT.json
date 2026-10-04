@@ -1,0 +1,13 @@
+{
+  "installed_codex_version": "codex-cli 0.159.0",
+  "requested_model": "gpt-6.1-sol",
+  "requested_reasoning": "high",
+  "catalog_model_present": true,
+  "reasoning_high_supported": true,
+  "configured_model": "gpt-6.1-sol",
+  "configured_reasoning": "high",
+  "plan_mode": "OFF",
+  "application_provider_calls": 0,
+  "configuration_changes": 0,
+  "entitlement_claim": "NONE"
+}

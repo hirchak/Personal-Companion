@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "implementation_sha": "a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "base_sha": "1533a69c40c1eaa0a8f67a867724a8835101e0af",
+  "environment": {
+    "os": "Darwin",
+    "macos_version": "27.0",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "node": "v26.8.2",
+    "npm": "11.19.1",
+    "browser": "EXISTING_CHROMIUM"
+  },
+  "Python": {
+    "command": ".venv/bin/python -m pytest -q",
+    "exit_code": 0,
+    "passed": 751,
+    "Chromium_subset": 45,
+    "M8C_subset": 84,
+    "warnings": "One existing Starlette/anyio deprecation warning"
+  },
+  "independent_checks": [
+    {
+      "check": "web",
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0
+    },
+    {
+      "check": "M7A_AJV",
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0
+    },
+    {
+      "check": "M7C_AJV",
+      "command": "node scripts/verify_m7c_schemas.mjs",
+      "exit_code": 0
+    },
+    {
+      "check": "M7D_AJV",
+      "command": "node scripts/verify_m7d_schemas.mjs",
+      "exit_code": 0
+    },
+    {
+      "check": "admission",
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0
+    },
+    {
+      "check": "qualification",
+      "command": ".venv/bin/python scripts/qualify_m7d_skills.py",
+      "exit_code": 0
+    },
+    {
+      "check": "docs",
+      "command": ".venv/bin/python scripts/check_docs.py",
+      "exit_code": 0
+    },
+    {
+      "check": "snapshot",
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0
+    },
+    {
+      "check": "diff",
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "web_passed": 50,
+  "build": {
+    "command": "PC_BUILD_COMMIT=<C> npm --prefix apps/web run build (invoked by clean exact release prepare)",
+    "exit_code": 0
+  },
+  "actual_Mac": {
+    "command": ".venv/bin/python -m scripts.verify_m8c --output generated/m8c-verification --previous-package generated/releases/M8C-3eade011e7ba8f2b14c48baddc4fda58f257fe5c",
+    "exit_code": 0,
+    "scope": "PRIVATE_LOCAL_RUNTIME_WITH_SYNTHETIC_CONTENT",
+    "cleanup": "COMPLETE"
+  },
+  "additional_render_and_security_negatives": {
+    "exit_code": 0,
+    "implementation_sha": "a00a14277974b7f6c25846d0eb7a23879f86183a",
+    "Host_Origin_CSRF_build": "PASS",
+    "content": "ORIGINAL_SYNTHETIC"
+  },
+  "privacy": {
+    "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+    "exit_code": 0,
+    "scope": "WORKTREE_GENERATED_UI_CONTEXT_ALL_LOCAL_GIT_OBJECTS"
+  },
+  "CI": {
+    "status": "NOT_CONFIGURED",
+    "execution": "NOT_RUN",
+    "workflow_directory_present": false,
+    "queried_runs": []
+  },
+  "real_private_data_used": 0,
+  "live_application_provider_calls": 0,
+  "system_wide_changes": 0,
+  "ACTUAL_PRIVATE_PILOT": "NOT_STARTED",
+  "actual_private_root": "NOT_CREATED",
+  "security_schema": {
+    "oracle": "Independent existing Ajv2020",
+    "passed": 5,
+    "exit_code": 0
+  }
+}

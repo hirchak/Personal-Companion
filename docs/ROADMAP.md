@@ -168,3 +168,8 @@ M8C IN_PROGRESS: final private-local core engineering gate, distinct mode/explic
 protected backups/core-only runtime/UI, actual reference Mac private path using ORIGINAL SYNTHETIC content only.
 Current goal/contract prompts/M8C_PRIVATE_LOCAL_PILOT_RUNTIME.md / docs/M8C_CONTRACT.md. Actual private root
 NOT_CREATED/pilot NOT_STARTED; phone/AI/ASR/Health/clinical/language gates carried independently.
+
+M8C final implementation `a00a14277974b7f6c25846d0eb7a23879f86183a` — AWAITING_REVIEW.751Python/45Chromium/84M8C/50web/build and exact native
+private-mode/synthetic-content full lifecycle/genuine rollback PASS. Core/storage/backup/activation READY
+engineering-only; independent ACCEPT + owner/data-owner activation required. Actual private rootNOT_CREATED/
+pilotNOT_STARTED; optional gates unchanged. No additional core milestone if acceptance/preflight pass.
