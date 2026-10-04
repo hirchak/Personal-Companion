@@ -77,3 +77,14 @@ def test_strict_provider_schema_requires_nullable_map_and_error_redaction():
  assert 'null' in str(strict['properties']['working_map'])
  error={'message':'Invalid schema: required must include working_map ORIGINAL_SYNTHETIC_ACCOUNT_SENTINEL','codexErrorInfo':'badRequest'}
  assert safe_failure(error)=={'category':'INVALID_STRUCTURED_SCHEMA','rpc_error_kind':'badRequest'} and 'SENTINEL' not in json.dumps(safe_failure(error))
+
+@pytest.mark.parametrize('text,expected',[
+ ('Він сказав «ще не готово?». Що саме зачепило?',1),
+ ('Він сказав "ще не готово?". Що саме зачепило?',1),
+ ('Він сказав «ще не готово?». Що зачепило? Чого хочеш?',2),
+ ('Можна спитати «чому я нездатний?». Що думаєш?',2),
+])
+def test_main_question_guard_does_not_count_exact_context_quotes(text,expected):
+ from apps.core.conversation_controller import main_question_count
+ payload={'context':[{'text':'ORIGINAL SYNTHETIC · Колега сказав «ще не готово?».'}],'reflection_state':None}
+ assert main_question_count(text,payload)==expected

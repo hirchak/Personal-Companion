@@ -36,6 +36,22 @@ def check_inferences(c):
             if d['state']=='COMPLETED':ConversationCandidate.model_validate(d['candidate'])
     except (KeyError,ValueError,TypeError,ValidationError):raise SafeError('INFERENCE_INTEGRITY') from None
 
+def main_question_count(text,payload):
+    """Quoted questions already in explicit context are data, not another follow-up.
+
+    Unknown quotes still count. This is a punctuation heuristic, not a semantic judge.
+    """
+    known=[p['text'] for p in payload.get('context',[])]
+    known += [i['text'] for i in (payload.get('reflection_state') or {}).get('items',[])]
+    normalized=lambda value:' '.join(value.casefold().split())
+    known=[normalized(t) for t in known]
+    count=text.count('?')
+    pattern=r'«([^«»]{1,1000})»|“([^“”]{1,1000})”|"([^"\n]{1,1000})"'
+    for match in re.finditer(pattern,text):
+        quote=next(v for v in match.groups() if v is not None)
+        if any(normalized(quote) in source for source in known):count-=quote.count('?')
+    return count
+
 class ConversationController:
     def __init__(self,conversations,provider=None,skills=None,timeout=60):
         self.conversations=conversations;self.store=conversations.store;self.context=Reflection(conversations);self.deep=DeepSessions(conversations);self.provider=provider;self.skills=skills or ConversationSkills();self.timeout=timeout
@@ -243,7 +259,7 @@ class ConversationController:
             if any(s not in payload['source_refs_allowed'] for s in candidate.source_refs):raise SafeError('MODEL_SOURCE_OUT_OF_SCOPE')
             if candidate.goal_suggestion is not None and d['purpose']!='GOAL_PROPOSAL':raise SafeError('UNREQUESTED_GOAL_CANDIDATE')
             if (candidate.closure is not None)!=(d['purpose']=='CLOSURE'):raise SafeError('CLOSURE_SCHEMA_REQUIRED')
-            if candidate.assistant_text.count('?')>1:raise SafeError('MAIN_QUESTION_LIMIT')
+            if main_question_count(candidate.assistant_text,payload)>1:raise SafeError('MAIN_QUESTION_LIMIT')
             with self.store.transaction() as c:
                 d=self.row(c,id)
                 if cancel.is_set() or d['state']!='RUNNING':

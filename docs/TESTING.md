@@ -270,7 +270,7 @@ context snapshot/doc/privacy checks. Commands/exit codes/exact C environment go 
 
 Separate live authorized synthetic: `PYTHONPATH=. .venv/bin/python scripts/evaluate_m7d_providers.py
 --model gpt-6-luna --effort max --implementation-sha <C>` and gpt-6-sol --effort ultra, initial planned34 attempts
-under persistent48 ceiling; no implicit retries, no auth extraction, no fallback/PAYG. After20 retained interim attempts, final bounded selection is Luna LONGITUDINAL/FREE/ROLE11 + Sol full17; total ceiling48. Catalog setting must
+under persistent48 ceiling; no implicit retries, no auth extraction, no fallback/PAYG. After28 retained interim attempts, final bounded selection is Luna LONGITUDINAL --max-attempts3 + Sol full17; total ceiling48. Source-bound quoted questions do not count as extra main follow-ups; unknown quotes and multiple actual questions still fail. Catalog setting must
 be supported before any turn. Model/effort/route/profile, receipt/map and failure evidence are retained.
 Human quality dimensions are review prompts, not clinical outcomes or an LLM score.
 

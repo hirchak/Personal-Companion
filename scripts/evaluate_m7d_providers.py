@@ -14,18 +14,21 @@ from apps.core.deep_session_contracts import SessionAction,MapAction,DeepContext
 from apps.core.conversation_runtime_contracts import InferenceStart
 
 OUT=REPO/'generated/m7d-provider-eval'
-def run(model,effort,sha,scenarios=None):
+def run(model,effort,sha,scenarios=None,max_attempts=None):
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()==sha
  assert not subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip(),'EXACT_C_REQUIRES_CLEAN_SOURCE'
  corpus_path=REPO/'research/evals/M7D_SYNTHETIC_DEEP.json';corpus=json.loads(corpus_path.read_text());budget=M7DEvaluationBudget()
  cases=[s for s in corpus['runs'] if not scenarios or s['id'] in scenarios]
  assert not scenarios or set(scenarios)<={s['id'] for s in corpus['runs']},'UNKNOWN_SCENARIO'
+ if max_attempts is not None:assert 1<=max_attempts<=48,'INVALID_ATTEMPT_BOUND'
  planned=sum(len(turns) for s in cases for turns in s['sessions'])
+ if max_attempts is not None:planned=min(planned,max_attempts)
  assert budget.summary()['remaining']>=planned,'INSUFFICIENT_PERSISTENT_M7D_BUDGET'
  provider=CodexConversationProvider(model,budget=budget,effort=effort);catalog=provider.discover()
  assert effort in next(m['supported_efforts'] for m in catalog['models'] if m['model']==model)
  OUT.mkdir(parents=True,exist_ok=True);rows=[];controls=[];file=OUT/(model+'-'+effort+'.json')
  for scenario in cases:
+  if max_attempts is not None and sum(r['attempt_count'] for r in rows)>=max_attempts:break
   root=Path(tempfile.mkdtemp(prefix='m7d-original-synthetic-eval-',dir=Path(tempfile.gettempdir()).resolve()))
   try:
    c=ConversationController(Conversations(Store(root/'data'),True),provider,timeout=120)
@@ -40,10 +43,12 @@ def run(model,effort,sha,scenarios=None):
      with c.store.transaction() as db:
       m=p['messages'][0];m['created_utc']=(datetime.now(timezone.utc)-timedelta(days=20)).isoformat();db.execute('UPDATE conversation_messages SET payload=? WHERE id=?',(encode(m),m['id']))
    for session_index,turns in enumerate(scenario['sessions']):
+    if max_attempts is not None and sum(r['attempt_count'] for r in rows)>=max_attempts:break
     p=c.conversations.create(NewConversation(operation_id=uuid4(),goal_id=g['id'] if g else None,goal_revision=g['revision'] if g else None));id=p['conversation']['id']
     if g:
      s=c.deep.read(id)['session'];c.deep.session_action(id,SessionAction(operation_id=uuid4(),base_revision=s['revision'],action='focus',focus='ORIGINAL SYNTHETIC · Розмова про чернетку / сесія '+str(session_index+1)))
     for turn_index,text in enumerate(turns):
+     if max_attempts is not None and sum(r['attempt_count'] for r in rows)>=max_attempts:break
      if scenario['id']=='REVISION' and session_index==0 and turn_index==1:
       g=c.context.change(g['id'],GoalChange(operation_id=uuid4(),base_revision=1,text='ORIGINAL SYNTHETIC · Зрозуміти, як хочу обговорювати дедлайни.',user_agreed=True))
      p=c.conversations.get(id);purpose='CLOSURE' if 'Явно прошу підсумувати' in text else 'REFLECT';selection=ContextSelection(type='LAST_7_DAYS') if scenario['id']=='RANGE' and turn_index==0 else ContextSelection(type='CUSTOM',window_start=(datetime.now(timezone.utc)-timedelta(days=30)).isoformat(),window_end=datetime.now(timezone.utc).isoformat()) if scenario['id']=='RANGE' else ContextSelection()
@@ -76,4 +81,4 @@ def run(model,effort,sha,scenarios=None):
  result={'implementation_sha':sha,'catalog':catalog,'corpus_sha256':digest(corpus_path.read_bytes()),'model':model,'effort':effort,'profile':provider.profile,'attempt_count':sum(r['attempt_count'] for r in rows),'valid':len(valid),'failed':len(rows)-len(valid),'latency_ms':{'median':statistics.median(lat) if lat else None,'max':max(lat) if lat else None},'rows':rows,'controls':controls,'ledger':budget.summary(),'quality_dimensions':corpus['human_dimensions'],'qualitative_review':'PENDING_OWNER_ARCHITECT; deterministic compliance does not establish quality','new_auth':False,'PAYG':False,'private_provider_suitability':'NOT_VERIFIED_M7C_N02','hidden_reasoning_logged':False}
  file.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');return result
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--model',required=True,choices=['gpt-6-luna','gpt-6-sol','gpt-6.1-sol']);p.add_argument('--effort',required=True);p.add_argument('--implementation-sha',required=True);p.add_argument('--scenario',action='append');a=p.parse_args();run(a.model,a.effort,a.implementation_sha,a.scenario)
+ p=argparse.ArgumentParser();p.add_argument('--model',required=True,choices=['gpt-6-luna','gpt-6-sol','gpt-6.1-sol']);p.add_argument('--effort',required=True);p.add_argument('--implementation-sha',required=True);p.add_argument('--scenario',action='append');p.add_argument('--max-attempts',type=int);a=p.parse_args();run(a.model,a.effort,a.implementation_sha,a.scenario,a.max_attempts)
