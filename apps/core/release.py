@@ -16,7 +16,7 @@ import subprocess
 import sys
 import threading
 from uuid import uuid4
-from .storage import Store, SafeError, MARKER, SCHEMA, REPO, safe_path, empty_target, encode, digest
+from .storage import Store, SafeError, MARKER, SCHEMA, REPO, safe_path, empty_target, encode, digest, check_synthetic_marker
 from .voice import durable_write, fsync_dir
 
 from .release_metadata import DEFAULTS,CONTRACT,identity,validate_manifest,check_backup_provenance
@@ -65,7 +65,7 @@ def validate_package(package, expected_hash):
         validate_profile(package/'packages/pilot/MAC_CORE_PROFILE.json')
     if m['format']==3:
         from .local_private import PROFILE
-        if read_json(package/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json')!=PROFILE:raise SafeError('PILOT_PROFILE_INCOMPATIBLE')
+        if encode(read_json(package/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json'))!=encode(PROFILE):raise SafeError('PILOT_PROFILE_INCOMPATIBLE')
     return m
 
 def prepare(output):
@@ -139,7 +139,7 @@ def inspect_data(data, root_kind=RootKind.SYNTHETIC_TEST):
         validate_root(data)
     else:
         if (data/'private-local.json').exists():raise SafeError('ROOT_KIND_MISMATCH')
-        if read_json(data/'synthetic.json') != MARKER: raise SafeError('SYNTHETIC_ROOT_REQUIRED')
+        check_synthetic_marker(data)
     allowed = {'private-local.json' if private else 'synthetic.json', 'journal.sqlite3', 'journal.sqlite3-wal', 'journal.sqlite3-shm', 'preupgrade.sqlite3', 'audio', 'audio-staging'}
     if {p.name for p in data.iterdir()} - allowed: raise SafeError('UNKNOWN_ROOT_CONTENT')
     try:
@@ -271,6 +271,7 @@ def verify_backup(backup,expected_producer_hash=None,expected_backup_hash=None,a
     if m.get('backup_format') not in {3,4} and not allow_legacy:raise SafeError('LEGACY_BACKUP_REQUIRES_EXPLICIT_APPROVAL')
     with sqlite3.connect((backup/'snapshot.sqlite3').as_uri()+'?mode=ro',uri=True) as c:
         c.row_factory=sqlite3.Row; Store.check(c)
+        if m.get('backup_format')!=4 and c.execute("SELECT 1 FROM sqlite_master WHERE name='private_root_identity'").fetchone():raise SafeError('ROOT_KIND_MISMATCH')
         if m.get('backup_format') in {3,4}:check_backup_provenance(m,c,expected_producer_hash)
         elif 'release_provenance' in m or c.execute("SELECT 1 FROM sqlite_master WHERE name='release_backup_provenance'").fetchone():raise SafeError('BACKUP_RELEASE_PROVENANCE')
         if c.execute('PRAGMA integrity_check').fetchone()[0]!='ok': raise SafeError('DATABASE_INTEGRITY')

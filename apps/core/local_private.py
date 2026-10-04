@@ -43,6 +43,13 @@ class RootReceipt(Strict):
     no_cloud_directory_acknowledged: Literal[True]
     created_at_utc: str
 
+    @model_validator(mode='before')
+    @classmethod
+    def exact_literal_types(cls,value):
+        if not isinstance(value,dict) or type(value.get('format')) is not int or any(type(value.get(key)) is not bool for key in ('data_owner_acknowledged','no_cloud_directory_acknowledged')):
+            raise ValueError('exact metadata types required')
+        return value
+
     @field_validator('root_id')
     @classmethod
     def valid_id(cls,value):
@@ -78,10 +85,16 @@ class PrivatePreflight(Strict):
     application_level_backup_encryption: Literal['NOT_IMPLEMENTED']
     runtime_profile: dict
 
+    @field_validator('format',mode='before')
+    @classmethod
+    def exact_format_type(cls,value):
+        if type(value) is not int:raise ValueError('integer format required')
+        return value
+
     @field_validator('runtime_profile')
     @classmethod
     def exact_profile(cls,value):
-        if value!=PROFILE:raise ValueError('profile mismatch')
+        if encode(value)!=encode(PROFILE):raise ValueError('profile mismatch')
         return value
 
     @model_validator(mode='after')

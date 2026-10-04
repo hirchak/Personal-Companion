@@ -30,6 +30,18 @@ def encode(value):
 def digest(data):
     return hashlib.sha256(data).hexdigest()
 
+def check_synthetic_marker(root):
+    def unique(items):
+        result={}
+        for key,value in items:
+            if key in result:raise ValueError()
+            result[key]=value
+        return result
+    try:
+        value=json.loads((Path(root)/'synthetic.json').read_text(),object_pairs_hook=unique)
+        if encode(value)!=encode(MARKER):raise ValueError()
+    except (OSError,ValueError,TypeError):raise SafeError('UNKNOWN_ROOT') from None
+
 def safe_path(path):
     p = Path(path).absolute()
     if '..' in p.parts:
@@ -122,8 +134,7 @@ class Store:
                 validate_root(self.root, security=True)
             elif (self.root/'private-local.json').exists():
                 raise SafeError('ROOT_KIND_MISMATCH')
-            elif not manifest.is_file() or json.loads(manifest.read_text()) != MARKER:
-                raise SafeError('UNKNOWN_ROOT')
+            else:check_synthetic_marker(self.root)
             allowed = {manifest.name, 'journal.sqlite3', 'journal.sqlite3-wal', 'journal.sqlite3-shm', 'preupgrade.sqlite3', 'audio', 'audio-staging'}
             if any(p.name not in allowed for p in self.root.iterdir()):
                 raise SafeError('UNKNOWN_ROOT_CONTENT')
@@ -241,6 +252,16 @@ class Store:
 
     @contextmanager
     def connect(self):
+        # Keep private root/ACL/identity validation and SQLite WAL lifetime together.
+        # Otherwise a parallel connection closing can remove WAL/SHM during permission probes.
+        if getattr(self, 'root_kind', RootKind.SYNTHETIC_TEST) == RootKind.PRIVATE_LOCAL:
+            with self.attachment_lock:
+                with self._connect() as c:yield c
+        else:
+            with self._connect() as c:yield c
+
+    @contextmanager
+    def _connect(self):
         # Revalidate all children on every operation to reject post-start path swaps.
         safe_path(self.root)
         if getattr(self, 'root_kind', RootKind.SYNTHETIC_TEST) == RootKind.PRIVATE_LOCAL:
@@ -248,6 +269,7 @@ class Store:
             if not getattr(self, '_creating_private', False): validate_root(self.root)
         elif (self.root/'private-local.json').exists():
             raise SafeError('ROOT_KIND_MISMATCH')
+        else:check_synthetic_marker(self.root)
         c = sqlite3.connect(self.db, timeout=5, isolation_level=None)
         c.row_factory = sqlite3.Row
         if getattr(self, 'root_kind', RootKind.SYNTHETIC_TEST) == RootKind.SYNTHETIC_TEST and c.execute("SELECT 1 FROM sqlite_master WHERE name='private_root_identity'").fetchone():
@@ -483,6 +505,7 @@ class Store:
             if m['files']['snapshot.sqlite3']!=digest((b/'snapshot.sqlite3').read_bytes()):raise SafeError('CHECKSUM_MISMATCH')
             with sqlite3.connect(f'file:{b / "snapshot.sqlite3"}?mode=ro&immutable=1',uri=True) as source:
                 source.row_factory=sqlite3.Row;cls.check(source)
+                if not private and source.execute("SELECT 1 FROM sqlite_master WHERE name='private_root_identity'").fetchone():raise SafeError('ROOT_KIND_MISMATCH')
                 if source.execute('SELECT schema_version FROM vault_meta').fetchone()[0]!=m['schema_version']:raise SafeError('UNSUPPORTED_SCHEMA')
                 if m['backup_format'] in {3,4}:
                     from .release_metadata import check_backup_provenance

@@ -16,7 +16,7 @@ def validate_manifest(m):
         keys={'format','release_id','git_commit','schema_version','python_input_hash','web_lock_hash','platform','defaults','compatibility','files','manifest_hash'}
         if not old:keys.add('runtime_input_hash')
         if set(m)!=keys or type(m['format']) is not int or m['format'] not in {1,2,3}:raise ValueError()
-        if m['defaults']!=DEFAULTS or type(m['schema_version']) is not int or m['schema_version']!=SCHEMA:raise ValueError()
+        if encode(m['defaults'])!=encode(DEFAULTS) or type(m['schema_version']) is not int or m['schema_version']!=SCHEMA:raise ValueError()
         if not re.fullmatch('[0-9a-f]{40}',m['git_commit']):raise ValueError()
         if m['release_id']!=({1:'M8A-',2:'M8B-',3:'M8C-'}[m['format']])+m['git_commit']:raise ValueError()
         if m['compatibility']!={'schema_min':2,'schema_max':SCHEMA,'web_contract':CONTRACT,'downgrade':'FRESH_ROOT_BACKUP_ONLY'}:raise ValueError()

@@ -337,3 +337,60 @@ def test_private_profile_cannot_enable_provider_even_after_rehash(private_packag
     m=r.read_json(pkg/'release-manifest.json');m['files']=r.file_hashes(pkg);m['manifest_hash']=r.identity(m)
     (pkg/'release-manifest.json').write_text(encode(m))
     with pytest.raises(SafeError,match='PILOT_PROFILE_INCOMPATIBLE'):r.validate_package(pkg,m['manifest_hash'])
+
+
+@pytest.mark.parametrize('field,value',[('format',True),('format',1.0),('data_owner_acknowledged',1),('no_cloud_directory_acknowledged',1)])
+def test_private_literal_type_corruption_refused(vault,field,value):
+    _,_,_,data,_=vault;marker=data/'private-local.json';receipt=r.read_json(marker);receipt[field]=value
+    marker.write_text(encode(receipt))
+    with pytest.raises(SafeError):Store(data,root_kind=KIND)
+
+@pytest.mark.parametrize('marker',[{'kind':'SYNTHETIC_M1','format':True},{'kind':'SYNTHETIC_M1','format':1.0},'duplicate'])
+def test_synthetic_marker_type_corruption_refused(isolated,marker):
+    root=isolated/'synthetic';store=Store(root)
+    content='{"kind":"SYNTHETIC_M1","kind":"SYNTHETIC_M1","format":1}' if marker=='duplicate' else encode(marker)
+    (root/'synthetic.json').write_text(content)
+    for action in [lambda:Store(root),lambda:r.inspect_data(root),lambda:store.meta()]:
+        with pytest.raises(SafeError,match='UNKNOWN_ROOT'):action()
+
+@pytest.mark.parametrize('value',[False,0.0])
+def test_private_profile_exact_json_types(private_package,value):
+    pkg,_=private_package;profile=r.read_json(pkg/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json');profile['clinical_active']=value
+    (pkg/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json').write_text(encode(profile))
+    m=r.read_json(pkg/'release-manifest.json');m['files']=r.file_hashes(pkg);m['manifest_hash']=r.identity(m)
+    (pkg/'release-manifest.json').write_text(encode(m))
+    with pytest.raises(SafeError,match='PILOT_PROFILE_INCOMPATIBLE'):r.validate_package(pkg,m['manifest_hash'])
+
+
+def test_security_report_version_boolean_refused(vault):
+    pkg,h,app,data,b=vault;report=p.preflight(pkg,h,app,data,b);report['format']=True
+    with pytest.raises(ValidationError):p.PrivatePreflight.model_validate(report)
+
+
+def test_private_concurrent_journal_search_and_identity_permissions(vault):
+    from concurrent.futures import ThreadPoolExecutor
+    _,_,_,data,_=vault;j=Journal(Store(data,root_kind=KIND))
+    def write(index):
+        request,_=create(j,text='ORIGINAL SYNTHETIC parallel private '+str(index))
+        return j.get(str(request.entry_id))['raw_text']
+    def read(_):
+        for _ in range(5):
+            j.list(q='ORIGINAL SYNTHETIC');j.store.meta()
+        return 'READ_PASS'
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        outputs=list(pool.map(lambda n:write(n) if n%2==0 else read(n),range(12)))
+    assert outputs.count('READ_PASS')==6 and len(j.list(q='parallel private')['items'])==6
+    assert p.validate_root(data)['root_kind']=='PRIVATE_LOCAL'
+
+
+def test_private_backup_relabelled_legacy_still_refused_before_roots(vault,isolated):
+    pkg,h,app,data,b=vault;target=b/'backup';r.backup(app,data,target,root_kind=KIND)
+    m=r.read_json(target/'manifest.json');m.update(backup_format=2,app_version='M7D')
+    for key in ['release_provenance','root_kind','security_policy']:m.pop(key)
+    with sqlite3.connect(target/'snapshot.sqlite3') as c:c.execute('DROP TABLE release_backup_provenance')
+    m['files']['snapshot.sqlite3']=digest((target/'snapshot.sqlite3').read_bytes());(target/'manifest.json').write_text(encode(m))
+    newapp,newdata=isolated/'rejected app',isolated/'rejected data'
+    with pytest.raises(SafeError,match='ROOT_KIND_MISMATCH'):r.restore(pkg,h,target,newapp,newdata,allow_legacy=True)
+    assert not newapp.exists() and not newdata.exists()
+    with pytest.raises(SafeError,match='ROOT_KIND_MISMATCH'):Store.restore(target,newdata)
+    assert not newdata.exists()
