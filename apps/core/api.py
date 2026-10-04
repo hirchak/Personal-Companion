@@ -1,5 +1,6 @@
 """Loopback-only same-origin HTTP adapter. No provider or credential discovery."""
 import secrets
+import re
 import sqlite3
 import threading
 import time
@@ -153,7 +154,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                     raise SafeError('CSRF_DENIED', 403)
             if private:
                 # Explicit allowlist makes future optional routes OFF until a separately reviewed profile.
-                allowed = path in {'/api/v1/status','/api/v1/auth/unlock','/api/v1/auth/session','/api/v1/auth/lock','/api/v1/entries','/api/v1/creative','/api/v1/creative/preview','/api/v1/creative/export','/api/v1/exports','/api/v1/exports/preview'} or path.startswith('/api/v1/entries/')
+                allowed = path in {'/api/v1/status','/api/v1/auth/unlock','/api/v1/auth/session','/api/v1/auth/lock','/api/v1/entries','/api/v1/creative','/api/v1/creative/preview','/api/v1/creative/export','/api/v1/exports','/api/v1/exports/preview'} or re.fullmatch(r'/api/v1/entries/[0-9a-fA-F-]{36}(?:/revisions)?',path) is not None
                 if path.startswith('/api/') and not allowed:raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
                 if path.startswith('/phone'):raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
             response = await call_next(request)

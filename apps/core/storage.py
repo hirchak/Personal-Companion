@@ -155,7 +155,9 @@ class Store:
             empty_target(self.root)
             self.root.mkdir(mode=0o700, exist_ok=True)
             fd = os.open(manifest, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-            with os.fdopen(fd, 'w') as handle: handle.write(encode(private_creation if private else MARKER))
+            with os.fdopen(fd, 'w') as handle:
+                handle.write(encode(private_creation if private else MARKER))
+                handle.flush(); os.fsync(handle.fileno())
         os.chmod(self.root, 0o700)
         self.db = self.root / 'journal.sqlite3'
         # Create mode before SQLite opens it, including under permissive caller umask.
@@ -233,6 +235,9 @@ class Store:
             self.check(c)
         private_files(self.root)
         self._creating_private = False
+        if private:
+            from .voice import fsync_dir
+            fsync_dir(self.root); fsync_dir(self.root.parent)
 
     @contextmanager
     def connect(self):

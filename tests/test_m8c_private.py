@@ -169,7 +169,7 @@ def test_private_crud_search_auth_lock_restart(vault):
             assert c2.get('/api/v1/entries').status_code==401
     assert token.encode() not in (data/'journal.sqlite3').read_bytes()
 
-@pytest.mark.parametrize('path',['ai/mode','conversations','health/import','practices/start','sync/invitations','device/pair','voice/audio','feedback','external-embeddings','future-optional-capability'])
+@pytest.mark.parametrize('path',['ai/mode','conversations','health/import','practices/start','sync/invitations','device/pair','voice/audio','feedback','external-embeddings','future-optional-capability','entries/future-optional-capability'])
 def test_forbidden_capability_requests_with_provider_env(vault,monkeypatch,path):
     for name in ['OPENAI_API_KEY','MINIMAX_API_KEY','PC_CONVERSATION_PROVIDER','PC_LOCAL_ASR','PC_HEALTH_BRIDGE']:
         monkeypatch.setenv(name,'ORIGINAL_SYNTHETIC_NOT_A_KEY_OR_AUTH')
@@ -319,3 +319,19 @@ def test_security_report_inconsistent_ready_rejected(vault,mutation):
     if mutation=='false_pass':
         next(c for c in report['checks'] if c['gate']=='data_volume')['status']='NOT_RUN';report['storage_protection']='UNVERIFIED'
     with pytest.raises(ValidationError):p.PrivatePreflight.model_validate(report)
+
+
+def test_private_application_permission_change_refused(vault):
+    _,_,app,data,_=vault;os.chmod(app,0o777)
+    with pytest.raises(SafeError,match='OWNER_ONLY_PERMISSIONS'):r.selected(app,data,KIND)
+    os.chmod(app,0o700)
+    os.chmod(app/'active.json',0o644)
+    with pytest.raises(SafeError,match='OWNER_ONLY_PERMISSIONS'):r.selected(app,data,KIND)
+
+
+def test_private_profile_cannot_enable_provider_even_after_rehash(private_package):
+    pkg,_=private_package;profile=r.read_json(pkg/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json')
+    profile['private_ai']='ON';(pkg/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json').write_text(encode(profile))
+    m=r.read_json(pkg/'release-manifest.json');m['files']=r.file_hashes(pkg);m['manifest_hash']=r.identity(m)
+    (pkg/'release-manifest.json').write_text(encode(m))
+    with pytest.raises(SafeError,match='PILOT_PROFILE_INCOMPATIBLE'):r.validate_package(pkg,m['manifest_hash'])

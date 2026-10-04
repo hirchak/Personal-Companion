@@ -136,6 +136,17 @@ def main():
             assert len(client.get('/api/v1/entries/'+ids[0]+'/revisions').json()['items'])==1
             assert client.get('/api/v1/entries/'+ids[2]).status_code==410
             checks['restart_durability_auth']={'status':'PASS','new_unlock_required':True,'history_tombstones':True,'defaults':defaults(client)}
+            with sync_playwright() as pw:
+                browser=pw.chromium.launch(headless=True);ctx=browser.new_context()
+                ctx.add_cookies([{'name':'m1_session','value':client.cookies['m1_session'],'url':origin,'httpOnly':True,'sameSite':'Strict'}])
+                page=ctx.new_page();page.clock.install();page.goto(origin)
+                expect(page.get_by_role('heading',name='Ваш щоденник',exact=True)).to_be_visible()
+                page.clock.fast_forward(900001)
+                expect(page.get_by_label('Код розблокування')).to_be_visible()
+                assert client.get('/api/v1/entries').status_code==401
+                checks['actual_package_idle_lock']={'status':'PASS','idle_seconds':900,'absolute_seconds':28800,'ui_and_api_locked':True,'clock':'CHROMIUM_CONTROLLED_CLOCK_NOT_REAL_15MIN_WAIT'}
+                ctx.close();browser.close()
+
         finally:stop(process,client)
         target=backups/'verified private snapshot'
         receipt=measured('private_backup',lambda:command('backup','--mode','PRIVATE_LOCAL','--app',app,'--data',data,'--backup',target))

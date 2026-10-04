@@ -1,5 +1,7 @@
 """Real Chromium PRIVATE_LOCAL path with ORIGINAL SYNTHETIC data only; native security in separate Mac dry-run."""
 import os
+import json
+import re
 import threading
 import time
 import pytest
@@ -20,7 +22,9 @@ os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH',str(REPO/'generated/chromium'))
 @pytest.mark.parametrize('scenario',['private_core','idle_lock'])
 def test_private_browser_mode_core_and_lock(vault,scenario):
     _,_,_,data,_=vault
-    app=create_app(data,port=PORT,root_kind=RootKind.PRIVATE_LOCAL,release_identity='DEVELOPMENT')
+    compiled_ids=[json.loads(m.group(1)) for file in (REPO/'apps/web/dist/assets').glob('*.js') if (m:=re.search(r'\.set\("X-PC-Build",("[^"]+")\)',file.read_text()))]
+    assert len(compiled_ids)==1,'Built web identity required'
+    app=create_app(data,port=PORT,root_kind=RootKind.PRIVATE_LOCAL,release_identity=compiled_ids[0])
     srv=uvicorn.Server(uvicorn.Config(app,host='127.0.0.1',port=PORT,access_log=False,log_level='critical'))
     thread=threading.Thread(target=srv.run,daemon=True);thread.start()
     deadline=time.monotonic()+10

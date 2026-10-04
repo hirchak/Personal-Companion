@@ -197,6 +197,9 @@ def require_preflight(package, expected_hash, app, data, port=8765):
     return result
 
 def receipt(app, root_kind=RootKind.SYNTHETIC_TEST):
+    if RootKind(root_kind)==RootKind.PRIVATE_LOCAL:
+        from .local_private import owner_only
+        owner_only(app); owner_only(app/'installation.json')
     value = read_json(app/'installation.json')
     if RootKind(root_kind)==RootKind.PRIVATE_LOCAL:
         if set(value)!={'kind','data_root','root_kind','root_id'} or value['kind']!=PRIVATE_INSTALL_MARKER or value['root_kind']!='PRIVATE_LOCAL':raise SafeError('ROOT_KIND_MISMATCH')
@@ -209,6 +212,9 @@ def receipt(app, root_kind=RootKind.SYNTHETIC_TEST):
 def selected(app, data, root_kind=RootKind.SYNTHETIC_TEST):
     app, data = separated(app, data)
     if receipt(app,root_kind)['data_root'] != str(data): raise SafeError('DATA_ROOT_MISMATCH')
+    if RootKind(root_kind)==RootKind.PRIVATE_LOCAL:
+        from .local_private import owner_only
+        owner_only(app/'active.json')
     active = read_json(app/'active.json')
     if set(active) != {'release_id', 'manifest_hash'} or not re.fullmatch(r'M8[ABC]-[0-9a-f]{40}', active['release_id']): raise SafeError('INVALID_METADATA')
     package = app/'releases'/active['release_id']
