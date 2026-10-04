@@ -95,3 +95,8 @@ M7C persistent goal-wide ledger reserves before turn/start, counts every failure
 M7C per-case usage now binds a local random inference attempt ID to the canonical ledger; it does not
 infer attribution from a concurrent goal-wide counter difference. Failed/invalid/cancelled output retains
 text-free attempt/usage metadata, never hidden reasoning or unvalidated assistant authority.
+
+
+## M8D optional owner pilot
+
+M8D final owner binding: FREE Luna/high, explicit DEEP economical Luna/max or quality Sol6.1/high. Luna permits low/medium/high/xhigh (if catalog-supported)/max; Sol6.1 low/medium/high ONLY. No Sol aboveHigh, no substitutes/fallback. Four NEW engineering attempts total across checkpoints; failures/cancels/retries count in separate M8D ledger. Post-review owner manual attempt receipts are separate local metadata. Installed cached catalog via supported model_catalog_json/model-list is capability evidence; completed exact-C synthetic inference is separately required. Native adapter uses existing SDK ChatGPT auth TYPE, read-only reference, temporary state and fixed existing subscription destination. [ADR-014](adr/ADR-014-M8D-OWNER-PRIVATE-AI-VOICE.md) carries privacy/transport limits.

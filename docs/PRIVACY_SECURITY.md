@@ -104,3 +104,8 @@ selection/session safeguards and becomes an owner-controlled private plaintext f
 owner protection. No provider/env/Health/voice/phone/AI/clinical enablement in this profile. Root receipts remain local,
 contain no personal identity; public evidence excludes paths/root IDs/real consent/contents/native disk IDs/unlock.
 Exact operator activation after independent ACCEPT: [PILOT_HANDOFF](PILOT_HANDOFF.md). M8C uses synthetic content only.
+
+
+## M8D optional owner pilot
+
+M8D is a separate owner-bounded optional profile, defaultOFF. [ADR-014](adr/ADR-014-M8D-OWNER-PRIVATE-AI-VOICE.md) defines seven explicit disclosures/settings confirmations, exact text/context previews, isolated native client and fixed-destination TLS-blind local transport. Existing subscription only, no credential extraction/copy, provider fallback/PAYG/new auth. Current message/bounded same-conversation history; journal explicit selection only; raw audio NEVER sent. Consumer route is NOT zero-retention/commercial/third-party certified. Training/environments OFF are owner-confirmed, not account-inspected. At-rest/FileVault/permissions/backup policy remains ADR-013. No real owner-vault access during M8D.

@@ -79,3 +79,46 @@ Actual native facts apply only to tested Mac; re-run security checks on the actu
 No extra engineering milestone is required for core activation after ACCEPT when these checks pass; any newly
 missing prerequisite remains an explicit blocker, not permission to alter system security or install dependencies.
 Phone/private provider/human ASR/Health/clinical modules each require separate gates and authorizations.
+
+## M8D optional AI/voice — post-ACCEPT owner procedure (NOT EXECUTED)
+
+M8D implementation is AWAITING_REVIEW. Existing real core vault is never used in engineering.
+After independent M8D ACCEPT, the owner may activate this optional profile on the existing PRIVATE_LOCAL
+vault; no new vault, import/discovery or migration. Keep the accepted M8C application and compatible
+pre-upgrade backup for fresh-root rollback. Human Ukrainian ASR remains OPEN_HUMAN_TEST.
+
+1. Verify the exact accepted M8D implementation package/manifest from the final report, runtime lock and
+   file hashes; use its local `launch.py`, existing Python/Codex/whisper assets only. Stop the foreground
+   M8C app. Retain a backup created by the accepted M8C manager before optional activation, or recover a compatible pre-upgrade backup using the accepted M8D manager with the M8C target package. The old M8C manager cannot validate a new M8D producing manifest. The owner supplies existing app/vault/backup paths locally; never paste them into Git/reports.
+2. Run accepted M8D `private-preflight --package "$PACKAGE" --manifest-hash "$HASH" --app "$APP"
+   --data "$VAULT" --backup-directory "$BACKUPS" --port 8765`. Every required check must PASS.
+   FileVault/volume/0700-0600/ACL/app-data/backup policies remain ADR-013. Missing prerequisite: stop;
+   no system security, auth, dependency, network or billing changes to fix it silently.
+3. Run `upgrade --mode PRIVATE_LOCAL --package "$PACKAGE" --manifest-hash "$HASH" --app "$APP"
+   --data "$VAULT" --backup "$BACKUPS/owner-chosen-pre-M8D-backup"`. This preserves the same vault
+   and creates a protected exact-provenance backup before selecting the new application. No in-place
+   downgrade. Check output PASS; retain backup/producer/manifest hashes locally.
+4. Select the already installed verified local ASR assets explicitly. Start `start --mode PRIVATE_LOCAL
+   --app "$APP" --data "$VAULT" --port 8765 --local-asr-assets "$LOCAL_ASR_ASSETS"` using accepted
+   M8D launcher. This does not install/download a model. One-time unlock code stays in the local terminal.
+5. Open `http://127.0.0.1:8765`, unlock, then «Розмова». AI and local voice initially OFF. Expand controls:
+   owner acknowledges text leaves Mac for existing OpenAI/ChatGPT subscription, audio stays local,
+   only exact approved context, no zero-retention certification, no fallback/PAYG; confirms ChatGPT
+   Improve the model for everyone OFF and Codex Include environments OFF. This procedure does not
+   inspect/change those settings. Click explicit session AI enable; failure stays visible, no substitute.
+6. FREE defaults Luna/High. Choose DEEP economical Luna/Max or quality Sol6.1/High explicitly. Sol above
+   High is forbidden. Changing profile invalidates previous context previews and stops pending inference.
+   Approve the separate local-only audio/review/manual-deletion acknowledgement to enable voice.
+7. Every send shows exact current text/history/goal/focus/map and any explicitly selected journal entries,
+   destination/model/effort. Journal is OFF by default; no whole-vault discovery. Confirm only after
+   reviewing the exact preview. Silence blocks ASR, uncertain candidates need review/edit. Transcription
+   inserts a draft; it never sends automatically. Audio is retained locally until explicit deletion.
+8. Owner-side human UA test after ACCEPT: five short natural utterances (normal quiet speech; optionally
+   names/numbers; one very short phrase; one after brief silence). Review/edit local transcripts, decide
+   usefulness. Keep recordings/transcripts/private details local; only a sanitized verdict may be supplied
+   later under explicit authorization. Engineering synthetic TTS does not close human quality.
+
+Lock/disable/restart/restore leave AI/voice OFF and require local acknowledgements again. Backup/restore
+uses the same protected-volume policy and exact provenance; restoration repeats private security/data-owner
+consent. Never recreate the actual vault to activate AI. Clinical/all specialists/Health/phone/embeddings/
+cloud ASR/sync/telemetry/publication remain OFF/NONE. Actual private AI activation during M8D = NOT_STARTED.

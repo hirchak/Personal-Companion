@@ -47,8 +47,9 @@ def safe_failure(error):
 class CodexConversationProvider:
     route='CODEX_SUBSCRIPTION'
     live=True
-    def __init__(self,model='gpt-6-luna',executable=None,budget=None,effort='low'):
+    def __init__(self,model='gpt-6-luna',executable=None,budget=None,effort='low',private_scope=False):
         if model not in ALLOWED_MODELS:raise SafeError('MODEL_NOT_ALLOWLISTED',403)
+        self.private_scope=private_scope
         self.model=model;self.effort=effort;self.profile=model+':'+effort;self.executable=executable or shutil.which('codex');self.budget=budget or LiveEvaluationBudget()
         if not self.executable:raise SafeError('CODEX_CLI_UNAVAILABLE',503)
     def metadata(self):return {'route':self.route,'model':self.model,'effort':self.effort,'profile':self.profile,'auth_type':'EXISTING_CHATGPT_CLI_ONLY','live':True,'availability':'CAPABILITY_REQUIRES_COMPLETED_INFERENCE','streaming':True,'tools':[],'fallback':False,'payg':False,'host_policy':'SDK_HOST_WORKING_AGREEMENTS_PRESENT; NO_APPLICATION_VAULT_ACCESS'}
@@ -66,7 +67,7 @@ class CodexConversationProvider:
         return [v['reasoningEffort'] for v in matches[0].get('supportedReasoningEfforts',[]) if isinstance(v,dict) and isinstance(v.get('reasoningEffort'),str)]
     def discover(self):
         """Read-only supported RPC catalog; no auth fields, prompt, or inference turn."""
-        work=Path(tempfile.mkdtemp(prefix='m7d-capabilities-',dir=Path(tempfile.gettempdir()).resolve()))
+        work=Path(tempfile.mkdtemp(prefix='m8d-private-catalog-' if self.private_scope else 'm7d-capabilities-',dir=Path(tempfile.gettempdir()).resolve()))
         process=None;sel=selectors.DefaultSelector();buf=bytearray();total=0;deadline=time.monotonic()+20
         try:
             process=subprocess.Popen(**self.spec(work),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,start_new_session=True)
@@ -89,7 +90,7 @@ class CodexConversationProvider:
             exchange(1,'initialize',{'clientInfo':{'name':'personal_companion_synthetic_capabilities','version':'0.7.0'},'capabilities':{'experimentalApi':True}})
             process.stdin.write((encode({'method':'initialized','params':{}})+'\n').encode());process.stdin.flush()
             catalog=exchange(2,'model/list',{'includeHidden':False})
-            return {'models':[{'model':m,'supported_efforts':self.supported_settings(catalog,m)} for m in ALLOWED_MODELS],'access':'CATALOG_ONLY_NOT_COMPLETED_INFERENCE_ENTITLEMENT','source':'INSTALLED_CODEX_APP_SERVER_MODEL_LIST','payg':False,'new_auth':False}
+            return {'models':[{'model':m,'supported_efforts':self.supported_settings(catalog,m)} for m in getattr(self,'catalog_models',ALLOWED_MODELS)],'access':'CATALOG_ONLY_NOT_COMPLETED_INFERENCE_ENTITLEMENT','source':'INSTALLED_CODEX_APP_SERVER_MODEL_LIST','payg':False,'new_auth':False}
         finally:
             sel.close()
             if process:
@@ -100,12 +101,16 @@ class CodexConversationProvider:
             shutil.rmtree(work)
     def execute(self,payload,response_schema,cancel,deadline,on_delta=None):
         from .conversation_runtime_contracts import ProviderPayload
-        body=ProviderPayload.model_validate(payload).model_dump(mode='json');encoded=encode(body)
+        payload_type=ProviderPayload
+        if self.private_scope:
+            from .local_private_contracts import PrivateProviderPayload
+            payload_type=PrivateProviderPayload
+        body=payload_type.model_validate(payload).model_dump(mode='json');encoded=encode(body)
         if len(encoded.encode())>64000:raise SafeError('PROVIDER_INPUT_LIMIT',413)
         if cancel.is_set():raise SafeError('CANCELLED')
-        work=Path(tempfile.mkdtemp(prefix='m7c-provider-synthetic-',dir=Path(tempfile.gettempdir()).resolve()));process=None;selector=selectors.DefaultSelector();buffer=bytearray();seen_bytes=0;attempt=None
-        frame_path=REPO/'skills/conversation/controller_frame.json';frame=json.loads(frame_path.read_text());frame_hash=digest(encode(frame).encode())
+        frame_path=REPO/('skills/conversation/local_private_controller_frame.json' if self.private_scope else 'skills/conversation/controller_frame.json');frame=json.loads(frame_path.read_text());frame_hash=digest(encode(frame).encode())
         if body['controller_frame_hash']!=frame_hash:raise SafeError('CONTROLLER_FRAME_CHANGED',409)
+        work=Path(tempfile.mkdtemp(prefix='m8d-private-provider-' if self.private_scope else 'm7c-provider-synthetic-',dir=Path(tempfile.gettempdir()).resolve()));process=None;selector=selectors.DefaultSelector();buffer=bytearray();seen_bytes=0;attempt=None
         started=time.monotonic();text='';final_text=None;usage=None;thread_id=None;turn_id=None;profile_verified=False
         def send(id,method,params):
             wire={'method':method,'params':params}

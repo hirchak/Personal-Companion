@@ -141,3 +141,8 @@ keep PRIVATE_PERSONAL/USER_REPORTED and existing revision/source/tombstone contr
 tests label their content in fixtures/evidence only; no production synthetic-label bypass field is accepted.
 Dual marker/SQLite root identity plus install receipt and backup4 attestations refuse loose-flag/cross-mode conversion.
 Root identity renews after fresh protected restore; domain lineage/history remains. No existing-data discovery/import.
+
+
+## M8D optional owner pilot
+
+M8D production private conversations use synthetic=false / PRIVATE_PERSONAL / USER_AUTHORED or MODEL_GENERATED semantics. Test content is explicitly ORIGINAL SYNTHETIC in fixtures/evidence; never relabel production entries to bypass gates. Selected journal revisions/preview/model/effort/draft bindings are checked again before and after inference; stale fails. Journal-derived map source history remains local and stale-aware; future external snapshots never silently re-add journal sources. No automatic memory or journal promotion. Restore revokes session activation.

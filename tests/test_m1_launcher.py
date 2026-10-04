@@ -11,7 +11,7 @@ ORIGIN = 'http://127.0.0.1:8765'
 
 
 def launch(root):
-    process = subprocess.Popen(['bash', 'scripts/demo.sh', str(root)], cwd=REPO,
+    process = subprocess.Popen(['bash', 'scripts/demo.sh', str(root),ORIGIN.rsplit(':',1)[1]], cwd=REPO,
                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
     code = None
     # stdout contains only the initializer and launcher; keep the code memory-only.
@@ -50,7 +50,8 @@ def stop(process):
         process.stdout.close()
 
 
-def test_A09_documented_demo_start_unlock_restart_stop(isolated):
+def test_A09_documented_demo_start_unlock_restart_stop(isolated,isolated_preflight_port,monkeypatch):
+    monkeypatch.setattr(__import__(__name__),'ORIGIN',f'http://127.0.0.1:{isolated_preflight_port}')
     root = isolated / 'launcher-demo'
     process, code = launch(root)
     try:

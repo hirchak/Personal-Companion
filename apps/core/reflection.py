@@ -176,7 +176,9 @@ class Reflection:
                 m=json.loads(row[0])
                 if b.selection_type!='LEGACY' and not start<=m['created_utc']<=end:continue
                 add('CURRENT_TURN',m['raw_text'],[{'id':m['id'],'revision':m['revision']}])
-            rows=c.execute('SELECT m.payload FROM conversation_messages m JOIN conversations v ON v.id=m.conversation_id WHERE json_extract(v.payload,"$.mode")="FREE" AND json_extract(m.payload,"$.created_utc")>=? AND json_extract(m.payload,"$.created_utc")<=? ORDER BY json_extract(m.payload,"$.created_utc") DESC LIMIT 50',(start,end)).fetchall()
+            if not self.conversations.synthetic_demo:
+                rows=[] # Private defaults never draw in unrelated Free conversations.
+            else:rows=c.execute('SELECT m.payload FROM conversation_messages m JOIN conversations v ON v.id=m.conversation_id WHERE json_extract(v.payload,"$.mode")="FREE" AND json_extract(m.payload,"$.created_utc")>=? AND json_extract(m.payload,"$.created_utc")<=? ORDER BY json_extract(m.payload,"$.created_utc") DESC LIMIT 50',(start,end)).fetchall()
             refs=[{'id':(m:=json.loads(r[0]))['id'],'revision':m['revision']} for r in rows]
             goalref={'id':str(goal.id),'revision':goal.revision}
             if b.prepare_synthetic_digests:

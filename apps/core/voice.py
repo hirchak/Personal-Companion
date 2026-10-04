@@ -291,7 +291,7 @@ class Voice:
         for id in pending:
             with self.store.connect() as c:r=c.execute('SELECT retention FROM audio WHERE id=?',(id,)).fetchone()
             self._purge(id,keep_confirmed=r[0]=='DELETE_AFTER_CONFIRM')
-        # Remove finalized orphans after an aborted begin/finalize. Only this synthetic store is scanned.
+        # Remove finalized orphans after an aborted begin/finalize. Only this explicitly opened store attachment directory is scanned.
         with self.store.connect() as c:known={r[0] for r in c.execute("SELECT id FROM audio WHERE state IN ('MAC_AUDIO_CONFIRMED','UPLOADING')")}
         for p in self.root.iterdir():
             if p.name.removesuffix('.wav') not in known:p.unlink()

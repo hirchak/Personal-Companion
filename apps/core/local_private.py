@@ -220,7 +220,7 @@ def preflight(package, expected_hash, app, data, backup_directory, port=8765):
     from . import release as r
     package=r.package_path(package); app,data=r.separated(app,data)
     m=r.validate_package(package,expected_hash)
-    if m['format'] != 3: raise SafeError('PRIVATE_RELEASE_REQUIRED')
+    if m['format'] not in {3,4}: raise SafeError('PRIVATE_RELEASE_REQUIRED')
     for p in (app,data,local_path(backup_directory)):
         if p == package or p.is_relative_to(package) or package.is_relative_to(p): raise SafeError('PACKAGE_PATH_OVERLAP')
     b=local_path(backup_directory)

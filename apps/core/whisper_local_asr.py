@@ -4,9 +4,13 @@ from pathlib import Path
 from .storage import SafeError,digest,REPO
 
 class WhisperLocalASR:
-    def __init__(self,root=None):
+    def __init__(self,root=None,private_scope=False):
+        self.private_scope=private_scope
         self.root=Path(root or REPO/'generated/local-asr').resolve();self.binary=self.root/'build-v1.9.4-cpu/bin/whisper-cli';self.model=self.root/'models/ggml-small.bin';self.sandbox=Path('/usr/bin/sandbox-exec');self.executions=0;self.last_spec=None
-        if not self.root.is_relative_to((REPO/'generated').resolve()) or not self.sandbox.is_file():raise SafeError('LOCAL_ASR_ISOLATION_UNAVAILABLE')
+        if not self.sandbox.is_file() or (not self.root.is_relative_to((REPO/'generated').resolve()) and not (private_scope and root is not None)):raise SafeError('LOCAL_ASR_ISOLATION_UNAVAILABLE')
+        if root is not None:
+            source=Path(root).absolute()
+            if '..' in source.parts or any(p.is_symlink() for p in (source,*source.parents)):raise SafeError('LOCAL_ASR_ASSET_PATH_UNSAFE')
         receipt=json.loads((self.root/'M7C_ASR_MODEL_RECEIPT.json').read_text())
         if receipt.get('model_checksum_verified') is not True or receipt['model_bytes']>2500000000:raise SafeError('LOCAL_ASR_MODEL_INTEGRITY')
         isolation=self.root/'M7C_ASR_ISOLATION_RECEIPT.json'
@@ -17,7 +21,7 @@ class WhisperLocalASR:
         self.validate()
     def validate(self):
         if self.binary.is_symlink() or self.model.is_symlink() or digest(self.binary.read_bytes())!=self.binary_hash or self.model.stat().st_size!=487601967 or digest(self.model.read_bytes())!=self.model_hash:raise SafeError('LOCAL_ASR_MODEL_INTEGRITY')
-    def metadata(self):return {'engine':'whisper.cpp','version':self.version,'model':'small-multilingual','model_hash':self.model_hash,'binary_hash':self.binary_hash,'languages':['uk'],'available':True,'status':'LOCAL_SYNTHETIC_ONLY','supported_input':['audio/wav'],'cloud_asr':False,'scope':'M7D_ORIGINAL_SYNTHETIC_AUDIO_ONLY','speech_guard':'PCM_SIGNAL_V1'}
+    def metadata(self):return {'engine':'whisper.cpp','version':self.version,'model':'small-multilingual','model_hash':self.model_hash,'binary_hash':self.binary_hash,'languages':['uk'],'available':True,'status':'LOCAL_PRIVATE_OWNER_REVIEW_REQUIRED' if self.private_scope else 'LOCAL_SYNTHETIC_ONLY','supported_input':['audio/wav'],'cloud_asr':False,'scope':'M8D_OWNER_LOCAL_AUDIO_ONLY_NO_HUMAN_QUALITY_CERTIFICATION' if self.private_scope else 'M7D_ORIGINAL_SYNTHETIC_AUDIO_ONLY','speech_guard':'PCM_SIGNAL_V1'}
     def profile(self,work):
         q=lambda p:json.dumps(str(p))
         return '\n'.join(['(version 1)','(allow default)','(deny network*)','(deny file-read-data)','(deny file-write*)','(deny process-exec)','(allow file-read-data (literal "/"))','(allow process-fork)','(allow process-exec (literal '+q(self.binary)+'))','(allow sysctl-read)','(allow mach-lookup)','(allow file-read-data (subpath "/System") (subpath "/usr/lib") (subpath "/Library/Apple") (subpath "/private/var/db/dyld") (subpath "/dev") (literal "/etc/localtime") (literal '+q(self.binary)+') (literal '+q(self.model)+') (literal '+q(self.binary.parent)+') (literal '+q(work.parent)+') (subpath '+q(work)+'))','(allow file-write* (subpath '+q(work)+') (literal "/dev/null"))'])
@@ -28,7 +32,13 @@ class WhisperLocalASR:
         guard=speech_presence(data)
         if guard['state']=='NO_SPEECH':raise SafeError('NO_SPEECH')
         self.validate();self.executions+=1
-        work=Path(tempfile.mkdtemp(prefix='m7c-whisper-synthetic-',dir=Path(tempfile.gettempdir()).resolve()));source=work/'input.wav';source.write_bytes(data);source.chmod(0o600);profile=work/'sandbox.sb';profile.write_text(self.profile(work));output=work/'candidate'
+        work=Path(tempfile.mkdtemp(prefix='m8d-local-whisper-' if self.private_scope else 'm7c-whisper-synthetic-',dir=Path(tempfile.gettempdir()).resolve()))
+        if self.private_scope:
+            from .local_private import owner_only,require_volume
+            try:owner_only(work);require_volume(work)
+            except BaseException:
+                shutil.rmtree(work);raise
+        source=work/'input.wav';source.write_bytes(data);source.chmod(0o600);profile=work/'sandbox.sb';profile.write_text(self.profile(work));output=work/'candidate'
         args=[str(self.sandbox),'-f',str(profile),str(self.binary),'-m',str(self.model),'-f',str(source),'-l','uk','-t','4','-ng','-nf','-oj','-of',str(output)]
         spec={'args':args,'cwd':str(work),'env':{'LANG':'en_US.UTF-8','TMPDIR':str(work)},'shell':False};self.last_spec=spec;process=None;sel=selectors.DefaultSelector();sizes={'stdout':0,'stderr':0}
         try:

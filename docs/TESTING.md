@@ -333,3 +333,13 @@ runtime12 (no installs/test libraries), actual native protection, PRIVATE_LOCAL 
 real HTTP/Chromium, backup/restore/upgrade/failure/rollback/restarts/KEEP DATA/delete/cleanup. Exact hashes/status only.
 Run full existing Python/web/build/Ajv/admission/docs/snapshot/public-tree/all-local-Git-object checks on final C.
 No real private/provider/Health/audio/phone samples/system changes or hardware/clinical/private acceptance inference.
+
+
+## M8D
+
+`.venv/bin/python -m pytest -q` preserves M1–M8C and adds `tests/test_m8d_private.py`: exact owner/model ceilings, distinct private contracts, no env bypass, private context/journal/defaultOFF/backup/restore/restart, voice review/edit, wrong modes and actual Mac OS synthetic filesystem/network sentinels. Native checks on non-Darwin are explicitly skipped, not PASS. Legacy launcher/reference preflight regressions select a real free loopback port, leaving the owner's current core app untouched.
+
+`npm --prefix apps/web test` / `npm --prefix apps/web run build`.
+`.venv/bin/python -m scripts.verify_m8d_browser --source-fixture` is pre-C UI engineering only (synthetic identity, fixture inference); final evidence runs `--package generated/releases/M8D-<C>` after exact-C build. Existing Chromium, synthetic fake microphone/Lesya TTS, genuine pinned private-scope local whisper; no real microphone or provider call. Screenshots contain original synthetic text only. Native subscription smoke is separate, uses the one persistent M8D max4 ledger, and runs only after final C/required checks. Successful calls are not repeated for benchmarking; no LLM judge.
+
+Actual owner vault/operator terminal/private audio never used. Human Ukrainian quality remains OPEN_HUMAN_TEST, owner five-utterance procedure after ACCEPT in PILOT_HANDOFF. Full tracked-tree/all-local-Git-object privacy scan before R/publication.

@@ -1,0 +1,45 @@
+{
+  "scope": "FINAL_OWNER_CORRECTION_M8D",
+  "supersedes": "ALL_PREVIOUS_M8D_MODEL_EFFORT_BINDINGS",
+  "profiles": {
+    "FREE": {
+      "model": "gpt-6-luna",
+      "effort": "high"
+    },
+    "DEEP_ECONOMICAL": {
+      "model": "gpt-6-luna",
+      "effort": "max"
+    },
+    "DEEP_QUALITY": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    }
+  },
+  "authorized_efforts": {
+    "gpt-6-luna": [
+      "low",
+      "medium",
+      "high",
+      "xhigh",
+      "max"
+    ],
+    "gpt-6.1-sol": [
+      "low",
+      "medium",
+      "high"
+    ]
+  },
+  "maximum_new_live_attempts": 4,
+  "attempts_started_before_final_correction": 0,
+  "sol_above_high_attempts_started": 0,
+  "deep_selection": "EXPLICIT_NO_FALLBACK",
+  "priorities": [
+    "FREE_LUNA_HIGH",
+    "DEEP_LUNA_MAX",
+    "DEEP_SOL_HIGH",
+    "MISSING_VOICE_OR_JOURNAL_INTEGRATION"
+  ],
+  "fallback": "NONE",
+  "payg": "NONE",
+  "new_auth_billing": "NONE"
+}

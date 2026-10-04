@@ -13,7 +13,9 @@ M7B_CONVERSATION_HOME: external ACCEPT — synthetic engineering scope; binding 
 M7C: external ACCEPT — live-synthetic engineering + local ASR capability.
 M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality evaluation + synthetic local-ASR guard.
 M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
-M8B: AWAITING_REVIEW — real-reference-Mac synthetic dry run; no actual private pilot/release/system install permission. Clinical active0.
+M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
+M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
+M8D: IN_PROGRESS — optional private AI/local voice; real owner vault NOT TOUCHED, actual AI activation NOT_STARTED.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -184,3 +186,8 @@ No further engineering milestone; all optional module gates unchanged. No privat
 Owner/data-owner post-ACCEPT activation COMPLETE: native private-preflight PASS, new empty vault initialized,
 protected backup target ready, accepted core app running locally; ACTUAL_PRIVATE_PILOT STARTED.
 No samples/import/private-content reading; future developer content access remains NONE. Optional modules OFF.
+
+
+## M8D optional owner integration — IN_PROGRESS
+
+M8C external ACCEPT / real core activation remain durable. M8D adds owner-gated private conversation and pinned local voice using synthetic engineering roots; final cost binding FREE Luna/high, explicit Deep Luna/max or Sol6.1/high, four new native attempts total. No real-vault access or AI/voice activation before independent review. M7C-N02 bounded owner route pending exact-C native evidence; universal/zero-retention gate remains open. M7C-N03 OPEN_HUMAN_TEST, M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW, M6-N01 final0.6.1 hardware NOT_RUN, 27findingsOPEN/all5OFF/clinical0/phone separate.

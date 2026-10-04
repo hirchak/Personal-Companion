@@ -78,3 +78,10 @@ Root identity renewed; domain privacy/provenance/history/tombstones preserved. D
 states remain invalidated, every optional profile capability stays OFF. Start uses `--mode PRIVATE_LOCAL` after verifying
 restored state. Failed migration leaves verified backup/pending marker/original pointer; restore into fresh roots,
 never remove marker to bypass recovery. Detailed initial activation: [PILOT_HANDOFF](PILOT_HANDOFF.md).
+
+
+## M8D optional owner pilot
+
+M8C→M8D is an explicit application upgrade with protected pre-upgrade backup and fresh private security preflight. Preserve the same root identity/schema11 and journal data; no existing-data migration/discovery during M8D. Optional AI/voice stay OFF after startup and need local acknowledgements. See [pilot handoff](PILOT_HANDOFF.md#m8d-optional-aivoice--post-accept-owner-procedure-not-executed).
+
+M8D lifecycle commands accept an explicit loopback `--port` for initialize/upgrade/restore/rollback as well as preflight/start. Default8765 is unchanged. The actual selected port must be free; this isolates disposable engineering roots from an existing core pilot without weakening the socket preflight.

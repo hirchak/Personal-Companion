@@ -1,0 +1,43 @@
+{
+  "profile_id": "MAC_PRIVATE_AI_VOICE_PILOT_V1",
+  "profile_version": 1,
+  "root_kind": "PRIVATE_LOCAL",
+  "journal": "ON",
+  "creative": "ON",
+  "local_search": "ON",
+  "backup_restore": "ON",
+  "explicit_local_export": "ON",
+  "conversation": "ON",
+  "private_ai": "EXPLICIT_OWNER_GATE_DEFAULT_OFF",
+  "local_voice": "EXPLICIT_OWNER_GATE_DEFAULT_OFF",
+  "local_asr": "PINNED_WHISPER_CPP_LOCAL_ONLY",
+  "provider_route": "EXISTING_CODEX_CHATGPT_SUBSCRIPTION_ONLY",
+  "profiles": {
+    "FREE": {
+      "model": "gpt-6-luna",
+      "effort": "high"
+    },
+    "DEEP_ECONOMICAL": {
+      "model": "gpt-6-luna",
+      "effort": "max"
+    },
+    "DEEP_QUALITY": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    }
+  },
+  "clinical_active": 0,
+  "specialists": "OFF",
+  "health_bridge": "OFF",
+  "health_to_ai": "OFF",
+  "phone": "OFF",
+  "external_embeddings": "OFF",
+  "cloud_asr": "NONE",
+  "cloud_sync": "NONE",
+  "telemetry": "NONE",
+  "publication": "NONE",
+  "automatic_external_sharing": "NONE",
+  "provider_fallback": "NONE",
+  "journal_context": "EXPLICIT_SELECTION_ONLY",
+  "raw_audio_to_provider": "NEVER"
+}

@@ -31,3 +31,27 @@ class M7DEvaluationBudget(LiveEvaluationBudget):
     goal='M7D_OWNER_2026_10_04'
     def __init__(self,path=None):
         super().__init__(path or REPO/'generated/m7d-live-evaluation-ledger.sqlite3')
+
+class M8DEvaluationBudget(LiveEvaluationBudget):
+    maximum=4
+    goal='M8D_OWNER_PRIVATE_PILOT_SYNTHETIC_2026_10_04'
+    def __init__(self,path=None):
+        super().__init__(path or REPO/'generated/m8d-live-evaluation-ledger.sqlite3')
+
+
+class OwnerPilotAttemptReceipts:
+    """Post-review manual sends only. Separate from the four-attempt engineering ledger.
+
+    The controller records explicit jobs/retries; this local table retains attempt outcomes across
+    restart and backup without prompts, responses or credentials. No automatic retry/fallback.
+    """
+    def __init__(self,store):
+        self.store=store
+        with store.connect() as c:c.execute('CREATE TABLE IF NOT EXISTS private_provider_attempts(id TEXT PRIMARY KEY,route TEXT NOT NULL,model TEXT NOT NULL,started REAL NOT NULL,outcome TEXT NOT NULL)')
+    def reserve(self,id,route,model):
+        with self.store.connect() as c:
+            if c.execute('SELECT 1 FROM private_provider_attempts WHERE id=?',(id,)).fetchone():raise SafeError('LIVE_ATTEMPT_REUSE',409)
+            c.execute('INSERT INTO private_provider_attempts VALUES(?,?,?,?,?)',(id,route,model,time.time(),'STARTED'))
+    def finish(self,id,outcome):
+        if outcome not in {'COMPLETED','FAILED','CANCELLED'}:raise SafeError('LIVE_OUTCOME_INVALID')
+        with self.store.connect() as c:c.execute('UPDATE private_provider_attempts SET outcome=? WHERE id=?',(outcome,id))

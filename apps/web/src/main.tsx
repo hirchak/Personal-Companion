@@ -67,6 +67,7 @@ function message(error: unknown) {
   return "Не вдалося зберегти зміни. Текст залишається тут; перевірте сервер і повторіть.";
 }
 function App() {
+  const [privateOptional,setPrivateOptional]=useState(false);
   const [rootKind, setRootKind] = useState<"SYNTHETIC_TEST" | "PRIVATE_LOCAL" | "UNKNOWN">("UNKNOWN");
   const [csrf, setCsrf] = useState(""),
     [ready, setReady] = useState(false),
@@ -77,7 +78,9 @@ function App() {
     fetch("/runtime-mode.json", { cache: "no-store", credentials: "same-origin" })
       .then(async (r) => {
         if (!r.ok) throw new Error("MODE_UNAVAILABLE");
-        const mode = (await r.json()).root_kind;
+        const config=await r.json();
+        const mode = config.root_kind;
+        setPrivateOptional(config.private_optional_profile==="MAC_PRIVATE_AI_VOICE_PILOT_V1");
         if (mode !== "SYNTHETIC_TEST" && mode !== "PRIVATE_LOCAL") throw new Error("MODE_UNAVAILABLE");
         setRootKind(mode);
       })
@@ -116,6 +119,7 @@ function App() {
       <Journal
         csrf={csrf}
         privateLocal={rootKind === "PRIVATE_LOCAL"}
+        privateOptional={privateOptional}
         onLock={() => {
           setCsrf("");
           setCode("");
@@ -162,7 +166,7 @@ function App() {
     </main>
   );
 }
-function Journal({ csrf, onLock, privateLocal }: { csrf: string; onLock: () => void; privateLocal: boolean }) {
+function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string; onLock: () => void; privateLocal: boolean;privateOptional:boolean }) {
   const [surface, setSurface] = useState(privateLocal ? "journal" : "conversation");
   const [menuOpen, setMenuOpen] = useState(false);
   const [detail, setDetail] = useState<Entry | null>(null);
@@ -530,7 +534,7 @@ function Journal({ csrf, onLock, privateLocal }: { csrf: string; onLock: () => v
           {privateLocal && <small className="private-mode-label">Локальний приватний пілот</small>}
         </a>
         <nav aria-label="Основна навігація">
-          {!privateLocal && <button
+          {(!privateLocal||privateOptional) && <button
             className={surface === "conversation" ? "current" : ""}
             onClick={() => navigate("conversation")}
           >
@@ -611,13 +615,14 @@ function Journal({ csrf, onLock, privateLocal }: { csrf: string; onLock: () => v
         {surface === "conversation" && (
           <ConversationHome
             csrf={csrf}
+            privateLocal={privateOptional}
             onPractice={() => navigate("practices")}
           />
         )}
         {surface === "settings" && (
           <section className="settings-home">
             <h1>Налаштування</h1>
-            {privateLocal ? <p>Лише цей Mac. AI, практики, голос, Health і телефон вимкнені. Резервні копії створюються вручну на підтвердженому захищеному локальному носії; хмарної синхронізації немає.</p> : <>
+            {privateLocal ? <p>{privateOptional ? "Лише цей Mac. AI та локальний голос потребують окремої згоди у «Розмові». Практики, Health і телефон вимкнені." : "Лише цей Mac. AI, практики, голос, Health і телефон вимкнені."} Резервні копії створюються вручну на підтвердженому захищеному локальному носії; хмарної синхронізації немає.</p> : <>
             <h2>Підключення</h2>
             <button onClick={() => navigate("health")}>Health Connect</button>
             <MacSyncSettings csrf={csrf} />

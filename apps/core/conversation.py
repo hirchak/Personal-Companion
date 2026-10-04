@@ -32,7 +32,7 @@ def check_conversations(c):
         for row in c.execute('SELECT * FROM conversation_messages'):
             m=Message.model_validate_json(row['payload'])
             if str(m.id)!=row['id'] or str(m.conversation_id)!=row['conversation_id']:raise ValueError()
-            if m.role=='ASSISTANT' and (m.provenance not in {'MOCK_SYNTHETIC','MODEL_GENERATED'} or not m.synthetic):raise ValueError()
+            if m.role=='ASSISTANT' and (m.provenance not in {'MOCK_SYNTHETIC','MODEL_GENERATED'} or m.provenance=='MOCK_SYNTHETIC' and not m.synthetic or m.synthetic!=x.synthetic):raise ValueError()
             if m.provenance=='MODEL_GENERATED' and not m.inference_reference:raise ValueError()
     except (ValueError,TypeError,ValidationError):raise SafeError('CONVERSATION_INTEGRITY') from None
 

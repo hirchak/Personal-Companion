@@ -15,10 +15,10 @@ def validate_manifest(m):
         old=m['format']==1
         keys={'format','release_id','git_commit','schema_version','python_input_hash','web_lock_hash','platform','defaults','compatibility','files','manifest_hash'}
         if not old:keys.add('runtime_input_hash')
-        if set(m)!=keys or type(m['format']) is not int or m['format'] not in {1,2,3}:raise ValueError()
+        if set(m)!=keys or type(m['format']) is not int or m['format'] not in {1,2,3,4}:raise ValueError()
         if encode(m['defaults'])!=encode(DEFAULTS) or type(m['schema_version']) is not int or m['schema_version']!=SCHEMA:raise ValueError()
         if not re.fullmatch('[0-9a-f]{40}',m['git_commit']):raise ValueError()
-        if m['release_id']!=({1:'M8A-',2:'M8B-',3:'M8C-'}[m['format']])+m['git_commit']:raise ValueError()
+        if m['release_id']!=({1:'M8A-',2:'M8B-',3:'M8C-',4:'M8D-'}[m['format']])+m['git_commit']:raise ValueError()
         if encode(m['compatibility'])!=encode({'schema_min':2,'schema_max':SCHEMA,'web_contract':CONTRACT,'downgrade':'FRESH_ROOT_BACKUP_ONLY'}):raise ValueError()
         if encode(m['platform'])!=encode({'os':'Darwin','architecture':'arm64','python':'3.13','dependencies':'EXACT_REQUIREMENTS_LOCK' if old else 'EXACT_RUNTIME_LOCK','self_contained':False}):raise ValueError()
         if not isinstance(m['files'],dict) or not m['files']:raise ValueError()
@@ -26,7 +26,8 @@ def validate_manifest(m):
             if not p or p.startswith('/') or '..' in p.split('/') or not re.fullmatch('[0-9a-f]{64}',h):raise ValueError()
         required={'launch.py','apps/core/release.py','apps/core/storage.py','apps/core/api.py','apps/web/dist/index.html','apps/web/dist/phone/sw.js','requirements.lock','apps/web/package-lock.json'}
         if not old:required|={'requirements.runtime.lock','apps/core/release_metadata.py','packages/pilot/MAC_CORE_PROFILE.json'}
-        if m['format']==3:required|={'apps/core/local_private.py','apps/core/root_types.py','packages/pilot/MAC_PRIVATE_CORE_PROFILE.json'}
+        if m['format'] in {3,4}:required|={'apps/core/local_private.py','apps/core/root_types.py','packages/pilot/MAC_PRIVATE_CORE_PROFILE.json'}
+        if m['format']==4:required|={'apps/core/local_private_ai.py','apps/core/local_private_provider.py','packages/pilot/MAC_PRIVATE_AI_VOICE_PROFILE.json'}
         if not required<=m['files'].keys():raise ValueError()
         if m['python_input_hash']!=m['files']['requirements.lock'] or m['web_lock_hash']!=m['files']['apps/web/package-lock.json']:raise ValueError()
         if not old and m['runtime_input_hash']!=m['files']['requirements.runtime.lock']:raise ValueError()
@@ -58,11 +59,11 @@ def validate_provenance(value):
             from .local_private import RootReceipt, POLICY
             RootReceipt.model_validate(value['private_identity'])
             if value['root_kind']!='PRIVATE_LOCAL' or value['security_policy']!=POLICY:raise ValueError()
-            if value['producing_manifest']['format']!=3:raise ValueError()
+            if value['producing_manifest']['format'] not in {3,4}:raise ValueError()
         producer=validate_manifest(value['producing_manifest']);source=value['source_release']
         if set(source)!={'release_id','git_commit','manifest_hash','schema_version'}:raise ValueError()
-        if not re.fullmatch('[0-9a-f]{40}',source['git_commit']) or source['release_id'] not in {'M8A-'+source['git_commit'],'M8B-'+source['git_commit'],'M8C-'+source['git_commit']}:raise ValueError()
-        if private and not source['release_id'].startswith('M8C-'):raise ValueError()
+        if not re.fullmatch('[0-9a-f]{40}',source['git_commit']) or source['release_id'] not in {'M8A-'+source['git_commit'],'M8B-'+source['git_commit'],'M8C-'+source['git_commit'],'M8D-'+source['git_commit']}:raise ValueError()
+        if private and not source['release_id'].startswith(('M8C-','M8D-')):raise ValueError()
         if not re.fullmatch('[0-9a-f]{64}',source['manifest_hash']) or type(source['schema_version']) is not int or source['schema_version']!=SCHEMA:raise ValueError()
         schema=value['snapshot_schema']
         if type(schema) is not int or not producer['compatibility']['schema_min']<=schema<=producer['compatibility']['schema_max']:raise ValueError()

@@ -71,8 +71,9 @@ class Auth:
             return s
 
 
-def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None,conversation_timeout=60,release_identity=None,root_kind=RootKind.SYNTHETIC_TEST):
+def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None,conversation_timeout=60,release_identity=None,root_kind=RootKind.SYNTHETIC_TEST,m8d_private=False,private_provider_factory=None,private_asr_factory=None):
     private = RootKind(root_kind)==RootKind.PRIVATE_LOCAL
+    if m8d_private and not private:raise SafeError('PRIVATE_LOCAL_ROOT_REQUIRED',403)
     if private and (not release_identity or conversation_provider is not None or local_asr is not None or m2 or synthetic_practices or synthetic_conversations or m7c_synthetic):raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
     if release_identity and (conversation_provider is not None or local_asr is not None or m2 or synthetic_practices):raise SafeError('RELEASE_CAPABILITY_OFF',403)
     if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
@@ -97,7 +98,19 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.conversations = conversations
     reflection = Reflection(conversations)
     app.state.reflection = reflection
-    controller=ConversationController(conversations,conversation_provider,timeout=conversation_timeout) if m7c_synthetic else None
+    private_gate=None
+    if m8d_private:
+        from .local_private_ai import PrivatePilotGate
+        private_gate=PrivatePilotGate(store,provider_factory=private_provider_factory,asr_factory=private_asr_factory)
+    app.state.private_gate=private_gate
+    controller=ConversationController(conversations,conversation_provider,timeout=conversation_timeout,private_gate=private_gate) if m7c_synthetic or private_gate else None
+    if private_gate:
+        private_gate.revocation_hooks.append(controller.revoke_private)
+        private_gate.profile_change_hooks.append(controller.revoke_private)
+        def revoke_private_voice():
+            for event in list(voice.cancel_events.values()):event.set()
+            voice.engines.pop('LOCAL',None)
+        private_gate.revocation_hooks.append(revoke_private_voice)
     app.state.conversation_controller=controller
     if local_asr is not None:
         voice.engines['LOCAL']=local_asr
@@ -148,13 +161,22 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                     request.state.device_epoch = request.headers.get('x-sync-epoch','')
             elif path.startswith('/api/') and path != '/api/v1/auth/unlock':
                 token = request.cookies.get('m1_session', '')
-                s = auth.session(token)
+                try:s = auth.session(token)
+                except SafeError:
+                    if private_gate:private_gate.disable()
+                    raise
                 request.state.session = token
                 if request.method not in {'GET', 'HEAD'} and not secrets.compare_digest(request.headers.get('x-csrf-token', '').encode('utf-8', 'surrogatepass'), s['csrf'].encode('ascii')):
                     raise SafeError('CSRF_DENIED', 403)
             if private:
                 # Explicit allowlist makes future optional routes OFF until a separately reviewed profile.
                 allowed = path in {'/api/v1/status','/api/v1/auth/unlock','/api/v1/auth/session','/api/v1/auth/lock','/api/v1/entries','/api/v1/creative','/api/v1/creative/preview','/api/v1/creative/export','/api/v1/exports','/api/v1/exports/preview'} or re.fullmatch(r'/api/v1/entries/[0-9a-fA-F-]{36}(?:/revisions)?',path) is not None
+                if private_gate:
+                    optional_allowed=path in {'/api/v1/conversations','/api/v1/conversations/status','/api/v1/reflection/goals','/api/v1/private-pilot/status','/api/v1/private-pilot/acknowledge','/api/v1/private-pilot/disable','/api/v1/private-pilot/deep-profile','/api/v1/private-pilot/local-voice'} or re.fullmatch(r'/api/v1/conversations/[0-9a-fA-F-]{36}(?:/(?:messages|actions|private-infer|private-context/preview|context-preview|deep-session|deep-session/actions|working-map/actions|inference|inference/[0-9a-fA-F-]{36}(?:/actions)?|messages/[0-9a-fA-F-]{36}/edit|journal-point/(?:preview|confirm)))?',path) is not None or re.fullmatch(r'/api/v1/reflection/goals/[0-9a-fA-F-]{36}',path) is not None
+                    allowed=allowed or optional_allowed
+                    if path.startswith('/api/v1/voice/'):
+                        private_gate.require_voice(request.state.session);allowed=True
+                    if '/api/v1/voice/audio/' in path and path.endswith('/transcribe') and request._body and __import__('json').loads(request._body).get('mode')!='LOCAL':raise SafeError('PRIVATE_LOCAL_ASR_ONLY',403)
                 if path.startswith('/api/') and not allowed:raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
                 if path.startswith('/phone'):raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
             response = await call_next(request)
@@ -164,7 +186,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
             response = error('STORAGE_UNAVAILABLE', 503)
         response.headers.update({'Cache-Control': 'no-store', 'Content-Security-Policy': CSP,
                                  'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
-                                 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()' if private else 'camera=(), microphone=(self), geolocation=()'})
+                                 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()' if private and not m8d_private else 'camera=(), microphone=(self), geolocation=()'})
         return response
 
     @app.exception_handler(SafeError)
@@ -194,7 +216,10 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
 
     # Same bounded domain boundary for owner session and already paired phone. No arbitrary paths.
     for prefix in ('/api/v1/voice','/api/v1/device/voice'):
-        def voice_list(request: Request): return voice.list(voice_auth(request))
+        def voice_list(request: Request):
+            result=voice.list(voice_auth(request))
+            if private_gate:result['private_retention']='LOCAL_UNTIL_EXPLICIT_DELETE_NO_SECURE_ERASURE'
+            return result
         def voice_begin(body: AudioBegin,request: Request): return voice.begin(body,voice_auth(request))
         def voice_get(audio_id: UUID,request: Request): return voice.get(audio_id,voice_auth(request))
         def voice_chunk(audio_id: UUID,body: AudioChunk,request: Request):return voice.chunk(audio_id,body,voice_auth(request))
@@ -202,6 +227,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
         def voice_cancel(audio_id: UUID,body: VoiceEmpty,request: Request):return voice.cancel_upload(audio_id,voice_auth(request))
         def voice_delete(audio_id: UUID,body: AudioDelete,request: Request):return voice.delete(audio_id,body,voice_auth(request))
         def voice_asr(audio_id: UUID,body: ASRRequest,request: Request):
+            if private_gate and body.mode!='LOCAL':raise SafeError('PRIVATE_LOCAL_ASR_ONLY',403)
             auth_args=voice_auth(request);result=voice.enqueue(audio_id,body,auth_args)
             threading.Thread(target=voice.run,args=(result['transcript_id'],body.mode,auth_args),daemon=True).start()
             return result
@@ -298,6 +324,29 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
         if not controller:raise SafeError('M7C_RUNTIME_OFF',403)
         return controller.journal_confirm(journal,conversation_id,body)
 
+    if private_gate:
+        from .local_private_ai import OwnerAcknowledgement,LocalVoiceAcknowledgement,DeepProfileSelection,PROFILE as PRIVATE_AI_PROFILE
+        from .local_private_contracts import PrivateInferenceStart,PrivateContextPreview
+        @app.get('/api/v1/private-pilot/status')
+        def private_status():return dict(private_gate.status(),capabilities=PRIVATE_AI_PROFILE)
+        @app.post('/api/v1/private-pilot/acknowledge')
+        def private_ack(body:OwnerAcknowledgement,request:Request):return private_gate.acknowledge(request.state.session,body)
+        @app.post('/api/v1/private-pilot/disable')
+        def private_disable(body:Empty):return private_gate.disable()
+        @app.post('/api/v1/private-pilot/deep-profile')
+        def private_deep_profile(body:DeepProfileSelection,request:Request):return private_gate.select_deep(request.state.session,body.profile)
+        @app.post('/api/v1/private-pilot/local-voice')
+        def private_voice(body:LocalVoiceAcknowledgement,request:Request):
+            result=private_gate.enable_voice(request.state.session,body)
+            voice.engines['LOCAL']=private_gate.asr;voice.timeout=90
+            return result
+        @app.post('/api/v1/conversations/{conversation_id}/private-context/preview')
+        def private_context_preview(conversation_id:UUID,body:PrivateContextPreview,request:Request):
+            private_gate.require(request.state.session);return controller.private_preview(conversation_id,body)
+        @app.post('/api/v1/conversations/{conversation_id}/private-infer')
+        def private_infer(conversation_id:UUID,body:PrivateInferenceStart,request:Request):
+            private_gate.require(request.state.session);return controller.send(conversation_id,body)
+
     @app.get('/api/v1/practices/catalog')
     def practice_catalog(): return practices.catalog()
 
@@ -348,6 +397,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     def lock(request: Request):
         auth.sessions.pop(request.state.session, None)
         runtime.set_mode('OFF')
+        if private_gate:private_gate.disable()
         with store.transaction() as c:
             c.execute('UPDATE ai_consents SET revoked=1 WHERE session=?',(digest(request.state.session.encode()),))
         journal.plans = {k: v for k, v in journal.plans.items() if v['session'] != request.state.session}
@@ -359,13 +409,16 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     def status():
         if private:
             from .local_private import PROFILE
+            if private_gate:
+                from .local_private_ai import PROFILE as PRIVATE_AI_PROFILE
+                return {'schema_version':store.meta()['schema_version'],'mode':'PRIVATE_LOCAL','root_kind':'PRIVATE_LOCAL','provider':'OFF' if not private_gate.adapters else 'OWNER_CONSENTED_EXTERNAL','storage':'LOCAL_MAC','data':'PRIVATE_PERSONAL','capabilities':PRIVATE_AI_PROFILE,'private_pilot':private_gate.status()}
             return {'schema_version':store.meta()['schema_version'],'mode':'PRIVATE_LOCAL','root_kind':'PRIVATE_LOCAL','provider':'OFF','storage':'LOCAL_MAC','data':'PRIVATE_PERSONAL','capabilities':PROFILE}
         return {'schema_version': store.meta()['schema_version'], 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
 
     @app.get('/runtime-mode.json', include_in_schema=False)
     def runtime_mode():
         # Only the mode is public, so the unlock screen can be truthful without disclosing content.
-        return {'root_kind':str(RootKind(root_kind))}
+        return {'root_kind':str(RootKind(root_kind)),**({'private_optional_profile':'MAC_PRIVATE_AI_VOICE_PILOT_V1'} if private_gate else {})}
 
     @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):

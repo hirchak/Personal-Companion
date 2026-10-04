@@ -32,15 +32,15 @@ export type ConversationPage = {
   messages: ChatMessage[];
   next_after: number | null;
   inference_job?: InferenceJob | null;
-  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE";
+  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE" | "PRIVATE_OWNER_CONSENTED";
 };
 export type ConversationStatus = {
   synthetic_demo: boolean;
-  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE";
+  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE" | "PRIVATE_OWNER_CONSENTED";
   actual_asr: string;
   clinical_active: 0;
   live_provider_calls: boolean;
-  mode?: "OFF" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE";
+  mode?: "OFF" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE" | "PRIVATE_OWNER_CONSENTED";
   provider?: { route: string; model: string; live: boolean };
 };
 export function validChatText(text: string) {

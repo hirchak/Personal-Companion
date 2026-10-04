@@ -1,4 +1,4 @@
-"""M8C local unsigned release lifecycle; distinct synthetic/private profiles. No dependency installation/network."""
+"""M8D local unsigned release lifecycle; distinct synthetic/private profiles. No dependency installation/network."""
 from __future__ import annotations
 import argparse
 from contextlib import contextmanager
@@ -50,12 +50,15 @@ def validate_package(package, expected_hash):
     m = read_json(package / 'release-manifest.json')
     validate_manifest(m)
     if m['manifest_hash']!=expected_hash or file_hashes(package)!=m['files']:raise SafeError('RELEASE_INTEGRITY')
-    if m['format'] in {2,3}:
+    if m['format'] in {2,3,4}:
         from .pilot_readiness import validate_profile
         validate_profile(package/'packages/pilot/MAC_CORE_PROFILE.json')
-    if m['format']==3:
+    if m['format'] in {3,4}:
         from .local_private import PROFILE
         if encode(read_json(package/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json'))!=encode(PROFILE):raise SafeError('PILOT_PROFILE_INCOMPATIBLE')
+    if m['format']==4:
+        from .local_private_ai import PROFILE as AI_PROFILE
+        if encode(read_json(package/'packages/pilot/MAC_PRIVATE_AI_VOICE_PROFILE.json'))!=encode(AI_PROFILE):raise SafeError('PILOT_PROFILE_INCOMPATIBLE')
     return m
 
 def prepare(output):
@@ -79,7 +82,7 @@ def prepare(output):
     try:
         tracked = git('ls-files').splitlines()
         prefixes = ('apps/core/', 'skills/conversation/', 'packages/practices/synthetic/', 'research/admission/')
-        specific = {'requirements.lock','requirements.runtime.lock','packages/pilot/MAC_CORE_PROFILE.json','packages/pilot/MAC_PRIVATE_CORE_PROFILE.json', 'apps/web/package-lock.json', 'scripts/m7_admission.py',
+        specific = {'requirements.lock','requirements.runtime.lock','packages/pilot/MAC_CORE_PROFILE.json','packages/pilot/MAC_PRIVATE_CORE_PROFILE.json','packages/pilot/MAC_PRIVATE_AI_VOICE_PROFILE.json', 'apps/web/package-lock.json', 'scripts/m7_admission.py',
                     'apps/web/src/PracticePanel.tsx', 'apps/web/src/practice-model.ts', 'apps/web/src/style.css'}
         for name in tracked:
             if name in specific or name.startswith(prefixes):
@@ -89,7 +92,7 @@ def prepare(output):
         shutil.copytree(REPO/'apps/web/dist', temp/'apps/web/dist')
         (temp/'launch.py').write_text("import sys\nfrom pathlib import Path\nsys.dont_write_bytecode=True\nsys.path.insert(0,str(Path(__file__).resolve().parent))\nfrom apps.core.release import main\nmain()\n")
         files = file_hashes(temp)
-        m = {'format': 3, 'release_id': 'M8C-'+commit, 'git_commit': commit, 'schema_version': SCHEMA,
+        m = {'format': 4, 'release_id': 'M8D-'+commit, 'git_commit': commit, 'schema_version': SCHEMA,
              'python_input_hash': files['requirements.lock'], 'runtime_input_hash': files['requirements.runtime.lock'], 'web_lock_hash': files['apps/web/package-lock.json'],
              'platform': {'os': 'Darwin', 'architecture': 'arm64', 'python': '3.13', 'dependencies': 'EXACT_RUNTIME_LOCK', 'self_contained': False},
              'defaults': DEFAULTS, 'compatibility': {'schema_min': 2, 'schema_max': SCHEMA, 'web_contract': CONTRACT, 'downgrade': 'FRESH_ROOT_BACKUP_ONLY'}, 'files': files}
@@ -152,7 +155,7 @@ def runtime_checks(package):
     checks.append({'gate': 'platform', 'status': 'PASS' if platform_ok else 'INCOMPATIBLE'})
     checks.append({'gate': 'python', 'status': 'PASS' if sys.version_info[:2] == (3, 13) else 'INCOMPATIBLE', 'version': platform.python_version()})
     manifest=read_json(package/'release-manifest.json')
-    dependency_file='requirements.runtime.lock' if manifest['format'] in {2,3} else 'requirements.lock'
+    dependency_file='requirements.runtime.lock' if manifest['format'] in {2,3,4} else 'requirements.lock'
     for line in (package/dependency_file).read_text().splitlines():
         name, version = line.split('==')
         try: available = importlib.metadata.version(name) == version
@@ -206,7 +209,7 @@ def selected(app, data, root_kind=RootKind.SYNTHETIC_TEST):
         from .local_private import owner_only
         owner_only(app/'active.json')
     active = read_json(app/'active.json')
-    if set(active) != {'release_id', 'manifest_hash'} or not re.fullmatch(r'M8[ABC]-[0-9a-f]{40}', active['release_id']): raise SafeError('INVALID_METADATA')
+    if set(active) != {'release_id', 'manifest_hash'} or not re.fullmatch(r'M8[ABCD]-[0-9a-f]{40}', active['release_id']): raise SafeError('INVALID_METADATA')
     package = app/'releases'/active['release_id']
     return package, validate_package(package, active['manifest_hash'])
 
@@ -268,11 +271,11 @@ def verify_backup(backup,expected_producer_hash=None,expected_backup_hash=None,a
         if c.execute('PRAGMA integrity_check').fetchone()[0]!='ok': raise SafeError('DATABASE_INTEGRITY')
     return m
 
-def upgrade(package, expected_hash, app, data, backup, *, fail_migration=False, root_kind=RootKind.SYNTHETIC_TEST):
+def upgrade(package, expected_hash, app, data, backup, *, fail_migration=False, root_kind=RootKind.SYNTHETIC_TEST,port=None):
     app, data = separated(app, data); backup = safe_path(backup)
     if backup == data or backup.is_relative_to(data) or data.is_relative_to(backup) or backup == app or backup.is_relative_to(app) or app.is_relative_to(backup): raise SafeError('BACKUP_PATH_OVERLAP')
     with operation_lock(data):
-        lifecycle_preflight(package, expected_hash, app, data, root_kind)
+        lifecycle_preflight(package, expected_hash, app, data, root_kind,port)
         if (app/'upgrade-pending.json').exists(): raise SafeError('UPGRADE_RECOVERY_REQUIRED')
         _, previous = selected(app, data, root_kind)
         version = inspect_data(data, root_kind)
@@ -296,13 +299,13 @@ def upgrade(package, expected_hash, app, data, backup, *, fail_migration=False, 
             raise
     return {'status': 'PASS', 'operation': 'UPGRADE', 'schema_from': version, 'schema_to': SCHEMA, 'backup': 'VERIFIED', 'backup_manifest_hash':digest((backup/'manifest.json').read_bytes()), 'defaults': DEFAULTS}
 
-def restore(package, expected_hash, backup, app, data, *, expected_producer_hash=None,expected_backup_hash=None,allow_legacy=False,root_kind=RootKind.SYNTHETIC_TEST,backup_directory=None,confirmation=None,consent=None,acknowledge_no_cloud=False):
+def restore(package, expected_hash, backup, app, data, *, expected_producer_hash=None,expected_backup_hash=None,allow_legacy=False,root_kind=RootKind.SYNTHETIC_TEST,backup_directory=None,confirmation=None,consent=None,acknowledge_no_cloud=False,port=None):
     app, data = separated(app, data)
     with operation_lock(data):
         private=RootKind(root_kind)==RootKind.PRIVATE_LOCAL
         if private:
             from .local_private import require_preflight as private_preflight, activation_receipt, owner_only, require_volume
-            private_preflight(package,expected_hash,app,data,backup_directory)
+            private_preflight(package,expected_hash,app,data,backup_directory,*([port] if port is not None else []))
             new_receipt=activation_receipt(data,expected_hash,backup_directory,confirmation,consent,acknowledge_no_cloud)
             owner_only(backup,tree=True);require_volume(backup)
         else:require_preflight(package, expected_hash, app, data)
@@ -346,7 +349,7 @@ def delete_synthetic_data(data, confirmation):
         shutil.rmtree(data)
     return {'status': 'PASS', 'operation': 'EXPLICIT_SYNTHETIC_DATA_DELETE', 'secure_erasure': 'NOT_CLAIMED', 'backups_deleted': False}
 
-def serve(app, data, port, root_kind=RootKind.SYNTHETIC_TEST):
+def serve(app, data, port, root_kind=RootKind.SYNTHETIC_TEST,local_asr_assets=None):
     app, data=separated(app, data)
     with operation_lock(data):
         package,m=selected(app,data,root_kind)
@@ -354,9 +357,9 @@ def serve(app, data, port, root_kind=RootKind.SYNTHETIC_TEST):
         if inspect_data(data,root_kind)!=SCHEMA: raise SafeError('EXPLICIT_UPGRADE_REQUIRED')
     # Replace launcher process. Ctrl+C/SIGTERM targets the one foreground server; no orphan child.
     os.execv(sys.executable,[sys.executable,'-I','-B',str(package/'launch.py'),'_serve','--app',str(app),
-                            '--package',str(package),'--manifest-hash',m['manifest_hash'],'--data',str(data),'--port',str(port),'--mode',str(root_kind)])
+                            '--package',str(package),'--manifest-hash',m['manifest_hash'],'--data',str(data),'--port',str(port),'--mode',str(root_kind),*(['--local-asr-assets',str(local_asr_assets)] if local_asr_assets is not None else [])])
 
-def run_server(package, expected_hash, app_root, data, port, root_kind=RootKind.SYNTHETIC_TEST):
+def run_server(package, expected_hash, app_root, data, port, root_kind=RootKind.SYNTHETIC_TEST,local_asr_assets=None):
     with operation_lock(data):
         current,m=selected(app_root,data,root_kind)
         if current!=package or m['manifest_hash']!=expected_hash: raise SafeError('RELEASE_CHANGED')
@@ -368,13 +371,22 @@ def run_server(package, expected_hash, app_root, data, port, root_kind=RootKind.
         if private:
             from .local_private import validate_root
             validate_root(data,security=True)
-            if m['format']!=3:raise SafeError('PRIVATE_RELEASE_REQUIRED')
+            if m['format'] not in {3,4}:raise SafeError('PRIVATE_RELEASE_REQUIRED')
         from .network import deny_egress
         deny_egress()
         from .api import create_app
         import uvicorn
+        provider_factory=asr_factory=None
+        if private and m['format']==4:
+            from .local_private_provider import PrivateCodexConversationProvider
+            from .live_evaluation_budget import OwnerPilotAttemptReceipts
+            def provider_factory(mode,model,effort):
+                return PrivateCodexConversationProvider(model=model,effort=effort,budget=OwnerPilotAttemptReceipts(Store(data,root_kind=RootKind.PRIVATE_LOCAL)))
+            if local_asr_assets is not None:
+                from .whisper_local_asr import WhisperLocalASR
+                asr_factory=lambda:WhisperLocalASR(local_asr_assets,private_scope=True)
         application=create_app(data,port=port,web=package/'apps/web/dist',synthetic_conversations=not private,m7c_synthetic=not private,root_kind=root_kind,
-                               release_identity=m['git_commit'])
+                               conversation_timeout=120 if private and m['format']==4 else 60,release_identity=m['git_commit'],m8d_private=private and m['format']==4,private_provider_factory=provider_factory,private_asr_factory=asr_factory)
         print(f'Local {"private" if private else "synthetic"} runtime: http://127.0.0.1:{port}',flush=True)
         print('One-time unlock code: '+application.state.auth.code,flush=True)
         print('Stop: Ctrl+C; no daemon/autostart. Restart generates new unlock state.',flush=True)
@@ -385,18 +397,18 @@ def install_receipt(data,root_kind,private_receipt=None):
         return {'kind':PRIVATE_INSTALL_MARKER,'data_root':str(data),'root_kind':'PRIVATE_LOCAL','root_id':private_receipt['root_id']}
     return {'kind':INSTALL_MARKER,'data_root':str(data)}
 
-def lifecycle_preflight(package,expected_hash,app,data,root_kind):
+def lifecycle_preflight(package,expected_hash,app,data,root_kind,port=None):
     if RootKind(root_kind)==RootKind.PRIVATE_LOCAL:
         from .local_private import validate_root,require_preflight as private_preflight
         value=validate_root(data,security=True)
-        return private_preflight(package,expected_hash,app,data,value['backup_directory'])
-    return require_preflight(package,expected_hash,app,data)
+        return private_preflight(package,expected_hash,app,data,value['backup_directory'],*([port] if port is not None else []))
+    return require_preflight(package,expected_hash,app,data,*([port] if port is not None else []))
 
-def initialize_private(package,expected_hash,app,data,backup_directory,confirmation,consent,acknowledge_no_cloud):
+def initialize_private(package,expected_hash,app,data,backup_directory,confirmation,consent,acknowledge_no_cloud,*,port=None):
     from .local_private import require_preflight as private_preflight,activation_receipt
     app,data=separated(app,data)
     with operation_lock(data):
-        private_preflight(package,expected_hash,app,data,backup_directory)
+        private_preflight(package,expected_hash,app,data,backup_directory,*([port] if port is not None else []))
         empty_target(app)
         if app.exists():raise SafeError('FRESH_INSTALL_REQUIRES_NEW_ROOTS')
         value=activation_receipt(data,expected_hash,backup_directory,confirmation,consent,acknowledge_no_cloud)
@@ -433,7 +445,8 @@ def main():
             s.add_argument('--confirm');s.add_argument('--data-owner-consent');s.add_argument('--acknowledge-no-cloud-directory',action='store_true')
         s.add_argument('--app',type=Path,required=True)
         s.add_argument('--data',type=Path,required=True)
-        if command in {'preflight','mac-preflight','private-preflight','start','_serve'}: s.add_argument('--port',type=int,default=8765)
+        if command in {'preflight','mac-preflight','private-preflight','initialize-private','upgrade','restore','rollback','start','_serve'}: s.add_argument('--port',type=int,default=8765)
+        if command in {'start','_serve'}:s.add_argument('--local-asr-assets',type=Path)
         if command in {'upgrade','restore','rollback','backup'}: s.add_argument('--backup',type=Path,required=True)
         if command in {'restore','rollback'}:
             s.add_argument('--producer-manifest-hash');s.add_argument('--backup-manifest-hash');s.add_argument('--allow-legacy-backup',action='store_true')
@@ -448,16 +461,16 @@ def main():
         elif a.command=='private-preflight':
             from .local_private import preflight as private_preflight
             result=private_preflight(a.package,a.manifest_hash,a.app,a.data,a.backup_directory,a.port)
-        elif a.command=='initialize-private':result=initialize_private(a.package,a.manifest_hash,a.app,a.data,a.backup_directory,a.confirm,a.data_owner_consent,a.acknowledge_no_cloud_directory)
+        elif a.command=='initialize-private':result=initialize_private(a.package,a.manifest_hash,a.app,a.data,a.backup_directory,a.confirm,a.data_owner_consent,a.acknowledge_no_cloud_directory,port=a.port)
         elif a.command=='install': result=install(a.package,a.manifest_hash,a.app,a.data)
-        elif a.command=='upgrade': result=upgrade(a.package,a.manifest_hash,a.app,a.data,a.backup,root_kind=a.mode)
-        elif a.command in {'restore','rollback'}: result=restore(a.package,a.manifest_hash,a.backup,a.app,a.data,expected_producer_hash=a.producer_manifest_hash,expected_backup_hash=a.backup_manifest_hash,allow_legacy=a.allow_legacy_backup,root_kind=a.mode,backup_directory=a.backup_directory,confirmation=a.confirm,consent=a.data_owner_consent,acknowledge_no_cloud=a.acknowledge_no_cloud_directory)
+        elif a.command=='upgrade': result=upgrade(a.package,a.manifest_hash,a.app,a.data,a.backup,root_kind=a.mode,port=a.port)
+        elif a.command in {'restore','rollback'}: result=restore(a.package,a.manifest_hash,a.backup,a.app,a.data,expected_producer_hash=a.producer_manifest_hash,expected_backup_hash=a.backup_manifest_hash,allow_legacy=a.allow_legacy_backup,root_kind=a.mode,backup_directory=a.backup_directory,confirmation=a.confirm,consent=a.data_owner_consent,acknowledge_no_cloud=a.acknowledge_no_cloud_directory,port=a.port)
         elif a.command=='backup': result=backup(a.app,a.data,a.backup,root_kind=a.mode)
         elif a.command=='uninstall': result=uninstall(a.app,a.data,root_kind=a.mode)
         elif a.command=='delete-synthetic-data': result=delete_synthetic_data(a.data,a.confirm)
         elif a.command=='delete-private-data':result=delete_private_data(a.data,a.confirm)
-        elif a.command=='_serve': run_server(a.package,a.manifest_hash,a.app,a.data,a.port,root_kind=a.mode); return
-        else: serve(a.app,a.data,a.port,root_kind=a.mode); return
+        elif a.command=='_serve': run_server(a.package,a.manifest_hash,a.app,a.data,a.port,root_kind=a.mode,local_asr_assets=a.local_asr_assets); return
+        else: serve(a.app,a.data,a.port,root_kind=a.mode,local_asr_assets=a.local_asr_assets); return
         print(json.dumps(result,ensure_ascii=False,indent=2))
         if result.get('status') in {'INCOMPATIBLE','SECURITY_REQUIREMENT_NOT_MET','BLOCKED_BY_PERMISSION'} or a.command=='private-preflight' and result.get('status')!='PASS': raise SystemExit(1)
     except (SafeError,OSError,ValueError,sqlite3.Error,subprocess.SubprocessError) as exc:

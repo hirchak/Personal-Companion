@@ -55,3 +55,10 @@ owner remediation or compatible protected fresh-root restore, renewed acknowledg
 Backup copied to unencrypted volume loses protection and is refused there. Failed upgrade/pending marker => fresh-root
 rollback using protected compatible M8C private backup; M8A/B synthetic packages are incompatible with private data.
 Restart/failed startup never bypasses local unlock. No actual private/root/phone/Health/provider activation in M8C.
+
+
+## M8D optional owner pilot
+
+M8D private conversations/derived maps retain local personal provenance and exact source revisions. Interrupted jobs become FAILED, no automatic resume/retry or provider fallback. Backup/restore never carries reusable owner-session AI/voice activation. Restart/restore require fresh unlock/acknowledgements and exact preview. Rollback to M8C uses a compatible trusted pre-upgrade backup in a fresh PRIVATE_LOCAL root; no in-place downgrade. Protected-volume policy unchanged.
+
+M8D manager can validate the new producing manifest and restore a compatible pre-upgrade snapshot into a fresh M8C target. Old M8C manager cannot parse M8D producer format4; retain an M8C-produced backup or use the M8D manager for rollback. A post-AI snapshot with private schema2 inference records is not promised compatible with the old M8C runtime.

@@ -28,8 +28,13 @@ def check_inferences(c):
             if d['id']!=row['id'] or d['conversation_id']!=row['conversation_id'] or d['state']!=row['state'] or d['revision']!=row['revision']:raise ValueError()
             if d['state'] not in {'QUEUED','RUNNING','COMPLETED','FAILED','CANCELLED'} or d['revision']<1:raise ValueError()
             UUID(d['id']);UUID(d['source_message_id'])
-            ConversationRequest.model_validate(dict(d['request_metadata'],payload={
-                'mode':d['request_metadata']['mode'],'purpose':d['purpose'],'synthetic':True,'language':'uk',
+            request_type=ConversationRequest
+            private=d['request_metadata'].get('schema_version')==2
+            if private:
+                from .local_private_contracts import PrivateConversationRequest
+                request_type=PrivateConversationRequest
+            request_type.model_validate(dict(d['request_metadata'],payload={
+                'mode':d['request_metadata']['mode'],'purpose':d['purpose'],'synthetic':not private,'language':'uk',
                 'skills':[],'context':[],'current_message_ref':'s0','source_refs_allowed':['s0'],
                 'goal_revision':None,'tool_permissions':[],'controller_frame_hash':'0'*64}))
             if not re.fullmatch('[0-9a-f]{64}',d['request_hash']):raise ValueError()
@@ -75,16 +80,33 @@ def verify_address_form(text, payload):
         raise SafeError('ADDRESS_FORM_MISMATCH')
 
 class ConversationController:
-    def __init__(self,conversations,provider=None,skills=None,timeout=60):
+    def __init__(self,conversations,provider=None,skills=None,timeout=60,private_gate=None):
         self.conversations=conversations;self.store=conversations.store;self.context=Reflection(conversations);self.deep=DeepSessions(conversations);self.provider=provider;self.skills=skills or ConversationSkills();self.timeout=timeout
-        if not conversations.synthetic_demo:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED',403)
+        self.private_gate=private_gate
+        if not conversations.synthetic_demo and private_gate is None:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED',403)
+        if private_gate is not None:
+            from .root_types import RootKind
+            if conversations.synthetic_demo or self.store.root_kind!=RootKind.PRIVATE_LOCAL:raise SafeError('PRIVATE_LOCAL_ROOT_REQUIRED',403)
         self.lock=threading.RLock();self.events={};self.previews={};self.workers={}
         with self.store.transaction() as c:
             for sql in RUNTIME_TABLES:c.execute(sql)
             for sql in DEEP_TABLES:c.execute(sql)
             # A restarted server never resumes an old external request or assumes a partial result is final.
             c.execute('UPDATE conversation_inferences SET state="FAILED",revision=revision+1,payload=json_set(payload,"$.state","FAILED","$.error","PROCESS_INTERRUPTED","$.revision",revision+1) WHERE state IN ("QUEUED","RUNNING")')
+    def provider_for(self,mode):
+        if self.private_gate is not None:
+            return self.private_gate.provider(mode) if self.private_gate.adapters else None
+        return self.provider
+    def revoke_private(self):
+        for event in self.events.values():event.set()
+        with self.store.transaction() as c:
+            c.execute('UPDATE conversation_inferences SET state="CANCELLED",revision=revision+1,payload=json_set(payload,"$.state","CANCELLED","$.error","PRIVATE_AI_DISABLED","$.revision",revision+1) WHERE state IN ("QUEUED","RUNNING")')
+    def private_preview(self,id,body):
+        from .local_private_context import private_preview
+        return private_preview(self,id,body)
     def status(self):
+        if self.private_gate is not None:
+            return dict(self.private_gate.status(),synthetic_demo=False,responder='PRIVATE_OWNER_CONSENTED' if self.private_gate.adapters else 'OFF',live_provider_calls=any(a.metadata().get('live') is True for a in self.private_gate.adapters.values()),clinical_active=0,real_private_data=True,normal_user_mode=True,skills=self.skills.catalog(),provider_profiles=__import__('apps.core.local_private_ai',fromlist=['PROFILES']).PROFILES,**({'mode':'PRIVATE_OWNER_CONSENTED'} if self.private_gate.adapters else {}))
         metadata=self.provider.metadata() if self.provider else None
         return {'synthetic_demo':True,'mode':'LIVE_SYNTHETIC' if metadata and metadata.get('live') else 'OFFLINE_FIXTURE' if self.provider else 'OFF','responder':'LIVE_SYNTHETIC' if metadata and metadata.get('live') else 'OFFLINE_FIXTURE' if self.provider else 'OFF','live_provider_calls':bool(metadata and metadata.get('live')),'clinical_active':0,'real_private_data':False,'actual_asr':'SEPARATE_LOCAL_GATE','provider':metadata,'skills':self.skills.catalog(),'normal_user_mode':False}
     def row(self,c,id,conversation_id=None):
@@ -109,7 +131,7 @@ class ConversationController:
         row=c.execute('SELECT payload FROM conversation_messages WHERE id=? AND conversation_id=?',(str(body.message_id),str(conversation_id))).fetchone()
         if not row:raise SafeError('SOURCE_CHANGED',409)
         source=Message.model_validate_json(row[0])
-        if source.role!='USER' or source.provenance!='USER_AUTHORED' or not source.synthetic:raise SafeError('USER_AUTHORED_SOURCE_REQUIRED',403)
+        if source.role!='USER' or source.provenance!='USER_AUTHORED' or source.synthetic!=self.conversations.synthetic_demo:raise SafeError('USER_AUTHORED_SOURCE_REQUIRED',403)
         if source.revision!=body.source_revision:raise SafeError('SOURCE_CHANGED',409)
         point={'conversation_id':str(conversation_id),'message_id':str(source.id),'source_revision':source.revision,'created_utc':source.created_utc,'provenance':'USER_AUTHORED','raw_text':source.raw_text}
         return dict(point,preview_hash=digest(encode(point).encode()))
@@ -167,23 +189,30 @@ class ConversationController:
         if conv.revision!=body.base_revision:raise SafeError('CONVERSATION_CHANGED',409)
         return built,data
     def assemble(self,c,conversation,user_message,receipt,parts,purpose,snapshot=None):
-        if not user_message.synthetic or not conversation.synthetic:raise SafeError('REAL_PRIVATE_DATA_OFF',403)
-        if receipt['confirmed_memory_refs']:raise SafeError('SYNTHETIC_MEMORY_SCOPE_UNVERIFIED',403)
+        private=self.private_gate is not None
+        if private:
+            self.private_gate.require()
+            if user_message.synthetic or conversation.synthetic:raise SafeError('PRIVATE_PROVENANCE_REQUIRED',403)
+        elif not user_message.synthetic or not conversation.synthetic:raise SafeError('REAL_PRIVATE_DATA_OFF',403)
+        if receipt['confirmed_memory_refs']:raise SafeError('PRIVATE_MEMORY_SCOPE_NOT_AUTHORIZED' if private else 'SYNTHETIC_MEMORY_SCOPE_UNVERIFIED',403)
         if conversation.mode=='DEEP':
             goal=self.context.row(c,conversation.goal_binding.id,conversation.goal_binding.revision)
             current=self.context.row(c,conversation.goal_binding.id)
-            if not goal.synthetic:raise SafeError('REAL_PRIVATE_DATA_OFF',403)
+            if goal.synthetic!=self.conversations.synthetic_demo:raise SafeError('CONVERSATION_SCOPE_MISMATCH',403)
             if current.state!='ACTIVE':raise SafeError('GOAL_NOT_ACTIVE',409)
         aliases={s['id']:'s'+str(i) for i,s in enumerate(receipt['sources'])}
         if str(user_message.id) not in aliases:raise SafeError('CURRENT_MESSAGE_NOT_IN_RECEIPT',409)
         for ref in receipt['sources']:
             row=c.execute('SELECT payload FROM conversation_messages WHERE id=?',(ref['id'],)).fetchone()
-            if not row or not json.loads(row[0])['synthetic']:raise SafeError('REAL_PRIVATE_DATA_OFF',403)
+            if not row or json.loads(row[0])['synthetic']!=self.conversations.synthetic_demo:raise SafeError('CONVERSATION_SCOPE_MISMATCH',403)
         selected=self.skills.select(conversation.mode,purpose)
-        payload={'mode':conversation.mode,'purpose':purpose,'synthetic':True,'language':'uk','address_form':'FORMAL_VY','skills':[{k:s[k] for k in ('skill_id','version','content_hash','instructions')} for s in selected],'context':[{'kind':p['kind'],'text':p['text'],'source_refs':[aliases[s['id']] for s in p['sources']]} for p in parts],'current_message_ref':aliases[str(user_message.id)],'source_refs_allowed':list(aliases.values()),'goal_revision':conversation.goal_binding.revision if conversation.goal_binding else None,'tool_permissions':[],'controller_frame_hash':digest(encode(json.loads((REPO/'skills/conversation/controller_frame.json').read_text())).encode())}
+        payload={'mode':conversation.mode,'purpose':purpose,'synthetic':not private,'language':'uk','address_form':'FORMAL_VY','skills':[{k:s[k] for k in ('skill_id','version','content_hash','instructions')} for s in selected],'context':[{'kind':p['kind'],'text':p['text'],'source_refs':[aliases[s['id']] for s in p['sources']]} for p in parts],'current_message_ref':aliases[str(user_message.id)],'source_refs_allowed':list(aliases.values()),'goal_revision':conversation.goal_binding.revision if conversation.goal_binding else None,'tool_permissions':[],'controller_frame_hash':digest(encode(json.loads((REPO/('skills/conversation/local_private_controller_frame.json' if private else 'skills/conversation/controller_frame.json')).read_text())).encode())}
         if snapshot:
             payload['reflection_state']={'focus':snapshot['session']['focus'],'phase':snapshot['session']['phase'],'map_version':snapshot['map_version'],'items':[{'kind':i['kind'],'text':i['text'],'provenance':i['provenance'],'state':i['state'],'source_refs':[aliases[r['id']] for r in i['sources']]} for i in snapshot['items']],'prior_closures':[{'closure':i['closure'],'source_refs':[aliases[r['id']] for r in i['sources']]} for i in snapshot['prior_closures']]}
-        payload=ProviderPayload.model_validate(payload).model_dump(mode='json')
+        if private:
+            from .local_private_contracts import PrivateProviderPayload
+            payload=PrivateProviderPayload.model_validate(payload).model_dump(mode='json')
+        else:payload=ProviderPayload.model_validate(payload).model_dump(mode='json')
         if len(encode(payload).encode())>48000:raise SafeError('PROVIDER_INPUT_LIMIT',413)
         return payload,self.skills.binding(selected),aliases
     def send(self,id,body:InferenceStart,launch=True):
@@ -197,8 +226,19 @@ class ConversationController:
                 if c.execute('SELECT 1 FROM conversation_inferences WHERE conversation_id=? AND state IN ("QUEUED","RUNNING")',(id,)).fetchone():raise SafeError('INFERENCE_BUSY',409)
             selected=None;preview=None
             with self.store.connect() as c:before=self.conversations.row(c,id)
-            if before.mode=='FREE' and body.context_binding:raise SafeError('DEEP_MODE_REQUIRED',409)
-            if before.mode=='DEEP':
+            private=self.private_gate is not None
+            provider=self.provider_for(before.mode)
+            private_preview_data=None
+            if private:
+                from .local_private_contracts import PrivateInferenceStart
+                if not isinstance(body,PrivateInferenceStart):raise SafeError('PRIVATE_REQUEST_REQUIRED',403)
+                if provider is not None and body.context_binding is None:raise SafeError('PRIVATE_EXACT_CONTEXT_PREVIEW_REQUIRED',403)
+                if body.context_binding:
+                    from .local_private_context import selected_private_context
+                    private_preview_data=selected_private_context(self,id,body)
+                    selected,preview=private_preview_data['deep_selected'],private_preview_data['deep_preview']
+            if before.mode=='FREE' and body.context_binding and not private:raise SafeError('DEEP_MODE_REQUIRED',409)
+            if before.mode=='DEEP' and not private:
                 binding=body.context_binding
                 if binding is None:
                     # Compatibility callers use a deterministic preview; UI always binds its explicit preview.
@@ -209,11 +249,11 @@ class ConversationController:
             # User source persists even if provider is OFF or later fails; never fake a live response.
             request=SendMessage(operation_id=body.operation_id,base_revision=body.base_revision,text=body.text,source_reference=getattr(body,'source_reference',None))
             page=self.conversations.send(id,request,respond=False)
-            if self.provider is None:return dict(page,inference_job=None,responder='OFF')
+            if provider is None:return dict(page,inference_job=None,responder='OFF')
             with self.store.connect() as c:conv=self.conversations.row(c,id)
             source_id=str(uuid5(__import__('apps.core.conversation',fromlist=['NAMESPACE']).NAMESPACE,op+':user'))
             snapshot=preview['snapshot'] if preview else None
-            if conv.mode=='DEEP':
+            if conv.mode=='DEEP' or private_preview_data:
                 # Freeze exactly previewed history/map; current draft is a separate explicit source.
                 built=json.loads(encode(selected));receipt=built['receipt'];receipt['id']=str(uuid5(NAMESPACE,op+':context'))
                 with self.store.transaction() as c:
@@ -228,11 +268,19 @@ class ConversationController:
             else:built=self.context.build_free(id,uuid5(NAMESPACE,op+':context'))
             with self.store.connect() as c:
                 user=Message.model_validate_json(c.execute('SELECT payload FROM conversation_messages WHERE id=?',(source_id,)).fetchone()[0]);payload,bindings,aliases=self.assemble(c,conv,user,built['receipt'],built['context'],body.purpose,snapshot)
-            request_hash=digest(encode(payload).encode());job_id=str(uuid5(NAMESPACE,op+':job'));metadata=self.provider.metadata()
+            if private_preview_data:
+                from .local_private_context import add_selected_journal
+                payload,aliases=add_selected_journal(self,payload,aliases,private_preview_data)
+            request_hash=digest(encode(payload).encode());job_id=str(uuid5(NAMESPACE,op+':job'));metadata=provider.metadata()
             context_hash=digest(encode(built['context']).encode())
-            r=ConversationRequest(schema_version=1,request_id=UUID(job_id),mode=conv.mode,purpose=body.purpose,selected_skills=bindings,context_hash=context_hash,retrieval_receipt_id=UUID(built['receipt']['id']),provider_route=metadata['route'],provider_model=metadata['model'],provider_effort=metadata.get('effort','low'),provider_profile=metadata.get('profile','M7C_COMPAT_LOW'),selection_type=preview['selection']['type'] if preview else 'FREE_RECENT',selection_timezone=built['receipt']['timezone'],selected_window_start=built['receipt']['window_start'],selected_window_end=built['receipt']['window_end'],selected_receipt_id=UUID(preview['receipt_id']) if preview else None,selected_context_hash=preview['context_hash'] if preview else None,map_snapshot_hash=digest(encode(snapshot).encode()) if snapshot else None,consent_scope='M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY',synthetic=True,clinical_active=0,tools=[],timeout_seconds=self.timeout,input_byte_budget=48000,response_schema='M7C_CONVERSATION_CANDIDATE_V1',payload=payload)
+            request_type=ConversationRequest
+            if private:
+                from .local_private_contracts import PrivateConversationRequest
+                request_type=PrivateConversationRequest
+            r=request_type(schema_version=2 if private else 1,request_id=UUID(job_id),mode=conv.mode,purpose=body.purpose,selected_skills=bindings,context_hash=context_hash,retrieval_receipt_id=UUID(built['receipt']['id']),provider_route=metadata['route'],provider_model=metadata['model'],provider_effort=metadata.get('effort','low'),provider_profile=metadata.get('profile','M7C_COMPAT_LOW'),selection_type=preview['selection']['type'] if preview else 'FREE_RECENT',selection_timezone=built['receipt']['timezone'],selected_window_start=built['receipt']['window_start'],selected_window_end=built['receipt']['window_end'],selected_receipt_id=UUID(preview['receipt_id']) if preview else None,selected_context_hash=preview['context_hash'] if preview else None,map_snapshot_hash=digest(encode(snapshot).encode()) if snapshot else None,consent_scope='M8D_THIS_OWNER_EXACT_APPROVED_PRIVATE_CONTEXT' if private else 'M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY',synthetic=not private,clinical_active=0,tools=[],timeout_seconds=self.timeout,input_byte_budget=48000,response_schema='M7C_CONVERSATION_CANDIDATE_V1',payload=payload)
             meta=r.model_dump(mode='json');meta.pop('payload')
             d={'id':job_id,'conversation_id':id,'purpose':body.purpose,'state':'QUEUED','revision':1,'error':None,'created_at':now(),'updated_at':now(),'candidate':None,'request_metadata':meta,'provider_result':None,'request_hash':request_hash,'source_message_id':source_id,'conversation_revision':conv.revision,'aliases':aliases,'attempt':0,'deep_snapshot':snapshot}
+            if private_preview_data:d['private_context']=private_preview_data
             with self.store.transaction() as c:c.execute('INSERT INTO conversation_inferences VALUES(?,?,?,?,?,?,?)',(job_id,id,op,fingerprint,'QUEUED',1,encode(d)))
             self.events[job_id]=threading.Event()
             if launch:self.launch(job_id)
@@ -251,9 +299,13 @@ class ConversationController:
         if snapshot:
             fresh=self.deep.snapshot(c,d['conversation_id'],built['receipt'])
             if digest(encode(fresh).encode())!=d['request_metadata']['map_snapshot_hash']:raise SafeError('MAP_CHANGED',409)
-        metadata=self.provider.metadata() if self.provider else {}
+        provider=self.provider_for(conv.mode)
+        metadata=provider.metadata() if provider else {}
         if metadata.get('model')!=d['request_metadata']['provider_model'] or metadata.get('effort','low')!=d['request_metadata']['provider_effort'] or metadata.get('profile','M7C_COMPAT_LOW')!=d['request_metadata']['provider_profile']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
         payload,bindings,aliases=self.assemble(c,conv,Message.model_validate_json(row[0]),built['receipt'],built['context'],d['purpose'],snapshot)
+        if d.get('private_context'):
+            from .local_private_context import add_selected_journal
+            payload,aliases=add_selected_journal(self,payload,aliases,d['private_context'])
         if digest(encode(payload).encode())!=d['request_hash'] or digest(encode(built['context']).encode())!=d['request_metadata']['context_hash']:raise SafeError('CONTEXT_CHANGED',409)
         return payload
     def persist(self,c,d):
@@ -272,7 +324,7 @@ class ConversationController:
                 if m:
                     try:self.previews[id]=json.loads('"'+m.group(1)+'"')[:4000]
                     except ValueError:pass
-            result=self.provider.execute(payload,ConversationCandidate.model_json_schema(),cancel,started+self.timeout,preview)
+            result=self.provider_for(payload['mode']).execute(payload,ConversationCandidate.model_json_schema(),cancel,started+self.timeout,preview)
             if result.get('route')!=d['request_metadata']['provider_route'] or result.get('model')!=d['request_metadata']['provider_model']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
             result_metadata={k:result[k] for k in ('route','model','effort','profile','elapsed_ms','usage','auth_type','streaming_actual','frame_hash','attempt_id') if k in result}
             if result.get('effort','low')!=d['request_metadata']['provider_effort'] or result.get('profile','M7C_COMPAT_LOW')!=d['request_metadata']['provider_profile']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
@@ -291,10 +343,12 @@ class ConversationController:
                 self.request_for(c,d)
                 if candidate.working_map:
                     rr=json.loads(c.execute('SELECT payload FROM retrieval_receipts WHERE id=?',(d['request_metadata']['retrieval_receipt_id'],)).fetchone()[0])
-                    refs={r['id']:r for r in rr['sources']};inverse={alias:refs[sid] for sid,alias in d['aliases'].items()}
+                    refs={r['id']:r for r in rr['sources']}
+                    if d.get('private_context'):refs.update({r['id']:r for r in d['private_context']['journal_refs']})
+                    inverse={alias:refs[sid] for sid,alias in d['aliases'].items()}
                     self.deep.ingest(c,d['conversation_id'],candidate.working_map,inverse,dict(d['request_metadata'],request_hash=d['request_hash']))
                 conv=self.conversations.row(c,d['conversation_id']);seq=c.execute('SELECT COALESCE(MAX(sequence),0)+1 FROM conversation_messages WHERE conversation_id=?',(d['conversation_id'],)).fetchone()[0]
-                message=Message(schema_version=1,id=uuid5(NAMESPACE,id+':assistant'),conversation_id=conv.id,role='ASSISTANT',raw_text=candidate.assistant_text,created_utc=now(),revision=1,provenance='MODEL_GENERATED',source_reference=None,source_message_id=UUID(d['source_message_id']),synthetic=True,privacy_class='PRIVATE_PERSONAL',inference_reference={'job_id':id,'request_hash':d['request_hash'],'provider_route':result['route'],'model':result['model'],'response_hash':digest(encode(candidate.model_dump(mode='json')).encode())})
+                message=Message(schema_version=1,id=uuid5(NAMESPACE,id+':assistant'),conversation_id=conv.id,role='ASSISTANT',raw_text=candidate.assistant_text,created_utc=now(),revision=1,provenance='MODEL_GENERATED',source_reference=None,source_message_id=UUID(d['source_message_id']),synthetic=self.conversations.synthetic_demo,privacy_class='PRIVATE_PERSONAL',inference_reference={'job_id':id,'request_hash':d['request_hash'],'provider_route':result['route'],'model':result['model'],'response_hash':digest(encode(candidate.model_dump(mode='json')).encode())})
                 c.execute('INSERT INTO conversation_messages VALUES(?,?,?,?)',(str(message.id),d['conversation_id'],seq,encode(message.model_dump(mode='json'))));conv.revision+=1;conv.updated_utc=now();c.execute('UPDATE conversations SET revision=?,payload=?,updated=? WHERE id=?',(conv.revision,encode(conv.model_dump(mode='json')),conv.updated_utc,d['conversation_id']))
                 d['candidate']=candidate.model_dump(mode='json');d['provider_result']=result_metadata;d['state']='COMPLETED';d['revision']+=1;self.persist(c,d)
         except Exception as exc:

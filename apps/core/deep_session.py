@@ -44,6 +44,9 @@ class DeepSessions:
             if item['state']!='CURRENT':continue
             for s in item['sources']:
                 row=c.execute('SELECT payload FROM conversation_messages WHERE id=?',(s['id'],)).fetchone()
+                if not row and not self.conversations.synthetic_demo:
+                    source=c.execute('SELECT revision FROM entries WHERE id=?',(s['id'],)).fetchone()
+                    row=(encode({'revision':source[0]}),) if source else None
                 if not row or json.loads(row[0])['revision']!=s['revision']:
                     item['state']='STALE';break
         return m
@@ -76,6 +79,9 @@ class DeepSessions:
             for alias in item.source_refs:
                 if alias not in aliases:raise SafeError('MODEL_SOURCE_OUT_OF_SCOPE')
                 ref=aliases[alias];row=c.execute('SELECT payload FROM conversation_messages WHERE id=?',(ref['id'],)).fetchone()
+                if not row and not self.conversations.synthetic_demo and item.provenance!='USER_STATED':
+                    source=c.execute('SELECT revision,payload FROM entries WHERE id=?',(ref['id'],)).fetchone()
+                    row=(encode(dict(json.loads(source['payload']),revision=source['revision'])),) if source else None
                 if not row or json.loads(row[0])['revision']!=ref['revision']:raise SafeError('SOURCE_CHANGED',409)
                 refs.append(ref)
                 if item.provenance=='USER_STATED':

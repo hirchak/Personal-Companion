@@ -64,3 +64,8 @@ M8C may test them only on disposable roots with ORIGINAL SYNTHETIC content; actu
 Current private profile binds MAC_PRIVATE_CORE_PROFILE.json and is enforced by API/factory/runtime, not a toggle.
 [ADR-013](adr/ADR-013-M8C-PRIVATE-LOCAL-CORE.md) specifies verified FileVault APFS + owner-only0700/0600/no ACL;
 no application-level database/archive encryption, no downloads or OS settings changes. Package assets all local.
+
+
+## M8D optional owner pilot
+
+M8D exact release format4 adds an optional owner-gated AI/local voice profile to PRIVATE_LOCAL. Default OFF; no new vault or data discovery. Post-ACCEPT operator procedure is canonical in [PILOT_HANDOFF.md](PILOT_HANDOFF.md). Existing Codex/local whisper assets only; no dependency/auth/billing/network installation.

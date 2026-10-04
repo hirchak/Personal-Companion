@@ -9,16 +9,16 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: 1533a69c40c1eaa0a8f67a867724a8835101e0af
-implementation_sha: a00a14277974b7f6c25846d0eb7a23879f86183a
-report_path: reports/MAC_CORE_PILOT_ACTIVATION_REPORT.md
+baseline_sha: cee41e3a7638cf7efba511e93157ff5c3eb47ce7
+implementation_sha: null
+report_path: reports/M8D_PRIVATE_AI_VOICE_PILOT_REPORT.md
 last_reviewed_sha: a00a14277974b7f6c25846d0eb7a23879f86183a
-current_milestone: M8C
-current_goal: POST_M8C_MAC_CORE_PILOT_ACTIVATION
-current_goal_path: prompts/POST_M8C_MAC_CORE_PILOT_ACTIVATION.md
-current_contract_path: docs/M8C_CONTRACT.md
-implementation_status: ACCEPTED
-review_status: ACCEPTED
+current_milestone: M8D
+current_goal: M8D_PRIVATE_AI_VOICE_PILOT
+current_goal_path: prompts/M8D_PRIVATE_AI_VOICE_PILOT.md
+current_contract_path: docs/M8D_CONTRACT.md
+implementation_status: IN_PROGRESS
+review_status: NOT_STARTED
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -30,16 +30,15 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8C ACCEPTED — owner Mac core pilot STARTED
+# M8D — IN_PROGRESS
 
-External architect ACCEPT exact Ca00a14277974b7f6c25846d0eb7a23879f86183a / R4eb8188f771adc9ea472d5c3e3379421b5e16e19,
-reports/M8C_ARCHITECT_REVIEW.md. Historical engineering evidence unchanged.
-Explicit owner/data-owner activation of their own NEW EMPTY private local vault COMPLETE.
-Existing exact accepted package/manifest verified; no moving-main rebuild.
-Native private-preflight PASS; FileVault/volume protection + owner-only parent/vault/backup verified.
-Vault initialized YES; backup target ready YES; application running127.0.0.1; private pilot STARTED.
-No sample entries/imports/content reading. Unlock only local operator Terminal, never captured by agent/Git/evidence.
-Journal/creative/search/local backup-restore/explicit export ON; AI conversation/providers/clinical0/all5/
-Health/voice/ASR/phone/embeddingsOFF; sync/telemetry/publication/fallbackNONE. Optional gates unchanged.
-No private paths/receipt/content in repository; developer permission to future private data remains NONE.
-Owner manual interaction only. No further module/engineering work authorized; STOP after sanitized state publication.
+Actual clean main/fresh origin cee41e3a7638cf7efba511e93157ff5c3eb47ce7 verified. M8C external ACCEPT + owner
+private core activation durable; real owner vault MUST NOT be inspected/read/scanned/queried/copied/tested.
+M8D development/evidence ORIGINAL SYNTHETIC only/disposable PRIVATE_LOCAL roots; max4 new live attempts.
+Implement distinct owner-gated private AI/local voice profile, exact bounded approved context, process isolation,
+existing pinned local whisper assets, no fallback/PAYG/new auth/OS installs. User confirms training/environmentsOFF;
+runtime local acknowledgements still required, actual private AI activation NOT_STARTED until independent ACCEPT.
+FREE Luna/high + explicit DEEP Luna/max or Sol6.1/high installed catalog supported; native completion entitlement not yet newly tested.
+Clinical0/all5/Health/phone/embeddings/sync/telemetry/publication/fallbackOFF;27findingsOPEN. M7C-N03 humanUA OPEN.
+Owner's existing core app/real vault remains unchanged. No private paths/unlock/receipts/contents in Git/evidence.
+Next: implementation/synthetic checks, final C, bounded <=4 live synthetic attempts, R/privacy/normal main FF/review.

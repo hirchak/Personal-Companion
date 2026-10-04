@@ -36,3 +36,8 @@ with synthetic content in M8C):
 Deletes that validated PRIVATE_LOCAL vault only, refuses unknown/synthetic/corrupt/wrong-kind roots and missing
 confirmation. Backups/exports/browser/OS snapshots are **not** silently deleted. No secure-erasure claim. Data may
 remain in APFS/OS backups/copies; delete is not evidence of physical media erasure. Real deletion not authorized in M8C.
+
+
+## M8D optional owner pilot
+
+M8D keeps REMOVE APPLICATION / KEEP PRIVATE DATA. AI/voice disable/lock stops pending work and revokes session activation; local records/audio/backups are not silently erased. User-visible manual audio deletion claims no secure erase. Separate exact-confirmation PRIVATE_LOCAL deletion remains ADR-013; engineering uses disposable synthetic roots only.

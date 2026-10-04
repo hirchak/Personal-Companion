@@ -93,8 +93,8 @@ def test_runtime_identity_and_profile_tampering(runtime_package):
     with pytest.raises(SafeError,match='RELEASE_INTEGRITY'):r.validate_package(p,h)
 
 
-def test_profile_inactive_and_optional_modules_do_not_block_core(runtime_package,isolated):
-    p,h=runtime_package;report=reference_mac_preflight(p,h,*paths(isolated))
+def test_profile_inactive_and_optional_modules_do_not_block_core(runtime_package,isolated,isolated_preflight_port):
+    p,h=runtime_package;report=reference_mac_preflight(p,h,*paths(isolated),port=isolated_preflight_port)
     assert report['scope']=='REAL_REFERENCE_MAC_SYNTHETIC_ONLY' and report['status']=='PASS'
     assert not any(k in encode(report).lower() for k in ('/users/','username','account','token','auth'))
     decision=readiness(report,True)
