@@ -1672,3 +1672,5 @@ footer {
 .context-dates label { flex: 1 1 180px; min-width: 0; }
 .map-item { padding: 1rem 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
 .map-item p { max-width: 68ch; }
+
+.private-mode-label { display: block; font-family: inherit; font-size: 0.75rem; font-weight: 400; letter-spacing: normal; line-height: 1.5; }

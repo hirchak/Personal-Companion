@@ -33,6 +33,7 @@ from .ai_contracts import PreviewRequest, Approval, Enqueue, RuntimeMode, Empty,
 from .sync import SyncService, Pair, Packet, EpochReset
 from .voice import Voice
 from .voice_contracts import AudioBegin, AudioChunk, VoiceEmpty, ASRRequest, TranscriptEdit, TranscriptConfirm, AudioDelete
+from .root_types import RootKind
 
 CSP = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
 
@@ -69,11 +70,13 @@ class Auth:
             return s
 
 
-def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None,conversation_timeout=60,release_identity=None):
+def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None,conversation_timeout=60,release_identity=None,root_kind=RootKind.SYNTHETIC_TEST):
+    private = RootKind(root_kind)==RootKind.PRIVATE_LOCAL
+    if private and (not release_identity or conversation_provider is not None or local_asr is not None or m2 or synthetic_practices or synthetic_conversations or m7c_synthetic):raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
     if release_identity and (conversation_provider is not None or local_asr is not None or m2 or synthetic_practices):raise SafeError('RELEASE_CAPABILITY_OFF',403)
     if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
     if (conversation_provider is not None or local_asr is not None) and not m7c_synthetic:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED',403)
-    store = Store(root)
+    store = Store(root,root_kind=root_kind)
     journal, auth = Journal(store, clock), Auth(clock)
     app = FastAPI(title='M1 Local Journal', version='1.0.0', docs_url=None, redoc_url=None, openapi_url=None)
     app.state.store, app.state.journal, app.state.auth = store, journal, auth
@@ -148,6 +151,11 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                 request.state.session = token
                 if request.method not in {'GET', 'HEAD'} and not secrets.compare_digest(request.headers.get('x-csrf-token', '').encode('utf-8', 'surrogatepass'), s['csrf'].encode('ascii')):
                     raise SafeError('CSRF_DENIED', 403)
+            if private:
+                # Explicit allowlist makes future optional routes OFF until a separately reviewed profile.
+                allowed = path in {'/api/v1/status','/api/v1/auth/unlock','/api/v1/auth/session','/api/v1/auth/lock','/api/v1/entries','/api/v1/creative','/api/v1/creative/preview','/api/v1/creative/export','/api/v1/exports','/api/v1/exports/preview'} or path.startswith('/api/v1/entries/')
+                if path.startswith('/api/') and not allowed:raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
+                if path.startswith('/phone'):raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
             response = await call_next(request)
         except SafeError as exc:
             response = error(exc.code, exc.status)
@@ -155,7 +163,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
             response = error('STORAGE_UNAVAILABLE', 503)
         response.headers.update({'Cache-Control': 'no-store', 'Content-Security-Policy': CSP,
                                  'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
-                                 'Permissions-Policy': 'camera=(), microphone=(self), geolocation=()'})
+                                 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()' if private else 'camera=(), microphone=(self), geolocation=()'})
         return response
 
     @app.exception_handler(SafeError)
@@ -348,7 +356,15 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
 
     @app.get('/api/v1/status')
     def status():
+        if private:
+            from .local_private import PROFILE
+            return {'schema_version':store.meta()['schema_version'],'mode':'PRIVATE_LOCAL','root_kind':'PRIVATE_LOCAL','provider':'OFF','storage':'LOCAL_MAC','data':'PRIVATE_PERSONAL','capabilities':PROFILE}
         return {'schema_version': store.meta()['schema_version'], 'mode':'M2_SYNTHETIC_HARNESS' if m2 else 'LOCAL_ONLY', 'provider': 'OFF', 'storage': 'LOCAL_MAC', 'data': 'SYNTHETIC'}
+
+    @app.get('/runtime-mode.json', include_in_schema=False)
+    def runtime_mode():
+        # Only the mode is public, so the unlock screen can be truthful without disclosing content.
+        return {'root_kind':str(RootKind(root_kind))}
 
     @app.post('/api/v1/entries', status_code=201, response_model=Receipt)
     def create(body: Create):

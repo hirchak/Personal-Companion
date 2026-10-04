@@ -40,3 +40,18 @@ M8B: `PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED` блокує actual private core pi
 `PHONE_PRIVATE_TRANSPORT_REQUIRED` блокує phone pilot; optional AI/ASR/Health/clinical не блокують корисний core
 автоматично. Exact operator/readiness handoff: [PILOT_HANDOFF](PILOT_HANDOFF.md). Там немає команди активації
 private root. Backup provenance mismatch → відмова; не переписувати manifest/checksums щоб обійти gate.
+
+## M8C current core gate
+
+M8C adds the missing private runtime gate; prior M8A/B private-profile blockers are historical. Current readiness is
+[final M8C report](../reports/M8C_PRIVATE_LOCAL_PILOT_RUNTIME_REPORT.md); acceptance/explicit owner/data-owner
+activation remains required. Phone/AI/ASR/Health/clinical are separate optional gates, not Mac core blockers.
+First real vault is empty/new; no migration/discovery. [PILOT_HANDOFF](PILOT_HANDOFF.md) is the canonical procedure.
+
+Unverified/missing FileVault or backup protection => NOT_READY; forbidden OS changes => BLOCKED_BY_PERMISSION.
+Do not enable encryption/install dependencies as recovery during M8C. Bad permissions/ACL/wrong root/corrupt mode/
+provenance fail closed; no automatic chmod/mode relabel/backup rehash. Preserve root and trusted hashes; deliberate
+owner remediation or compatible protected fresh-root restore, renewed acknowledgement, then explicit private start.
+Backup copied to unencrypted volume loses protection and is refused there. Failed upgrade/pending marker => fresh-root
+rollback using protected compatible M8C private backup; M8A/B synthetic packages are incompatible with private data.
+Restart/failed startup never bypasses local unlock. No actual private/root/phone/Health/provider activation in M8C.

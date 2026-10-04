@@ -67,12 +67,21 @@ function message(error: unknown) {
   return "Не вдалося зберегти зміни. Текст залишається тут; перевірте сервер і повторіть.";
 }
 function App() {
+  const [rootKind, setRootKind] = useState<"SYNTHETIC_TEST" | "PRIVATE_LOCAL" | "UNKNOWN">("UNKNOWN");
   const [csrf, setCsrf] = useState(""),
     [ready, setReady] = useState(false),
     [code, setCode] = useState(""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   useEffect(() => {
+    fetch("/runtime-mode.json", { cache: "no-store", credentials: "same-origin" })
+      .then(async (r) => {
+        if (!r.ok) throw new Error("MODE_UNAVAILABLE");
+        const mode = (await r.json()).root_kind;
+        if (mode !== "SYNTHETIC_TEST" && mode !== "PRIVATE_LOCAL") throw new Error("MODE_UNAVAILABLE");
+        setRootKind(mode);
+      })
+      .catch(() => setRootKind("UNKNOWN"));
     api("auth/session")
       .then((r) => r.json())
       .then((s) => setCsrf(s.csrf_token))
@@ -100,10 +109,13 @@ function App() {
         <p role="status">Відкриваємо щоденник…</p>
       </main>
     );
+  if (ready && rootKind === "UNKNOWN")
+    return <main className="unlock"><p role="alert">Не вдалося перевірити локальний режим. Перевірте сервер і оновіть сторінку.</p></main>;
   if (csrf)
     return (
       <Journal
         csrf={csrf}
+        privateLocal={rootKind === "PRIVATE_LOCAL"}
         onLock={() => {
           setCsrf("");
           setCode("");
@@ -142,7 +154,7 @@ function App() {
         </form>
         {error && <p role="alert">{error}</p>}
         <p className="hint">
-          Synthetic demo · лише вигадані записи.
+          {rootKind === "PRIVATE_LOCAL" ? "Локальний приватний пілот · лише цей Mac." : "Synthetic demo · лише вигадані записи."}
           <br />
           Після блокування перезапустіть сервер для нового коду.
         </p>
@@ -150,8 +162,8 @@ function App() {
     </main>
   );
 }
-function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
-  const [surface, setSurface] = useState("conversation");
+function Journal({ csrf, onLock, privateLocal }: { csrf: string; onLock: () => void; privateLocal: boolean }) {
+  const [surface, setSurface] = useState(privateLocal ? "journal" : "conversation");
   const [menuOpen, setMenuOpen] = useState(false);
   const [detail, setDetail] = useState<Entry | null>(null);
   const [journalView, setJournalView] = useState<"tiles" | "list">(() => {
@@ -179,6 +191,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
   );
   const [space, setSpace] = useState({ version: 0, state: defaultSpace() });
   useEffect(() => {
+    if (privateLocal) return;
     api("personal-space", csrf)
       .then((r) => r.json())
       .then((s) => {
@@ -514,14 +527,15 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
       <header className="app-topbar">
         <a className="wordmark" href="/">
           Особистий простір
+          {privateLocal && <small className="private-mode-label">Локальний приватний пілот</small>}
         </a>
         <nav aria-label="Основна навігація">
-          <button
+          {!privateLocal && <button
             className={surface === "conversation" ? "current" : ""}
             onClick={() => navigate("conversation")}
           >
             Розмова
-          </button>
+          </button>}
           <button
             className={surface === "journal" ? "current" : ""}
             onClick={() => {
@@ -543,8 +557,8 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
       {menuOpen && (
         <Sheet title="Більше" onClose={() => setMenuOpen(false)}>
           <nav className="more-menu" aria-label="Другорядні розділи">
-            <button onClick={() => navigate("practices")}>Практики</button>
-            <button onClick={() => navigate("space")}>Мій простір</button>
+            {!privateLocal && <button onClick={() => navigate("practices")}>Практики</button>}
+            {!privateLocal && <button onClick={() => navigate("space")}>Мій простір</button>}
             <button onClick={() => navigate("creative")}>Творча полиця</button>
             <button
               onClick={() => {
@@ -555,14 +569,14 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
               Творчі записи
             </button>
             <button onClick={() => navigate("settings")}>Налаштування</button>
-            <button
+            {!privateLocal && <button
               onClick={() => {
                 navigate("health");
               }}
             >
               Дані з годинника
-            </button>
-            <button onClick={() => navigate("feedback")}>Відгук</button>
+            </button>}
+            {!privateLocal && <button onClick={() => navigate("feedback")}>Відгук</button>}
             <button
               onClick={() => {
                 setMenuOpen(false);
@@ -603,6 +617,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
         {surface === "settings" && (
           <section className="settings-home">
             <h1>Налаштування</h1>
+            {privateLocal ? <p>Лише цей Mac. AI, практики, голос, Health і телефон вимкнені. Резервні копії створюються вручну на підтвердженому захищеному локальному носії; хмарної синхронізації немає.</p> : <>
             <h2>Підключення</h2>
             <button onClick={() => navigate("health")}>Health Connect</button>
             <MacSyncSettings csrf={csrf} />
@@ -621,6 +636,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
                 onChanged={load}
               />
             </details>
+            </>}
             <button onClick={() => void lock()}>Заблокувати</button>
           </section>
         )}
@@ -660,7 +676,7 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
                 <span aria-hidden="true">+</span> Додати запис
               </button>
             </header>
-            <details className="voice-disclosure">
+            {!privateLocal && <details className="voice-disclosure">
               <summary>Голосовий запис</summary>
               <VoicePanel
                 csrf={csrf}
@@ -668,15 +684,15 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
                   void load();
                 }}
               />
-            </details>
-            <details className="journal-tools">
+            </details>}
+            {!privateLocal && <details className="journal-tools">
               <summary>Локальні інструменти</summary>
               <AssistantPanel
                 csrf={csrf}
                 selected={selected}
                 onChanged={load}
               />
-            </details>
+            </details>}
             <nav className="journal-filters" aria-label="Фільтри щоденника">
               {[
                 ["", "Усі"],

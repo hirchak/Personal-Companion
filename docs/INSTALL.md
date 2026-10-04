@@ -1,4 +1,4 @@
-# M8B: локальне синтетичне встановлення
+# M8C: локальне встановлення; synthetic compatibility і private core
 
 Це prerequisite-based unsigned source package, не standalone installer і не дозвіл на реальний пілот.
 Поточні assumptions: macOS/Darwin arm64, Python3.13 із **точними runtime versions** `requirements.runtime.lock`.
@@ -10,10 +10,10 @@ M8B не запускає pip/npm ci, Homebrew, trust setup чи system changes.
 
 ```bash
 mkdir -p generated/releases
-.venv/bin/python -m apps.core.release prepare --output "generated/releases/M8B-$(git rev-parse HEAD)"
+.venv/bin/python -m apps.core.release prepare --output "generated/releases/M8C-$(git rev-parse HEAD)"
 ```
 
-Ідентичність — `M8B-<full Git SHA>`, а не latest. Manifest у `release-manifest.json` містить exact commit,
+Ідентичність нового build — `M8C-<full Git SHA>`, а не latest. Manifest у `release-manifest.json` містить exact commit,
 schema11, окремі runtime/dev Python lock identities і web lock, contract/defaults і hashes усіх package files. Output ignored; не комітити
 runtime roots/backups/архіви. Expected `manifest_hash` візьміть з довіреного результату build/evidence,
 передавайте окремо; hash не є цифровим підписом чи notarization.
@@ -50,4 +50,17 @@ build/test input (pytest/Playwright/httpx тощо); вони не потріб�
 зберігає історичний full-lock prerequisite contract, не перетлумачений заднім числом.
 Sanitized actual-Mac preflight: `python -m apps.core.release mac-preflight` із тими самими package/hash/app/data/port
 arguments. Факти обмежені поточним Mac, не всіма Macs. [Pilot handoff](PILOT_HANDOFF.md) пояснює окремий
-private-root runtime gate: реальний private profile не реалізовано/не активовано цим synthetic launcher.
+private-root runtime gate: M8B synthetic launcher не активує private mode; M8C private gate описано нижче.
+
+## Current PRIVATE_LOCAL release
+
+New builds use **M8C-<exact C> / manifest format3**, retaining the format1/2 synthetic compatibility above.
+Use `generated/releases/M8C-<exact C>` as the clean-checkout prepare output; same existing runtime-only prerequisites.
+PRIVATE_LOCAL is a separate root/SQLite/install classification, not SYNTHETIC_M1 marker replacement. `install` remains
+synthetic-only; private activation is separately named `initialize-private` and requires exact root/data-owner intent.
+`start --mode PRIVATE_LOCAL` never creates a vault. Wrong kinds/corrupt markers/permissions/encryption fail closed.
+Canonical **post-ACCEPT-only** preflight/empty-root consent/start/first-entry commands: [PILOT_HANDOFF](PILOT_HANDOFF.md).
+M8C may test them only on disposable roots with ORIGINAL SYNTHETIC content; actual private root NOT_CREATED.
+Current private profile binds MAC_PRIVATE_CORE_PROFILE.json and is enforced by API/factory/runtime, not a toggle.
+[ADR-013](adr/ADR-013-M8C-PRIVATE-LOCAL-CORE.md) specifies verified FileVault APFS + owner-only0700/0600/no ACL;
+no application-level database/archive encryption, no downloads or OS settings changes. Package assets all local.

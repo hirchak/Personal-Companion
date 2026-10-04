@@ -321,3 +321,15 @@ M8B exact-C outcomes:667Python (43Chromium,19M8B)/50web/build/schema/admission/d
 434b1cd5ad857776bbfd9b3799a0abddec2858f6. MAC_PREFLIGHT/MAC_LIFECYCLE evidence records actual Mac27.0/M2,
 new runtime-only environment without pytest/Playwright/httpx/pip, and genuine accepted M8A package upgrade/rollback.
 No physical Galaxy/human/Health verification; no private activation. CI remains NOT_CONFIGURED/NOT_RUN.
+
+## M8C — PRIVATE_LOCAL_RUNTIME_WITH_SYNTHETIC_CONTENT
+
+`python -m pytest -q tests/test_m8c_private.py tests/test_m8c_browser.py` deterministic root/permission/native status/
+profile/credential-env/forbidden API/auth/restart/provenance/protected backup/restore/cross-mode/upgrade/failure/
+rollback/KEEP DATA/delete tests; real installed Chromium for mode/journal/creative/idle-lock/unsupported UI.
+Unit security statuses are mocked explicitly; final actual-Mac dry run uses native probes without mocks.
+`python -m scripts.verify_m8c --output generated/m8c-verification` builds/executes clean exact C using copied existing
+runtime12 (no installs/test libraries), actual native protection, PRIVATE_LOCAL roots with original synthetic content,
+real HTTP/Chromium, backup/restore/upgrade/failure/rollback/restarts/KEEP DATA/delete/cleanup. Exact hashes/status only.
+Run full existing Python/web/build/Ajv/admission/docs/snapshot/public-tree/all-local-Git-object checks on final C.
+No real private/provider/Health/audio/phone samples/system changes or hardware/clinical/private acceptance inference.

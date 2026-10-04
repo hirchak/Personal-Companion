@@ -1,6 +1,6 @@
 # ADR-012 — Release-aware backup, runtime-only prerequisites and honest pilot handoff
 
-2026-10-04. IMPLEMENTED_AWAITING_REVIEW; M8B real reference Mac with synthetic data only.
+2026-10-04. ACCEPTED_EXTERNAL_REVIEW; M8B real reference Mac with synthetic data only.
 
 New release manifest format2 / M8B-<exact Git C> binds requirements.runtime.lock separately from full
 requirements.lock (dev/test/build input remains pinned and recorded). New runtime checks only12 actual
@@ -37,3 +37,7 @@ data-owner consent/storage policy. This core gate is independent of optional AI/
 Phone route remains candidate-only ADR-002; no existing authorized HTTPS/pairing route was proven. Record
 PHONE_PRIVATE_TRANSPORT_REQUIRED / NEEDS_TRANSPORT_GATE without inspecting private accounts/endpoints or
 installing networking/trust. Galaxy/human UA/Health0.6.1 gates remain NOT_RUN.
+
+External M8B ACCEPT exact C434b1cd5/R1533a69c recorded in reports/M8B_ARCHITECT_REVIEW.md.
+The synthetic-only runtime/inactive handoff above describes M8B; M8C adds a separately reviewed private mode
+without reinterpreting historical evidence: [ADR-013](ADR-013-M8C-PRIVATE-LOCAL-CORE.md).

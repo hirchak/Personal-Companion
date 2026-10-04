@@ -1,62 +1,81 @@
-# Особистий пілот: handoff після M8B, без активації
+# Mac-only core pilot: post-M8C ACCEPT activation handoff
 
-M8B перевіряє конкретний Mac із disposable ORIGINAL SYNTHETIC даними. Це не реальний приватний пілот.
-Планований профіль — MAC_CORE_PILOT_V1: щоденник, творчість, локальний пошук і backup/restore ON.
-Profile файл не активує runtime. Чинний пакет приймає лише synthetic roots; реальний private-root mode потребує
-окремої owner goal, реалізації/перевірки точного data labeling і згоди власниці даних. Його не створено в M8B.
+**Do not execute during M8C.** M8C tests the production PRIVATE_LOCAL path using disposable ORIGINAL SYNTHETIC
+content only. ACTUAL_PRIVATE_PILOT NOT_STARTED; actual private root NOT_CREATED. After independent M8C ACCEPT,
+explicit owner/data-owner activation may start a new empty Mac-only vault without another core engineering milestone
+if all core readiness criteria pass. Existing private data import/migration requires a separate exact-source action.
 
-## Незалежні readiness gates
+## Independent gates
 
-| Частина | Стан / наступна дія |
-|---|---|
-| Mac synthetic engineering dry run | READY тільки після exact-C preflight/lifecycle PASS на цьому Mac |
-| MAC_CORE_PILOT із реальним vault | NOT_READY: PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED; окрема bounded owner goal для private local mode/consent/storage |
-| PHONE_PILOT | NEEDS_TRANSPORT_GATE: PHONE_PRIVATE_TRANSPORT_REQUIRED |
-| Private AI | BLOCKED_M7C_N02; retention/private suitability NOT_VERIFIED |
-| Human UA ASR | NOT_RUN_M7C_N03; голосові samples/retention потребують окремої згоди |
-| Health/Watch | NOT_RUN_M6_N01; final bridge0.6.1 hardware не перевірено |
-| Clinical/self-help | OFF_27_FINDINGS_OPEN; content/rights/admission review не закрито |
+MAC_CORE_PILOT, PRIVATE_STORAGE_SECURITY, PRIVATE_BACKUP, ACTIVATION_PROCEDURE are READY only when final exact-C
+checks/unmocked security + private lifecycle pass; see reports/evidence/M8C/PILOT_READINESS.json after completion.
+These are engineering readiness, not consent, release publication, clinical approval or actual activation.
+PHONE NEEDS_TRANSPORT_GATE / PHONE_PRIVATE_TRANSPORT_REQUIRED. Private AI BLOCKED_M7C_N02; human UA ASR
+NOT_RUN_M7C_N03; Health/Watch NOT_RUN_M6_N01; clinical/self-help OFF_27_FINDINGS_OPEN; five specialists OFF.
+M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW is not a core blocker with conversationOFF. No phone/Tailscale/cert changes.
 
-Optional AI/ASR/Health/clinical/phone не є причиною core NO-GO. Причина — відсутність дозволеного private-root
-runtime profile. Перший real core pilot може бути Mac-only після закриття цього окремого gate.
+## Exact operator procedure after independent ACCEPT and explicit activation
 
-## Операторський цикл
+1. Select the **exact accepted** M8C source package/release ID/manifest hash from the final report and retain a
+   trusted copy. Verify installed Python3.13/Darwin arm64 + exact requirements.runtime.lock. No automatic download
+   or system dependency installation; unsigned checksums are not notarization/signatures.
+2. Choose local application/data roots outside Git/cloud-sync folders; neither may contain the other. First vault
+   must be NEW or genuinely EMPTY. Do not select an existing journal/Obsidian/other-app vault. Choose an explicit
+   separate local backup container on verified FileVault-protected APFS storage. Verify externally configured
+   sync/OS backups; this app cannot switch them off. Operator creates only chosen app/data parents and backup
+   container as owner0700, with no extended ACL. No encryption/system changes are performed by the app.
+3. Set local variables (never put actual paths/consent/unlock into public evidence): `PYTHON`, `PACKAGE`,
+   `EXPECTED_HASH`, `APP_ROOT`, `DATA_ROOT`, `BACKUP_DIRECTORY`. Parents must already exist; application root new.
+   Data/backup files require0600/directories0700. Preflight verifies actual filesystem device/volume/FileVault,
+   permissions/ACL/symlink/Git/cloud path/runtime/space/loopback and exact release/profile.
 
-Application/runtime directory і private data directory — різні каталоги без вкладення. Майбутній private root
-обирає власниця, поза Git/public/cloud-sync folders; концептуально — її локальний Application Support/vault.
-Не підміняйте приватний root synthetic marker і не створюйте його командами M8B. Права доступу, FileVault,
-backup storage/encryption/retention і згода власниці — окремі передумови активації. Backup зараз не encrypted at-rest.
+```bash
+"$PYTHON" -I -B "$PACKAGE/launch.py" private-preflight --package "$PACKAGE" --manifest-hash "$EXPECTED_HASH" --app "$APP_ROOT" --data "$DATA_ROOT" --backup-directory "$BACKUP_DIRECTORY"
+```
 
-Для вже дозволеного **синтетичного** root застосовуються точні [INSTALL](INSTALL.md), [UPGRADE](UPGRADE.md),
-[RECOVERY](RECOVERY.md), [UNINSTALL](UNINSTALL.md). Після майбутнього scoped private-mode goal команди й mode
-мають бути явно оновлені/перевірені; нижче не є інструкцією запустити real private vault зараз.
+4. The data-owner reads the local-only/backup policy and deliberately acknowledges it. This consent is separate
+   from developer/architect acceptance. The literal below acknowledges local storage and protected local backups;
+   no identity is requested. Exact root confirmation prevents accidental activation. No normal startup does this.
 
-- Start — foreground local127.0.0.1; one-time unlock лише в операторському terminal. Не зберігати код у logs/evidence.
-- Stop — Ctrl+C. Restart — той самий verified app/data root; новий код; interrupted work не auto-resume.
-- Backup — зупинити сервер; release backup команда повертає producing release hash + backup manifest hash.
-  Зберегти receipt/hashes окремо від backup і перевірити restore у новий root. Backup сам по собі не шифрує дані.
-- Restore/rollback — нові roots, trusted expected package/producer/backup hashes; no in-place downgrade/overwrite.
-  Pairing/consent/jobs/Health revalidation не воскресають автоматично.
-- Uninstall — KEEP DATA: видаляється лише керований application/runtime; vault/backups зберігаються.
-- Stop pilot safely — Ctrl+C, verified backup/export за explicit choice, залишити data root; не видаляти все як recovery.
-- Data removal — лише окремий unmistakable explicit choice. Поточна delete-synthetic-data команда призначена лише
-  для synthetic roots; майбутній real mode потребує свого перевіреного consent flow. Secure erasure не доведене;
-  backups/exports/browser/OS copies можуть залишитися.
+```bash
+"$PYTHON" -I -B "$PACKAGE/launch.py" initialize-private --package "$PACKAGE" --manifest-hash "$EXPECTED_HASH" --app "$APP_ROOT" --data "$DATA_ROOT" --backup-directory "$BACKUP_DIRECTORY" --confirm "INITIALIZE_PRIVATE_LOCAL:$DATA_ROOT" --data-owner-consent I_AM_THE_DATA_OWNER_AND_CONSENT_TO_LOCAL_STORAGE_AND_PROTECTED_LOCAL_BACKUPS --acknowledge-no-cloud-directory
+"$PYTHON" -I -B "$PACKAGE/launch.py" start --mode PRIVATE_LOCAL --app "$APP_ROOT" --data "$DATA_ROOT" --port 8765
+```
 
-Зараз OFF: private provider/AI, усі5 self-help candidates, clinical0, health-to-AI/Health bridge/human voice ASR,
-external embeddings; cloudASRNONE, telemetry/cloud sync/publicationNONE. Відсутні downloads/fallback/autostart.
-Не вважайте flags OFF доказом шифрування чи придатності стороннього provider для приватного щоденника.
+5. Open `http://127.0.0.1:8765`, enter the one-time code shown only in the foreground operator terminal. Do not log,
+   screenshot, share or save it. UI says «Локальний приватний пілот», opens the journal, then «Додати запис» → text →
+   «Зберегти на Mac». First real entry happens **only after this explicit post-review activation**, never in M8C.
+6. Journal/creative/local search available; explicit previewed local exports retained. AI conversation/Health/
+   voice/phone/clinical/sharing/cloud/telemetry are unavailable and hidden. No provider keys/env enable them.
 
-## Мінімальний окремий phone transport gate
+## Stop, restart, lock and backup
 
-Репозиторій має candidate ADR-002, а не accepted діючий private HTTPS endpoint; package phone transport OFF.
-На перевіреному Mac Tailscale CLI відсутній. Нові private network/account endpoints не шукалися й не зчитувалися.
-Наступна окрема owner transport goal повинна вибрати точний приватний route та дозволити лише потрібні
-client/account/config/trust зміни; адаптувати exact HTTPS Origin/Host/auth/pairing і виконати Galaxy synthetic smoke.
-Якщо обрано Tailscale Serve candidate, дозвіл на client/account/Serve потрібен окремо; не Funnel/public exposure.
-Без такого gate телефонне hardware тестування не починається. Не обходити TLS warnings.
+Ctrl+C stops the single foreground runtime; no autostart/daemon. Restart with the same explicit PRIVATE_LOCAL roots
+creates new unlock state. Lock erases UI/session access; after lock use foreground restart for a new code. Idle15min,
+absolute8hours. Unsaved drafts are not promised durable. All app requests/assets localhost; no network egress.
 
-PWA candidate має schema2 encrypted IndexedDB (native PBKDF2/AES-GCM), transactional outbox,
-локальний shell cache та explicit waiting-update activation; це підтверджують code/build/desktop Chromium тести.
-Відсутній cloud backend/automatic provider/clinical/Health activation. Real Galaxy/background/storage eviction/
-persistence/private HTTPS, Watch/Health0.6.1 та human UA ASR лишаються NOT_RUN, не підмінені desktop evidence.
+Stop before backup/maintenance. Choose a **new** snapshot child directly inside the consented backup container:
+
+```bash
+"$PYTHON" -I -B "$PACKAGE/launch.py" backup --mode PRIVATE_LOCAL --app "$APP_ROOT" --data "$DATA_ROOT" --backup "$NEW_BACKUP_ROOT"
+```
+
+Retain producing manifest hash and backup manifest hash separately in a protected owner-local receipt; never Git.
+Test a fresh-root restore before depending on backup. Backup protection is verified FileVault/volume + owner-only
+access, **NOT independently encrypted archive**; copying to unencrypted storage removes protection. No automatic
+retention deletion, cloud upload or synchronization. SQLite application encryption NOT_IMPLEMENTED.
+
+[UPGRADE](UPGRADE.md) defines protected backup/restore/upgrade/rollback commands and explicit renewed consent.
+[RECOVERY](RECOVERY.md) defines fail-closed recovery; do not delete markers or downgrade in place.
+[UNINSTALL](UNINSTALL.md) removes application/keeps vault/backups and defines separate exact-root private deletion.
+Safely stop pilot: stop process, choose verified protected backup/export if needed, preserve data; no generic wipe.
+
+## Security limitations
+
+Protection is for data at rest on verified FileVault-protected volumes and normal local access boundaries.
+Compromised/unlocked OS, same-user malware/admin/browser extensions/system screenshots/OS backups remain outside
+this model. One-time local terminal unlock is not a separate at-rest encryption password. No secure-erasure claim.
+Actual native facts apply only to tested Mac; re-run security checks on the actual activation Mac/target volumes.
+No extra engineering milestone is required for core activation after ACCEPT when these checks pass; any newly
+missing prerequisite remains an explicit blocker, not permission to alter system security or install dependencies.
+Phone/private provider/human ASR/Health/clinical modules each require separate gates and authorizations.

@@ -159,3 +159,12 @@ M8B final C434b1cd5ad857776bbfd9b3799a0abddec2858f6:667Python/43Chromium/19M8B/5
 runtime-only/lifecycle and accepted old M8A cross-release upgrade/rollback PASS. N01/N02 CLOSED_ENGINEERING.
 MAC_SYNTHETIC_DRY_RUN READY; MAC_CORE_PILOT NOT_READY / PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED;
 PHONE_PILOT NEEDS_TRANSPORT_GATE. Independent optional AI/ASR/Health/clinical gates unchanged. No actual private pilot.
+
+## M8B external ACCEPT / M8C owner goal — 2026-10-04
+
+M8B external ACCEPT exact C434b1cd5ad857776bbfd9b3799a0abddec2858f6 / R1533a69c40c1eaa0a8f67a867724a8835101e0af
+recorded in reports/M8B_ARCHITECT_REVIEW.md. M8A-N01/N02 CLOSED_ENGINEERING; historical evidence unchanged.
+M8C IN_PROGRESS: final private-local core engineering gate, distinct mode/explicit consent/verified volume+permissions/
+protected backups/core-only runtime/UI, actual reference Mac private path using ORIGINAL SYNTHETIC content only.
+Current goal/contract prompts/M8C_PRIVATE_LOCAL_PILOT_RUNTIME.md / docs/M8C_CONTRACT.md. Actual private root
+NOT_CREATED/pilot NOT_STARTED; phone/AI/ASR/Health/clinical/language gates carried independently.

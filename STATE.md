@@ -9,16 +9,16 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: 08d8efdd01dbcf8ddcdbdd6fcd6bd8361b75062a
-implementation_sha: 434b1cd5ad857776bbfd9b3799a0abddec2858f6
-report_path: reports/M8B_REAL_HARDWARE_SYNTHETIC_DRY_RUN_REPORT.md
-last_reviewed_sha: 38d3ed69839a8fc876c50b900552ad38d965c5cd
-current_milestone: M8B
-current_goal: M8B_REAL_HARDWARE_SYNTHETIC_DRY_RUN
-current_goal_path: prompts/M8B_REAL_HARDWARE_SYNTHETIC_DRY_RUN.md
-current_contract_path: docs/M8B_CONTRACT.md
-implementation_status: AWAITING_REVIEW
-review_status: AWAITING_REVIEW
+baseline_sha: 1533a69c40c1eaa0a8f67a867724a8835101e0af
+implementation_sha: null
+report_path: reports/M8C_PRIVATE_LOCAL_PILOT_RUNTIME_REPORT.md
+last_reviewed_sha: 434b1cd5ad857776bbfd9b3799a0abddec2858f6
+current_milestone: M8C
+current_goal: M8C_PRIVATE_LOCAL_PILOT_RUNTIME
+current_goal_path: prompts/M8C_PRIVATE_LOCAL_PILOT_RUNTIME.md
+current_contract_path: docs/M8C_CONTRACT.md
+implementation_status: IN_PROGRESS
+review_status: NOT_STARTED
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -30,18 +30,14 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8B — AWAITING_REVIEW
+# M8C — IN_PROGRESS
 
-External M8A scoped ACCEPT durable, exact C38d3ed6/R08d8efdd, reports/M8A_ARCHITECT_REVIEW.md.
-Final C434b1cd5ad857776bbfd9b3799a0abddec2858f6; evidence-only R follows, no self-hash.
-Release M8B-C format2/schema11/web2, manifest8abf5811…; runtime12-lock f17abf6c… (no pytest/Playwright/httpx/pip).
-667Python/43Chromium/19M8B/50web/build/Ajv/admission/docs/context/privacy exact-C PASS.
-Actual Mac27.0/arm64/AppleM2/Mac14,15/Python3.13.2 preflight+minimal-runtime install/start/usage/restart/recovery PASS;
-backup/restore/failed-upgrade/rollback/KEEP DATA, actual M8A→M8B upgrade+old application rollback PASS.
-M8A-N01/N02 CLOSED_ENGINEERING: snapshot-bound producer/source provenance + runtime-only dependency surface.
-MAC_SYNTHETIC_DRY_RUN READY; actual MAC_CORE_PILOT NOT_READY / PRIVATE_DATA_RUNTIME_PROFILE_REQUIRED.
-PHONE NEEDS_TRANSPORT_GATE; no network/trust changes. Inactive operator profile/handoff docs/PILOT_HANDOFF.md.
-M7D-N01 CLOSED_ENGINEERING; N02 OPEN_HUMAN_LANGUAGE_REVIEW. M7C-N02 OPEN HARD; M7C-N03/M6-N01 NOT_RUN.
-27 findingsOPEN/clinical0/five candidatesOFF; providerOFF/health-to-AIOFF/privateOFF; real private data/livecalls0.
-CI NOT_CONFIGURED/NOT_RUN. No system/global installs/release/tag/deploy/autostart/actual private pilot.
-After R/final privacy/normal FF main push verify origin/main==R and STOP for architect review; next goal not authorized.
+M8B external ACCEPT durable exact C434b1cd5/R1533a69c, reports/M8B_ARCHITECT_REVIEW.md.
+Authorized final private-local core engineering gate, ORIGINAL SYNTHETIC content only on disposable roots.
+Distinct root/receipt/SQLite binding, volume/permission gates, protected backups, private API/UI profile in progress.
+Actual reference Mac FileVault ON; exact target-volume probes and final-C lifecycle pending.
+MAC_CORE_PILOT/PRIVATE_STORAGE_SECURITY/PRIVATE_BACKUP/ACTIVATION_PROCEDURE NOT_READY until final evidence.
+PHONE NEEDS_TRANSPORT_GATE; M7C-N02 HARD/M7C-N03 human UA/M6-N01 Health0.6.1 remain OPEN/NOT_RUN;
+M7D-N02 human language OPEN;27 findingsOPEN/clinical0/five candidatesOFF.
+Actual private root NOT_CREATED; ACTUAL_PRIVATE_PILOT NOT_STARTED; real data/livecalls/system changes0.
+Standing checked C/R normal FF main publication allowed; no release/tag/deploy/providers/real activation.

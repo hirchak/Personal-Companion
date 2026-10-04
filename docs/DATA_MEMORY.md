@@ -133,3 +133,11 @@ real private data OFF; M7C/M8 NOT_STARTED. [Contract](M7B_CONTRACT.md), [ADR](ad
 ## M7C owner scope — 2026-10-04
 
 Schema10 adds controller inference metadata tables and N01/N02 digest semantics; journal entry schema2, health schema1 and practice schema1 remain unchanged. Raw timestamped messages and exact user-goal revisions remain authoritative. One CURRENT digest per (kind,scope_key), superseded/stale text purged transactionally, source edit/delete invalidates dependencies. Daily identity is IANA_LOCAL_V1:<timezone>:<local-date>; Europe/Warsaw is the explicit reference default, not a discovered user timezone. UTC originals never shift; timezone changes preserve historical artifact identity. Legacy UTC daily digests become STALE. Existing FTS/filter and bounded builder are used; no mandatory vector DB/embeddings or external embedding calls. Digests remain deterministic synthetic fixtures, not real model summaries. Receipts are local metadata only. Inference stores request/context/skills hashes, receipt and candidate separately; partial stream never persists. Restart/backup cancels pending authority and never resumes external calls. Explicit journal-point copy revalidates source revision/preview hash in the accepted journal transaction; operation receipt hash binds that user action, and the resulting USER_REPORTED entry survives conversation deletion. No source ID is added to the journal schema. M7C does not wire confirmed-memory or journal/health-to-AI context.
+
+## M8C root kind and domain provenance
+
+PRIVATE_LOCAL is a storage/runtime classification, separate from domain privacy/provenance. Journal/creative records
+keep PRIVATE_PERSONAL/USER_REPORTED and existing revision/source/tombstone contracts. Synthetic-content private-mode
+tests label their content in fixtures/evidence only; no production synthetic-label bypass field is accepted.
+Dual marker/SQLite root identity plus install receipt and backup4 attestations refuse loose-flag/cross-mode conversion.
+Root identity renews after fresh protected restore; domain lineage/history remains. No existing-data discovery/import.

@@ -49,3 +49,32 @@ Generic historical Store backups format1/2 не отримують вигада�
 Release restore відхиляє їх за замовчуванням; deliberate compatibility choice `--allow-legacy-backup` дає
 LEGACY_UNKNOWN_PRODUCER та звичайну typed snapshot validation. Не застосовувати цю опцію для обходу corrupt
 format3 provenance. Новий private pilot тут не дозволений; див. PILOT_HANDOFF.md.
+
+## M8C PRIVATE_LOCAL maintenance (after explicit activation)
+
+The historical examples above remain SYNTHETIC_TEST. Use explicit `--mode PRIVATE_LOCAL` for the distinct private
+installation. Archive at-rest protection = freshly verified FileVault-protected APFS volume + owner-only container;
+NOT application-encrypted archive. Copying to unencrypted storage removes protection. No backup cloud routing/delete.
+Private backup format4 binds private identity/policy to release producer/source/snapshot attestation. Trusted independent
+producer and backup manifest hashes remain required operator practice; no signature claim. Cross-mode restore fails.
+
+Run from exact trusted **new** package for upgrade; backup target must be a new child of the acknowledged protected
+backup container, and server must be stopped. New manager is the producer; old active package is source.
+
+```bash
+"$PYTHON" -I -B "$NEW_PACKAGE/launch.py" upgrade --mode PRIVATE_LOCAL --package "$NEW_PACKAGE" --manifest-hash "$NEW_HASH" --app "$APP_ROOT" --data "$DATA_ROOT" --backup "$NEW_PREUPGRADE_BACKUP"
+```
+
+Restore/rollback require compatible PRIVATE_LOCAL-aware M8C package, fresh application/data roots, protected source
+backup plus target volume/container, and renewed explicit acknowledgement. Old M8A/B cannot open private roots.
+No in-place downgrade or silent synthetic conversion. Exact selected target root is confirmed again:
+
+```bash
+"$PYTHON" -I -B "$PACKAGE/launch.py" restore --mode PRIVATE_LOCAL --package "$COMPATIBLE_PACKAGE" --manifest-hash "$TRUSTED_HASH" --producer-manifest-hash "$TRUSTED_PRODUCER_HASH" --backup-manifest-hash "$TRUSTED_BACKUP_HASH" --backup "$BACKUP_ROOT" --app "$FRESH_APP_ROOT" --data "$FRESH_DATA_ROOT" --backup-directory "$BACKUP_DIRECTORY" --confirm "INITIALIZE_PRIVATE_LOCAL:$FRESH_DATA_ROOT" --data-owner-consent I_AM_THE_DATA_OWNER_AND_CONSENT_TO_LOCAL_STORAGE_AND_PROTECTED_LOCAL_BACKUPS --acknowledge-no-cloud-directory
+```
+
+For rollback use the same command with `rollback`, trusted old-compatible M8C package and preupgrade backup.
+Root identity renewed; domain privacy/provenance/history/tombstones preserved. Device/AI/Health/practice reapproval
+states remain invalidated, every optional profile capability stays OFF. Start uses `--mode PRIVATE_LOCAL` after verifying
+restored state. Failed migration leaves verified backup/pending marker/original pointer; restore into fresh roots,
+never remove marker to bypass recovery. Detailed initial activation: [PILOT_HANDOFF](PILOT_HANDOFF.md).

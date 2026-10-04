@@ -41,6 +41,8 @@ class Runtime:
                 'providers': [metadata(p) for p in self.providers.values()], 'idle_worker': bool(self.worker and self.worker.is_alive())}
 
     def set_mode(self, mode):
+        from .root_types import RootKind
+        if getattr(self.store, "root_kind", RootKind.SYNTHETIC_TEST)==RootKind.PRIVATE_LOCAL and mode != "OFF":raise SafeError("PRIVATE_CORE_CAPABILITY_OFF",403)
         with self.lock:
             self.mode = mode
             if mode == 'OFF':

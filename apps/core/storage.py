@@ -9,6 +9,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from uuid import uuid4
 from datetime import datetime, timezone
+from .root_types import RootKind
 
 SCHEMA = 11
 _ROOT_LOCKS = {}
@@ -106,16 +107,24 @@ def ai_triggers(c):
         END""")
 
 class Store:
-    def __init__(self, root, fail_migration=False):
+    def __init__(self, root, fail_migration=False, *, root_kind=RootKind.SYNTHETIC_TEST, private_creation=None):
         self.root = safe_path(root)
+        self.root_kind = RootKind(root_kind)
+        self._creating_private = private_creation is not None
         self.attachment_lock = _ROOT_LOCKS.setdefault(str(self.root), threading.RLock())
         self.commit_error = None
         self.fail_commit = False  # controlled test injection, never an HTTP/config switch
-        manifest = self.root / 'synthetic.json'
+        private = self.root_kind == RootKind.PRIVATE_LOCAL
+        manifest = self.root / ('private-local.json' if private else 'synthetic.json')
         if self.root.exists() and any(self.root.iterdir()):
-            if not manifest.is_file() or json.loads(manifest.read_text()) != MARKER:
+            if private:
+                from .local_private import validate_root
+                validate_root(self.root, security=True)
+            elif (self.root/'private-local.json').exists():
+                raise SafeError('ROOT_KIND_MISMATCH')
+            elif not manifest.is_file() or json.loads(manifest.read_text()) != MARKER:
                 raise SafeError('UNKNOWN_ROOT')
-            allowed = {'synthetic.json', 'journal.sqlite3', 'journal.sqlite3-wal', 'journal.sqlite3-shm', 'preupgrade.sqlite3', 'audio', 'audio-staging'}
+            allowed = {manifest.name, 'journal.sqlite3', 'journal.sqlite3-wal', 'journal.sqlite3-shm', 'preupgrade.sqlite3', 'audio', 'audio-staging'}
             if any(p.name not in allowed for p in self.root.iterdir()):
                 raise SafeError('UNKNOWN_ROOT_CONTENT')
             for folder, pattern in [('audio', r'[0-9a-f-]{36}\.wav(?:\.writing)?'), ('audio-staging', r'[0-9a-f-]{36}')]:
@@ -136,9 +145,17 @@ class Store:
             finally:
                 probe.close()
         else:
+            if private:
+                from .local_private import RootReceipt, owner_only, require_volume
+                if private_creation is None: raise SafeError('EXPLICIT_PRIVATE_INITIALIZATION_REQUIRED')
+                private_creation = RootReceipt.model_validate(private_creation).model_dump()
+                owner_only(self.root if self.root.exists() else self.root.parent)
+                require_volume(self.root)
+                owner_only(private_creation['backup_directory']); require_volume(private_creation['backup_directory'])
             empty_target(self.root)
             self.root.mkdir(mode=0o700, exist_ok=True)
-            manifest.write_text(encode(MARKER))
+            fd = os.open(manifest, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+            with os.fdopen(fd, 'w') as handle: handle.write(encode(private_creation if private else MARKER))
         os.chmod(self.root, 0o700)
         self.db = self.root / 'journal.sqlite3'
         # Create mode before SQLite opens it, including under permissive caller umask.
@@ -163,6 +180,9 @@ class Store:
                 if not exists:
                     c.execute('CREATE TABLE vault_meta(vault_id TEXT,owner_id TEXT,schema_version INTEGER,restore_epoch INTEGER,created_at_utc TEXT,reconciliation TEXT)')
                     c.execute('INSERT INTO vault_meta VALUES(?,?,?,0,?,?)', (str(uuid4()), str(uuid4()), SCHEMA, now(), 'NONE'))
+                    if private:
+                        c.execute('CREATE TABLE private_root_identity(payload TEXT NOT NULL)')
+                        c.execute('INSERT INTO private_root_identity VALUES(?)', (encode(private_creation),))
                 for sql in TABLES:
                     c.execute(sql)
                 for sql in SYNC_TABLES:
@@ -212,13 +232,22 @@ class Store:
                 raise
             self.check(c)
         private_files(self.root)
+        self._creating_private = False
 
     @contextmanager
     def connect(self):
         # Revalidate all children on every operation to reject post-start path swaps.
         safe_path(self.root)
+        if getattr(self, 'root_kind', RootKind.SYNTHETIC_TEST) == RootKind.PRIVATE_LOCAL:
+            from .local_private import validate_root
+            if not getattr(self, '_creating_private', False): validate_root(self.root)
+        elif (self.root/'private-local.json').exists():
+            raise SafeError('ROOT_KIND_MISMATCH')
         c = sqlite3.connect(self.db, timeout=5, isolation_level=None)
         c.row_factory = sqlite3.Row
+        if getattr(self, 'root_kind', RootKind.SYNTHETIC_TEST) == RootKind.SYNTHETIC_TEST and c.execute("SELECT 1 FROM sqlite_master WHERE name='private_root_identity'").fetchone():
+            c.close()
+            raise SafeError('ROOT_KIND_MISMATCH')
         c.execute('PRAGMA foreign_keys=ON')
         c.execute('PRAGMA journal_mode=WAL')
         c.execute('PRAGMA synchronous=FULL')
@@ -333,6 +362,12 @@ class Store:
             return self._backup(target, release_context=release_context)
 
     def _backup(self, target, *, release_context=None):
+        private = getattr(self, 'root_kind', RootKind.SYNTHETIC_TEST) == RootKind.PRIVATE_LOCAL
+        root_identity = None
+        if private:
+            from .local_private import backup_gate
+            if release_context is None: raise SafeError('PRIVATE_RELEASE_BACKUP_REQUIRED')
+            root_identity = backup_gate(self.root, target)
         p = empty_target(target)
         created=now();release_info=None
         if release_context is not None:
@@ -366,7 +401,7 @@ class Store:
                     if 'release_backup_provenance' in tables:dest.execute('DROP TABLE release_backup_provenance')
                     if release_context is not None:
                         from .release_metadata import provenance
-                        release_info=provenance(release_context['producer'],release_context['source'],version,created)
+                        release_info=provenance(release_context['producer'],release_context['source'],version,created,private_identity=root_identity)
                         dest.execute('CREATE TABLE release_backup_provenance(payload TEXT NOT NULL)')
                         dest.execute('INSERT INTO release_backup_provenance VALUES(?)',(encode(release_info),))
                     dest.commit();dest.execute('PRAGMA journal_mode=DELETE')
@@ -403,7 +438,10 @@ class Store:
                         'created_at_utc': created, 'attachments': attachments,
                         'files': {'snapshot.sqlite3': digest((temp / 'snapshot.sqlite3').read_bytes())}}
             if release_info is not None:
-                manifest.update(backup_format=3,app_version=release_info['producing_manifest']['release_id'],release_provenance=release_info)
+                manifest.update(backup_format=4 if private else 3,app_version=release_info['producing_manifest']['release_id'],release_provenance=release_info)
+                if private:
+                    from .local_private import POLICY
+                    manifest.update(root_kind='PRIVATE_LOCAL',security_policy=POLICY)
             (temp / 'manifest.json').write_text(encode(manifest));private_files(temp)
             from .voice import fsync_dir
             for file in (temp/'snapshot.sqlite3',temp/'manifest.json'):
@@ -417,13 +455,22 @@ class Store:
         return manifest
 
     @classmethod
-    def restore(cls, backup, target):
+    def restore(cls, backup, target, *, root_kind=RootKind.SYNTHETIC_TEST, private_creation=None):
         b, p = safe_path(backup), empty_target(target)
+        private = RootKind(root_kind) == RootKind.PRIVATE_LOCAL
         if '.partial-' in b.name or not b.is_dir():raise SafeError('INVALID_BACKUP')
         try:
             m=json.loads((b/'manifest.json').read_text())
-            if m['backup_format'] not in {1,2,3} or m['schema_version'] not in {2,3,4,5,6,7,8,9,10,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
-            if m['backup_format']!=3 and 'release_provenance' in m:raise SafeError('BACKUP_RELEASE_PROVENANCE')
+            if private != (m.get('backup_format')==4):raise SafeError('ROOT_KIND_MISMATCH')
+            if private:
+                from .local_private import RootReceipt, owner_only, require_volume
+                if private_creation is None:raise SafeError('EXPLICIT_PRIVATE_INITIALIZATION_REQUIRED')
+                private_creation=RootReceipt.model_validate(private_creation).model_dump()
+                owner_only(b,tree=True);require_volume(b)
+                owner_only(p if p.exists() else p.parent);require_volume(p)
+                owner_only(private_creation['backup_directory']);require_volume(private_creation['backup_directory'])
+            if m['backup_format'] not in {1,2,3,4} or m['schema_version'] not in {2,3,4,5,6,7,8,9,10,SCHEMA} or set(m['files'])!={'snapshot.sqlite3'}:raise SafeError('UNSUPPORTED_BACKUP')
+            if m['backup_format'] not in {3,4} and 'release_provenance' in m:raise SafeError('BACKUP_RELEASE_PROVENANCE')
             attachments=m['attachments']
             if not isinstance(attachments,list) or m['backup_format']==1 and attachments:raise SafeError('UNSUPPORTED_BACKUP')
             expected={'manifest.json','snapshot.sqlite3'}|({'audio'} if attachments else set())
@@ -432,7 +479,7 @@ class Store:
             with sqlite3.connect(f'file:{b / "snapshot.sqlite3"}?mode=ro&immutable=1',uri=True) as source:
                 source.row_factory=sqlite3.Row;cls.check(source)
                 if source.execute('SELECT schema_version FROM vault_meta').fetchone()[0]!=m['schema_version']:raise SafeError('UNSUPPORTED_SCHEMA')
-                if m['backup_format']==3:
+                if m['backup_format'] in {3,4}:
                     from .release_metadata import check_backup_provenance
                     check_backup_provenance(m,source)
                 elif source.execute("SELECT 1 FROM sqlite_master WHERE name='release_backup_provenance'").fetchone():raise SafeError('BACKUP_RELEASE_PROVENANCE')
@@ -467,9 +514,12 @@ class Store:
             import shutil
             shutil.copyfile(b/'snapshot.sqlite3',temp/'journal.sqlite3')
             if attachments:shutil.copytree(b/'audio',temp/'audio')
-            (temp/'synthetic.json').write_text(encode(MARKER))
+            marker_name = 'private-local.json' if private else 'synthetic.json'
+            (temp/marker_name).write_text(encode(private_creation if private else MARKER))
             with sqlite3.connect(temp/'journal.sqlite3') as c:
-                if m['backup_format']==3:c.execute('DROP TABLE release_backup_provenance')
+                if m['backup_format'] in {3,4}:c.execute('DROP TABLE release_backup_provenance')
+                if private:c.execute('UPDATE private_root_identity SET payload=?',(encode(private_creation),))
+                elif c.execute("SELECT 1 FROM sqlite_master WHERE name='private_root_identity'").fetchone():raise SafeError('ROOT_KIND_MISMATCH')
                 c.execute("UPDATE vault_meta SET restore_epoch=restore_epoch+1,reconciliation='RESTORED_REQUIRES_RECONCILIATION'")
             with sqlite3.connect(temp/'journal.sqlite3') as c:
                 if m['schema_version']>=5:c.execute('UPDATE feedback_drafts SET approval=NULL')
@@ -486,7 +536,7 @@ class Store:
             if attachments:
                 for f in (temp/'audio').iterdir():os.chmod(f,0o600)
             from .voice import fsync_dir
-            for f in (temp/'journal.sqlite3',temp/'synthetic.json'):
+            for f in (temp/'journal.sqlite3',temp/marker_name):
                 with f.open('rb') as h:os.fsync(h.fileno())
             fsync_dir(temp)
             if p.exists():p.rmdir()
@@ -494,4 +544,4 @@ class Store:
         except BaseException:
             import shutil
             shutil.rmtree(temp);raise
-        return cls(p)
+        return cls(p, root_kind=root_kind)

@@ -86,3 +86,21 @@ Private note → локальний очищений draft → користув�
 
 Privacy gate включає аналіз всіх Git objects, staged diff, CI artifacts, screenshots,
 source maps і журналів; `.gitignore` — запобіжник, не гарантія.
+
+## M8C bounded PRIVATE_LOCAL core policy
+
+[ADR-013](adr/ADR-013-M8C-PRIVATE-LOCAL-CORE.md) implements the separate Mac-only mode; earlier synthetic-only
+security gates remain historical. Native read-only target-volume verification requires APFS FileVault, Encryption
+and EncryptionThisVolumeProper all true. Hardware encryption/global FileVault status alone is insufficient.
+Directories0700/files0600/current-owner/no extended ACL, safe separate app/vault/backup outside Git/cloud, localhost,
+auth/auto-lock/CSRF/Host/Origin/CSP/build match/deny-egress. Invalid/unverified security blocks readiness/init/start/
+backup/restore, never changes OS settings. Same owner editing DB/code or an unlocked/compromised OS outside scope.
+
+SQLite/database and backup application encryption **NOT_IMPLEMENTED**. Private archives rely on verified protected
+volume, not independent archive keys. Copying to unencrypted storage removes that protection. Backup target explicit/
+local/owner-only/reverified; no automatic uploads/retention deletion. Third-party sync agents/OS backups are not
+controlled by app; owner explicitly acknowledges local folders/no cloud routing. Local export retains exact preview/
+selection/session safeguards and becomes an owner-controlled private plaintext file; destination outside app needs
+owner protection. No provider/env/Health/voice/phone/AI/clinical enablement in this profile. Root receipts remain local,
+contain no personal identity; public evidence excludes paths/root IDs/real consent/contents/native disk IDs/unlock.
+Exact operator activation after independent ACCEPT: [PILOT_HANDOFF](PILOT_HANDOFF.md). M8C uses synthetic content only.
