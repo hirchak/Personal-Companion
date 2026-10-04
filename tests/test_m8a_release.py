@@ -282,3 +282,34 @@ def test_stable_address_contract_on_two_turns_and_restart(isolated):
     assert len(c.conversations.get(id)['messages'])==3
     restarted=ConversationController(Conversations(Store(store.root),True))
     assert restarted.provider is None and restarted.skills.read('core_reflection')['version']=='2.1.0'
+
+
+def test_packaged_legacy_messages_never_enable_mock_response(isolated):
+    from fastapi.testclient import TestClient
+    from apps.core.api import create_app
+    app=create_app(isolated/'packaged OFF',release_identity='a'*40,synthetic_conversations=True,m7c_synthetic=True)
+    with TestClient(app,base_url='http://127.0.0.1:8765',headers={'Origin':'http://127.0.0.1:8765','X-PC-Build':'a'*40}) as client:
+        unlock=client.post('/api/v1/auth/unlock',json={'code':app.state.auth.code});client.headers['X-CSRF-Token']=unlock.json()['csrf_token']
+        page=client.post('/api/v1/conversations',json={'operation_id':str(uuid4())}).json()
+        assert page['responder']=='OFF'
+        sent=client.post('/api/v1/conversations/'+page['conversation']['id']+'/messages',json={'operation_id':str(uuid4()),'base_revision':1,'text':'ORIGINAL SYNTHETIC no hidden mock response'}).json()
+        assert sent['responder']=='OFF' and len(sent['messages'])==1 and sent['messages'][0]['role']=='USER'
+        assert client.get('/api/v1/conversations/status').json()['responder']=='OFF'
+    with pytest.raises(SafeError,match='RELEASE_CAPABILITY_OFF'):
+        create_app(isolated/'denied provider',release_identity='a'*40,conversation_provider=FixtureProvider(),m7c_synthetic=True,synthetic_conversations=True)
+
+
+def test_application_replacement_then_failed_migration_old_fixture_rollback(package,isolated):
+    p,h=package;app,data=paths(isolated);r.install(p,h,app,data);ids=domains(data)
+    next_package=isolated/'ORIGINAL SYNTHETIC second package';shutil.copytree(p,next_package)
+    marker=next_package/'SYNTHETIC_VARIANT.txt';marker.write_text('ORIGINAL_SYNTHETIC_INSTALL_SIMULATION_NOT_A_PUBLISHED_COMMIT')
+    m=r.read_json(next_package/'release-manifest.json');m['git_commit']='b'*40;m['release_id']='M8A-'+'b'*40;m['files']=r.file_hashes(next_package);m['manifest_hash']=r.identity(m)
+    (next_package/'release-manifest.json').write_text(encode(m))
+    old_pointer=r.read_json(app/'active.json')
+    with sqlite3.connect(data/'journal.sqlite3') as c:c.execute('UPDATE vault_meta SET schema_version=10')
+    with pytest.raises(sqlite3.OperationalError):r.upgrade(next_package,m['manifest_hash'],app,data,isolated/'replacement backup',fail_migration=True)
+    assert r.read_json(app/'active.json')==old_pointer and len(list((app/'releases').iterdir()))==2
+    assert r.inspect_data(data)==10
+    r.restore(p,h,isolated/'replacement backup',isolated/'old application root',isolated/'rollback domain root')
+    assert_domains(isolated/'rollback domain root',ids)
+    assert r.selected(isolated/'old application root',isolated/'rollback domain root')[1]['manifest_hash']==h

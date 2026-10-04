@@ -37,17 +37,19 @@ def check_conversations(c):
     except (ValueError,TypeError,ValidationError):raise SafeError('CONVERSATION_INTEGRITY') from None
 
 class Conversations:
-    def __init__(self,store,synthetic_demo=False):
+    def __init__(self,store,synthetic_demo=False,mock_responses=None):
         if type(synthetic_demo) is not bool:raise SafeError('CONVERSATION_CONFIG_INVALID')
         self.store,self.synthetic_demo=store,synthetic_demo
-        self.responder:ConversationResponder= SyntheticResponder() if synthetic_demo else DisabledResponder()
+        self.mock_responses=synthetic_demo if mock_responses is None else mock_responses
+        if type(self.mock_responses) is not bool or self.mock_responses and not synthetic_demo:raise SafeError('CONVERSATION_CONFIG_INVALID')
+        self.responder:ConversationResponder= SyntheticResponder() if self.mock_responses else DisabledResponder()
 
     def mode(self):
         # Data marker is independently required before any synthetic adapter call.
         if self.synthetic_demo:
             import json
             if json.loads((self.store.root/'synthetic.json').read_text())!=MARKER:raise SafeError('SYNTHETIC_ROOT_REQUIRED')
-        return {'synthetic_demo':self.synthetic_demo,'responder':'MOCK_SYNTHETIC' if self.synthetic_demo else 'OFF',
+        return {'synthetic_demo':self.synthetic_demo,'responder':'MOCK_SYNTHETIC' if self.mock_responses else 'OFF',
                 'live_provider_calls':False,'clinical_active':0,'actual_asr':'NOT_RUN','privacy':'LOCAL_ONLY'}
 
     def row(self,c,id):
@@ -122,7 +124,7 @@ class Conversations:
             if seq>=2000:raise SafeError('CONVERSATION_MESSAGE_LIMIT',409)
             user=Message(schema_version=1,id=uid,conversation_id=x.id,role='USER',raw_text=body.text,created_utc=time,revision=1,provenance='USER_AUTHORED',source_reference=body.source_reference,source_message_id=None,synthetic=self.synthetic_demo,privacy_class='PRIVATE_PERSONAL')
             c.execute('INSERT INTO conversation_messages VALUES(?,?,?,?)',(str(uid),id,seq+1,encode(user.model_dump(mode='json'))))
-            if mode['synthetic_demo'] and respond:
+            if self.mock_responses and respond:
                 # The controller chooses the sole allowed adapter; its output is data, not authority.
                 candidate=CandidateResponse.model_validate(self.responder.candidate())
                 response=Message(schema_version=1,id=uuid5(NAMESPACE,op+':assistant'),conversation_id=x.id,role=candidate.role,raw_text=candidate.text,created_utc=time,revision=1,provenance=candidate.provenance,source_reference=None,source_message_id=uid,synthetic=True,privacy_class='PRIVATE_PERSONAL')

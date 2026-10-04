@@ -70,6 +70,7 @@ class Auth:
 
 
 def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None,conversation_timeout=60,release_identity=None):
+    if release_identity and (conversation_provider is not None or local_asr is not None or m2 or synthetic_practices):raise SafeError('RELEASE_CAPABILITY_OFF',403)
     if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
     if (conversation_provider is not None or local_asr is not None) and not m7c_synthetic:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED',403)
     store = Store(root)
@@ -88,7 +89,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     app.state.health = health
     practices = PracticeEngine(store, synthetic_demo=synthetic_practices)
     app.state.practices = practices
-    conversations = Conversations(store, synthetic_demo=synthetic_conversations)
+    conversations = Conversations(store, synthetic_demo=synthetic_conversations,mock_responses=False if release_identity else None)
     app.state.conversations = conversations
     reflection = Reflection(conversations)
     app.state.reflection = reflection

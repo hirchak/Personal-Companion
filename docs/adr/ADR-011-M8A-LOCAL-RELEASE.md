@@ -37,3 +37,8 @@ Uninstall validates managed synthetic installation and removes app only. A separ
 requires exact DELETE_SYNTHETIC_DATA:<absolute-root>; backups/exports may survive. No secure-erasure claim.
 ASR is explicitly OPTIONAL_UNAVAILABLE in package; existing checkout ASR remains a separate verified synthetic gate.
 No real private data/clinical/pilot/provider release permission is created by this architecture.
+
+Synthetic data labeling and legacy mock responses are separate switches. Packaged /messages cannot synthesize
+an assistant response while controller is OFF; release factory rejects provider/ASR/phone/practice activation inputs.
+Two distinct labeled synthetic manifest fixtures verify app staging/replacement and failed-migration rollback;
+they are installation simulations, not newly published historical release builds.
