@@ -65,9 +65,13 @@ class DeepSessions:
         if s['phase'] in {'CLOSED','PAUSED'}:raise SafeError('SESSION_NOT_OPEN',409)
         old=self.effective(c,self.current(c,s['goal']));items=old['items'] if old else []
         normalize=lambda t:' '.join(t.casefold().split())
+        # Explicit past rejection/irrelevance remains a tombstone even after bounded compaction.
+        retired={normalize(r[0]) for r in c.execute('''SELECT DISTINCT json_extract(i.value,'$.text')
+            FROM working_maps m,json_each(json_extract(m.payload,'$.items')) i
+            WHERE m.goal_id=? AND m.goal_revision=? AND json_extract(i.value,'$.state') IN ('REJECTED','IRRELEVANT')''',(s['goal']['id'],s['goal']['revision']))}
         for item in candidate.items:
             # Preserve rejected/irrelevant/confirmed entries rather than replacing them with model output.
-            if any(normalize(i['text'])==normalize(item.text) for i in items):continue
+            if normalize(item.text) in retired or any(normalize(i['text'])==normalize(item.text) and i['state']!='STALE' for i in items):continue
             refs=[]
             for alias in item.source_refs:
                 if alias not in aliases:raise SafeError('MODEL_SOURCE_OUT_OF_SCOPE')
@@ -77,6 +81,10 @@ class DeepSessions:
                 if item.provenance=='USER_STATED':
                     source=json.loads(row[0])
                     if source['role']!='USER' or source['provenance']!='USER_AUTHORED' or item.text not in source['raw_text']:raise SafeError('USER_STATEMENT_QUOTE_REQUIRED')
+            if len(items)>=40:
+                # Never discard confirmed or rejected understanding. Explicitly retired and
+                # source-invalid model items remain in immutable historical versions.
+                items=[i for i in items if i['state']!='IRRELEVANT' and not (i['state']=='STALE' and i['provenance'] not in {'USER_STATED','USER_CONFIRMED'})]
             if len(items)>=40:raise SafeError('MAP_CAPACITY_REVIEW_REQUIRED',409)
             items.append(MapItem(id=uuid4(),kind=item.kind,text=item.text,provenance=item.provenance,sources=refs).model_dump(mode='json'))
         return self.write(c,s,items,metadata)
@@ -158,6 +166,9 @@ class DeepSessions:
                 if not sr or json.loads(sr[0])['revision']!=ref['revision'] or not receipt['window_start']<=json.loads(sr[0])['created_utc']<=receipt['window_end']:valid=False;break
             if valid:closures.append({'conversation_id':d['conversation_id'],'closure':d['candidate']['closure'],'sources':refs})
             if len(closures)>=2:break
-        result={'session':s,'map_version':m['version'] if m else 0,'items':bounded[-20:],'prior_closures':closures}
+        important=[i for i in bounded if i['state']=='REJECTED' or i['provenance']=='USER_CONFIRMED']
+        recent=[i for i in bounded if i not in important]
+        selected=important[:20]+(recent[-(20-len(important)):] if len(important)<20 else [])
+        result={'session':s,'map_version':m['version'] if m else 0,'items':selected,'prior_closures':closures}
         if len(encode(result).encode())>16000:raise SafeError('MAP_CONTEXT_LIMIT',413)
         return result

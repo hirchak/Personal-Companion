@@ -161,3 +161,19 @@ def test_effort_profile_drift_denied_before_provider(deep):
  c.run(d['id'])
  with c.store.connect() as db:assert c.row(db,d['id'])['error']=='PROVIDER_BINDING_CHANGED'
  assert c.provider.calls==0
+
+
+def test_bounded_map_recovers_after_explicit_irrelevance_keeps_history_rejection(deep):
+ from apps.core.deep_session_contracts import WorkingMapCandidate
+ c,g,p=deep;turn(c,p);m=c.deep.read(p['conversation']['id'])['map'];ref=m['items'][0]['sources'][0]
+ with c.store.transaction() as db:
+  s=c.deep.session(db,p['conversation']['id']);items=[dict(m['items'][0],state='REJECTED')]+[dict(m['items'][1],id=str(uuid4()),text='ORIGINAL SYNTHETIC derived '+str(i)) for i in range(39)]
+  m=c.deep.write(db,s,items,{'provider_model':'OFFLINE_FIXTURE','provider_route':'OFFLINE_FIXTURE','selected_skills':[],'request_hash':'a'*64})
+ retired=items[1];m=c.deep.action(p['conversation']['id'],MapAction(operation_id=uuid4(),base_version=m['version'],item_id=retired['id'],action='irrelevant',user_confirmed=True))
+ candidate=WorkingMapCandidate(items=[{'kind':'QUESTION','text':'ORIGINAL SYNTHETIC genuinely new question','provenance':'MODEL_DERIVED_SUMMARY','source_refs':['s0']},{'kind':'QUESTION','text':retired['text'],'provenance':'MODEL_DERIVED_SUMMARY','source_refs':['s0']}])
+ with c.store.transaction() as db:
+  m=c.deep.ingest(db,p['conversation']['id'],candidate,{'s0':ref},{'provider_model':'OFFLINE_FIXTURE','provider_route':'OFFLINE_FIXTURE','selected_skills':[],'request_hash':'a'*64})
+ assert len(m['items'])==40 and m['items'][0]['state']=='REJECTED' and not any(i['text']==retired['text'] for i in m['items'])
+ assert any(i['state']=='IRRELEVANT' for version in c.deep.read(p['conversation']['id'])['history'] for i in version['items'])
+ p=c.conversations.get(p['conversation']['id']);preview=c.preview_context(p['conversation']['id'],DeepContextPreview(operation_id=uuid4(),base_revision=p['conversation']['revision'],text='ORIGINAL SYNTHETIC draft',selection=ContextSelection()))
+ assert preview['snapshot']['items'][0]['state']=='REJECTED'
