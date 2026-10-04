@@ -1,0 +1,59 @@
+{
+  "implementation_sha": "d0b24846ced133864c45dc0b0eb71a1b01f0e947",
+  "scope": "PRIVATE_LOCAL_RUNTIME_WITH_ORIGINAL_SYNTHETIC_CONTENT",
+  "python": {
+    "command": ".venv/bin/python -m pytest -q",
+    "exit_code": 0,
+    "passed": 780
+  },
+  "web": {
+    "command": "npm --prefix apps/web test",
+    "exit_code": 0,
+    "passed": 50
+  },
+  "build": {
+    "command": ".venv/bin/python -m apps.core.release prepare --output generated/releases/M8D-<C>",
+    "exit_code": 0
+  },
+  "chromium": {
+    "command": ".venv/bin/python -m scripts.verify_m8d_browser --package generated/releases/M8D-<C>",
+    "exit_code": 0,
+    "native_local_asr": true,
+    "provider": "EXPLICIT_OFFLINE_FIXTURE",
+    "nonloopback_requests": 0,
+    "page_errors": 0
+  },
+  "actual_mac_lifecycle": {
+    "command": ".venv/bin/python -m scripts.verify_m8d --package generated/releases/M8D-<C> --previous-package generated/releases/M8C-a00a14277974b7f6c25846d0eb7a23879f86183a",
+    "exit_code": 0
+  },
+  "native_inference": {
+    "command": ".venv/bin/python -m scripts.evaluate_m8d_private --package generated/releases/M8D-<C>",
+    "exit_code": 0,
+    "attempts": 4,
+    "maximum": 4,
+    "completed": 4,
+    "failed": 0,
+    "cancelled": 0,
+    "retries": 0,
+    "sol_above_high": 0
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "node": "26.8.2",
+    "codex_cli": "0.159.0",
+    "dependencies": "EXISTING_ONLY_NO_INSTALLS"
+  },
+  "actual_owner_vault": "NOT_TOUCHED",
+  "actual_private_ai_activation": "NOT_STARTED",
+  "human_ua_quality": "OPEN_HUMAN_TEST",
+  "real_private_data_used": 0,
+  "real_human_voice_used": 0,
+  "new_assets_downloaded": 0,
+  "system_changes": 0,
+  "fallback": "NONE",
+  "payg": "NONE",
+  "new_auth_billing_account_route": "NONE"
+}

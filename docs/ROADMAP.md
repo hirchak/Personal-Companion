@@ -15,7 +15,7 @@ M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality e
 M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
-M8D: IN_PROGRESS — optional private AI/local voice; real owner vault NOT TOUCHED, actual AI activation NOT_STARTED.
+M8D: AWAITING_REVIEW — optional private AI/local voice; real owner vault NOT TOUCHED, actual AI activation NOT_STARTED.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -188,6 +188,8 @@ protected backup target ready, accepted core app running locally; ACTUAL_PRIVATE
 No samples/import/private-content reading; future developer content access remains NONE. Optional modules OFF.
 
 
-## M8D optional owner integration — IN_PROGRESS
+## M8D optional owner integration — AWAITING_REVIEW
 
-M8C external ACCEPT / real core activation remain durable. M8D adds owner-gated private conversation and pinned local voice using synthetic engineering roots; final cost binding FREE Luna/high, explicit Deep Luna/max or Sol6.1/high, four new native attempts total. No real-vault access or AI/voice activation before independent review. M7C-N02 bounded owner route pending exact-C native evidence; universal/zero-retention gate remains open. M7C-N03 OPEN_HUMAN_TEST, M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW, M6-N01 final0.6.1 hardware NOT_RUN, 27findingsOPEN/all5OFF/clinical0/phone separate.
+M8C external ACCEPT / real core activation remain durable. M8D adds owner-gated private conversation and pinned local voice using synthetic engineering roots; final cost binding FREE Luna/high, explicit Deep Luna/max or Sol6.1/high, four new native attempts total. No real-vault access or AI/voice activation before independent review. M7C-N02 ready for this owner bounded route only after independent M8D ACCEPT; universal/zero-retention gate remains open. M7C-N03 OPEN_HUMAN_TEST, M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW, M6-N01 final0.6.1 hardware NOT_RUN, 27findingsOPEN/all5OFF/clinical0/phone separate.
+
+M8D C d0b24846: exact-C Python780/web50/build/private Chromium+native whisper/Mac lifecycle/privacy PASS; native4/4 COMPLETED, no repeats. Owner real vault untouched, actual AI activation NOT_STARTED. Activation procedure READY; independent review required.

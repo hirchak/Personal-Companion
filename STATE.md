@@ -1,7 +1,7 @@
 ---
 state_schema_version: 1
 packet_version: 0.1.0
-updated_at: 2026-10-04
+updated_at: 2026-10-05
 project_slug: personal-companion
 repo_url: https://github.com/hirchak/Personal-Companion.git
 repo_visibility: public
@@ -10,15 +10,15 @@ actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: cee41e3a7638cf7efba511e93157ff5c3eb47ce7
-implementation_sha: null
+implementation_sha: d0b24846ced133864c45dc0b0eb71a1b01f0e947
 report_path: reports/M8D_PRIVATE_AI_VOICE_PILOT_REPORT.md
 last_reviewed_sha: a00a14277974b7f6c25846d0eb7a23879f86183a
 current_milestone: M8D
 current_goal: M8D_PRIVATE_AI_VOICE_PILOT
 current_goal_path: prompts/M8D_PRIVATE_AI_VOICE_PILOT.md
 current_contract_path: docs/M8D_CONTRACT.md
-implementation_status: IN_PROGRESS
-review_status: NOT_STARTED
+implementation_status: AWAITING_REVIEW
+review_status: AWAITING_REVIEW
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -30,15 +30,17 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8D — IN_PROGRESS
+# M8D — AWAITING_REVIEW
 
-Actual clean main/fresh origin cee41e3a7638cf7efba511e93157ff5c3eb47ce7 verified. M8C external ACCEPT + owner
-private core activation durable; real owner vault MUST NOT be inspected/read/scanned/queried/copied/tested.
-M8D development/evidence ORIGINAL SYNTHETIC only/disposable PRIVATE_LOCAL roots; max4 new live attempts.
-Implement distinct owner-gated private AI/local voice profile, exact bounded approved context, process isolation,
-existing pinned local whisper assets, no fallback/PAYG/new auth/OS installs. User confirms training/environmentsOFF;
-runtime local acknowledgements still required, actual private AI activation NOT_STARTED until independent ACCEPT.
-FREE Luna/high + explicit DEEP Luna/max or Sol6.1/high installed catalog supported; native completion entitlement not yet newly tested.
-Clinical0/all5/Health/phone/embeddings/sync/telemetry/publication/fallbackOFF;27findingsOPEN. M7C-N03 humanUA OPEN.
-Owner's existing core app/real vault remains unchanged. No private paths/unlock/receipts/contents in Git/evidence.
-Next: implementation/synthetic checks, final C, bounded <=4 live synthetic attempts, R/privacy/normal main FF/review.
+Base cee41e3a7638cf7efba511e93157ff5c3eb47ce7; C d0b24846ced133864c45dc0b0eb71a1b01f0e947; evidence-only R contains final report/evidence; exact R/origin/CI externally verified.
+M8C ACCEPT/owner core activation durable; actual real vault/operator terminal NOT TOUCHED. Actual private AI
+activation NOT_STARTED. PRIVATE_AI/LOCAL_VOICE engineering READY for this owner only AFTER independent ACCEPT.
+Final owner profiles: FREE Luna/high, explicit DEEP Luna/max or Sol6.1/high; ceilings LunaMAX/SolHIGH.
+Native4/max4 COMPLETED, failures/retries0; no more attempts. Python780/web50/build/Chromium/nativeASR/Mac
+private lifecycle/privacy PASS; exact release/manifest/runtime lock and commands in final report.
+Distinct optional profile/session acknowledgements/defaultOFF/exact context/journal selection/OS filesystem-
+network boundary/protected temporary storage/backup-restart safeguards implemented. No actual owner data/voice,
+provider fallback/PAYG/new auth/billing/account/system/phone/Health action. Clinical0/all5OFF/27findingsOPEN.
+M7C-N02 ready only for this bounded owner pilot after review, universal/zero-retention gate OPEN; M7C-N03
+OPEN_HUMAN_TEST, M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW, M6-N01 final0.6.1 hardware NOT_RUN; phone separate.
+Post-ACCEPT owner procedure READY, not executed. Next: independent architect review; no automatic next goal.

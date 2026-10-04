@@ -1,0 +1,356 @@
+{
+  "scope": "PRIVATE_LOCAL_RUNTIME_WITH_ORIGINAL_SYNTHETIC_CONTENT",
+  "offline_fixture": false,
+  "implementation_sha": "d0b24846ced133864c45dc0b0eb71a1b01f0e947",
+  "release_id": "M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947",
+  "manifest_hash": "4dcef73b066f3adf7c969baedb9d76b39d7885e58967c44c90e8cd986a57a866",
+  "budget": {
+    "goal": "M8D_OWNER_PRIVATE_PILOT_SYNTHETIC_2026_10_04",
+    "maximum": 4,
+    "total_requests": 4,
+    "remaining": 0,
+    "routes": [
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6-luna",
+        "outcome": "COMPLETED",
+        "requests": 3
+      },
+      {
+        "route": "CODEX_SUBSCRIPTION",
+        "model": "gpt-6.1-sol",
+        "outcome": "COMPLETED",
+        "requests": 1
+      }
+    ],
+    "raw_payload_logged": false
+  },
+  "final_owner_profiles": {
+    "FREE": "gpt-6-luna/high",
+    "DEEP_ECONOMICAL": "gpt-6-luna/max",
+    "DEEP_QUALITY": "gpt-6.1-sol/high"
+  },
+  "cases": [
+    {
+      "case": "FREE_LUNA_HIGH_CONTINUITY",
+      "state": "COMPLETED",
+      "error": null,
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "profile": "gpt-6-luna:high",
+      "request_hash": "ae3f5676bc570a930c59bd305361b0c6c9402652d0469a7a944066bbc6cb420b",
+      "context_hash": "051994fc22971433b5c09c8d39f00f35e3c2589be4fa8dc8e975065fae89c797",
+      "context_parts": [
+        "CURRENT_TURN",
+        "CURRENT_TURN"
+      ],
+      "journal_selection_count": 0,
+      "raw_audio_in_payload": false,
+      "synthetic_content_only": true,
+      "production_record_synthetic": false,
+      "elapsed_seconds": 9.105,
+      "new_attempts": 1,
+      "candidate": {
+        "assistant_text": "Ви можете зробити один п’ятихвилинний крок: намалювати на аркуші один грубий елемент паперового саду й зупинитися, не виправляючи його. Нехай це буде лише початок чернетки, не готовий результат.",
+        "closure": null,
+        "goal_suggestion": null,
+        "source_refs": [
+          "s0",
+          "s1"
+        ],
+        "topics": [
+          "decision"
+        ],
+        "working_map": null
+      },
+      "provider_result": {
+        "attempt_id": "a25e510d-dc1b-47d1-ad0d-e03c8a638050",
+        "auth_type": "EXISTING_CHATGPT",
+        "effort": "high",
+        "elapsed_ms": 8670.908,
+        "frame_hash": "a8783aca11fea11b8c443f2c482d4db58d08556fcccda02e2be0f38d6f388244",
+        "model": "gpt-6-luna",
+        "profile": "gpt-6-luna:high",
+        "route": "CODEX_SUBSCRIPTION",
+        "streaming_actual": true,
+        "usage": {
+          "cachedInputTokens": 0,
+          "inputTokens": 6761,
+          "outputTokens": 360,
+          "totalTokens": 7121
+        }
+      }
+    },
+    {
+      "case": "DEEP_LUNA_MAX_GOAL_FOCUS_CONTINUITY",
+      "state": "COMPLETED",
+      "error": null,
+      "model": "gpt-6-luna",
+      "effort": "max",
+      "profile": "gpt-6-luna:max",
+      "request_hash": "da60e5d8baa9ad95b0f0d835db00b650952426a723840d44c836665ba31b81e9",
+      "context_hash": "643e2c744b394be5da2f65d8feac06265b3f57e432733cbfca048080b7d0c08d",
+      "context_parts": [
+        "GOAL_REVISION",
+        "CURRENT_TURN",
+        "CURRENT_TURN"
+      ],
+      "journal_selection_count": 0,
+      "raw_audio_in_payload": false,
+      "synthetic_content_only": true,
+      "production_record_synthetic": false,
+      "elapsed_seconds": 61.91,
+      "new_attempts": 1,
+      "candidate": {
+        "assistant_text": "Повернімося до погодженого фокусу: обрати посильний перший крок сьогодні й почати маленьку чернетку паперового саду без вимоги ідеального результату. Ви вже вирішили, що малого кроку достатньо; те, що сьогодні відкладаєте чернетку, саме по собі не встановлює причину. Можливий крок — відкрити аркуш і додати одну позначку: контур клумби, одну рослину або її назву. Що з цього вам найпростіше зробити сьогодні?",
+        "closure": null,
+        "goal_suggestion": null,
+        "source_refs": [
+          "s0",
+          "s1"
+        ],
+        "topics": [
+          "decision",
+          "self_reflection"
+        ],
+        "working_map": {
+          "items": [
+            {
+              "kind": "OBSERVATION",
+              "provenance": "USER_STATED",
+              "source_refs": [
+                "s1"
+              ],
+              "text": "Я вже вирішив, що малий крок достатній."
+            },
+            {
+              "kind": "ACTION",
+              "provenance": "USER_STATED",
+              "source_refs": [
+                "s1"
+              ],
+              "text": "Сьогодні знову відкладаю чернетку паперового саду."
+            },
+            {
+              "kind": "TAKEAWAY",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s0",
+                "s1"
+              ],
+              "text": "Малий крок є достатнім орієнтиром для початку."
+            },
+            {
+              "kind": "OPTION",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s1"
+              ],
+              "text": "Відкрити аркуш і додати одну позначку — контур клумби, одну рослину або її назву."
+            }
+          ]
+        }
+      },
+      "provider_result": {
+        "attempt_id": "adf0d0b3-09d8-4ebe-88c6-84e1cc7c205e",
+        "auth_type": "EXISTING_CHATGPT",
+        "effort": "max",
+        "elapsed_ms": 61486.821,
+        "frame_hash": "a8783aca11fea11b8c443f2c482d4db58d08556fcccda02e2be0f38d6f388244",
+        "model": "gpt-6-luna",
+        "profile": "gpt-6-luna:max",
+        "route": "CODEX_SUBSCRIPTION",
+        "streaming_actual": true,
+        "usage": {
+          "cachedInputTokens": 0,
+          "inputTokens": 7554,
+          "outputTokens": 2544,
+          "totalTokens": 10098
+        }
+      }
+    },
+    {
+      "case": "DEEP_SOL_HIGH_GOAL_FOCUS_CONTINUITY",
+      "state": "COMPLETED",
+      "error": null,
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "profile": "gpt-6.1-sol:high",
+      "request_hash": "da60e5d8baa9ad95b0f0d835db00b650952426a723840d44c836665ba31b81e9",
+      "context_hash": "a9e1768e6975b7ba664ee03bc9ca45075dd49c4c12dd932611430f80fa3d82da",
+      "context_parts": [
+        "GOAL_REVISION",
+        "CURRENT_TURN",
+        "CURRENT_TURN"
+      ],
+      "journal_selection_count": 0,
+      "raw_audio_in_payload": false,
+      "synthetic_content_only": true,
+      "production_record_synthetic": false,
+      "elapsed_seconds": 29.98,
+      "new_attempts": 1,
+      "candidate": {
+        "assistant_text": "Ви вже вирішили, що малого кроку достатньо — повертатися до цього рішення не потрібно. Причину відкладання не припускатиму.\n\nПовернімося до погодженого фокусу: обрати посильний перший крок сьогодні. Можна лише покласти аркуш перед собою або намітити один елемент паперового саду — без вимоги продовжувати чи отримати ідеальний результат.\n\nЯкий крок вам зараз посильніший — один із цих чи ваш власний?",
+        "closure": null,
+        "goal_suggestion": null,
+        "source_refs": [
+          "s0",
+          "s1"
+        ],
+        "topics": [
+          "self_reflection",
+          "decision"
+        ],
+        "working_map": {
+          "items": [
+            {
+              "kind": "TAKEAWAY",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s0",
+                "s1"
+              ],
+              "text": "Невеликий крок допомагає почати; рішення, що такого кроку достатньо, вже прийняте."
+            },
+            {
+              "kind": "OBSERVATION",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s1"
+              ],
+              "text": "Сьогодні чернетка паперового саду знову відкладається; причина з наданого повідомлення не визначена."
+            },
+            {
+              "kind": "OPTION",
+              "provenance": "MODEL_DERIVED_SUMMARY",
+              "source_refs": [
+                "s1"
+              ],
+              "text": "Для повернення до погодженого фокусу запропоновано на вибір: покласти аркуш перед собою, намітити один елемент саду або обрати власний посильний крок."
+            }
+          ]
+        }
+      },
+      "provider_result": {
+        "attempt_id": "f0a56f5f-aad0-46c4-98af-a2587227dfa0",
+        "auth_type": "EXISTING_CHATGPT",
+        "effort": "high",
+        "elapsed_ms": 29575.067,
+        "frame_hash": "a8783aca11fea11b8c443f2c482d4db58d08556fcccda02e2be0f38d6f388244",
+        "model": "gpt-6.1-sol",
+        "profile": "gpt-6.1-sol:high",
+        "route": "CODEX_SUBSCRIPTION",
+        "streaming_actual": true,
+        "usage": {
+          "cachedInputTokens": 0,
+          "inputTokens": 7557,
+          "outputTokens": 856,
+          "totalTokens": 8413
+        }
+      }
+    },
+    {
+      "case": "CONFIRMED_LOCAL_ASR_EXPLICIT_JOURNAL_LUNA_HIGH",
+      "state": "COMPLETED",
+      "error": null,
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "profile": "gpt-6-luna:high",
+      "request_hash": "aa7105726d753e26755bf814f1f058588e8cc34add4ca82e9d7ca3d7a934365d",
+      "context_hash": "58c32747679d5da0eb5d30b46872e8f2339e9292bb384527c71f714eeeba7944",
+      "context_parts": [
+        "JOURNAL_SELECTED",
+        "CURRENT_TURN"
+      ],
+      "journal_selection_count": 1,
+      "raw_audio_in_payload": false,
+      "synthetic_content_only": true,
+      "production_record_synthetic": false,
+      "elapsed_seconds": 9.664,
+      "new_attempts": 1,
+      "candidate": {
+        "assistant_text": "У вибраному записі ви домовилися дозволити собі коротку чернетку. Для паперового саду малим кроком може бути написати одну фразу або зробити швидкий начерк — що вам легше почати?",
+        "closure": null,
+        "goal_suggestion": null,
+        "source_refs": [
+          "s0",
+          "s1"
+        ],
+        "topics": [
+          "decision"
+        ],
+        "working_map": null
+      },
+      "provider_result": {
+        "attempt_id": "76cd6045-37f3-4f5e-83eb-52b5f6154ffb",
+        "auth_type": "EXISTING_CHATGPT",
+        "effort": "high",
+        "elapsed_ms": 8949.137,
+        "frame_hash": "a8783aca11fea11b8c443f2c482d4db58d08556fcccda02e2be0f38d6f388244",
+        "model": "gpt-6-luna",
+        "profile": "gpt-6-luna:high",
+        "route": "CODEX_SUBSCRIPTION",
+        "streaming_actual": true,
+        "usage": {
+          "cachedInputTokens": 0,
+          "inputTokens": 6776,
+          "outputTokens": 296,
+          "totalTokens": 7072
+        }
+      }
+    }
+  ],
+  "deep_comparison": [
+    {
+      "case": "DEEP_LUNA_MAX_GOAL_FOCUS_CONTINUITY",
+      "same_goal_text_focus_draft_seeded_takeaway": true,
+      "seed": "ORIGINAL_SYNTHETIC_USER_CONFIRMED_FIXTURE_NO_EXTRA_LLM",
+      "working_map_present": true,
+      "candidate_is_human_review_material": true
+    },
+    {
+      "case": "DEEP_SOL_HIGH_GOAL_FOCUS_CONTINUITY",
+      "same_goal_text_focus_draft_seeded_takeaway": true,
+      "seed": "ORIGINAL_SYNTHETIC_USER_CONFIRMED_FIXTURE_NO_EXTRA_LLM",
+      "working_map_present": true,
+      "candidate_is_human_review_material": true
+    }
+  ],
+  "local_asr": {
+    "status": "PASS",
+    "scope": "ORIGINAL_SYNTHETIC_LESYA_TTS_PRIVATE_LOCAL",
+    "engine": {
+      "engine": "whisper.cpp",
+      "version": "1.9.4-dev",
+      "model": "small-multilingual",
+      "model_hash": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
+      "binary_hash": "54d1e7bf2e36ec29bdf70b87a45e26158396d5004909d16d5ad76e51920b566c",
+      "languages": [
+        "uk"
+      ],
+      "available": true,
+      "status": "LOCAL_PRIVATE_OWNER_REVIEW_REQUIRED",
+      "supported_input": [
+        "audio/wav"
+      ],
+      "cloud_asr": false,
+      "scope": "M8D_OWNER_LOCAL_AUDIO_ONLY_NO_HUMAN_QUALITY_CERTIFICATION",
+      "speech_guard": "PCM_SIGNAL_V1"
+    },
+    "native_executions": 1,
+    "candidate_chars": 80,
+    "reviewed_edited": true,
+    "automatic_send": false,
+    "raw_audio_external": false,
+    "human_quality": "NOT_RUN"
+  },
+  "real_private_data_used": 0,
+  "real_human_audio_used": 0,
+  "sol_above_high_attempts": 0,
+  "automatic_fallback": "NONE",
+  "payg": "NONE",
+  "new_billing_auth_account_route": "NONE",
+  "actual_private_ai_activation": "NOT_STARTED",
+  "human_ua_quality": "OPEN_HUMAN_TEST",
+  "llm_judge": "NOT_USED"
+}

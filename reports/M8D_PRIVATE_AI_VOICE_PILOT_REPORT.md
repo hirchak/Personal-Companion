@@ -1,8 +1,8 @@
-# M8D — implementation prepared; exact-C evidence pending
+# M8D — AWAITING_REVIEW
 
-Base: `cee41e3a7638cf7efba511e93157ff5c3eb47ce7`. Implementation C is the commit carrying this prepared report;
-exact implementation/evidence publication fields will be supplied in the evidence-only successor R without self-hash.
-Actual origin/main equals base on fresh verification. External M8C ACCEPT/owner core activation are durable.
+Base: `cee41e3a7638cf7efba511e93157ff5c3eb47ce7`. Implementation C: `d0b24846ced133864c45dc0b0eb71a1b01f0e947`. Evidence R is the evidence-only successor containing this final report;
+its exact SHA is externally verified/returned after commit, without recursive self-hash.
+Actual origin/main matched base immediately before C; normal FF publication is recorded below. External M8C ACCEPT/owner core activation are durable.
 Real owner vault/operator terminal NOT TOUCHED; actual private AI/voice activation NOT_STARTED.
 
 Implemented a distinct manifest-bound MAC_PRIVATE_AI_VOICE_PILOT_V1 profile, PRIVATE_LOCAL-only typed requests,
@@ -14,7 +14,7 @@ retrieval, memory promotion or automatic journal writes. Personal records remain
 Final owner binding supersedes all earlier instructions: FREE Luna/high; explicit DEEP economical Luna/max or
 quality Sol6.1/high. Luna ceilingMAX, Sol6.1 ceilingHIGH. Four NEW native attempts total across checkpoints;
 failures/cancel/retries count, successful requests are not repeated. Native attempts consumed before final binding0,
-Sol aboveHigh/max-ultra attempts before binding0. Current engineering ledger0/max4; native evidence PENDING.
+Sol aboveHigh/max-ultra attempts before binding0. Final engineering ledger4/max4: four COMPLETED, failures0/cancel0/retry0. No further native attempts authorized.
 No fallback/PAYG/credits purchase/new auth/billing/account route. Owner confirms training/environmentsOFF;
 no private account settings inspection and no zero-retention certification.
 
@@ -36,16 +36,76 @@ source; source-fixture M8C→M8D upgrade/restart/restore/fresh-root M8C rollback
 rehearsal passes. Old M8C manager cannot validate a new M8D producer manifest; compatible pre-upgrade recovery uses
 M8D manager or an M8C-produced backup. No compatibility claim for post-AI schema2 inference records on old M8C.
 
-Prepared checks: Python779 PASS before final narrow fixes; controller59/private-security28/temp-policy43/lifecycle146
-relevant passes, web50 PASS/build PASS. Chromium real browser/native local-ASR source-fixture PASS, nonloopback0,
-page errors0; source fixtures are not exact release evidence. Four-scenario offline rehearsal PASS on a separate
-fixture ledger; actual native ledger remains0. Exact-C full regression, package/reference-Mac/browser/native<=4/
-privacy/publication checks PENDING. Impeccable detector found one pre-existing unrelated style warning, no new
-private-controls warning; incumbent design preserved.
+Exact-C checks on Darwin/arm64/Python3.13.2/Node26.8.2/Codex0.159.0, existing dependencies only:
+
+| Check | Command | Result |
+|---|---|---|
+| Python | `.venv/bin/python -m pytest -q` | exit0, 780 PASS |
+| Web | `npm --prefix apps/web test` | exit0, 50 PASS |
+| Exact package/build | `.venv/bin/python -m apps.core.release prepare --output generated/releases/M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947` | exit0 |
+| Chromium + native ASR | `.venv/bin/python -m scripts.verify_m8d_browser --package generated/releases/M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947` | exit0, fixture inference, nonloopback0/page-errors0 |
+| Actual Mac lifecycle | `.venv/bin/python -m scripts.verify_m8d --package generated/releases/M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947 --previous-package generated/releases/M8C-a00a14277974b7f6c25846d0eb7a23879f86183a` | exit0 |
+| Native private synthetic integration | `.venv/bin/python -m scripts.evaluate_m8d_private --package generated/releases/M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947` | exit0, four completed requests |
+| Privacy | `.venv/bin/python scripts/check_privacy.py --include-generated` | PASS, all local objects/worktree/snapshots/UI; repeated before/after R |
+| Docs/context | `check_docs.py` / `build_chatgpt_context.py` | PASS |
+
+Release: `M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947`. Manifest `4dcef73b066f3adf7c969baedb9d76b39d7885e58967c44c90e8cd986a57a866`. Runtime lock `f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e`.
+Unsigned local engineering package; no tag, GitHub Release, deploy, signing/notarization or autostart.
+Source-fixture pre-C rehearsals are separate; only exact-C artifacts below support the delivered release.
+Impeccable detector: one pre-existing unrelated style warning, no introduced private-controls warning.
+
+| Native case | Model / effort | State | Seconds |
+|---|---|---|---|
+| FREE current + same-conversation continuity | gpt-6-luna / high | COMPLETED | 9.105 |
+| DEEP agreed goal/focus/confirmed fixture takeaway/continuity | gpt-6-luna / max | COMPLETED | 61.910 |
+| Comparable DEEP goal/focus/takeaway/continuity | gpt-6.1-sol / high | COMPLETED | 29.980 |
+| Genuine local-ASR candidate → reviewed/edited text + selected journal → AI | gpt-6-luna / high | COMPLETED | 9.664 |
+
+Both Deep requests returned valid source-bound working maps (4/3 items), respected formal-VY/no declared cause
+and retained the explicit goal/focus. The same bounded scenario and explicit synthetic fixture takeaway were
+used, not extra benchmarking or an LLM judge. One case/model is not a general quality or speed ranking;
+the original synthetic candidate samples are independent human-review material. No automatic winner/fallback.
+Fourth request combines both required integrations inside the ceiling: only exact approved edited text and one
+journal revision, unselected sentinel absent, audio/hash/source descriptor absent from actual provider payload.
+No max/ultra attempts preceded final binding; Sol aboveHigh0, Luna/max1 explicitly authorized.
+
+Actual Mac: native private preflight PASS, verified protected APFS/FileVault data and backup volumes,
+owner-only permissions/path/app-data separation/loopback/auth/lock/restart; application-level database/archive
+encryption NOT_IMPLEMENTED. Temporary provider/ASR storage also requires protected volume before private writes.
+Exact backup producer/source verified; M8C→M8D restart/restore/defaultOFF/fresh compatible M8C rollback/restart/
+uninstall KEEP DATA/separate confirmed disposable deletion preserve journal revision and backups. No in-place
+downgrade or actual owner-vault action. Fixture and exact-C disposable runtime containers cleaned.
+
+Public evidence: [checks](evidence/M8D/CHECKS.json), [manifest](evidence/M8D/RELEASE_MANIFEST.json),
+[Mac lifecycle](evidence/M8D/M8D_PRIVATE_LIFECYCLE.json), [Chromium](evidence/M8D/CHROMIUM_PRIVATE_LOCAL.json),
+[native samples/ledger](evidence/M8D/NATIVE_PRIVATE_CONVERSATION.json),
+[final owner binding](evidence/M8D/OWNER_COST_BINDING.json), [privacy scan](evidence/M8D/PRIVACY_PUBLIC_TREE.json). Screenshots contain ORIGINAL SYNTHETIC text only.
 
 Clinical0/all five specialistsOFF/27findingsOPEN; Health/phone/embeddings/cloudASR/sync/telemetry/publicationOFF/NONE.
 M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW; M7C-N03 OPEN_HUMAN_TEST; M6-N01 final0.6.1 hardware NOT_RUN.
-M7C-N02 bounded owner route decision awaits completed native evidence; universal private gate remains OPEN.
+M7C-N02 = READY_FOR_THIS_OWNER_BOUNDED_PILOT_ONLY_AFTER_M8D_ACCEPT; universal/third-party/zero-retention gate remains OPEN.
 MAC core readiness/started owner core pilot stays independently accepted M8C. M8D does not execute optional activation.
 
 Review status after delivery: AWAITING_REVIEW. No tag/GitHub Release/deploy/force/history rewrite/next milestone.
+
+
+| Independent readiness | Result |
+|---|---|
+| PRIVATE_AI_ENGINEERING | READY |
+| LOCAL_VOICE_ENGINEERING | READY |
+| PRIVATE_AI_PROVIDER_ROUTE | READY_FOR_OWNER_BOUNDED_PILOT_AFTER_M8D_ACCEPT |
+| PRIVATE_VAULT_CONTEXT | EXPLICIT_SELECTION_ONLY |
+| RAW_AUDIO_TO_PROVIDER | NEVER |
+| ACTIVATION_PROCEDURE | READY, NOT EXECUTED |
+| M7C-N03 | OPEN_HUMAN_TEST / actual human UA NOT_RUN |
+| M7D-N02 | OPEN_HUMAN_LANGUAGE_REVIEW |
+| CLINICAL / Health | OFF / OFF |
+| PHONE | NEEDS_TRANSPORT_GATE |
+| ACTUAL_PRIVATE_AI_ACTIVATION | NOT_STARTED |
+| Real private data / real human audio / system changes | 0 / 0 / 0 |
+
+Post-ACCEPT procedure in PILOT_HANDOFF upgrades the existing vault's application without recreating/importing
+or migrating real data during M8D. Fresh preflight, exact accepted release, local owner acknowledgements,
+explicit profile and reviewed per-send preview remain mandatory. Current accepted M8C core continues unchanged.
+Publication: C + evidence-only R normal FF main, origin/main must equal R; CI status is separately reported
+from the exact GitHub run. No self-accept, further provider attempt, real AI/voice activation or next milestone.

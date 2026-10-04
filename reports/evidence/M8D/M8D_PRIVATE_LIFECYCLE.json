@@ -1,0 +1,232 @@
+{
+  "status": "PASS",
+  "scope": "PRIVATE_LOCAL_RUNTIME_WITH_ORIGINAL_SYNTHETIC_CONTENT",
+  "source_fixture": false,
+  "release_id": "M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947",
+  "implementation_sha": "d0b24846ced133864c45dc0b0eb71a1b01f0e947",
+  "manifest_hash": "4dcef73b066f3adf7c969baedb9d76b39d7885e58967c44c90e8cd986a57a866",
+  "runtime_input_hash": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+  "previous_release": "M8C-a00a14277974b7f6c25846d0eb7a23879f86183a",
+  "private_preflight": {
+    "format": 1,
+    "scope": "PRIVATE_LOCAL_SECURITY_TESTED_MAC_ONLY",
+    "status": "PASS",
+    "release_id": "M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947",
+    "manifest_hash": "4dcef73b066f3adf7c969baedb9d76b39d7885e58967c44c90e8cd986a57a866",
+    "runtime_input_hash": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "root_kind": "PRIVATE_LOCAL",
+    "checks": [
+      {
+        "gate": "platform",
+        "status": "PASS"
+      },
+      {
+        "gate": "python",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:annotated-types",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:anyio",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:click",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:fastapi",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:h11",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:idna",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:pydantic",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:pydantic_core",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:starlette",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:typing-inspection",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:typing_extensions",
+        "status": "PASS"
+      },
+      {
+        "gate": "dependency:uvicorn",
+        "status": "PASS"
+      },
+      {
+        "gate": "local_asr",
+        "status": "OPTIONAL_UNAVAILABLE"
+      },
+      {
+        "gate": "phone_health_transport",
+        "status": "NOT_RUN"
+      },
+      {
+        "gate": "application_owner_only_permissions",
+        "status": "PASS"
+      },
+      {
+        "gate": "data_owner_only_permissions",
+        "status": "PASS"
+      },
+      {
+        "gate": "backup_owner_only_permissions",
+        "status": "PASS"
+      },
+      {
+        "gate": "data_volume",
+        "status": "PASS"
+      },
+      {
+        "gate": "backup_volume",
+        "status": "PASS"
+      },
+      {
+        "gate": "writable_space",
+        "status": "PASS"
+      },
+      {
+        "gate": "loopback",
+        "status": "PASS"
+      },
+      {
+        "gate": "exact_release_and_private_profile",
+        "status": "PASS"
+      },
+      {
+        "gate": "path_safety_app_data_separation",
+        "status": "PASS"
+      },
+      {
+        "gate": "runtime_off_defaults",
+        "status": "PASS"
+      }
+    ],
+    "storage_protection": "VERIFIED_FILEVAULT_VOLUME",
+    "backup_protection": "VERIFIED_FILEVAULT_VOLUME",
+    "application_level_database_encryption": "NOT_IMPLEMENTED",
+    "application_level_backup_encryption": "NOT_IMPLEMENTED",
+    "runtime_profile": {
+      "profile_id": "MAC_PRIVATE_LOCAL_CORE_V1",
+      "profile_version": 1,
+      "journal": "ON",
+      "creative": "ON",
+      "local_search": "ON",
+      "backup_restore": "ON",
+      "explicit_local_export": "ON",
+      "private_ai": "OFF",
+      "conversation_inference": "OFF",
+      "specialists": "OFF",
+      "clinical_active": 0,
+      "health_to_ai": "OFF",
+      "health_bridge": "OFF",
+      "human_voice_asr": "OFF",
+      "cloud_asr": "NONE",
+      "external_embeddings": "OFF",
+      "phone": "OFF",
+      "cloud_sync": "NONE",
+      "telemetry": "NONE",
+      "publication": "NONE",
+      "automatic_external_sharing": "NONE",
+      "provider_fallback": "NONE"
+    }
+  },
+  "runtime_only_environment": {
+    "status": "PASS",
+    "method": "COPY_EXISTING_PINNED_RUNTIME_ONLY_PIP_FREE_TEMP_ENVIRONMENT",
+    "packages": [
+      {
+        "package": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "package": "anyio",
+        "version": "4.15.1"
+      },
+      {
+        "package": "click",
+        "version": "8.5.0"
+      },
+      {
+        "package": "fastapi",
+        "version": "0.115.12"
+      },
+      {
+        "package": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "package": "idna",
+        "version": "3.20"
+      },
+      {
+        "package": "pydantic",
+        "version": "2.11.3"
+      },
+      {
+        "package": "pydantic_core",
+        "version": "2.33.1"
+      },
+      {
+        "package": "starlette",
+        "version": "0.46.2"
+      },
+      {
+        "package": "typing-inspection",
+        "version": "0.4.4"
+      },
+      {
+        "package": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "package": "uvicorn",
+        "version": "0.34.2"
+      }
+    ],
+    "no_downloads_or_package_manager_installs": true,
+    "test_client_packages_absent": {
+      "pytest": true,
+      "playwright": true,
+      "httpx": true,
+      "pip": true
+    }
+  },
+  "checks": {
+    "private_security_preflight": true,
+    "old_m8c_runtime_fixture": true,
+    "private_upgrade": true,
+    "exact_backup_producer_and_old_source": true,
+    "new_runtime_restart_data_and_safe_default_off": true,
+    "private_restore_restart_default_off": true,
+    "fresh_root_old_m8c_rollback_restart": true,
+    "uninstall_keep_private_data": true,
+    "separate_exact_delete_keeps_backup": true
+  },
+  "real_private_data_used": 0,
+  "live_provider_calls": 0,
+  "system_changes": 0,
+  "actual_private_ai_activation": "NOT_STARTED"
+}
