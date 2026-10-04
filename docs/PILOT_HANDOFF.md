@@ -52,7 +52,7 @@ M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW is not a core blocker with conversationOFF. N
 
 Ctrl+C stops the single foreground runtime; no autostart/daemon. Restart with the same explicit PRIVATE_LOCAL roots
 creates new unlock state. Lock erases UI/session access; after lock use foreground restart for a new code. Idle15min,
-absolute8hours. Unsaved drafts are not promised durable. All app requests/assets localhost; no network egress.
+absolute8hours. Private cookie is session-only; reusable server credentials are never persisted. Unsaved drafts are not promised durable. All app requests/assets localhost; no network egress.
 
 Stop before backup/maintenance. Choose a **new** snapshot child directly inside the consented backup container:
 

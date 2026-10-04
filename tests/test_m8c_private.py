@@ -141,6 +141,8 @@ def client_for(data, clock=None):
 
 def unlock(app,c):
     response=c.post('/api/v1/auth/unlock',json={'code':app.state.auth.code});assert response.status_code==200
+    cookie=response.headers['set-cookie'].lower()
+    assert 'httponly' in cookie and 'samesite=strict' in cookie and 'max-age' not in cookie and 'expires=' not in cookie
     c.headers['X-CSRF-Token']=response.json()['csrf_token']
 
 

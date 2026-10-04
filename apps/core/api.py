@@ -336,7 +336,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     def unlock(body: Unlock):
         token, s = auth.unlock(body.code)
         r = JSONResponse({'csrf_token': s['csrf'], 'idle_seconds': 900, 'absolute_seconds': 28800})
-        r.set_cookie('m1_session', token, httponly=True, samesite='strict', path='/', max_age=28800, secure=scheme=='https')
+        r.set_cookie('m1_session', token, httponly=True, samesite='strict', path='/', max_age=None if private else 28800, secure=scheme=='https')
         return r
 
     @app.get('/api/v1/auth/session')

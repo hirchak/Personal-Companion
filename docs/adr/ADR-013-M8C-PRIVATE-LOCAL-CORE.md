@@ -19,7 +19,7 @@ Data/application/backup container require owner UID, directory0700/file0600 and 
 unsafe/Git/symlink/traversal/cloud-folder paths rejected. Owners acknowledge that chosen folders are not externally
 synchronized; the application cannot disable OS backups or third-party sync agents. Application-level DB and archive
 encryption NOT_IMPLEMENTED. Unlocked OS, malware/admin/same-user browser/system copies remain outside protection.
-Local auth/15-minute idle and8-hour absolute lock, one-time terminal code, in-memory session only, restart new unlock.
+Local auth/15-minute idle and8-hour absolute lock, one-time terminal code, in-memory server session only, session-only HttpOnly/SameSite cookie (no Max-Age/Expires), restart new unlock.
 The app/foreground process is local127.0.0.1; Host/Origin/CSRF/build-header/CSP/deny-egress preserved.
 
 Private backup is manual to an explicitly chosen owner-only directory on a freshly verified protected local APFS

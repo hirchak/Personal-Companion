@@ -169,7 +169,11 @@ def main():
         except sqlite3.OperationalError:pass
         assert r.read_json(restored_app/'active.json')==before and (restored_app/'upgrade-pending.json').is_file()
         assert r.verify_backup(backups/'failed upgrade backup',expected)['schema_version']==10
-        checks['failed_upgrade']={'status':'PASS','scope':'DISPOSABLE_SCHEMA10_TRANSACTION_FAILURE_PROJECTION','backup_verified':True,'pointer_preserved':True,'pending_marker':True}
+        try:
+            command('start','--mode','PRIVATE_LOCAL','--app',restored_app,'--data',restored,'--port',port)
+            raise AssertionError('PENDING_UPGRADE_START_ALLOWED')
+        except SafeError as exc:assert exc.code=='UPGRADE_RECOVERY_REQUIRED'
+        checks['failed_upgrade']={'status':'PASS','scope':'DISPOSABLE_SCHEMA10_TRANSACTION_FAILURE_PROJECTION','backup_verified':True,'pointer_preserved':True,'pending_marker':True,'startup_refused':'UPGRADE_RECOVERY_REQUIRED'}
         rollback_app,rollback_data=work/'rollback app',work/'rollback private synthetic data'
         flags=list(restore_flags);flags[flags.index(restored_app)]=rollback_app;flags[flags.index(restored)]=rollback_data
         flags[flags.index('INITIALIZE_PRIVATE_LOCAL:'+str(restored))]='INITIALIZE_PRIVATE_LOCAL:'+str(rollback_data)
