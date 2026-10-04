@@ -1,6 +1,6 @@
 # ADR-013 — Private local core root, volume protection and protected local backups
 
-2026-10-04. IMPLEMENTED_AWAITING_REVIEW. M8C uses ORIGINAL SYNTHETIC content only.
+2026-10-04. ACCEPTED_EXTERNAL_REVIEW. M8C uses ORIGINAL SYNTHETIC content only.
 
 Keep existing SYNTHETIC_TEST marker/fixtures intact. PRIVATE_LOCAL has its own typed receipt and SQLite
 private_root_identity attestation, bound identically; installation additionally binds root kind/id. No startup
@@ -42,3 +42,7 @@ acknowledgement + no-cloud-directory acknowledgement + protected backup containe
 no personal identity. Actual private pilot/root not initialized during M8C. Post-review owner/data-owner activation
 needs no additional core engineering milestone if final acceptance criteria pass. Optional module gates unchanged.
 Uninstall keeps private data; separate DELETE_PRIVATE_LOCAL_DATA:<root> never deletes backups or claims secure erasure.
+
+External architect ACCEPT exact Ca00a1427/R4eb8188 durably recorded in reports/M8C_ARCHITECT_REVIEW.md.
+The engineering synthetic-only scope above is historical M8C; owner now separately authorizes new-empty
+private core activation through the unchanged accepted handoff. No developer access to future contents.

@@ -173,3 +173,10 @@ M8C final implementation `a00a14277974b7f6c25846d0eb7a23879f86183a` — AWAITING
 private-mode/synthetic-content full lifecycle/genuine rollback PASS. Core/storage/backup/activation READY
 engineering-only; independent ACCEPT + owner/data-owner activation required. Actual private rootNOT_CREATED/
 pilotNOT_STARTED; optional gates unchanged. No additional core milestone if acceptance/preflight pass.
+
+## M8C external ACCEPT / explicit owner activation — 2026-10-04
+
+External architect M8C ACCEPT, scope private-local Mac core engineering, exact Ca00a1427/R4eb8188;
+reports/M8C_ARCHITECT_REVIEW.md. Separate explicit owner/data-owner goal authorizes own NEW EMPTY
+core-only local vault/preflight/init/start/browser; activation IN_PROGRESS, pilot NOT_STARTED until init.
+No further engineering milestone; all optional module gates unchanged. No private content access or import.
