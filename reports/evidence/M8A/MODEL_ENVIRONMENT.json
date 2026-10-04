@@ -1,0 +1,21 @@
+{
+  "installed_codex": "0.159.0",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "supported_efforts": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max",
+    "ultra"
+  ],
+  "model_source": "INSTALLED_APP_SERVER_MODEL_LIST",
+  "active_configuration_source": "CURRENT_SESSION_TURN_CONTEXT_WHITELIST_MODEL_AND_EFFORT",
+  "configured_global_model": "gpt-6.1-sol",
+  "configured_global_effort": "high",
+  "catalog_not_entitlement": true,
+  "live_runtime_inferences": 0,
+  "new_auth": false,
+  "payg": false
+}

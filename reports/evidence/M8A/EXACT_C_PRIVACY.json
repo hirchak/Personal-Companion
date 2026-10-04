@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "metrics": {
+    "worktree_text_files": 567,
+    "git_objects": 1711,
+    "git_text_objects": 1233,
+    "tracked_files": 666
+  },
+  "git_scope": "SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED",
+  "generated_included": true,
+  "limitations": "Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded.",
+  "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd"
+}

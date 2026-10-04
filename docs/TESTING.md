@@ -295,3 +295,8 @@ canonical admission + skill qualification, docs/context generation, privacy with
 Command/environment/exit codes are in exact-C evidence. CI/hardware/human Ukrainian/private HTTPS stay NOT_RUN.
 Package ASR OPTIONAL_UNAVAILABLE; existing authorized checkout local ASR verification remains separate.
 Build prerequisite: existing Python3.13/dependencies/Node/node_modules, no global/system installation.
+
+M8A final-C outcomes:648Python (43Chromium,36M8A),50web/build and actual packaged lifecycle PASS at
+38d3ed69839a8fc876c50b900552ad38d965c5cd. reports/evidence/M8A/EXACT_C_CHECKS.json records commands,
+exit codes/environment; LIFECYCLE.json distinguishes actual installed package from schema/release simulations.
+CI NOT_CONFIGURED/NOT_RUN; physical Mac/Android/Health/human voice gates remain NOT_RUN.

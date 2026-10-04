@@ -10,14 +10,14 @@ actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: 0eaac55783a8cc9aa400db238f78bafdf91623e7
-implementation_sha: null
+implementation_sha: 38d3ed69839a8fc876c50b900552ad38d965c5cd
 report_path: reports/M8A_RELEASE_PILOT_READINESS_REPORT.md
 last_reviewed_sha: 56b03bd3594a6d6630864904b6d99e46242de95a
 current_milestone: M8A
 current_goal: M8A_RELEASE_PILOT_READINESS
 current_goal_path: prompts/M8A_RELEASE_PILOT_READINESS.md
 current_contract_path: docs/M8A_CONTRACT.md
-implementation_status: IN_PROGRESS
+implementation_status: AWAITING_REVIEW
 review_status: AWAITING_REVIEW
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
@@ -30,13 +30,17 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8A — IN_PROGRESS
+# M8A — AWAITING_REVIEW
 
-M7D external scoped ACCEPT durable: reports/M7D_ARCHITECT_REVIEW.md exact C/R.
-M8A local source package/schema11 + verified manifest, prerequisite-only startup, app/data separation,
-consistent pre-upgrade backup, transaction/pending recovery, fresh-root rollback/restore, KEEP DATA removal.
-ProviderOFF/clinical0/specialistsOFF/health-to-AIOFF/cloudASRNONE/privateOFF; no live attempts.
-N01 options/quotes deterministic guard; N02 stable FORMAL_VY policy; exact-C evidence pending.
+M7D external scoped ACCEPT durable: reports/M7D_ARCHITECT_REVIEW.md exact C56b03bd/R0eaac557.
+Final C38d3ed69839a8fc876c50b900552ad38d965c5cd; evidence-only R follows (no self-hash).
+Exact clean-commit source package/schema11/web-contract2, manifest326ef01c…; prerequisites Darwin arm64/Python3.13.
+648Python/43Chromium/50web/build/schema/admission/docs/context/privacy PASS at C; actual packaged lifecycle PASS.
+App/data separated; backup before transactional upgrade; failed migration/pending start block; fresh-root restore/
+rollback; foreground stop/restart/interrupted inference+ASR recovery; uninstall KEEP DATA; explicit deletion separate.
+N01 CLOSED_ENGINEERING. N02 OPEN/nonblocking: FORMAL_VY policy+pronoun rejection implemented; verb register/human quality unverified.
+ProviderOFF/clinical0/five specialist candidatesOFF/health-to-AIOFF/cloudASRNONE/privateOFF; M8A live calls0.
 M7C-N02 OPEN HARD private gate; M7C-N03 human UA OPEN/NOT_RUN; M6-N01 final0.6.1 hardware OPEN/NOT_RUN.
-27 research findings OPEN; M7D ledger48/48 immutable. M8B NOT_STARTED; readiness checklist only.
-Next: final implementation C, exact-C regression and actual package lifecycle, evidence R/privacy/normal FF main push.
+27 findingsOPEN; M7D ledger48/48 immutable. CI NOT_CONFIGURED/NOT_RUN. No release/tag/deploy/system install/autostart.
+M8B NOT_STARTED; exact permissions checklist docs/RECOVERY.md, no actual pilot/private data/hardware work.
+After R/privacy/authorized normal FF main push verify origin/main==R and STOP; architect review pending.

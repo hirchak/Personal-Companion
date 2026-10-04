@@ -1,0 +1,117 @@
+{
+  "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+  "status": "AWAITING_REVIEW_NOT_SELF_ACCEPTED",
+  "criteria": [
+    {
+      "id": "M8A-A01",
+      "engineering_status": "PASS",
+      "evidence": "reports/M7D_ARCHITECT_REVIEW.md",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A02",
+      "engineering_status": "PASS",
+      "evidence": "RELEASE_MANIFEST.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A03",
+      "engineering_status": "PASS",
+      "evidence": "LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A04",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A05",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A06",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A07",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A08",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A09",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A10",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A11",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A12",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": "No hardware/private/clinical acceptance"
+    },
+    {
+      "id": "M8A-A13",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A14",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": "FORMAL_VY contract/pronoun policy verified; verb-only register drift remains human-quality OPEN"
+    },
+    {
+      "id": "M8A-A15",
+      "engineering_status": "PASS",
+      "evidence": "tests/test_m8a_release.py + LIFECYCLE.json",
+      "notes": "No hardware/private/clinical acceptance"
+    },
+    {
+      "id": "M8A-A16",
+      "engineering_status": "PASS",
+      "evidence": "EXACT_C_PRIVACY.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A17",
+      "engineering_status": "PASS",
+      "evidence": "EXACT_C_CHECKS.json",
+      "notes": ""
+    },
+    {
+      "id": "M8A-A18",
+      "engineering_status": "PASS",
+      "evidence": "docs/RECOVERY.md",
+      "notes": "No hardware/private/clinical acceptance"
+    }
+  ],
+  "M7D_N01": "CLOSED_ENGINEERING",
+  "M7D_N02": "OPEN_NONBLOCKING_POLICY_IMPLEMENTED_VERB_REGISTER_UNVERIFIED",
+  "M8B": "NOT_STARTED"
+}

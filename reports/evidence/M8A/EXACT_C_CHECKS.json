@@ -1,0 +1,159 @@
+{
+  "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "node": "v26.8.2"
+  },
+  "checks": [
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 153.762,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "test"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 4.02,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify_m7a_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.327,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify_m7c_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.082,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify_m7d_schemas.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.088,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/m7_admission.py"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.163,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/qualify_m7d_skills.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.08,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_docs.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.407,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/build_chatgpt_context.py"
+      ],
+      "exit_code": 0,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_privacy.py",
+        "--include-generated"
+      ],
+      "exit_code": 0,
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/verify_m8a.py"
+      ],
+      "environment_overrides": {
+        "PYTHONPATH": "."
+      },
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "exit_code": 0,
+      "status": "PASS",
+      "scope": "ACTUAL_INSTALLED_PACKAGE_LOOPBACK_AND_CHROMIUM"
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "/Users/hirchak/Desktop/Personal Companion/apps/web",
+        "run",
+        "build"
+      ],
+      "environment_overrides": {
+        "PC_BUILD_COMMIT": "38d3ed69839a8fc876c50b900552ad38d965c5cd"
+      },
+      "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+      "exit_code": 0,
+      "status": "PASS",
+      "invoked_by": "release.prepare"
+    }
+  ],
+  "scope": "ORIGINAL_SYNTHETIC_NO_LIVE_PROVIDERS",
+  "base_sha": "0eaac55783a8cc9aa400db238f78bafdf91623e7",
+  "summary": {
+    "python": 648,
+    "chromium_tests_in_python": 43,
+    "web_tests": 50,
+    "M8A_python_tests": 36,
+    "package_browser_smoke": "PASS",
+    "warnings": [
+      "Existing Starlette/anyio BlockingPortal deprecation"
+    ],
+    "live_calls": 0,
+    "hardware": "NOT_RUN"
+  }
+}

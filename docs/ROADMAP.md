@@ -12,7 +12,7 @@ M7A_GENERIC_PRACTICE_ENGINE: external ACCEPT — synthetic engineering scope (re
 M7B_CONVERSATION_HOME: external ACCEPT — synthetic engineering scope; binding longitudinal/deep-goal addenda included.
 M7C: external ACCEPT — live-synthetic engineering + local ASR capability.
 M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality evaluation + synthetic local-ASR guard.
-M8A: IN_PROGRESS — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
+M8A: AWAITING_REVIEW — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
 M8B: NOT_STARTED; no actual private pilot/release/system install permission. Clinical active0.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
@@ -139,3 +139,8 @@ Exact source package + prerequisites, safe defaults, separated roots, preflight/
 fresh-root rollback/restore, foreground lifecycle, stale-client refusal and KEEP DATA uninstall.
 M7D-N01/N02 hardening results belong to M8A report; historical M7D checkpoint text above remains evidence.
 M8B NOT_STARTED. Real Mac/private vault/phone/Health/human ASR/transport/provider/clinical gates separate.
+
+M8A final C38d3ed69839a8fc876c50b900552ad38d965c5cd:648Python/43Chromium/50web/build plus actual
+package lifecycle PASS; release manifest identity and exact outcomes in reports/evidence/M8A.
+N01 CLOSED_ENGINEERING; N02 OPEN with formal policy implemented (verb/human register quality unverified).
+M8A AWAITING_REVIEW; M8B NOT_STARTED. No public Release/tag/deploy/private or hardware acceptance.

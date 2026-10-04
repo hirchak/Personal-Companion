@@ -1,0 +1,28 @@
+{
+  "base_sha": "0eaac55783a8cc9aa400db238f78bafdf91623e7",
+  "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+  "objects": {
+    "reports/evidence/M7D": {
+      "base_object": "850a3dab14d8719bad6faa0f297022c376ce5280",
+      "final_C_object": "850a3dab14d8719bad6faa0f297022c376ce5280",
+      "unchanged": true
+    },
+    "reports/M7D_DEEP_SESSION_REPORT.md": {
+      "base_object": "db7471500e7e25444cc1aa909494d26b08f36cb2",
+      "final_C_object": "db7471500e7e25444cc1aa909494d26b08f36cb2",
+      "unchanged": true
+    },
+    "reports/M7D_MODEL_QUALITY_COMPARISON.md": {
+      "base_object": "14d185a07ac19d60844bb59d9feaf2b34fee398b",
+      "final_C_object": "14d185a07ac19d60844bb59d9feaf2b34fee398b",
+      "unchanged": true
+    },
+    "reports/M7D_ASR_GUARD_REPORT.md": {
+      "base_object": "d8a9df7abe6fc4b0eb070efbfd9d41db9c45bba5",
+      "final_C_object": "d8a9df7abe6fc4b0eb070efbfd9d41db9c45bba5",
+      "unchanged": true
+    }
+  },
+  "live_calls": 0,
+  "ledger_status": "48/48_EXHAUSTED_UNCHANGED"
+}

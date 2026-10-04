@@ -1,0 +1,15 @@
+{
+  "implementation_sha": "bc4bc31a7b8cebe501cb3f49aefaaa925270e650",
+  "command": [
+    ".venv/bin/python",
+    "scripts/verify_m8a.py"
+  ],
+  "exit_code": 1,
+  "status": "FAIL",
+  "category": "LEGACY_MESSAGES_MOCK_REPLY_WHILE_CONTROLLER_OFF",
+  "unsafe_external_calls": 0,
+  "cause": "Synthetic data marker also implicitly enabled legacy mock responder; observed second assistant message.",
+  "fixed_forward_at": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+  "rerun_final_C": "PASS",
+  "historical_evidence_rewritten": false
+}

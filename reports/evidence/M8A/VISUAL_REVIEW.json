@@ -1,0 +1,15 @@
+{
+  "implementation_sha": "38d3ed69839a8fc876c50b900552ad38d965c5cd",
+  "status": "PASS",
+  "material": "ORIGINAL_SYNTHETIC",
+  "captures": [
+    "desktop.png",
+    "mobile.png",
+    "update-required.png"
+  ],
+  "manual_review": "Existing paper/ink/sage preserved; desktop/mobile and update state readable; no clipping observed.",
+  "bounded_rounds": 2,
+  "fixture_only": false,
+  "hardware": "NOT_RUN",
+  "mechanical_detector": []
+}
