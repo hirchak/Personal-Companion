@@ -1,3 +1,5 @@
+import { CompatibilityBoundary, installBuildHeader } from "./release-compatibility";
+installBuildHeader();
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./style.css";
@@ -1031,5 +1033,5 @@ function Journal({ csrf, onLock }: { csrf: string; onLock: () => void }) {
   );
 }
 createRoot(document.getElementById("root")!).render(
-  location.pathname.startsWith("/phone/") ? <PhoneApp /> : <App />,
+  <CompatibilityBoundary>{location.pathname.startsWith("/phone/") ? <PhoneApp /> : <App />}</CompatibilityBoundary>,
 );

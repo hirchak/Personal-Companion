@@ -69,7 +69,7 @@ class Auth:
             return s
 
 
-def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None,conversation_timeout=60):
+def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme="http", synthetic_practices=False, synthetic_conversations=False,conversation_provider=None,m7c_synthetic=False,local_asr=None,conversation_timeout=60,release_identity=None):
     if scheme not in {"http","https"}: raise SafeError("UNSUPPORTED_TRANSPORT")
     if (conversation_provider is not None or local_asr is not None) and not m7c_synthetic:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED',403)
     store = Store(root)
@@ -127,6 +127,8 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                     chunks.append(chunk)
                 request._body = b''.join(chunks)
             path = request.url.path
+            if release_identity and path.startswith('/api/') and request.headers.get('x-pc-build') != release_identity:
+                raise SafeError('FRONTEND_UPDATE_REQUIRED',409)
             if '/voice/' in path and request.url.query:
                 raise SafeError('VOICE_QUERY_DENIED',403)
             if path.startswith('/api/v1/device/'):
@@ -497,6 +499,10 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     @app.post('/api/v1/device/operations')
     def apply(body: Packet, request: Request):
         return sync.apply(body,request.state.device_id,request.state.device_token,request.state.device_epoch)
+
+    @app.get('/release.json')
+    def release_contract():
+        return {'web_contract':2,'git_commit':release_identity or 'DEVELOPMENT','schema_version':store.meta()['schema_version']}
 
     @app.get('/{path:path}')
     def shell(path: str):

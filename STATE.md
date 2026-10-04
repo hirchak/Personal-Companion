@@ -9,15 +9,15 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: b75e3a4d7176372fef68399c80ddd09b7330d840
-implementation_sha: 56b03bd3594a6d6630864904b6d99e46242de95a
-report_path: reports/M7D_DEEP_SESSION_REPORT.md
-last_reviewed_sha: 36b99e45a5d6ce93a828cf1be7d82a76685a89e9
-current_milestone: M7D
-current_goal: M7D_DEEP_SESSION_INTELLIGENCE
-current_goal_path: prompts/M7D_DEEP_SESSION_INTELLIGENCE.md
-current_contract_path: docs/M7D_CONTRACT.md
-implementation_status: AWAITING_REVIEW
+baseline_sha: 0eaac55783a8cc9aa400db238f78bafdf91623e7
+implementation_sha: null
+report_path: reports/M8A_RELEASE_PILOT_READINESS_REPORT.md
+last_reviewed_sha: 56b03bd3594a6d6630864904b6d99e46242de95a
+current_milestone: M8A
+current_goal: M8A_RELEASE_PILOT_READINESS
+current_goal_path: prompts/M8A_RELEASE_PILOT_READINESS.md
+current_contract_path: docs/M8A_CONTRACT.md
+implementation_status: IN_PROGRESS
 review_status: AWAITING_REVIEW
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
@@ -30,17 +30,13 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M7D — AWAITING_REVIEW
+# M8A — IN_PROGRESS
 
-C `56b03bd3594a6d6630864904b6d99e46242de95a`, base `b75e3a4d7176372fef68399c80ddd09b7330d840`. Evidence-only R follows; actual R/push equality verified outside self-hashed report.
-M7C scoped external ACCEPT durable. Schema11 Working Map/version/source/provenance/rejection/history;
-goal/focus/phase/close distinct; exact selected-window preview/hash/receipt binds inference. One voice/controller.
-Final-C Python612/browser43/web46/build/Ajv/admission/docs/privacy/performance/local-ASR PASS.
-48/48 M7D requests:30completed18failed,0remain; all failures retained. Normal provider OFF, no PAYG/new auth.
-Native quality at1c15710: Luna/max3/3, Sol/ultra15/16;18runtime blobs identical at final C; final-C
-API factory Sol/ultra120s smoke PASS. Repeating full final-C native comparison NOT_RUN (budget binding).
-Four original neutral skills core/goal/closure2.0, deep/frame2.1; five qualified-metadata candidates OFF.
-ASR PCM guard6synthetic cases0false normal accepts/0false rejects; human UA NOT_RUN/cloudNONE/no new assets.
-All27findingsOPEN/RAW16externalmanifest-only/local0; clinical0/real dataOFF/health-to-AIOFF.
-M7C-N04CLOSEDengineering;N01evaluated/selectionpending;N02OPENhardprivate gate;N03human gateOPEN.
-M6-N01OPEN final0.6.1hardwareNOT_RUN. CI NOT_CONFIGURED/NOT_RUN. M8NOT_STARTED; no next goal authorized.
+M7D external scoped ACCEPT durable: reports/M7D_ARCHITECT_REVIEW.md exact C/R.
+M8A local source package/schema11 + verified manifest, prerequisite-only startup, app/data separation,
+consistent pre-upgrade backup, transaction/pending recovery, fresh-root rollback/restore, KEEP DATA removal.
+ProviderOFF/clinical0/specialistsOFF/health-to-AIOFF/cloudASRNONE/privateOFF; no live attempts.
+N01 options/quotes deterministic guard; N02 stable FORMAL_VY policy; exact-C evidence pending.
+M7C-N02 OPEN HARD private gate; M7C-N03 human UA OPEN/NOT_RUN; M6-N01 final0.6.1 hardware OPEN/NOT_RUN.
+27 research findings OPEN; M7D ledger48/48 immutable. M8B NOT_STARTED; readiness checklist only.
+Next: final implementation C, exact-C regression and actual package lifecycle, evidence R/privacy/normal FF main push.

@@ -147,6 +147,12 @@
           "title": "Language",
           "type": "string"
         },
+        "address_form": {
+          "const": "FORMAL_VY",
+          "default": "FORMAL_VY",
+          "title": "Address Form",
+          "type": "string"
+        },
         "skills": {
           "items": {
             "$ref": "#/$defs/RuntimeSkill"

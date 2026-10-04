@@ -278,3 +278,20 @@ Human quality dimensions are review prompts, not clinical outcomes or an LLM sco
 existing pinned whisper.cpp small. Silence/noise/quiet/normal/short/padded speech; no new model download,
 cloud or human audio. Human UA quality NOT_RUN. Signal heuristic is not perfect VAD. `measure_m7d.py`
 measures bounded local synthetic maps/invalidation/context/reopen/history/growth; no private/hardware claims.
+
+## M8A — exact local release lifecycle
+
+`python -m pytest -q tests/test_m8a_release.py` tests synthetic manifest/hash corruption, fail-safe defaults,
+paths/locks, schema2 genuine minimum/schema10 projections/schema11, pre-upgrade backup, migration failure,
+fresh restore/rollback/history/tombstones/conversations, interrupted backup, app uninstall KEEP DATA,
+explicit separate deletion, options/questions/quotes/address form, stale API refusal. No live providers.
+`PYTHONPATH=. python scripts/verify_m8a.py` on final **clean C** builds exact package and exercises installed
+foreground server without repository cwd/Git requirement, Chromium desktop/390px shell, real HTTP persistence,
+stop/immediate restart/abandoned inference, backup→upgrade→fresh rollback/restore→KEEP DATA uninstall.
+Generated outputs stay ignored; copy reviewed manifest/LIFECYCLE/PNG synthetic evidence into reports/evidence/M8A.
+
+Mandatory final checks: full Python/real Chromium regressions; web vitest/build; M7A/M7C/M7D Ajv,
+canonical admission + skill qualification, docs/context generation, privacy with generated assets + tracked tree.
+Command/environment/exit codes are in exact-C evidence. CI/hardware/human Ukrainian/private HTTPS stay NOT_RUN.
+Package ASR OPTIONAL_UNAVAILABLE; existing authorized checkout local ASR verification remains separate.
+Build prerequisite: existing Python3.13/dependencies/Node/node_modules, no global/system installation.

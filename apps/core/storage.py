@@ -342,29 +342,40 @@ class Store:
                 dest = sqlite3.connect(temp / 'snapshot.sqlite3');dest.row_factory = sqlite3.Row
                 try:
                     source.backup(dest)
-                    dest.execute("UPDATE devices SET credential_hash='',revoked_at_utc=COALESCE(revoked_at_utc,?)", (now(),))
-                    dest.execute('UPDATE ai_consents SET revoked=1')
-                    dest.execute('UPDATE feedback_drafts SET approval=NULL')
-                    dest.execute("UPDATE health_state SET generation=?,epoch=NULL,sequence=0,batch_hash=NULL,connection='SOURCE_RECONNECT_REQUIRED',blocked=1,permissions=?",(str(uuid4()),encode({k:'NOT_REQUESTED' for k in ('sleep','steps','exercise')})))
-                    dest.execute("UPDATE ai_jobs SET state='CANCELLED',error='BACKUP_REAPPROVAL_REQUIRED' WHERE state IN ('QUEUED','RUNNING')")
-                    dest.execute('UPDATE conversation_inferences SET state="FAILED",revision=revision+1,payload=json_set(payload,"$.state","FAILED","$.error","BACKUP_REAPPROVAL_REQUIRED","$.revision",revision+1) WHERE state IN ("QUEUED","RUNNING")')
-                    dest.execute("UPDATE transcripts SET state='FAILED',error='ASR_RESTORE_RETRY_REQUIRED' WHERE state IN ('TRANSCRIPTION_QUEUED','TRANSCRIBING')")
-                    # Incomplete transfer is resumable on live Mac; a backup contains finalized originals.
-                    dest.execute("UPDATE audio SET state='CANCELLED' WHERE state='UPLOADING'")
-                    dest.execute('DELETE FROM audio_chunks')
+                    version = dest.execute('SELECT schema_version FROM vault_meta').fetchone()[0]
+                    tables = {r[0] for r in dest.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+                    if 'devices' in tables:
+                        dest.execute("UPDATE devices SET credential_hash='',revoked_at_utc=COALESCE(revoked_at_utc,?)", (now(),))
+                    if 'ai_consents' in tables: dest.execute('UPDATE ai_consents SET revoked=1')
+                    if 'feedback_drafts' in tables: dest.execute('UPDATE feedback_drafts SET approval=NULL')
+                    if 'health_state' in tables:
+                        dest.execute("UPDATE health_state SET generation=?,epoch=NULL,sequence=0,batch_hash=NULL,connection='SOURCE_RECONNECT_REQUIRED',blocked=1,permissions=?",(str(uuid4()),encode({k:'NOT_REQUESTED' for k in ('sleep','steps','exercise')})))
+                    if 'ai_jobs' in tables:
+                        dest.execute("UPDATE ai_jobs SET state='CANCELLED',error='BACKUP_REAPPROVAL_REQUIRED' WHERE state IN ('QUEUED','RUNNING')")
+                    if 'conversation_inferences' in tables:
+                        dest.execute('UPDATE conversation_inferences SET state="FAILED",revision=revision+1,payload=json_set(payload,"$.state","FAILED","$.error","BACKUP_REAPPROVAL_REQUIRED","$.revision",revision+1) WHERE state IN ("QUEUED","RUNNING")')
+                    if 'transcripts' in tables:
+                        dest.execute("UPDATE transcripts SET state='FAILED',error='ASR_RESTORE_RETRY_REQUIRED' WHERE state IN ('TRANSCRIPTION_QUEUED','TRANSCRIBING')")
+                    if 'audio' in tables: dest.execute("UPDATE audio SET state='CANCELLED' WHERE state='UPLOADING'")
+                    if 'audio_chunks' in tables: dest.execute('DELETE FROM audio_chunks')
                     dest.commit();dest.execute('PRAGMA journal_mode=DELETE')
                     self.check(dest)
-                    from .practice import check_sessions
-                    check_sessions(dest)
-                    from .conversation import check_conversations
-                    check_conversations(dest)
-                    from .reflection import check_reflection
-                    check_reflection(dest)
-                    from .conversation_controller import check_inferences
-                    check_inferences(dest)
-                    from .deep_session import check_deep
-                    check_deep(dest)
-                    attachments=self.check_audio(dest)
+                    if version >= 7:
+                        from .practice import check_sessions
+                        check_sessions(dest)
+                    if version >= 8:
+                        from .conversation import check_conversations
+                        check_conversations(dest)
+                    if version >= 9:
+                        from .reflection import check_reflection
+                        check_reflection(dest, enforce_current_unique=version >= 10)
+                    if version >= 10:
+                        from .conversation_controller import check_inferences
+                        check_inferences(dest)
+                    if version >= 11:
+                        from .deep_session import check_deep
+                        check_deep(dest)
+                    attachments=self.check_audio(dest) if version >= 4 else []
                     meta = dict(dest.execute('SELECT * FROM vault_meta').fetchone())
                 finally: dest.close()
             if attachments:

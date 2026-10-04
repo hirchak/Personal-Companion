@@ -3936,6 +3936,22 @@
         }
       }
     },
+    "/release.json": {
+      "get": {
+        "summary": "Release Contract",
+        "operationId": "release_contract_release_json_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/{path}": {
       "get": {
         "summary": "Shell",

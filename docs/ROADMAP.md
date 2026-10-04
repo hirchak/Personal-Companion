@@ -10,8 +10,10 @@ M6: external ACCEPT — engineering + bounded early hardware за C6/R6
 M7_PREP_EVIDENCE_ADMISSION: external ACCEPT preparation/tooling scope (reports/M7_PREP_ARCHITECT_REVIEW.md); clinical active=0.
 M7A_GENERIC_PRACTICE_ENGINE: external ACCEPT — synthetic engineering scope (reports/M7A_ARCHITECT_REVIEW.md).
 M7B_CONVERSATION_HOME: external ACCEPT — synthetic engineering scope; binding longitudinal/deep-goal addenda included.
-M7C: AWAITING_REVIEW — bounded original-synthetic controller/provider/ASR scope; final exact-C580Python/42browser/46web.
-Clinical activation/M7D/M8 NOT_STARTED; наступної goal/permission немає.
+M7C: external ACCEPT — live-synthetic engineering + local ASR capability.
+M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality evaluation + synthetic local-ASR guard.
+M8A: IN_PROGRESS — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
+M8B: NOT_STARTED; no actual private pilot/release/system install permission. Clinical active0.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -127,3 +129,13 @@ five qualification metadata packages OFF. No clinical review/activation; all27 f
 M7C-N02 provider privacy hard gate OPEN, M6-N01 final0.6.1hardware NOT_RUN; M8 NOT_STARTED.
 
 M7D final evidence: reports/M7D_DEEP_SESSION_REPORT.md; C 56b03bd3594a6d6630864904b6d99e46242de95a. Native ledger48/48, all failures retained; provider choice/private/clinical/hardware gates pending. M8 NOT_STARTED.
+
+
+## M8A owner goal — 2026-10-04
+
+M7D external scoped ACCEPT: reports/M7D_ARCHITECT_REVIEW.md exact C56b03bd / R0eaac557.
+M8A synthetic release engineering; current authority: prompts/M8A_RELEASE_PILOT_READINESS.md / docs/M8A_CONTRACT.md.
+Exact source package + prerequisites, safe defaults, separated roots, preflight/backup/migration,
+fresh-root rollback/restore, foreground lifecycle, stale-client refusal and KEEP DATA uninstall.
+M7D-N01/N02 hardening results belong to M8A report; historical M7D checkpoint text above remains evidence.
+M8B NOT_STARTED. Real Mac/private vault/phone/Health/human ASR/transport/provider/clinical gates separate.

@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 export default defineConfig({
+  define: { __PC_BUILD_ID__: JSON.stringify(process.env.PC_BUILD_COMMIT || "DEVELOPMENT") },
   plugins: [
     {
       name: "synthetic-pwa-shell",

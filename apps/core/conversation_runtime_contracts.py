@@ -83,6 +83,7 @@ class ProviderPayload(Strict):
     purpose:Literal['REFLECT','GOAL_PROPOSAL','CLOSURE']
     synthetic:Literal[True]
     language:Literal['uk']
+    address_form:Literal['FORMAL_VY']='FORMAL_VY'
     skills:list[RuntimeSkill]
     context:list[ProviderContextPart]
     current_message_ref:str

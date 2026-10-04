@@ -36,21 +36,43 @@ def check_inferences(c):
             if d['state']=='COMPLETED':ConversationCandidate.model_validate(d['candidate'])
     except (KeyError,ValueError,TypeError,ValidationError):raise SafeError('INFERENCE_INTEGRITY') from None
 
-def main_question_count(text,payload):
-    """Quoted questions already in explicit context are data, not another follow-up.
+QUOTE_PATTERN = r'«([^«»]{1,1000})»|“([^“”]{1,1000})”|"([^"\n]{1,1000})"'
 
-    Unknown quotes still count. This is a punctuation heuristic, not a semantic judge.
+def generated_text(text, payload, examples=False):
+    """Remove source quotations, and explicitly labeled comparison/example quotations.
+
+    Unlabeled/standalone quoted questions remain follow-ups. Ambiguous language counts;
+    this is a bounded deterministic convention, not a general semantic classifier.
     """
-    known=[p['text'] for p in payload.get('context',[])]
-    known += [i['text'] for i in (payload.get('reflection_state') or {}).get('items',[])]
-    normalized=lambda value:' '.join(value.casefold().split())
-    known=[normalized(t) for t in known]
-    count=text.count('?')
-    pattern=r'«([^«»]{1,1000})»|“([^“”]{1,1000})”|"([^"\n]{1,1000})"'
-    for match in re.finditer(pattern,text):
-        quote=next(v for v in match.groups() if v is not None)
-        if any(normalized(quote) in source for source in known):count-=quote.count('?')
-    return count
+    normalized = lambda value: ' '.join(value.casefold().split())
+    known = [normalized(p['text']) for p in payload.get('context', [])]
+    known += [normalized(i['text']) for i in (payload.get('reflection_state') or {}).get('items', [])]
+    def replace(match):
+        quote = next(v for v in match.groups() if v is not None)
+        prefix = text[max(0, text.rfind('\n', 0, match.start()) + 1):match.start()]
+        labeled = examples and re.search(
+            r'(?:варіант|опція|приклад|репліка|формулювання)\b[^?\n]{0,100}[:—–-]\s*$',
+            prefix, re.IGNORECASE)
+        if any(normalized(quote) in source for source in known) or labeled:
+            return ' ' * len(match.group())
+        return match.group()
+    result = re.sub(QUOTE_PATTERN, replace, text)
+    # Explicit historical blockquotes must still match actual supplied source text.
+    for match in list(re.finditer(r'^\s*>\s*([^\n]+)',result,re.MULTILINE))[::-1]:
+        if any(normalized(match.group(1)) in source for source in known):
+            result=result[:match.start()]+' '*len(match.group())+result[match.end():]
+    return result
+
+def main_question_count(text, payload):
+    return len(re.findall(r'\?+', generated_text(text, payload, examples=True)))
+
+def verify_address_form(text, payload):
+    """Stable formal Ukrainian contract; quoted user/source text preserves its register."""
+    if payload.get('address_form', 'FORMAL_VY') != 'FORMAL_VY':
+        raise SafeError('ADDRESS_FORM_UNSUPPORTED')
+    if re.search(r"\b(?:ти|тебе|тобі|тобою|твій|твоя|твоє|твої|твого|твоєї|твоїх|твоїм|твоїми|твою|твоєму)\b",
+                 generated_text(text, payload, examples=True), re.IGNORECASE):
+        raise SafeError('ADDRESS_FORM_MISMATCH')
 
 class ConversationController:
     def __init__(self,conversations,provider=None,skills=None,timeout=60):
@@ -158,7 +180,7 @@ class ConversationController:
             row=c.execute('SELECT payload FROM conversation_messages WHERE id=?',(ref['id'],)).fetchone()
             if not row or not json.loads(row[0])['synthetic']:raise SafeError('REAL_PRIVATE_DATA_OFF',403)
         selected=self.skills.select(conversation.mode,purpose)
-        payload={'mode':conversation.mode,'purpose':purpose,'synthetic':True,'language':'uk','skills':[{k:s[k] for k in ('skill_id','version','content_hash','instructions')} for s in selected],'context':[{'kind':p['kind'],'text':p['text'],'source_refs':[aliases[s['id']] for s in p['sources']]} for p in parts],'current_message_ref':aliases[str(user_message.id)],'source_refs_allowed':list(aliases.values()),'goal_revision':conversation.goal_binding.revision if conversation.goal_binding else None,'tool_permissions':[],'controller_frame_hash':digest(encode(json.loads((REPO/'skills/conversation/controller_frame.json').read_text())).encode())}
+        payload={'mode':conversation.mode,'purpose':purpose,'synthetic':True,'language':'uk','address_form':'FORMAL_VY','skills':[{k:s[k] for k in ('skill_id','version','content_hash','instructions')} for s in selected],'context':[{'kind':p['kind'],'text':p['text'],'source_refs':[aliases[s['id']] for s in p['sources']]} for p in parts],'current_message_ref':aliases[str(user_message.id)],'source_refs_allowed':list(aliases.values()),'goal_revision':conversation.goal_binding.revision if conversation.goal_binding else None,'tool_permissions':[],'controller_frame_hash':digest(encode(json.loads((REPO/'skills/conversation/controller_frame.json').read_text())).encode())}
         if snapshot:
             payload['reflection_state']={'focus':snapshot['session']['focus'],'phase':snapshot['session']['phase'],'map_version':snapshot['map_version'],'items':[{'kind':i['kind'],'text':i['text'],'provenance':i['provenance'],'state':i['state'],'source_refs':[aliases[r['id']] for r in i['sources']]} for i in snapshot['items']],'prior_closures':[{'closure':i['closure'],'source_refs':[aliases[r['id']] for r in i['sources']]} for i in snapshot['prior_closures']]}
         payload=ProviderPayload.model_validate(payload).model_dump(mode='json')
@@ -260,6 +282,7 @@ class ConversationController:
             if candidate.goal_suggestion is not None and d['purpose']!='GOAL_PROPOSAL':raise SafeError('UNREQUESTED_GOAL_CANDIDATE')
             if (candidate.closure is not None)!=(d['purpose']=='CLOSURE'):raise SafeError('CLOSURE_SCHEMA_REQUIRED')
             if main_question_count(candidate.assistant_text,payload)>1:raise SafeError('MAIN_QUESTION_LIMIT')
+            verify_address_form(candidate.assistant_text,payload)
             with self.store.transaction() as c:
                 d=self.row(c,id)
                 if cancel.is_set() or d['state']!='RUNNING':

@@ -6,7 +6,7 @@ import json
 import re
 import subprocess
 from pathlib import Path
-from check_docs import public_files, SECRET_PATTERNS
+from check_docs import public_files, SECRET_PATTERNS, forbidden_path
 
 PATTERNS = SECRET_PATTERNS + (
     re.compile(r'\b(?:10\.(?:\d{1,3}\.){2}\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})\b'),
@@ -48,6 +48,14 @@ def scan(root: Path, include_generated: bool = False) -> dict:
         top = git('rev-parse','--show-toplevel').strip()
         if Path(top).resolve() == root:
             history = 'SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED'
+            tracked = git('ls-files').splitlines()
+            metrics['tracked_files'] = len(tracked)
+            for name in tracked:
+                path = Path(name)
+                generated_payload = bool(set(path.parts) & {'generated','node_modules','.venv','backups','exports','runtime-data','models'})
+                binary_payload = path.suffix in {'.bin','.gguf','.ggml','.onnx','.pt','.safetensors','.tar','.gz','.mp3','.mp4','.webm'}
+                if forbidden_path(path) or generated_payload or binary_payload:
+                    errors.append('Tracked forbidden payload path (contents not read): '+name)
             for row in git('cat-file','--batch-all-objects','--batch-check=%(objectname) %(objecttype)').splitlines():
                 oid, kind = row.split()
                 metrics['git_objects'] += 1
