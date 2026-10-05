@@ -10,15 +10,15 @@ actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: aa5d027d1aa71994085c4100f2d6f36fab47f44e
-implementation_sha: d0b24846ced133864c45dc0b0eb71a1b01f0e947
+implementation_sha: 96a61da305b98c7c33112f47fc134be8e36e79ec
 report_path: reports/M8D_REVIEW_FIX_REPORT.md
 last_reviewed_sha: d0b24846ced133864c45dc0b0eb71a1b01f0e947
 current_milestone: M8D
 current_goal: M8D_REVIEW_FIXES
 current_goal_path: prompts/M8D_REVIEW_FIXES.md
 current_contract_path: docs/M8D_CONTRACT.md
-implementation_status: IN_PROGRESS
-review_status: FIX_REQUIRED
+implementation_status: AWAITING_REVIEW
+review_status: AWAITING_REVIEW
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -30,16 +30,17 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8D review fixes — IN_PROGRESS
+# M8D review fixes — AWAITING_REVIEW
 
-Actual clean main/origin aa5d027 verified. C1 d0b24846 independent FIX_REQUIRED: R01 blocking exact
-context order/binding; R02 required durable settings-confirmation correction. Current goal/contract/report pointers above.
-Canonical cached private provider payload/ordered context + serialized reflection-state binding being fixed;
-fixture-only tests, source/profile/draft/revision/frame freshness remains fail closed. Native ledger4/4 immutable;
-ZERO new inference. Model profiles/caps unchanged LunaHigh/LunaMax/Sol6.1High; no fallback/PAYG/auth/account/billing.
+Base R1 aa5d027d1aa71994085c4100f2d6f36fab47f44e; reviewed C1 d0b24846 FIX_REQUIRED; forward C2 96a61da305b98c7c33112f47fc134be8e36e79ec.
+R01 canonical frozen exact ordered context/reflection/request hash and source/profile/draft freshness fixed;
+R02 current durable evidence corrected. Independent ACCEPT not claimed. Exact-C2 Python794/web50/build/
+Chromium selected journal+native local whisper/private Mac lifecycle/privacy PASS; fixture-only AI.
 TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
 CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
-Literal-true runtime acknowledgements mandatory before activation; no account/settings inspection.
-Real vault/operator terminal/private audio untouched; actual AI/voice activation NOT_STARTED.
-HumanUA OPEN_HUMAN_TEST; clinical0/all5OFF/27findingsOPEN/HealthOFF/phone NEEDS_TRANSPORT_GATE.
-Next forward C2/exact-C2 checks/evidence-only R2/privacy/normal main FF; stop for independent review.
+Literal-true runtime gates unchanged; account/settings not inspected. Native ledger4/4 byte-identical,
+new inference0; old samples stay C1, no C2 native rerun. Same LunaHigh/LunaMax/Sol6.1High and ceilings,
+no fallback/PAYG/auth/account/billing/system changes. Real vault/operator/human voice untouched, actual
+private AI activationNOT_STARTED. HumanUA OPEN_HUMAN_TEST/clinical0/all5OFF/HealthOFF/27findingsOPEN/
+phone NEEDS_TRANSPORT_GATE. Evidence-only R2/normal FF/origin verified externally; CI NOT_CONFIGURED.
+Next independent review only; no real activation or next milestone.

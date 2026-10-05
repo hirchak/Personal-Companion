@@ -136,3 +136,5 @@ No owner-settings confirmation to the architect is asserted. Owner must explicit
 literal-true local runtime acknowledgements at real activation; no account/settings inspection or real activation
 occurs in engineering. Canonical preview must show the exact ordered provider context and reflection state;
 stale/reordered approval fails. Native engineering ledger exhausted4/4; only fixture providers for this correction.
+
+Corrected M8D candidate C2 `96a61da305b98c7c33112f47fc134be8e36e79ec`, release `M8D-96a61da305b98c7c33112f47fc134be8e36e79ec`, manifest `846266388233eeded13fe332064df4d41d415a654c1d30fb47556cbf05d3d4dd`. Earlier C1 activation reference is superseded; use corrected exact release only after independent ACCEPT and explicit local real-activation settings confirmations. This procedure remains NOT EXECUTED.

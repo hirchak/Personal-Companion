@@ -1,0 +1,24 @@
+{
+  "implementation_sha": "96a61da305b98c7c33112f47fc134be8e36e79ec",
+  "scope": "READ_ONLY_EXISTING_C1_M8D_ENGINEERING_LEDGER",
+  "native_attempts_before": 4,
+  "native_attempts_after": 4,
+  "maximum": 4,
+  "new_native_inference": 0,
+  "before_sha256": "49b2093a46e008f789af441bdb792d3ebaf70fabbe9cfff78dc45948cfa4211e",
+  "after_sha256": "49b2093a46e008f789af441bdb792d3ebaf70fabbe9cfff78dc45948cfa4211e",
+  "byte_identical": true,
+  "historical_native_implementation": "d0b24846ced133864c45dc0b0eb71a1b01f0e947",
+  "outcomes": [
+    {
+      "model": "gpt-6-luna",
+      "outcome": "COMPLETED",
+      "requests": 3
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "outcome": "COMPLETED",
+      "requests": 1
+    }
+  ]
+}

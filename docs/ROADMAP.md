@@ -199,3 +199,5 @@ M8D independent review 2026-10-05: FIX_REQUIRED for C1 d0b24846/R1 aa5d027. R01 
 context ordering/binding; R02 durable settings-confirmation correction. Same M8D forward fix only, native
 ledger4/4 exhausted/no new calls. Real activation blocked until corrected independent ACCEPT; controls
 REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT. C2/R2 verification/publication pending.
+
+M8D forward corrections C2 96a61da305b98c7c33112f47fc134be8e36e79ec: R01 resolved engineering/R02 evidence corrected, AWAITING_REVIEW. Exact-C2 Python794/web50/build/fixture Chromium+local whisper/lifecycle/privacy PASS; native ledger4/4 immutable/new inference0. Both settings REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT. No real activation or next milestone.
