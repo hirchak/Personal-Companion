@@ -35,11 +35,13 @@ export function PrivatePilotControls({
   onChanged,
   compact = false,
   mode = "FREE",
+  deepProfile,
 }: {
   csrf: string;
   onChanged?: (state: PilotState) => void;
   compact?: boolean;
   mode?: "FREE" | "DEEP";
+  deepProfile?: PilotState["deep_profile"];
 }) {
   const [state, setState] = useState<PilotState | null>(null),
     [open, setOpen] = useState(false),
@@ -125,7 +127,7 @@ export function PrivatePilotControls({
         >
           {active
             ? mode === "DEEP"
-              ? state?.deep_profile === "DEEP_ECONOMICAL"
+              ? (deepProfile ?? state?.deep_profile) === "DEEP_ECONOMICAL"
                 ? "Deep · Luna Max"
                 : "Deep · Sol 6.1 High"
               : "Luna · High"

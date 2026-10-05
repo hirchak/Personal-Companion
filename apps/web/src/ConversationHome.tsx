@@ -886,6 +886,7 @@ export function ConversationHome({
         {privateLocal && (
           <PrivatePilotControls
             mode={page?.conversation.mode ?? "FREE"}
+            deepProfile={pilot?.deep_profile}
             compact
             csrf={csrf}
             onChanged={(s) => {
