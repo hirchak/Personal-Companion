@@ -202,7 +202,9 @@ export function ConversationHome({
     };
   }, []);
   useEffect(() => {
-    messages.current?.scrollTo({ top: messages.current.scrollHeight });
+    messages.current?.scrollTo({
+      top: page?.messages.length ? messages.current.scrollHeight : 0,
+    });
   }, [page?.messages.length]);
   useEffect(() => {
     const v = window.visualViewport;
@@ -733,7 +735,9 @@ export function ConversationHome({
           aria-live="polite"
           aria-relevant="additions"
         >
-          {!hasMessages ? (
+          {!hasMessages && page?.conversation.mode === "DEEP" ? (
+            <p className="deep-empty">З чого хочеться почати цю тему?</p>
+          ) : !hasMessages ? (
             <div className="conversation-empty">
               <h2>Що у вас сьогодні на думці?</h2>
               <p>

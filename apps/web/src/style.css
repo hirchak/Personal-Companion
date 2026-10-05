@@ -1784,3 +1784,5 @@ footer {
 .ai-compact button { font-size: .8rem; padding: 8px 10px; }
 .session-goal { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .85rem; color: var(--muted); }
 @media (max-width: 650px) { .conversation-toolbar > div > select { order: 1; width: 100%; max-width: none; } }
+
+.deep-empty { margin: 0; padding: 8px; color: var(--muted); font-size: 1.05rem; }
