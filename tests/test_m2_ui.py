@@ -20,7 +20,7 @@ def test_M2_owner_pairing_revoke_ui_and_synthetic_viewports(isolated):
     try:
       with sync_playwright() as pw:
         browser=pw.chromium.launch(headless=True);owner=browser.new_context();phone=browser.new_context(viewport={'width':390,'height':844})
-        root=owner.new_page();root.goto('http://127.0.0.1:8768/');root.get_by_label('Код розблокування').fill(app.state.auth.code);root.get_by_role('button',name='Відкрити щоденник').click();go_journal(root)
+        root=owner.new_page();root.goto('http://127.0.0.1:8768/');root.get_by_label('Код розблокування').fill(app.state.auth.code);root.get_by_role('button',name='Відкрити Особистий простір').click();go_journal(root)
         feature(root,'Налаштування');root.get_by_role('button',name='Пристрої та PWA',exact=True).click();root.get_by_role('button',name='Створити запрошення').click();invite=root.locator('.pair-code').inner_text()
         page=phone.new_page();external=[];errors=[]
         phone.on('request',lambda r:external.append(r.url) if not r.url.startswith('http://127.0.0.1:8768/') else None)

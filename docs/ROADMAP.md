@@ -15,8 +15,8 @@ M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality e
 M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
-M8D: external ACCEPT — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
-M8E: AWAITING_REVIEW — conversation-first mobile UX/seamless local voice; synthetic engineering, phone gate still OFF.
+M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
+M8E = AWAITING_REVIEW — C2 fixes independent R01/N01/N02 findings; no next milestone, phone gate still OFF.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 

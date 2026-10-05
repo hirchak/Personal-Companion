@@ -50,9 +50,10 @@ class LocalConsent:
         with self.store.transaction() as c:
             conv = controller.conversations.row(c, id)
             session = controller.deep.session(c, id)
-            goal = controller.context.row(c, conv.goal_binding.id)
-            if goal.revision != conv.goal_binding.revision or goal.state != 'ACTIVE':
-                raise SafeError('GOAL_REVISION_CHANGED', 409)
+            current_goal = controller.context.row(c, conv.goal_binding.id)
+            if current_goal.state != 'ACTIVE':
+                raise SafeError('GOAL_NOT_ACTIVE', 409)
+            goal = controller.context.row(c, conv.goal_binding.id, conv.goal_binding.revision)
             current_map = controller.deep.effective(c, controller.deep.current(c, session['goal']))
             # Model updates are advisory within scope. Explicit map corrections renew consent.
             actions = [r[0] for r in c.execute('SELECT operation_id FROM deep_actions WHERE json_extract(payload,"$.goal.id")=? AND json_extract(payload,"$.goal.revision")=? AND json_type(payload,"$.items")="array" ORDER BY operation_id', (session['goal']['id'],session['goal']['revision']))]

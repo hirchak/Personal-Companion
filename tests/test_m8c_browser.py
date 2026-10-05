@@ -40,7 +40,7 @@ def test_private_browser_mode_core_and_lock(vault,scenario):
             expect(page.get_by_text('Локальний приватний пілот · лише цей Mac.',exact=False)).to_be_visible()
             expect(page.get_by_text('Synthetic demo',exact=False)).to_have_count(0)
             page.get_by_label('Код розблокування').fill(app.state.auth.code)
-            page.get_by_role('button',name='Відкрити щоденник').click()
+            page.get_by_role('button',name='Відкрити Особистий простір').click()
             expect(page.get_by_role('heading',name='Ваш щоденник',exact=True)).to_be_visible()
             expect(page.get_by_role('button',name='Розмова',exact=True)).to_have_count(0)
             expect(page.locator('.voice-disclosure,.journal-tools')).to_have_count(0)

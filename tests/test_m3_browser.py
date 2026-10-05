@@ -26,7 +26,7 @@ def serve(root):
     return app,server,thread
 
 def unlock(page,app):
-    page.goto(ORIGIN+'/');page.get_by_label('Код розблокування').fill(app.state.auth.code);page.get_by_role('button',name='Відкрити щоденник').click()
+    page.goto(ORIGIN+'/');page.get_by_label('Код розблокування').fill(app.state.auth.code);page.get_by_role('button',name='Відкрити Особистий простір').click()
     go_journal(page);tools(page)
 
 def propose(page,task):

@@ -18,7 +18,7 @@ def server(root,demo=True):
  assert srv.started;return app,srv,t
 
 def unlock(p,app):
- p.goto(ORIGIN);p.get_by_label('Код розблокування').fill(app.state.auth.code);p.get_by_role('button',name='Відкрити щоденник').click();expect(p.get_by_role('heading',name='Що у вас сьогодні на думці?')).to_be_visible()
+ p.goto(ORIGIN);p.get_by_label('Код розблокування').fill(app.state.auth.code);expect(p.get_by_role('button',name='Відкрити Особистий простір',exact=True)).to_be_visible();p.get_by_role('button',name='Відкрити Особистий простір').click();expect(p.get_by_role('heading',name='Що у вас сьогодні на думці?')).to_be_visible()
 def stop(srv,t):srv.should_exit=True;t.join(8);assert not t.is_alive()
 def capture(p,name):
  OUT.mkdir(parents=True,exist_ok=True)

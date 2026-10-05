@@ -24,7 +24,7 @@ def context(pw,profile,file,width=1440):
     return pw.chromium.launch_persistent_context(str(profile),headless=True,permissions=['microphone'],accept_downloads=True,
       args=['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream',f'--use-file-for-fake-audio-capture={file}'],viewport={'width':width,'height':1000 if width>500 else 844})
 def mac_unlock(page,app):
-    page.goto(ORIGIN+'/');page.get_by_label('Код розблокування').fill(app.state.auth.code);page.get_by_role('button',name='Відкрити щоденник').click()
+    page.goto(ORIGIN+'/');page.get_by_label('Код розблокування').fill(app.state.auth.code);page.get_by_role('button',name='Відкрити Особистий простір').click()
     go_journal(page)
     page.get_by_text('Голосовий запис',exact=True).click()
 def record(page):

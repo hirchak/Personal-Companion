@@ -8,8 +8,9 @@ from apps.core.conversation import Conversations
 from apps.core.conversation_contracts import NewConversation
 from apps.core.conversation_controller import ConversationController
 from apps.core.local_private_ai import PrivatePilotGate,OwnerAcknowledgement,ACK_KEYS,PROFILE_ID
-from apps.core.local_private_contracts import PrivateContextPreview,PrivateInferenceStart
-from apps.core.deep_session_contracts import ContextBinding
+from apps.core.local_private_contracts import DurableConsentAcceptance,PrivateContextPreview,PrivateInferenceStart
+from apps.core.reflection_contracts import GoalChange,GoalCreate
+from apps.core.deep_session_contracts import ContextBinding,ContextSelection
 from apps.core.live_evaluation_budget import M8DEvaluationBudget
 from apps.core.domain import Journal
 from test_m1_domain import isolated,create
@@ -427,3 +428,166 @@ def test_R01_reordered_constructor_cannot_replace_frozen_approved_payload(contro
  monkeypatch.setattr(private,'canonical_private_payload',reordered)
  with pytest.raises(SafeError,match='PRIVATE_EXACT_CONTEXT_CHANGED'):c.send(id,body)
  assert not g.provider('FREE').calls
+
+
+# M8E-R01: preserve M7D-pinned goal revisions in durable Deep scope.
+class PinnedGoalMapProvider(PrivateFixtureProvider):
+    def __init__(self, model, effort, calls):
+        super().__init__(model, effort)
+        self.shared_calls = calls
+
+    def execute(self, payload, schema, cancel, deadline, on_delta=None):
+        result = super().execute(payload, schema, cancel, deadline, on_delta)
+        self.shared_calls.append(payload)
+        if payload['mode'] == 'DEEP':
+            current = next(part for part in reversed(payload['context']) if part['kind'] == 'CURRENT_TURN')
+            marker = 'REVISION_ONE' if 'REVISION_ONE' in current['text'] else 'REVISION_TWO'
+            candidate = json.loads(result['text'])
+            candidate['working_map'] = {'items': [{
+                'kind': 'OBSERVATION',
+                'text': 'ORIGINAL SYNTHETIC MAP_FROM_' + marker,
+                'provenance': 'MODEL_DERIVED_SUMMARY',
+                'source_refs': [payload['current_message_ref']],
+            }]}
+            result['text'] = encode(candidate)
+        return result
+
+
+def accept_private(gate):
+    gate.accept_consent('ORIGINAL_SYNTHETIC_REVIEW_SESSION', DurableConsentAcceptance(
+        version=gate.consent.contract()['version'],
+        privacy_version=gate.consent.contract()['privacy_version'],
+        accepted=True,
+    ))
+
+def deep_request(page, text):
+    return PrivateInferenceStart(
+        operation_id=uuid4(),
+        base_revision=page['conversation']['revision'],
+        text=text,
+        owner_approved_external_text=True,
+        standard_send=True,
+    )
+
+
+def completed(controller, conversation_id, text):
+    page = controller.conversations.get(conversation_id)
+    result = controller.send(conversation_id, deep_request(page, text))
+    assert result['inference_job'] is not None
+    final = finish(controller, result['inference_job']['id'])
+    assert final['state'] == 'COMPLETED'
+    return controller.conversations.get(conversation_id), final
+
+
+def new_controller(store, calls):
+    gate = PrivatePilotGate(
+        store,
+        provider_factory=lambda mode, model, effort: PinnedGoalMapProvider(model, effort, calls),
+    )
+    conversations = Conversations(store, synthetic_demo=False, mock_responses=False)
+    controller = ConversationController(conversations, private_gate=gate, timeout=120)
+    gate.revocation_hooks.append(controller.revoke_private)
+    gate.profile_change_hooks.append(controller.revoke_private)
+    gate.resume('ORIGINAL_SYNTHETIC_RESTART_SESSION')
+    return controller, gate
+
+
+def test_pinned_deep_revision_survives_goal_edit_reload_and_new_session(controller):
+    current, gate = controller
+    accept_private(gate)
+    calls = []
+    gate.adapters['DEEP_QUALITY'] = PinnedGoalMapProvider('gpt-6.1-sol', 'high', calls)
+
+    goal_v1_text = 'ORIGINAL SYNTHETIC agreed goal revision one'
+    goal_v2_text = 'ORIGINAL SYNTHETIC edited goal revision two'
+    goal = current.context.create(GoalCreate(operation_id=uuid4(), text=goal_v1_text, user_agreed=True))
+    old = current.conversations.create(NewConversation(
+        operation_id=uuid4(), goal_id=goal['id'], goal_revision=1,
+    ))
+    old_id = old['conversation']['id']
+    selection = ContextSelection()
+
+    scope_v1 = gate.consent.scope(current, old_id, selection)
+    assert scope_v1['goal']['revision'] == 1
+    assert scope_v1['goal_text'] == goal_v1_text
+    gate.consent.approve_scope(current, old_id, selection, scope_v1['scope_hash'])
+    _, first = completed(current, old_id, 'ORIGINAL SYNTHETIC REVISION_ONE initial source')
+    first_map = current.deep.read(old_id)['map']
+    assert first_map['goal']['revision'] == 1
+    assert first_map['items'][0]['text'] == 'ORIGINAL SYNTHETIC MAP_FROM_REVISION_ONE'
+
+    changed = current.context.change(goal['id'], GoalChange(
+        operation_id=uuid4(), base_revision=1, text=goal_v2_text, user_agreed=True,
+    ))
+    assert changed['revision'] == 2 and changed['state'] == 'ACTIVE'
+    with current.store.connect() as db:
+        assert current.context.row(db, goal['id'], 1).text == goal_v1_text
+
+    # Simulate process restart/reload: consent, pinned binding, session, and map are read from SQLite.
+    reopened_store = Store(current.store.root, root_kind=RootKind.PRIVATE_LOCAL)
+    reopened, reopened_gate = new_controller(reopened_store, calls)
+    resumed = reopened.conversations.get(old_id)
+    resumed_session = reopened.deep.read(old_id)['session']
+    resumed_scope = reopened_gate.consent.scope(reopened, old_id, selection)
+    reopened_gate.consent.require_scope(reopened, old_id, selection)
+    assert resumed['conversation']['goal_binding'] == {'id': goal['id'], 'revision': 1}
+    assert resumed_session['goal'] == {'id': goal['id'], 'revision': 1}
+    assert reopened.deep.read(old_id)['goal']['text'] == goal_v1_text
+    assert resumed_scope['goal_text'] == goal_v1_text
+    assert resumed_scope['scope_hash'] == scope_v1['scope_hash']
+    assert resumed_scope['working_map']['items'][0]['text'] == 'ORIGINAL SYNTHETIC MAP_FROM_REVISION_ONE'
+
+    _, continued = completed(reopened, old_id, 'ORIGINAL SYNTHETIC REVISION_ONE continuation')
+    continued_payload = calls[-1]
+    assert continued_payload['goal_revision'] == 1
+    assert continued_payload['context'][0]['text'] == goal_v1_text
+    assert continued_payload['reflection_state']['items'][0]['text'] == 'ORIGINAL SYNTHETIC MAP_FROM_REVISION_ONE'
+    assert goal_v2_text not in encode(continued_payload)
+
+    # A new conversation after the edit pins revision two and receives a separate map.
+    fresh = reopened.conversations.create(NewConversation(
+        operation_id=uuid4(), goal_id=goal['id'], goal_revision=2,
+    ))
+    fresh_id = fresh['conversation']['id']
+    scope_v2 = reopened_gate.consent.scope(reopened, fresh_id, selection)
+    assert scope_v2['goal']['revision'] == 2
+    assert scope_v2['goal_text'] == goal_v2_text
+    assert scope_v2['scope_hash'] != scope_v1['scope_hash']
+    assert scope_v2['working_map'] is None
+    reopened_gate.consent.approve_scope(reopened, fresh_id, selection, scope_v2['scope_hash'])
+    _, second = completed(reopened, fresh_id, 'ORIGINAL SYNTHETIC REVISION_TWO new session source')
+    second_payload = calls[-1]
+    second_map = reopened.deep.read(fresh_id)['map']
+    assert second_payload['goal_revision'] == 2
+    assert second_payload['context'][0]['text'] == goal_v2_text
+    assert second_map['goal']['revision'] == 2
+    assert second_map['items'][0]['text'] == 'ORIGINAL SYNTHETIC MAP_FROM_REVISION_TWO'
+    assert 'MAP_FROM_REVISION_TWO' not in encode(reopened.deep.read(old_id)['map'])
+    assert 'MAP_FROM_REVISION_ONE' not in encode(second_map)
+
+
+def test_pinned_deep_fails_closed_when_current_goal_is_paused(controller):
+    current, gate = controller
+    accept_private(gate)
+    goal = current.context.create(GoalCreate(
+        operation_id=uuid4(), text='ORIGINAL SYNTHETIC lifecycle goal', user_agreed=True,
+    ))
+    old = current.conversations.create(NewConversation(
+        operation_id=uuid4(), goal_id=goal['id'], goal_revision=1,
+    ))
+    old_id = old['conversation']['id']
+    selection = ContextSelection()
+    scope = gate.consent.scope(current, old_id, selection)
+    gate.consent.approve_scope(current, old_id, selection, scope['scope_hash'])
+    current.context.change(goal['id'], GoalChange(
+        operation_id=uuid4(), base_revision=1, state='PAUSED', user_agreed=True,
+    ))
+    assert current.conversations.get(old_id)['conversation']['goal_binding'] == {
+        'id': goal['id'], 'revision': 1,
+    }
+    with pytest.raises(SafeError, match='GOAL_NOT_ACTIVE'):
+        gate.consent.scope(current, old_id, selection)
+    with pytest.raises(SafeError, match='GOAL_NOT_ACTIVE'):
+        current.send(old_id, deep_request(current.conversations.get(old_id), 'ORIGINAL SYNTHETIC paused goal turn'))
+    assert current.conversations.get(old_id)['messages'] == []
+    assert gate.provider('DEEP').calls == []

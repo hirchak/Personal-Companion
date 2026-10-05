@@ -61,3 +61,13 @@ TRAINING_CONTROL_CONFIRMATION = NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
 CODEX_ENVIRONMENTS_CONFIRMATION = NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
 HUMAN_UA_ASR = PARTIAL_OWNER_PILOT / OPEN; an owner manual microphone→whisper exercise is not formal quality
 acceptance. No private transcript/audio is copied. PHONE_TRANSPORT = NOT_ACTIVATED / NEEDS_TRANSPORT_GATE.
+
+## M8E-R01 forward correction: pinned Deep goal revision
+
+An existing Deep conversation and its DeepSession, WorkingMap, closures, scope, and inference payload remain
+pinned to `conversation.goal_binding.id + revision`. Scope display/hash reads goal text from that immutable
+revision. It separately reads the current goal only to verify that lifecycle state remains `ACTIVE`; a newer
+ACTIVE revision does not invalidate or rebind the older conversation. Editing revision 1 to revision 2 affects
+new Deep conversations only. Each revision retains its own revision-keyed Working Map and source lineage.
+A PAUSED or COMPLETED current goal continues to fail closed with `GOAL_NOT_ACTIVE`, before message persistence
+or provider execution. This preserves the M7D pinned-revision contract.

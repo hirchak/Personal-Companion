@@ -122,7 +122,7 @@ function App() {
   if (!ready)
     return (
       <main className="unlock">
-        <p role="status">Відкриваємо щоденник…</p>
+        <p role="status">Відкриваємо Особистий простір…</p>
       </main>
     );
   if (ready && rootKind === "UNKNOWN")
@@ -173,7 +173,7 @@ function App() {
             autoFocus
           />
           <button className="primary" disabled={busy}>
-            {busy ? "Відкриваємо…" : "Відкрити щоденник"}
+            {busy ? "Відкриваємо…" : "Відкрити Особистий простір"}
           </button>
         </form>
         {error && <p role="alert">{error}</p>}

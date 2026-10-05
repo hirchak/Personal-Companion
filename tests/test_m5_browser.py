@@ -21,7 +21,7 @@ def server(root):
     assert srv.started;return app,srv,t
 def stop(srv,t):srv.should_exit=True;t.join(8);assert not t.is_alive()
 def unlock(p,app):
-    p.goto(ORIGIN+'/');p.get_by_label('Код розблокування').fill(app.state.auth.code);p.get_by_role('button',name='Відкрити щоденник').click();go_journal(p)
+    p.goto(ORIGIN+'/');p.get_by_label('Код розблокування').fill(app.state.auth.code);p.get_by_role('button',name='Відкрити Особистий простір').click();go_journal(p)
 def library(p):feature(p,'Творча полиця');expect(p.get_by_role('heading',name='Творча полиця',exact=True)).to_be_visible()
 def capture(p,text,title='SYNTHETIC · паперова сцена'):
     p.get_by_role('button',name='Нова творча ідея').click();p.get_by_label('Назва ідеї',exact=True).fill(title);p.get_by_label('Оригінальний творчий текст').fill(text)
