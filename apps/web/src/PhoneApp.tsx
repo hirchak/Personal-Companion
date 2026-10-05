@@ -7,6 +7,7 @@ import {
 } from "./phone-store";
 import { blank, names, typed, fieldNames, type Draft } from "./journal-ui";
 import { PhoneHealthPanel } from "./PhoneHealthPanel";
+import { ComposerVoice, VoiceHistory } from "./ComposerVoice";
 import { VoicePanel } from "./VoicePanel";
 import { CreativePanel } from "./CreativePanel";
 import { SpacePanel } from "./SpacePanel";
@@ -39,7 +40,8 @@ function errorText(e: unknown) {
 }
 export function PhoneApp() {
   const store = useRef(new PhoneStore());
-  const [surface, setSurface] = useState("journal");
+  const [voiceBusy, setVoiceBusy] = useState(false);
+  const [surface, setSurface] = useState("conversation");
   const [data, setData] = useState<LocalState | null>(null),
     [exists, setExists] = useState<boolean | null>(null),
     [pass, setPass] = useState(""),
@@ -103,7 +105,8 @@ export function PhoneApp() {
     unlockGeneration.current++;
     store.current.lock();
     setData(null);
-    setSurface("journal");
+    setVoiceBusy(false);
+    setSurface("conversation");
     setPass("");
     setDraft(blank());
     setEditing(null);
@@ -390,50 +393,94 @@ export function PhoneApp() {
     )
     .sort((a, b) => b.localOrder - a.localOrder);
   return (
-    <div className="workspace phone">
-      <aside className="sidebar">
+    <div className="workspace phone conversation-shell">
+      <header className="app-topbar">
         <span className="wordmark">Особистий простір</span>
-        <nav aria-label="Розділи щоденника">
+        <nav aria-label="Основна навігація">
           <button
+            disabled={voiceBusy}
+            className={surface === "conversation" ? "current" : ""}
+            onClick={() => setSurface("conversation")}
+          >
+            Розмова
+          </button>
+          <button
+            disabled={voiceBusy}
+            className={surface === "journal" ? "current" : ""}
             onClick={() => {
               setSurface("journal");
               setFilter("");
             }}
           >
-            Усі записи
+            Щоденник
           </button>
-          {Object.entries(names).map(([k, v]) => (
+          <button
+            disabled={voiceBusy}
+            className={surface === "creative" ? "current" : ""}
+            onClick={() => setSurface("creative")}
+          >
+            Творчість
+          </button>
+          <button
+            disabled={voiceBusy}
+            className={surface === "more" ? "current" : ""}
+            onClick={() => setSurface("more")}
+          >
+            Більше
+          </button>
+        </nav>
+      </header>
+      <main className="journal app-content">
+        {surface === "conversation" && (
+          <section className="phone-conversation">
+            <h1>Розмова</h1>
+            <h2>Що у вас сьогодні на думці?</h2>
+            <p>
+              AI доступний на вашому Mac. Телефонний приватний транспорт ще не
+              активовано. Запис голосу працює локально й офлайн.
+            </p>
+            <ComposerVoice
+              phone={store.current}
+              onBusy={setVoiceBusy}
+              onDraft={() => {}}
+            />
+            <VoiceHistory phone={store.current} />
+          </section>
+        )}
+        {surface === "more" && (
+          <section>
+            <h1>Більше</h1>
+            <button onClick={() => setSurface("creative")}>
+              Творча полиця
+            </button>
+            <button onClick={() => setSurface("health")}>
+              Дані з годинника
+            </button>
+            <button onClick={() => setSurface("space")}>Мій простір</button>
+            <h2>Голосові записи</h2>
+            <VoiceHistory phone={store.current} />
             <button
-              key={k}
               onClick={() => {
                 setSurface("journal");
-                setFilter(k);
+                setSettings(true);
               }}
             >
-              {v}
+              Дані · резервування · налаштування
             </button>
-          ))}
-          <button onClick={() => setSurface("creative")}>Творча полиця</button>
-          <button onClick={() => setSurface("health")}>Дані з годинника</button>
-        </nav>
-        <div className="sidebar-bottom">
-          <p>
-            Зашифрований synthetic PWA
-            <br />
-            AI вимкнено · {online ? "Мережа доступна" : "Офлайн"}
-          </p>
-          <button onClick={lock}>Заблокувати телефон</button>
-        </div>
-      </aside>
-      <main className="journal">
-        <SpacePanel
-          value={data.space ?? { version: 0, state: defaultSpace() }}
-          save={async (base, state) => {
-            const g = unlockGeneration.current;
-            const s = await store.current.updateSpace(base, state);
-            if (g === unlockGeneration.current) setData(s);
-          }}
-        />
+            <button onClick={lock}>Заблокувати телефон</button>
+          </section>
+        )}
+
+        {(surface === "space" || surface === "creative") && (
+          <SpacePanel
+            value={data.space ?? { version: 0, state: defaultSpace() }}
+            save={async (base, state) => {
+              const g = unlockGeneration.current;
+              const s = await store.current.updateSpace(base, state);
+              if (g === unlockGeneration.current) setData(s);
+            }}
+          />
+        )}
         {surface === "creative" && (
           <CreativePanel
             phone
@@ -446,8 +493,21 @@ export function PhoneApp() {
             })}
           />
         )}
-        {surface === "health" && <PhoneHealthPanel online={online} status={() => store.current.healthStatus()} />}
+        {surface === "health" && (
+          <PhoneHealthPanel
+            online={online}
+            status={() => store.current.healthStatus()}
+          />
+        )}
         <div hidden={surface !== "journal"}>
+          <nav aria-label="Фільтри щоденника">
+            <button onClick={() => setFilter("")}>Усі записи</button>
+            {Object.entries(names).map(([key, label]) => (
+              <button key={key} onClick={() => setFilter(key)}>
+                {label}
+              </button>
+            ))}
+          </nav>
           <header>
             <div>
               <h1>Ваш щоденник</h1>

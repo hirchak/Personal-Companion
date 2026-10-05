@@ -18,7 +18,7 @@ def server(root,demo=True):
  assert srv.started;return app,srv,t
 
 def unlock(p,app):
- p.goto(ORIGIN);p.get_by_label('Код розблокування').fill(app.state.auth.code);p.get_by_role('button',name='Відкрити щоденник').click();expect(p.get_by_role('heading',name='Про що хочеться поговорити?')).to_be_visible()
+ p.goto(ORIGIN);p.get_by_label('Код розблокування').fill(app.state.auth.code);p.get_by_role('button',name='Відкрити щоденник').click();expect(p.get_by_role('heading',name='Що у вас сьогодні на думці?')).to_be_visible()
 def stop(srv,t):srv.should_exit=True;t.join(8);assert not t.is_alive()
 def capture(p,name):
  OUT.mkdir(parents=True,exist_ok=True)
@@ -36,7 +36,7 @@ def test_conversation_text_home_history_journal_and_practice(isolated):
  try:
   with sync_playwright() as pw:
    b=pw.chromium.launch(headless=True);ctx=b.new_context(reduced_motion='reduce');p=ctx.new_page();errors=[];p.on('pageerror',lambda e:errors.append(str(e)));unlock(p,app);capture(p,'empty-conversation')
-   assert p.get_by_role('navigation',name='Основна навігація').get_by_role('button').count()==3
+   assert p.get_by_role('navigation',name='Основна навігація').get_by_role('button').count()==4
    p.get_by_label('Повідомлення',exact=True).fill('SYNTHETIC · Тестовий рядок');p.get_by_role('button',name='Надіслати',exact=True).click();expect(p.get_by_label('Ваше повідомлення')).to_have_count(1);expect(p.get_by_label('Демо-відповідь помічника')).to_have_count(1)
    p.get_by_label('Повідомлення',exact=True).fill('SYNTHETIC · Другий рядок');p.get_by_role('button',name='Надіслати',exact=True).click();expect(p.get_by_label('Ваше повідомлення')).to_have_count(2);capture(p,'multi-turn')
    p.reload();expect(p.get_by_label('Ваше повідомлення')).to_have_count(2)
@@ -46,7 +46,7 @@ def test_conversation_text_home_history_journal_and_practice(isolated):
    p.get_by_role('button',name='Список',exact=True).click();capture(p,'journal-list');p.reload();p.get_by_role('button',name='Щоденник',exact=True).click();expect(p.get_by_role('button',name='Список',exact=True)).to_have_attribute('aria-pressed','true')
    p.get_by_role('button',name='День',exact=True).click();expect(p.locator('.journal-card')).to_have_count(1)
    p.get_by_role('button',name='Відкрити запис: День').click();expect(p.get_by_role('dialog',name='Запис',exact=True)).to_be_visible();capture(p,'journal-detail');p.get_by_role('button',name='Закрити: Запис').click()
-   p.get_by_role('button',name='Більше',exact=True).click();capture(p,'simplified-menu');p.get_by_role('button',name='Налаштування',exact=True).click();capture(p,'settings-connections')
+   p.get_by_role('button',name='Більше',exact=True).click();capture(p,'simplified-menu');p.get_by_role('button',name='AI & Privacy · Налаштування',exact=True).click();capture(p,'settings-connections')
    assert not errors;b.close()
  finally:stop(srv,t)
 
@@ -58,11 +58,12 @@ def test_voice_composer_generated_audio_unavailable_and_explicit_demo_insert(iso
  try:
   with sync_playwright() as pw:
    ctx=context(pw,isolated/'profile',file);p=ctx.pages[0];p.set_default_timeout(8000);errors=[];external=[];p.on('pageerror',lambda e:errors.append(str(e)));ctx.on('request',lambda r:external.append(r.url) if not r.url.startswith(ORIGIN+'/') else None);unlock(p,app)
-   capture(p,'mic-idle');p.get_by_role('button',name='Записати голосом',exact=True).click();expect(p.get_by_text('Записуємо ·',exact=False)).to_be_visible();capture(p,'recording')
-   p.wait_for_timeout(800);p.get_by_role('button',name='Зупинити й зберегти аудіо').click();expect(p.locator('.voice-item')).to_have_count(1)
-   p.get_by_role('button',name='Розпізнати локально').click();expect(p.get_by_role('alert')).to_contain_text('Локальна модель ще не встановлена');capture(p,'asr-unavailable')
-   p.get_by_text('Локальне розпізнавання',exact=True).click();p.get_by_label('Використати synthetic fake ASR').check();p.get_by_role('button',name='Розпізнати локально').click();expect(p.get_by_label('Перевірити та виправити транскрипт')).to_be_visible()
-   p.get_by_label('Перевірити та виправити транскрипт').fill('SYNTHETIC · Перевірений текст для composer');p.get_by_role('button',name='Вставити текст у розмову').click();expect(p.get_by_role('dialog',name='Голосовий ввід')).to_have_count(0)
+   capture(p,'mic-idle');p.get_by_role('button',name='Записати голосом',exact=True).click();expect(p.locator('[data-voice-state=RECORDING]')).to_be_visible();capture(p,'recording')
+   p.wait_for_timeout(800);p.get_by_role('button',name='Завершити',exact=True).click();expect(p.locator('[data-voice-state=WAITING_FOR_LOCAL_ASR]')).to_be_visible();assert len(app.state.voice.list()['items'])==1
+   from apps.core.local_asr import FakeLocalASR
+   app.state.voice.engines['LOCAL']=FakeLocalASR()
+   p.get_by_role('button',name='Більше',exact=True).click();p.get_by_role('button',name='Голосові записи',exact=True).click();p.get_by_role('button',name='Повторити розпізнавання',exact=True).click();expect(p.get_by_role('button',name='Використати текст',exact=True)).to_be_visible();p.get_by_role('button',name='Використати текст',exact=True).click()
+   p.get_by_label('Повідомлення',exact=True).fill('SYNTHETIC · Перевірений текст для composer')
    expect(p.get_by_label('Повідомлення',exact=True)).to_have_value('SYNTHETIC · Перевірений текст для composer');assert not app.state.conversations.list()['items'] and not app.state.journal.list()['items']
    p.get_by_role('button',name='Надіслати',exact=True).click();expect(p.get_by_label('Ваше повідомлення')).to_have_count(1)
    stored=app.state.conversations.get(app.state.conversations.list()['items'][0]['id']);assert stored['messages'][0]['source_reference']['kind']=='VOICE_TRANSCRIPT';assert not errors and not external;ctx.close()
@@ -77,8 +78,8 @@ def test_normal_home_off_fake_transcript_hidden_and_mic_cancel(isolated):
   with sync_playwright() as pw:
    ctx=context(pw,isolated/'profile-off',file,390);p=ctx.pages[0];unlock(p,app);expect(p.get_by_text('Помічник поки недоступний.',exact=False)).to_be_visible();capture(p,'normal-off')
    p.get_by_label('Повідомлення',exact=True).fill('SYNTHETIC · Локальний запис без AI');p.get_by_role('button',name='Зберегти у розмові').click();expect(p.get_by_label('Ваше повідомлення')).to_have_count(1);assert p.get_by_label('Демо-відповідь помічника').count()==0
-   p.get_by_role('button',name='Записати голосом',exact=True).click();expect(p.get_by_text('Записуємо ·',exact=False)).to_be_visible();p.get_by_role('button',name='Скасувати запис',exact=True).click();expect(p.get_by_text('Незбережений запис відкинуто.')).to_be_visible();assert not app.state.voice.list()['items']
-   p.get_by_text('Локальне розпізнавання',exact=True).click();assert p.get_by_label('Використати synthetic fake ASR').count()==0
+   p.get_by_role('button',name='Записати голосом',exact=True).click();expect(p.locator('[data-voice-state=RECORDING]')).to_be_visible();p.get_by_role('button',name='Скасувати',exact=True).click();expect(p.get_by_text('Запис скасовано.')).to_be_visible();assert not app.state.voice.list()['items']
+   assert not app.state.voice.list()['items']
    ctx.close()
  finally:stop(srv,t)
 
@@ -88,12 +89,12 @@ def test_deep_goal_context_ux_exact_revision_history_and_budget(isolated):
  try:
   with sync_playwright() as pw:
    b=pw.chromium.launch(headless=True);ctx=b.new_context();p=ctx.new_page();unlock(p,app)
-   p.get_by_role('button',name='Цілі',exact=True).click();expect(p.get_by_role('dialog',name='Цілі')).to_be_visible();p.get_by_label('Текст цілі',exact=True).fill('SYNTHETIC paper city');p.get_by_label('Це моя погоджена ціль').check();p.get_by_role('button',name='Створити ціль').click();expect(p.get_by_role('button',name='Почати глибоку розмову')).to_be_enabled();p.get_by_role('button',name='Закрити: Цілі').click()
+   p.get_by_role('button',name='Глибока',exact=True).click();expect(p.get_by_role('dialog',name='Глибока розмова · оберіть мету')).to_be_visible();p.get_by_label('Текст цілі',exact=True).fill('SYNTHETIC paper city');p.get_by_label('Це моя погоджена ціль').check();p.get_by_role('button',name='Створити ціль').click();expect(p.get_by_role('button',name='Почати глибоку розмову')).to_be_enabled();p.get_by_role('button',name='Закрити: Глибока розмова · оберіть мету').click()
    p.get_by_label('Повідомлення',exact=True).fill('SYNTHETIC paper city in a free conversation');p.get_by_role('button',name='Надіслати',exact=True).click();expect(p.get_by_label('Ваше повідомлення')).to_have_count(1)
-   p.get_by_role('button',name='Цілі',exact=True).click();p.get_by_role('button',name='Почати глибоку розмову').click();expect(p.get_by_role('heading',name='Глибока розмова')).to_be_visible();expect(p.get_by_label('Глибока розмова',exact=True)).to_contain_text('SYNTHETIC paper city');capture(p,'deep-goal')
+   p.get_by_role('button',name='Глибока',exact=True).click();p.get_by_role('button',name='Почати глибоку розмову').click();expect(p.get_by_role('heading',name='Глибока розмова')).to_be_visible();expect(p.get_by_label('Глибока розмова',exact=True)).to_contain_text('SYNTHETIC paper city');capture(p,'deep-goal')
    p.get_by_text('Минулий контекст',exact=True).click();p.get_by_role('button',name='Підготувати демо-контекст').click();p.get_by_text('Прив’язки джерел і бюджет',exact=True).click();expect(p.get_by_text('Вибрано джерел:',exact=False)).to_be_visible();capture(p,'deep-context');p.set_viewport_size({'width':390,'height':540});p.wait_for_function('() => document.querySelector(".conversation-composer").getBoundingClientRect().bottom<=visualViewport.height+1',timeout=3000);p.set_viewport_size({'width':390,'height':844})
-   p.get_by_role('button',name='Цілі',exact=True).click();p.get_by_role('button',name='Редагувати ціль').click();p.get_by_label('Текст цілі',exact=True).fill('SYNTHETIC revised paper city');p.get_by_label('Це моя погоджена ціль').check();p.get_by_role('button',name='Зберегти нову редакцію').click();p.get_by_role('button',name='Історія цілі').click();expect(p.get_by_label('Історія цілі')).to_contain_text('SYNTHETIC paper city');capture(p,'goal-history')
-   p.get_by_role('button',name='Закрити: Цілі').click();assert app.state.conversations.list()['items'][0]['goal_binding']['revision']==1
+   p.get_by_role('button',name='Глибока',exact=True).click();p.get_by_role('button',name='Редагувати ціль').click();p.get_by_label('Текст цілі',exact=True).fill('SYNTHETIC revised paper city');p.get_by_label('Це моя погоджена ціль').check();p.get_by_role('button',name='Зберегти нову редакцію').click();p.get_by_role('button',name='Історія цілі').click();expect(p.get_by_label('Історія цілі')).to_contain_text('SYNTHETIC paper city');capture(p,'goal-history')
+   p.get_by_role('button',name='Закрити: Глибока розмова · оберіть мету').click();assert app.state.conversations.list()['items'][0]['goal_binding']['revision']==1
    ctx.close();b.close()
  finally:stop(srv,t)
 

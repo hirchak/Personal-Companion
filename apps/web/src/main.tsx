@@ -1,4 +1,7 @@
-import { CompatibilityBoundary, installBuildHeader } from "./release-compatibility";
+import {
+  CompatibilityBoundary,
+  installBuildHeader,
+} from "./release-compatibility";
 installBuildHeader();
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -18,6 +21,8 @@ import {
 import { EntryEditor } from "./EntryEditor";
 import { PhoneApp } from "./PhoneApp";
 import { AssistantPanel } from "./AssistantPanel";
+import { PrivatePilotControls } from "./PrivatePilotControls";
+import { VoiceHistory } from "./ComposerVoice";
 import { VoicePanel } from "./VoicePanel";
 import { CreativePanel } from "./CreativePanel";
 import { Sheet } from "./Sheet";
@@ -67,21 +72,29 @@ function message(error: unknown) {
   return "Не вдалося зберегти зміни. Текст залишається тут; перевірте сервер і повторіть.";
 }
 function App() {
-  const [privateOptional,setPrivateOptional]=useState(false);
-  const [rootKind, setRootKind] = useState<"SYNTHETIC_TEST" | "PRIVATE_LOCAL" | "UNKNOWN">("UNKNOWN");
+  const [privateOptional, setPrivateOptional] = useState(false);
+  const [rootKind, setRootKind] = useState<
+    "SYNTHETIC_TEST" | "PRIVATE_LOCAL" | "UNKNOWN"
+  >("UNKNOWN");
   const [csrf, setCsrf] = useState(""),
     [ready, setReady] = useState(false),
     [code, setCode] = useState(""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   useEffect(() => {
-    fetch("/runtime-mode.json", { cache: "no-store", credentials: "same-origin" })
+    fetch("/runtime-mode.json", {
+      cache: "no-store",
+      credentials: "same-origin",
+    })
       .then(async (r) => {
         if (!r.ok) throw new Error("MODE_UNAVAILABLE");
-        const config=await r.json();
+        const config = await r.json();
         const mode = config.root_kind;
-        setPrivateOptional(config.private_optional_profile==="MAC_PRIVATE_AI_VOICE_PILOT_V1");
-        if (mode !== "SYNTHETIC_TEST" && mode !== "PRIVATE_LOCAL") throw new Error("MODE_UNAVAILABLE");
+        setPrivateOptional(
+          config.private_optional_profile === "MAC_PRIVATE_AI_VOICE_PILOT_V1",
+        );
+        if (mode !== "SYNTHETIC_TEST" && mode !== "PRIVATE_LOCAL")
+          throw new Error("MODE_UNAVAILABLE");
         setRootKind(mode);
       })
       .catch(() => setRootKind("UNKNOWN"));
@@ -113,7 +126,14 @@ function App() {
       </main>
     );
   if (ready && rootKind === "UNKNOWN")
-    return <main className="unlock"><p role="alert">Не вдалося перевірити локальний режим. Перевірте сервер і оновіть сторінку.</p></main>;
+    return (
+      <main className="unlock">
+        <p role="alert">
+          Не вдалося перевірити локальний режим. Перевірте сервер і оновіть
+          сторінку.
+        </p>
+      </main>
+    );
   if (csrf)
     return (
       <Journal
@@ -158,7 +178,9 @@ function App() {
         </form>
         {error && <p role="alert">{error}</p>}
         <p className="hint">
-          {rootKind === "PRIVATE_LOCAL" ? "Локальний приватний пілот · лише цей Mac." : "Synthetic demo · лише вигадані записи."}
+          {rootKind === "PRIVATE_LOCAL"
+            ? "Локальний приватний пілот · лише цей Mac."
+            : "Synthetic demo · лише вигадані записи."}
           <br />
           Після блокування перезапустіть сервер для нового коду.
         </p>
@@ -166,8 +188,24 @@ function App() {
     </main>
   );
 }
-function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string; onLock: () => void; privateLocal: boolean;privateOptional:boolean }) {
-  const [surface, setSurface] = useState(privateLocal ? "journal" : "conversation");
+function Journal({
+  csrf,
+  onLock,
+  privateLocal,
+  privateOptional,
+}: {
+  csrf: string;
+  onLock: () => void;
+  privateLocal: boolean;
+  privateOptional: boolean;
+}) {
+  const [pendingVoice, setPendingVoice] = useState<{
+    text: string;
+    source: import("./conversation-model").VoiceReference | null;
+  } | null>(null);
+  const [surface, setSurface] = useState(
+    privateLocal && !privateOptional ? "journal" : "conversation",
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [detail, setDetail] = useState<Entry | null>(null);
   const [journalView, setJournalView] = useState<"tiles" | "list">(() => {
@@ -180,7 +218,19 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
       return "tiles";
     }
   });
+  const recordingPending = useRef(false);
+  useEffect(() => {
+    const track = (event: Event) => {
+      recordingPending.current = (event as CustomEvent<boolean>).detail;
+    };
+    window.addEventListener("pc-voice-busy", track);
+    return () => window.removeEventListener("pc-voice-busy", track);
+  }, []);
   function navigate(value: string) {
+    if (recordingPending.current) {
+      setError("Завершіть або скасуйте запис перед переходом.");
+      return;
+    }
     setMenuOpen(false);
     setSurface(value);
   }
@@ -531,15 +581,21 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
       <header className="app-topbar">
         <a className="wordmark" href="/">
           Особистий простір
-          {privateLocal && <small className="private-mode-label">Локальний приватний пілот</small>}
+          {privateLocal && (
+            <small className="private-mode-label">
+              Локальний приватний пілот
+            </small>
+          )}
         </a>
         <nav aria-label="Основна навігація">
-          {(!privateLocal||privateOptional) && <button
-            className={surface === "conversation" ? "current" : ""}
-            onClick={() => navigate("conversation")}
-          >
-            Розмова
-          </button>}
+          {(!privateLocal || privateOptional) && (
+            <button
+              className={surface === "conversation" ? "current" : ""}
+              onClick={() => navigate("conversation")}
+            >
+              Розмова
+            </button>
+          )}
           <button
             className={surface === "journal" ? "current" : ""}
             onClick={() => {
@@ -548,6 +604,12 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
             }}
           >
             Щоденник
+          </button>
+          <button
+            className={surface === "creative" ? "current" : ""}
+            onClick={() => navigate("creative")}
+          >
+            Творчість
           </button>
           <button
             aria-haspopup="dialog"
@@ -561,8 +623,12 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
       {menuOpen && (
         <Sheet title="Більше" onClose={() => setMenuOpen(false)}>
           <nav className="more-menu" aria-label="Другорядні розділи">
-            {!privateLocal && <button onClick={() => navigate("practices")}>Практики</button>}
-            {!privateLocal && <button onClick={() => navigate("space")}>Мій простір</button>}
+            {!privateLocal && (
+              <button onClick={() => navigate("practices")}>Практики</button>
+            )}
+            {!privateLocal && (
+              <button onClick={() => navigate("space")}>Мій простір</button>
+            )}
             <button onClick={() => navigate("creative")}>Творча полиця</button>
             <button
               onClick={() => {
@@ -572,15 +638,26 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
             >
               Творчі записи
             </button>
-            <button onClick={() => navigate("settings")}>Налаштування</button>
-            {!privateLocal && <button
-              onClick={() => {
-                navigate("health");
-              }}
-            >
-              Дані з годинника
-            </button>}
-            {!privateLocal && <button onClick={() => navigate("feedback")}>Відгук</button>}
+            <button onClick={() => navigate("settings")}>
+              AI & Privacy · Налаштування
+            </button>
+            {(!privateLocal || privateOptional) && (
+              <button onClick={() => navigate("voice-history")}>
+                Голосові записи
+              </button>
+            )}
+            {!privateLocal && (
+              <button
+                onClick={() => {
+                  navigate("health");
+                }}
+              >
+                Дані з годинника
+              </button>
+            )}
+            {!privateLocal && (
+              <button onClick={() => navigate("feedback")}>Відгук</button>
+            )}
             <button
               onClick={() => {
                 setMenuOpen(false);
@@ -615,33 +692,76 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
         {surface === "conversation" && (
           <ConversationHome
             csrf={csrf}
+            initialVoice={pendingVoice}
+            onVoiceConsumed={() => setPendingVoice(null)}
             privateLocal={privateOptional}
             onPractice={() => navigate("practices")}
           />
         )}
+        {surface === "voice-history" && (
+          <section>
+            <h1>Голосові записи</h1>
+            <VoiceHistory
+              csrf={csrf}
+              onInsert={(text, source) => {
+                setPendingVoice({ text, source });
+                navigate("conversation");
+              }}
+            />
+          </section>
+        )}
         {surface === "settings" && (
           <section className="settings-home">
             <h1>Налаштування</h1>
-            {privateLocal ? <p>{privateOptional ? "Лише цей Mac. AI та локальний голос потребують окремої згоди у «Розмові». Практики, Health і телефон вимкнені." : "Лише цей Mac. AI, практики, голос, Health і телефон вимкнені."} Резервні копії створюються вручну на підтвердженому захищеному локальному носії; хмарної синхронізації немає.</p> : <>
-            <h2>Підключення</h2>
-            <button onClick={() => navigate("health")}>Health Connect</button>
-            <MacSyncSettings csrf={csrf} />
-            <h2>Про застосунок</h2>
-            <button onClick={() => navigate("feedback")}>Відгук</button>
+            {privateOptional && <PrivatePilotControls csrf={csrf} />}
+            <h2>Резервні копії</h2>
+            <p>
+              Зберігайте копії вручну на захищеному локальному носії через
+              встановлений менеджер застосунку.
+            </p>
+            <h2>Дані</h2>
+            <button onClick={() => navigate("journal")}>
+              Переглянути, експортувати й видалити записи
+            </button>
             <details>
-              <summary>Статус та інструменти</summary>
+              <summary>Про застосунок · технічний статус</summary>
               <p>
-                Локальний test-stage. Live AI і клінічні практики вимкнені.
-                Health Connect: Sleep/Steps/Exercise лише для окремо дозволеного
-                bridge.
+                Локальний Personal Companion. Клінічні модулі, Health і
+                телефонний транспорт вимкнені.
               </p>
-              <AssistantPanel
-                csrf={csrf}
-                selected={selected}
-                onChanged={load}
-              />
             </details>
-            </>}
+            {privateLocal ? (
+              <p>
+                {privateOptional
+                  ? "Лише цей Mac. AI та голос використовують локальну версійовану згоду. Практики, Health і телефон вимкнені."
+                  : "Лише цей Mac. AI, практики, голос, Health і телефон вимкнені."}{" "}
+                Резервні копії створюються вручну на підтвердженому захищеному
+                локальному носії; хмарної синхронізації немає.
+              </p>
+            ) : (
+              <>
+                <h2>Підключення</h2>
+                <button onClick={() => navigate("health")}>
+                  Health Connect
+                </button>
+                <MacSyncSettings csrf={csrf} />
+                <h2>Про застосунок</h2>
+                <button onClick={() => navigate("feedback")}>Відгук</button>
+                <details>
+                  <summary>Статус та інструменти</summary>
+                  <p>
+                    Локальний test-stage. Live AI і клінічні практики вимкнені.
+                    Health Connect: Sleep/Steps/Exercise лише для окремо
+                    дозволеного bridge.
+                  </p>
+                  <AssistantPanel
+                    csrf={csrf}
+                    selected={selected}
+                    onChanged={load}
+                  />
+                </details>
+              </>
+            )}
             <button onClick={() => void lock()}>Заблокувати</button>
           </section>
         )}
@@ -681,23 +801,27 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
                 <span aria-hidden="true">+</span> Додати запис
               </button>
             </header>
-            {!privateLocal && <details className="voice-disclosure">
-              <summary>Голосовий запис</summary>
-              <VoicePanel
-                csrf={csrf}
-                onJournalChange={() => {
-                  void load();
-                }}
-              />
-            </details>}
-            {!privateLocal && <details className="journal-tools">
-              <summary>Локальні інструменти</summary>
-              <AssistantPanel
-                csrf={csrf}
-                selected={selected}
-                onChanged={load}
-              />
-            </details>}
+            {!privateLocal && (
+              <details className="voice-disclosure">
+                <summary>Голосовий запис</summary>
+                <VoicePanel
+                  csrf={csrf}
+                  onJournalChange={() => {
+                    void load();
+                  }}
+                />
+              </details>
+            )}
+            {!privateLocal && (
+              <details className="journal-tools">
+                <summary>Локальні інструменти</summary>
+                <AssistantPanel
+                  csrf={csrf}
+                  selected={selected}
+                  onChanged={load}
+                />
+              </details>
+            )}
             <nav className="journal-filters" aria-label="Фільтри щоденника">
               {[
                 ["", "Усі"],
@@ -1054,5 +1178,7 @@ function Journal({ csrf, onLock, privateLocal,privateOptional }: { csrf: string;
   );
 }
 createRoot(document.getElementById("root")!).render(
-  <CompatibilityBoundary>{location.pathname.startsWith("/phone/") ? <PhoneApp /> : <App />}</CompatibilityBoundary>,
+  <CompatibilityBoundary>
+    {location.pathname.startsWith("/phone/") ? <PhoneApp /> : <App />}
+  </CompatibilityBoundary>,
 );

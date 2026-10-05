@@ -127,3 +127,12 @@ Live provider OFF, clinical active0, real private data OFF; M7C/M8 NOT_STARTED.
 ## M7C owner scope — 2026-10-04
 
 M7C retains the Python/React/SQLite modular monolith, M7B raw/context/goal domains and M4 PCM/candidate pipeline. conversation_controller.py is the only model dispatch authority; conversation_runtime_contracts.py defines strict typed input/output, conversation_skills.py deterministic composition. Codex adapter uses current app-server stdio with ephemeral no-root thread, disabled tool features, deny-root/minimal-read permission profile, sanitized environment, fixed argv/shell=False, bounded IO/timeout/cancel and no fallback. Existing ChatGPT auth stays in the installed CLI. Host CLI working agreements are still injected: this is disclosed rather than claimed to be pure payload-only. Local whisper.cpp runs CPU through the M4 engine interface with pinned binary/model, filesystem and network sandbox and no cloud. ASR downloads/cache/corpus are ignored. Application defaults remain provider OFF; --m7c-synthetic plus explicit route is required. No auth/transport/crypto/storage permission weakening, PWA recorder rewrite, deployment or real-vault migration.
+
+## M8E bounded UX refinement
+
+[ADR-015](adr/ADR-015-M8E-CONSENT-AND-CONVERSATION-UX.md) and [M8E contract](M8E_CONTRACT.md) supersede
+M8D's repeated checkbox/per-message popup UX for new consented ordinary sends, retaining its exact canonical
+provider payload and source/profile checks. Additive local consent/scope tables stay in protected SQLite;
+restore epoch invalidates durable acceptance. ComposerVoice reuses M4 PCM/Mac Voice/PWA encrypted PhoneStore.
+No phone transport activation or provider call is part of engineering. Historical account-setting confirmation
+claims are corrected forward by the owner's M8E clarification; no private transcript is used as evidence.

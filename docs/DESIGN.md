@@ -61,3 +61,21 @@ confirmation inserts text into this draft before explicit sending. Demo/OFF expl
 remain visible beside capture: synthetic replies are labeled, while normal OFF offers
 local text saving without an assistant reply. M7A practice content/admission boundaries
 remain governed by their existing documentation; this navigation change does not revise them.
+
+## M8E current application surface
+
+Mode: Operate. Preserve original paper/ink/sage/system body/Georgia invitation. Optional PRIVATE_LOCAL
+profile now defaults to Conversation; four primary actions add Creative. Mobile bottom navigation has four
+44px touch actions with safe-area padding; desktop retains a compact header and left history drawer.
+Thread height follows visualViewport; composer is reachable above navigation during viewport resize.
+Free/Deep segmented control is distinct from Deep model selection. Local titles and kind labels make returning
+to a topic deliberate. Goal/focus/phase are compact; map, focus/range changes and exact context remain details.
+
+Composer microphone transforms capture into an original sage animated line indicator, duration, Cancel and
+Finish. Stop shows compact local transcription status, then editable text; sending remains explicit.
+ASR trouble preserves saved audio in Voice History with retry. Reduced motion uses a static voice indicator.
+AI destination/consent/models/voice status/backup/data controls live in More/Settings. One protected onboarding
+sheet carries durable local consent and truthful external Data Controls reminder. Standard Send has no mandatory
+modal; selected journal sources and materially changed Deep scope have explicit approval sheets.
+Mobile sheets dock to the bottom with internally scrollable content; focus/Escape remain native dialog behavior.
+No ChatGPT branding/assets, external fonts/images, clinical claims or dark-mode scope expansion.

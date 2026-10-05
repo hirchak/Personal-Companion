@@ -62,12 +62,13 @@ class Voice:
         x['chunk_size']=CHUNK_SIZE
         t=c.execute('SELECT * FROM transcripts WHERE audio_id=? ORDER BY created DESC,id DESC LIMIT 1',(row['id'],)).fetchone()
         x['transcript']=dict(t) if t else None
+        x['ux_state']=t['state'] if t else 'WAITING_FOR_LOCAL_ASR' if row['state']=='MAC_AUDIO_CONFIRMED' and not self.engines.get('LOCAL',DisabledLocalASR()).metadata()['available'] else 'LOCAL_AUDIO_SAVED'
         return x
     def list(self,auth=None):
         with self.lock,self.store.connect() as c:
             device=self._auth(c,auth)
             rows=c.execute('SELECT * FROM audio WHERE state!=?'+(' AND device_id=?' if device else '')+' ORDER BY created DESC LIMIT 100', ['DELETED']+([device] if device else [])).fetchall()
-            return {'items':[self.view(c,r) for r in rows],'actual_backend':self.engines['LOCAL'].metadata()}
+            return {'items':[self.view(c,r) for r in rows],'actual_backend':self.engines.get('LOCAL',DisabledLocalASR()).metadata()}
     def get(self,id,auth=None):
         with self.lock,self.store.connect() as c:return self.view(c,self._row(c,id,auth))
 
@@ -151,7 +152,7 @@ class Voice:
         return {'audio_id':str(id),'state':'CANCELLED'}
 
     def enqueue(self,id,body,auth=None):
-        engine=self.engines[body.mode];tid=str(uuid4());meta=engine.metadata()
+        engine=self.engines.get(body.mode,DisabledLocalASR());tid=str(uuid4());meta=engine.metadata()
         with self.lock,self.store.transaction() as c:
             row=self._row(c,id,auth)
             if row['state']!='MAC_AUDIO_CONFIRMED':raise SafeError('AUDIO_UNAVAILABLE',409)

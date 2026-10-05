@@ -216,6 +216,9 @@ export function DeepSessionPanel({
   }
   return (
     <aside className="deep-session-panel" aria-label="Поточна сесія">
+      <p className="session-goal" title={data?.goal.text}>
+        Мета · {data?.goal.text}
+      </p>
       <p className="hint">
         {phaseLabels[data?.session.phase ?? "OPEN"]} · ціль лишається окремою
       </p>

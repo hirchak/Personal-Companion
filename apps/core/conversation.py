@@ -129,6 +129,7 @@ class Conversations:
                 candidate=CandidateResponse.model_validate(self.responder.candidate())
                 response=Message(schema_version=1,id=uuid5(NAMESPACE,op+':assistant'),conversation_id=x.id,role=candidate.role,raw_text=candidate.text,created_utc=time,revision=1,provenance=candidate.provenance,source_reference=None,source_message_id=uid,synthetic=True,privacy_class='PRIVATE_PERSONAL')
                 c.execute('INSERT INTO conversation_messages VALUES(?,?,?,?)',(str(response.id),id,seq+2,encode(response.model_dump(mode='json'))))
+            if seq==0:x.title=' '.join(body.text.split())[:72]
             x.revision+=1;x.updated_utc=time
             c.execute('UPDATE conversations SET revision=?,payload=?,updated=? WHERE id=?',(x.revision,encode(x.model_dump(mode='json')),time,id))
             c.execute('INSERT INTO conversation_receipts VALUES(?,?,?,?,?)',(op,id,'send',fp,x.revision));result=self.view(c,x)

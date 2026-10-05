@@ -14,6 +14,8 @@ class PrivateInferenceStart(Strict):
  owner_approved_external_text:Literal[True]
  source_reference:VoiceSource|None=None
  context_binding:ContextBinding|None=None
+ standard_send:Literal[True]|None=None
+ selection:ContextSelection=Field(default_factory=ContextSelection)
  @field_validator('owner_approved_external_text',mode='before')
  @classmethod
  def exact_bool(cls,v):
@@ -46,3 +48,23 @@ class PrivateConversationRequest(ConversationRequest):
  synthetic:Literal[False]
  consent_scope:Literal['M8D_THIS_OWNER_EXACT_APPROVED_PRIVATE_CONTEXT']
  payload:PrivateProviderPayload
+
+class DurableConsentAcceptance(Strict):
+ version:Annotated[int,Field(ge=1)]
+ privacy_version:str
+ accepted:Literal[True]
+ @field_validator('accepted',mode='before')
+ @classmethod
+ def exact_bool(cls,v):
+  if v is not True:raise ValueError('Explicit acceptance required')
+  return v
+
+class DeepScopeApproval(Strict):
+ selection:ContextSelection=Field(default_factory=ContextSelection)
+ scope_hash:Hash
+ accepted:Literal[True]
+ @field_validator('accepted',mode='before')
+ @classmethod
+ def exact_bool(cls,v):
+  if v is not True:raise ValueError('Explicit acceptance required')
+  return v

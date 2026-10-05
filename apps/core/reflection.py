@@ -193,12 +193,13 @@ class Reflection:
                 ds=c.execute('SELECT payload FROM conversation_digests WHERE kind=? AND status="CURRENT" ORDER BY version DESC LIMIT 10',(kind,)).fetchall()
                 for row in ds:
                     d=json.loads(row[0])
+                    if not self.conversations.synthetic_demo and any(not c.execute('SELECT 1 FROM conversation_messages WHERE id=? AND conversation_id=?',(ref['id'],str(conv.id))).fetchone() for ref in d['sources']):continue
                     if (kind=='GOAL' and d['goal']!=goalref) or (kind=='DAILY' and d.get('timezone')!=b.timezone) or d['window_start']<start or d['window_end']>end or not self.valid_digest(c,d):continue
                     if add(kind+'_DIGEST',d['text'],d['sources'],d['version'],d['id']):digest_versions.append({'id':d['id'],'version':d['version'],'kind':kind})
             query=b.query or goal.text;terms=re.findall(r'\w{2,40}',query.lower())[:8]
             match=' OR '.join('"'+t.replace('"','""')+'"' for t in terms)
             candidates=[]
-            if match:
+            if match and self.conversations.synthetic_demo:
                 candidates=c.execute('SELECT m.payload FROM conversation_fts f JOIN conversation_messages m ON m.id=f.message_id JOIN conversations v ON v.id=m.conversation_id WHERE conversation_fts MATCH ? AND json_extract(v.payload,"$.mode")="FREE" AND json_extract(m.payload,"$.created_utc")>=? AND json_extract(m.payload,"$.created_utc")<=? ORDER BY rank LIMIT 20',(match,start,end)).fetchall()
             for r in candidates:
                 m=json.loads(r[0]);ref={'id':m['id'],'revision':m['revision']}

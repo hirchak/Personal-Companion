@@ -1195,6 +1195,9 @@ export class PhoneStore {
     cancelled: () => boolean,
     progress: () => void,
   ) {
+    const transport = await this.state();
+    if (!transport.pairing || transport.repair)
+      throw new StoreError("PRIVATE_TRANSPORT_REQUIRED");
     await this.finalizePairing();
     const item = (await this.audios()).find((x) => x.begin.audio_id === id);
     if (!item) throw new StoreError("AUDIO_NOT_FOUND");

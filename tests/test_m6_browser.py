@@ -30,7 +30,7 @@ def test_health_browser_import_delete_explicit_reimport_desktop_mobile(isolated)
             p.get_by_role('button',name='Видалити імпортовану копію',exact=True).click();p.get_by_role('button',name='Так, видалити лише копію').click();expect(p.get_by_role('status')).to_contain_text('Імпортовану копію видалено');assert not app.state.health.records()
             upload(p,fixture);expect(p.get_by_role('alert')).to_contain_text('Операцію не завершено');assert not app.state.health.records()
             p.get_by_label('Явно підключити джерело',exact=False).check();p.get_by_role('button',name='Імпортувати локальну копію').click();expect(p.get_by_role('status')).to_contain_text('Локальну копію імпортовано');assert len(app.state.health.records())==2
-            (p.get_by_role('button',name='Усі записи',exact=True).click() if '/phone/' in p.url else go_journal(p));expect(p.get_by_role('heading',name='Ваш щоденник')).to_be_visible();assert not errors and not external;b.close()
+            (p.get_by_role('button',name='Щоденник',exact=True).click() if '/phone/' in p.url else go_journal(p));expect(p.get_by_role('heading',name='Ваш щоденник')).to_be_visible();assert not errors and not external;b.close()
     finally:stop(srv,t)
 
 def test_health_browser_malformed_partial_revoke_keeps_journal(isolated):
@@ -51,7 +51,7 @@ def test_phone_health_truthful_offline_without_fake_copy(isolated):
             b=pw.chromium.launch(headless=True);ctx=b.new_context(viewport={'width':390,'height':844});p=ctx.new_page();errors,external=watch(ctx,p);p.goto(ORIGIN+"/phone/");unlock_phone(p);health(p)
             p.get_by_role('button',name='Перевірити стан копії на Mac').click();expect(p.get_by_role('status')).to_contain_text('копія на Mac недоступна')
             ctx.set_offline(True);expect(p.get_by_role('button',name='Перевірити стан копії на Mac')).to_be_disabled();expect(p.get_by_text('Офлайн: стан джерела невідомий.',exact=False)).to_be_visible();checks(p);OUT.mkdir(parents=True,exist_ok=True);p.screenshot(path=str(OUT/'health-phone-offline.png'),full_page=True)
-            (p.get_by_role('button',name='Усі записи',exact=True).click() if '/phone/' in p.url else go_journal(p));expect(p.get_by_role('heading',name='Ваш щоденник')).to_be_visible();assert not errors and not external;b.close()
+            (p.get_by_role('button',name='Щоденник',exact=True).click() if '/phone/' in p.url else go_journal(p));expect(p.get_by_role('heading',name='Ваш щоденник')).to_be_visible();assert not errors and not external;b.close()
     finally:stop(srv,t)
 
 def test_phone_health_pairing_reads_only_status_and_disconnects_normally(isolated):

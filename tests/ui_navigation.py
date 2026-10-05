@@ -6,7 +6,10 @@ def journal(p):
  expect(p.get_by_role('heading',name='Ваш щоденник',exact=True)).to_be_visible()
 
 def feature(p,name):
+ if name=="Налаштування":name="AI & Privacy · Налаштування"
  if '/phone/' in p.url:
+  button=p.get_by_role('button',name=name,exact=True)
+  if not button.count() or not button.first.is_visible():p.get_by_role('button',name='Більше',exact=True).click()
   p.get_by_role('button',name=name,exact=True).click();return
  button=p.get_by_role('button',name=name,exact=True)
  if button.count() and button.first.is_visible():button.first.click();return

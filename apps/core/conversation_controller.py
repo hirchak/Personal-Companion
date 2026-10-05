@@ -234,6 +234,13 @@ class ConversationController:
             if private:
                 from .local_private_contracts import PrivateInferenceStart
                 if not isinstance(body,PrivateInferenceStart):raise SafeError('PRIVATE_REQUEST_REQUIRED',403)
+                if provider is not None and body.context_binding is None and body.standard_send:
+                    if not self.private_gate.consent.read():raise SafeError('DURABLE_CONSENT_REQUIRED',403)
+                    if before.mode=='DEEP':self.private_gate.consent.require_scope(self,id,body.selection)
+                    from .local_private_contracts import PrivateContextPreview
+                    from .deep_session_contracts import ContextBinding
+                    exact=self.private_preview(id,PrivateContextPreview(operation_id=uuid5(NAMESPACE,op+':private-preview'),base_revision=body.base_revision,text=body.text,purpose=body.purpose,selection=body.selection))
+                    body=body.model_copy(update={'context_binding':ContextBinding(receipt_id=exact['receipt_id'],context_hash=exact['context_hash'],preview_hash=exact['preview_hash'])})
                 if provider is not None and body.context_binding is None:raise SafeError('PRIVATE_EXACT_CONTEXT_PREVIEW_REQUIRED',403)
                 if body.context_binding:
                     from .local_private_context import selected_private_context

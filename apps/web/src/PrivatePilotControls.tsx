@@ -1,44 +1,215 @@
 import { useEffect, useState } from "react";
+import { Sheet } from "./Sheet";
 export type PilotState = {
   state: "PRIVATE_AI_OFF" | "PRIVATE_AI_OWNER_CONSENTED";
   local_voice: "OFF" | "ON";
   deep_profile: "DEEP_ECONOMICAL" | "DEEP_QUALITY";
+  consent: {
+    accepted_at: string;
+    ai_enabled: boolean;
+    voice_enabled: boolean;
+  } | null;
+  consent_version: number;
+  privacy_version: string;
 };
-const acknowledgements = [
-  ["text_leaves_mac_for_openai", "Текст надсилається з Mac до OpenAI через мою наявну підписку ChatGPT."],
-  ["raw_audio_not_sent", "Аудіо залишається локально; до AI надсилається лише підтверджений текст."],
-  ["only_exact_approved_context", "Перед кожним надсиланням я переглядаю точний текст і вибраний контекст."],
-  ["retention_not_zero_certified", "Цей маршрут не гарантує нульового зберігання даних провайдером."],
-  ["no_provider_fallback", "Автоматичного fallback, PAYG і купівлі credits немає."],
-  ["chatgpt_training_off_confirmed", "У ChatGPT Improve the model for everyone вимкнено."],
-  ["codex_environments_off_confirmed", "У Codex Include environments вимкнено."],
-] as const;
-const voiceAcknowledgements = [
-  ["local_audio_only", "Лише локальний whisper.cpp; аудіо не завантажується до провайдера."],
-  ["review_before_send", "Я перевіряю й за потреби редагую транскрипт перед явним надсиланням."],
-  ["manual_audio_deletion_understood", "Аудіозаписи зберігаються локально до мого видалення. Secure erase не гарантується."],
-] as const;
-export function PrivatePilotControls({csrf,onChanged}:{csrf:string;onChanged:(state:PilotState)=>void}) {
-  const [state,setState]=useState<PilotState|null>(null), [checked,setChecked]=useState<Record<string,boolean>>({}), [busy,setBusy]=useState(false), [error,setError]=useState("");
-  async function call(path:string,body?:unknown) {
-    const r=await fetch("/api/v1/private-pilot/"+path,{method:body?"POST":"GET",credentials:"same-origin",cache:"no-store",headers:body?{"Content-Type":"application/json","X-CSRF-Token":csrf}:{},body:body?JSON.stringify(body):undefined});
-    if (!r.ok) throw new Error((await r.json()).code);
-    const s=await r.json();setState(s);onChanged(s);return s;
+export async function pilotCall(
+  csrf: string,
+  path: string,
+  body?: unknown,
+): Promise<PilotState> {
+  const r = await fetch("/api/v1/private-pilot/" + path, {
+    method: body !== undefined ? "POST" : "GET",
+    credentials: "same-origin",
+    cache: "no-store",
+    headers:
+      body !== undefined
+        ? { "Content-Type": "application/json", "X-CSRF-Token": csrf }
+        : {},
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+  if (!r.ok) throw new Error((await r.json()).code);
+  return r.json();
+}
+export function PrivatePilotControls({
+  csrf,
+  onChanged,
+  compact = false,
+  mode = "FREE",
+}: {
+  csrf: string;
+  onChanged?: (state: PilotState) => void;
+  compact?: boolean;
+  mode?: "FREE" | "DEEP";
+}) {
+  const [state, setState] = useState<PilotState | null>(null),
+    [open, setOpen] = useState(false),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState("");
+  function changed(s: PilotState) {
+    setState(s);
+    onChanged?.(s);
   }
-  useEffect(()=>{void call("status").catch(()=>setError("Не вдалося перевірити пілот. Оновіть сторінку."));},[]);
-  async function action(path:string,body:unknown) {
-    setBusy(true);setError("");try {await call(path,body);}catch {setError("Дію не виконано. Перевірте локальний сервер і точний профіль; автоматичної заміни немає.");}finally {setBusy(false);}
+  useEffect(() => {
+    let alive = true;
+    void pilotCall(csrf, "status")
+      .then(async (s) => {
+        if (s.consent?.ai_enabled && s.state === "PRIVATE_AI_OFF")
+          s = await pilotCall(csrf, "resume", {});
+        if (alive) changed(s);
+      })
+      .catch(() => {
+        if (alive)
+          setError(
+            "AI недоступний. Перевірте локальний сервіс і повторіть увімкнення.",
+          );
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  async function action(path: string, body: unknown) {
+    setBusy(true);
+    setError("");
+    try {
+      changed(await pilotCall(csrf, path, body));
+      setOpen(false);
+    } catch {
+      setError(
+        "Дію не виконано. Перевірте локальний сервіс. Автоматичної заміни провайдера немає.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
-  function checklist(items:typeof acknowledgements|typeof voiceAcknowledgements) {
-    return items.map(([key,label])=><label key={key}><input type="checkbox" checked={!!checked[key]} onChange={e=>setChecked(old=>({...old,[key]:e.target.checked}))}/>{label}</label>);
-  }
-  return <details className="private-pilot-controls">
-    <summary>AI {state?.state==="PRIVATE_AI_OWNER_CONSENTED"?"увімкнено для цієї сесії":"вимкнено"} · локальний голос {state?.local_voice==="ON"?"увімкнено":"вимкнено"}</summary>
-    <p>Розблокування, перезапуск або відновлення резервної копії не вмикають AI автоматично. Clinical, практики, Health і телефон залишаються вимкненими.</p>
-    {state?.state!=="PRIVATE_AI_OWNER_CONSENTED" ? <fieldset disabled={busy}><legend>Моя явна згода на приватний AI</legend>{checklist(acknowledgements)}<button disabled={!acknowledgements.every(([k])=>checked[k])} onClick={()=>void action("acknowledge",{profile_id:"MAC_PRIVATE_AI_VOICE_PILOT_V1",...Object.fromEntries(acknowledgements.map(([k])=>[k,checked[k]]))})}>Увімкнути AI для цієї сесії</button></fieldset> : <label>Профіль глибокої розмови<select disabled={busy} value={state.deep_profile} onChange={e=>void action("deep-profile",{profile:e.target.value})}><option value="DEEP_ECONOMICAL">Економний · Luna / Max</option><option value="DEEP_QUALITY">Якість · Sol 6.1 / High</option></select></label>}
-    <p>Звичайна розмова: Luna / High. Для Sol стеля — High. Профіль DEEP обирається явно; автоматичного fallback немає.</p>
-    {state?.local_voice!=="ON" && <fieldset disabled={busy}><legend>Локальний голос</legend>{checklist(voiceAcknowledgements)}<button disabled={!voiceAcknowledgements.every(([k])=>checked[k])} onClick={()=>void action("local-voice",Object.fromEntries(voiceAcknowledgements.map(([k])=>[k,checked[k]])))}>Увімкнути локальний голос</button></fieldset>}
-    <button disabled={busy||!state||(state.state==="PRIVATE_AI_OFF"&&state.local_voice==="OFF")} onClick={()=>void action("disable",{})}>Вимкнути AI та голос</button>
-    {error&&<p role="alert">{error}</p>}
-  </details>;
+  const active = state?.state === "PRIVATE_AI_OWNER_CONSENTED";
+  const privacy = (
+    <>
+      <p>
+        Підтверджений текст і обмежений контекст цієї розмови обробляє OpenAI
+        через наявну підписку ChatGPT.
+      </p>
+      <p>
+        Мікрофонне аудіо залишається локально. Щоденник не додається
+        автоматично. Нульове зберігання провайдером не гарантоване.
+        Автоматичного переходу до іншої моделі чи провайдера немає.
+      </p>
+      <p>
+        Перед наступним приватним AI використанням перевірте зовнішні
+        налаштування:
+      </p>
+      <ul>
+        <li>ChatGPT: Improve the model for everyone = OFF</li>
+        <li>Codex: Include environments = OFF</li>
+      </ul>
+      <p>
+        Цими Data Controls керуєте ви. Застосунок їх не перевіряв і не
+        підтверджує їхній стан.
+      </p>
+      <p>
+        Згода зберігається лише на цьому пристрої. Зміна приватності або
+        адресата потребуватиме нової згоди. Аудіо зберігається до вашого
+        видалення; повне стирання резервних копій не гарантоване.
+      </p>
+    </>
+  );
+  return (
+    <div className={compact ? "ai-compact" : "privacy-settings"}>
+      {compact ? (
+        <button
+          type="button"
+          className="quiet"
+          disabled={busy}
+          onClick={() =>
+            state?.consent ? void action("resume", {}) : setOpen(true)
+          }
+        >
+          {active
+            ? mode === "DEEP"
+              ? state?.deep_profile === "DEEP_ECONOMICAL"
+                ? "Deep · Luna Max"
+                : "Deep · Sol 6.1 High"
+              : "Luna · High"
+            : "AI вимкнено · увімкнути"}
+        </button>
+      ) : (
+        <>
+          <h2>AI & Privacy</h2>
+          {privacy}
+          <p>
+            {state?.consent
+              ? `Локальну згоду прийнято ${new Date(state.consent.accepted_at).toLocaleDateString("uk-UA")}. Версія ${state.consent_version}.`
+              : "Локальної згоди ще немає для поточної версії."}
+          </p>
+          <div className="actions">
+            <button
+              disabled={busy}
+              onClick={() =>
+                state?.consent ? void action("resume", {}) : setOpen(true)
+              }
+            >
+              Увімкнути AI
+            </button>
+            <button
+              disabled={busy || !active}
+              onClick={() => void action("disable", {})}
+            >
+              Вимкнути AI
+            </button>
+            <button
+              disabled={busy || !state?.consent}
+              onClick={() => void action("revoke", {})}
+            >
+              Відкликати згоду
+            </button>
+          </div>
+          <h2>Моделі</h2>
+          <p>
+            Звичайна: Luna / High. Глибока: Економний — Luna / Max; Якісний —
+            Sol 6.1 / High. Стелі: Luna ≤ Max; Sol 6.1 ≤ High. PAYG і fallback
+            вимкнені.
+          </p>
+          <h2>Локальний голос</h2>
+          <p>
+            Лише whisper.cpp.{" "}
+            {state?.local_voice === "ON"
+              ? "Локальне розпізнавання доступне."
+              : "Розпізнавання наразі недоступне; збережені записи можна повторити пізніше."}{" "}
+            Хмарного ASR немає. Перевірте й відредагуйте текст перед
+            надсиланням. Аудіо зберігається локально до вашого видалення.
+          </p>
+          <button
+            disabled={busy || state?.local_voice === "ON"}
+            onClick={() =>
+              void action("local-voice", {
+                local_audio_only: true,
+                review_before_send: true,
+                manual_audio_deletion_understood: true,
+              })
+            }
+          >
+            Увімкнути локальне розпізнавання
+          </button>
+        </>
+      )}
+      {error && <p role="alert">{error}</p>}
+      {open && state && (
+        <Sheet title="Приватність розмови" onClose={() => setOpen(false)}>
+          {privacy}
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={() =>
+              void action("consent", {
+                version: state.consent_version,
+                privacy_version: state.privacy_version,
+                accepted: true,
+              })
+            }
+          >
+            Приймаю · увімкнути AI та локальний голос
+          </button>
+        </Sheet>
+      )}
+    </div>
+  );
 }

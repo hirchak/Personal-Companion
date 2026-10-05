@@ -29,6 +29,8 @@ def unlock_phone(page):
     button=page.get_by_role('button',name='Створити encrypted сховище')
     if button.count():button.click()
     else:page.get_by_role('button',name='Розблокувати телефон',exact=True).click()
+    expect(page.get_by_role('heading',name='Розмова',exact=True)).to_be_visible()
+    page.get_by_role('button',name='Щоденник',exact=True).click()
     expect(page.get_by_role('heading',name='Ваш щоденник',exact=True)).to_be_visible()
 
 def capture(page,text):
@@ -116,7 +118,7 @@ def test_M2_A01_A02_A03_A04_A07_A09_offline_sync_conflict_and_storage(isolated):
         with a.expect_download() as download:a.get_by_role('button',name='Encrypted recovery для unsynced',exact=True).click()
         recovery=Path(download.value.path()).read_text();assert 'SYNTHETIC quota draft' not in recovery and PASSWORD not in recovery
         a.get_by_role('button',name='Налаштування телефону').click()
-        a.get_by_role('button',name='Заблокувати телефон',exact=True).click();expect(a.get_by_label('Локальний пароль')).to_be_visible();assert 'SYNTHETIC quota draft' not in a.locator('body').inner_text()
+        a.get_by_role('button',name='Більше',exact=True).click();a.get_by_role('button',name='Заблокувати телефон',exact=True).click();expect(a.get_by_label('Локальний пароль')).to_be_visible();assert 'SYNTHETIC quota draft' not in a.locator('body').inner_text()
         # Mac delete wins over stale offline edit; local variant remains explicit conflict.
         entry=app.state.journal.list(q='explicit merged')['items'][0]
         from apps.core.models import Delete
@@ -232,7 +234,7 @@ def test_M2_A09_evicted_store_and_offline_delete_restart(isolated):
         context.set_offline(True);capture(page,'SYNTHETIC local delete fixture')
         page.on('dialog',lambda d:d.accept());page.get_by_role('button',name='Видалити',exact=True).click();expect(page.locator('.entry')).to_have_count(0)
         page.reload();unlock_phone(page);expect(page.locator('.entry')).to_have_count(0);expect(page.get_by_text('2 очікують',exact=True)).to_be_visible()
-        page.get_by_role('button',name='Заблокувати телефон').click()
+        page.get_by_role('button',name='Більше',exact=True).click();page.get_by_role('button',name='Заблокувати телефон').click()
         page.evaluate("async()=>new Promise((resolve,reject)=>{const r=indexedDB.deleteDatabase('personal-companion-synthetic-phone');r.onsuccess=()=>resolve(true);r.onerror=()=>reject();})")
         page.reload();expect(page.get_by_text('Локальне сховище порожнє:',exact=False)).to_be_visible();expect(page.get_by_label('Відкрити encrypted recovery')).to_be_visible()
         context.close()

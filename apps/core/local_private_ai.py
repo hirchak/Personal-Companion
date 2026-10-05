@@ -5,6 +5,7 @@ from pydantic import BaseModel,ConfigDict,model_validator
 from .storage import SafeError,encode,digest,now
 from .root_types import RootKind
 
+
 PROFILE_ID='MAC_PRIVATE_AI_VOICE_PILOT_V1'
 PROFILES={'FREE':{'model':'gpt-6-luna','effort':'high'},'DEEP_ECONOMICAL':{'model':'gpt-6-luna','effort':'max'},'DEEP_QUALITY':{'model':'gpt-6.1-sol','effort':'high'}}
 EFFORT_CEILINGS={'gpt-6-luna':('low','medium','high','xhigh','max'),'gpt-6.1-sol':('low','medium','high')}
@@ -52,22 +53,51 @@ class LocalVoiceAcknowledgement(BaseModel):
   return value
 
 class PrivatePilotGate:
- """Session-bound activation. Restart/lock/restore revoke; no environment-derived enablement."""
+ """Authenticated runtime and versioned local consent; no environment-derived enablement."""
  def __init__(self,store,provider_factory=None,asr_factory=None):
   if getattr(store,'root_kind',None)!=RootKind.PRIVATE_LOCAL:raise SafeError('PRIVATE_LOCAL_ROOT_REQUIRED',403)
+  from .local_consent import LocalConsent
+  self.consent=LocalConsent(store)
   self.store=store;self.provider_factory=provider_factory;self.asr_factory=asr_factory
-  self.deep_profile='DEEP_QUALITY'
+  self.deep_profile=(self.consent.read() or {}).get('deep_profile','DEEP_QUALITY')
   self.lock=threading.RLock();self.session=None;self.ack_hash=None;self.adapters={};self.asr=None
-  self.revocation_hooks=[];self.profile_change_hooks=[];self.generation=0
+  self.revocation_hooks=[];self.profile_change_hooks=[];self.generation=0;self.durable_session=False
  def status(self):
+  consent=self.consent.read();contract=self.consent.contract()
   with self.lock:
    return {'profile_id':PROFILE_ID,'state':'PRIVATE_AI_OWNER_CONSENTED' if self.adapters else 'PRIVATE_AI_OFF',
     'local_voice':'ON' if self.asr else 'OFF','profiles':PROFILES,'deep_profile':self.deep_profile,'effort_ceilings':EFFORT_CEILINGS,'external_destination':'OPENAI',
     'scope':'THIS_OWNER_BOUNDED_PILOT_ONLY','retention':'NOT_ZERO_RETENTION_CERTIFIED',
     'journal_context':'EXPLICIT_SELECTION_ONLY','raw_audio_to_provider':'NEVER','fallback':'NONE','payg':'NONE',
-    'clinical_active':0,'specialists':'OFF','health':'OFF','phone':'OFF','restore_restart_requires_ack':True}
+    'clinical_active':0,'specialists':'OFF','health':'OFF','phone':'OFF','restore_restart_requires_ack':False,'restart_requires_consent':False,'restore_requires_consent':True,'consent':consent,
+    'consent_version':contract['version'],'privacy_version':contract['privacy_version'],
+    'external_settings':'NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER','local_asr_available':self.asr is not None}
+ def accept_consent(self,session,body):
+  if body.version!=self.consent.contract()['version'] or body.privacy_version!=self.consent.contract()['privacy_version']:raise SafeError('CONSENT_VERSION_CHANGED',409)
+  self.consent.accept()
+  return self.resume(session,enable=True)
+ def resume(self,session,enable=False):
+  data=self.consent.read()
+  if not data:raise SafeError('DURABLE_CONSENT_REQUIRED',403)
+  if enable:
+   data['ai_enabled']=True;self.consent.write(data)
+  if data['ai_enabled'] and not self.adapters:
+   self.activate(session,digest(encode(data).encode()),durable=True)
+  if data.get('voice_enabled') and self.asr is None and self.asr_factory:
+   try:self.enable_voice(session,dict(local_audio_only=True,review_before_send=True,manual_audio_deletion_understood=True))
+   except SafeError:pass # Capture/history remain available, local transcription waits safely.
+  return self.status()
+ def user_disable(self):
+  self.consent.disable()
+  return self.disable()
+ def revoke_consent(self):
+  self.consent.revoke()
+  return self.disable()
  def acknowledge(self,session,body):
   body=OwnerAcknowledgement.model_validate(body)
+  if not session:raise SafeError('OWNER_SESSION_REQUIRED',401)
+  return self.activate(session,digest(encode(body.model_dump()).encode()))
+ def activate(self,session,ack_hash,durable=False):
   if not session:raise SafeError('OWNER_SESSION_REQUIRED',401)
   if self.provider_factory is None:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503)
   candidates={mode:self.provider_factory(mode,**settings) for mode,settings in PROFILES.items()}
@@ -77,9 +107,10 @@ class PrivatePilotGate:
     raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
   self.disable()
   with self.lock:
-   self.session=digest(session.encode());self.ack_hash=digest(encode(body.model_dump()).encode());self.adapters=candidates
+   self.session=digest(session.encode());self.ack_hash=ack_hash;self.adapters=candidates;self.durable_session=durable
   return self.status()
  def require(self,session=None):
+  if self.durable_session and not self.consent.read():raise SafeError('PRIVATE_AI_CONSENT_CHANGED',409)
   with self.lock:
    if not self.adapters or self.session is None or session is not None and self.session!=digest(session.encode()):raise SafeError('PRIVATE_OWNER_ACK_REQUIRED',403)
  def provider(self,mode):
@@ -93,9 +124,12 @@ class PrivatePilotGate:
   self.require(session)
   if profile not in ('DEEP_ECONOMICAL','DEEP_QUALITY'):raise SafeError('PRIVATE_PROFILE_NOT_AVAILABLE',403)
   with self.lock:
-   if profile==self.deep_profile:return self.status()
-   self.deep_profile=profile;self.generation+=1
-   callbacks=list(self.profile_change_hooks)
+   changed=profile!=self.deep_profile
+   if changed:self.deep_profile=profile;self.generation+=1
+   callbacks=list(self.profile_change_hooks) if changed else []
+  if not changed:return self.status()
+  durable=self.consent.read()
+  if durable:durable['deep_profile']=profile;self.consent.write(durable)
   for callback in callbacks:callback()
   return self.status()
  def enable_voice(self,session,body):
@@ -109,12 +143,13 @@ class PrivatePilotGate:
    self.session=digest(session.encode());self.asr=engine
   return self.status()
  def require_voice(self,session):
+  durable=self.consent.read()
   with self.lock:
-   if self.asr is None or self.session!=digest(session.encode()):raise SafeError('PRIVATE_LOCAL_VOICE_ACK_REQUIRED',403)
+   if not (durable and durable.get('voice_enabled')) and (self.asr is None or self.session!=digest(session.encode())):raise SafeError('PRIVATE_LOCAL_VOICE_ACK_REQUIRED',403)
  def disable(self):
   with self.lock:
    self.generation+=1
    callbacks=list(self.revocation_hooks)
-   self.adapters={};self.asr=None;self.session=None;self.ack_hash=None
+   self.adapters={};self.asr=None;self.session=None;self.ack_hash=None;self.durable_session=False
   for callback in callbacks:callback()
   return self.status()

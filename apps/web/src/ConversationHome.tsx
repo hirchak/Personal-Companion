@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { PrivatePilotControls,type PilotState } from "./PrivatePilotControls";
+import { audioHash } from "./audio-types";
+import { ComposerVoice, VoiceHistory, voiceCall } from "./ComposerVoice";
+import {
+  PrivatePilotControls,
+  pilotCall,
+  type PilotState,
+} from "./PrivatePilotControls";
 import {
   ReflectionGoals,
   DeepContext,
   type ReflectionGoal,
 } from "./ReflectionGoals";
 import { Sheet } from "./Sheet";
-import { VoicePanel } from "./VoicePanel";
 import { InferencePanel } from "./InferencePanel";
 import {
   DeepSessionPanel,
@@ -28,11 +33,15 @@ import {
 export function ConversationHome({
   csrf,
   onPractice,
-  privateLocal=false,
+  privateLocal = false,
+  initialVoice,
+  onVoiceConsumed,
 }: {
   csrf: string;
   onPractice: () => void;
-  privateLocal?:boolean;
+  privateLocal?: boolean;
+  initialVoice?: { text: string; source: VoiceReference | null } | null;
+  onVoiceConsumed?: () => void;
 }) {
   const [status, setStatus] = useState<ConversationStatus | null>(null),
     [page, setPage] = useState<ConversationPage | null>(null),
@@ -43,16 +52,47 @@ export function ConversationHome({
     [notice, setNotice] = useState(""),
     [historyOpen, setHistoryOpen] = useState(false),
     [history, setHistory] = useState<Conversation[]>([]),
+    [historyLoading, setHistoryLoading] = useState(false),
     [archived, setArchived] = useState(false),
     [nextOffset, setNextOffset] = useState<number | null>(null),
     [deleteTarget, setDeleteTarget] = useState<Conversation | null>(null),
-    [voice, setVoice] = useState<"idle" | "record" | null>(null);
-  const [pilot,setPilot]=useState<PilotState|null>(null);
-  type PrivatePreview={receipt_id:string;context_hash:string;preview_hash:string;context:Array<{kind:string;text:string}>;reflection_state:unknown;provider_profile:{model:string;effort:string};purpose:"REFLECT"|"GOAL_PROPOSAL"|"CLOSURE";draft:string};
-  const [privatePreview,setPrivatePreview]=useState<PrivatePreview|null>(null);
-  const [journalChoices,setJournalChoices]=useState<Array<{id:string;revision:number;raw_text:string;type:string}>|null>(null);
-  const [journalSelection,setJournalSelection]=useState<Record<string,boolean>>({});
-  const privateAI=privateLocal&&pilot?.state==="PRIVATE_AI_OWNER_CONSENTED";
+    [voiceReset, setVoiceReset] = useState(0);
+  const [voiceBusy, setVoiceBusy] = useState(false);
+  const [scope, setScope] = useState<{
+    scope_hash: string;
+    goal_text: string;
+    focus: string;
+    phase: string;
+    selection: ContextSelection;
+    working_map: unknown;
+  } | null>(null);
+  const [inspect, setInspect] = useState(false);
+  const [pilot, setPilot] = useState<PilotState | null>(null);
+  type PrivatePreview = {
+    receipt_id: string;
+    context_hash: string;
+    preview_hash: string;
+    context: Array<{ kind: string; text: string }>;
+    reflection_state: unknown;
+    provider_profile: { model: string; effort: string };
+    purpose: "REFLECT" | "GOAL_PROPOSAL" | "CLOSURE";
+    draft: string;
+  };
+  const [privatePreview, setPrivatePreview] = useState<PrivatePreview | null>(
+    null,
+  );
+  const [journalChoices, setJournalChoices] = useState<Array<{
+    id: string;
+    revision: number;
+    raw_text: string;
+    type: string;
+  }> | null>(null);
+  const [journalPickerOpen, setJournalPickerOpen] = useState(false);
+  const [journalSelection, setJournalSelection] = useState<
+    Record<string, boolean>
+  >({});
+  const privateAI =
+    privateLocal && pilot?.state === "PRIVATE_AI_OWNER_CONSENTED";
   const [goalsOpen, setGoalsOpen] = useState(false);
   const [goalRefresh, setGoalRefresh] = useState(0);
   const [goalPreset, setGoalPreset] = useState("");
@@ -75,6 +115,15 @@ export function ConversationHome({
     pending = useRef<{ signature: string; operation_id: string } | null>(null);
   const pendingAction = useRef<{ signature: string; id: string } | null>(null);
   const deepCreating = useRef<{ signature: string; id: string } | null>(null);
+  useEffect(() => {
+    if (initialVoice) {
+      setText(initialVoice.text);
+      setSource(initialVoice.source);
+      voiceReviewPending.current = !!initialVoice.source;
+      onVoiceConsumed?.();
+    }
+  }, [initialVoice]);
+  const voiceReviewPending = useRef(false);
   const stored = "personal-companion-conversation-selection-v1";
   async function api(path: string, body?: unknown) {
     const controller = new AbortController();
@@ -184,10 +233,12 @@ export function ConversationHome({
     };
   }, []);
   async function recent(more = false) {
+    setHistoryLoading(true);
     const h = await api(
       `?archived=${archived}&offset=${more ? (nextOffset ?? 0) : 0}`,
     );
     if (alive.current) {
+      setHistoryLoading(false);
       setHistory((old) => (more ? [...old, ...h.items] : h.items));
       setNextOffset(h.next_offset);
     }
@@ -198,8 +249,14 @@ export function ConversationHome({
         setError("Не вдалося відкрити історію. Спробуйте ще раз."),
       );
   }, [historyOpen, archived]);
+  useEffect(() => {
+    if (goalsOpen)
+      void api("?archived=false")
+        .then((h) => setHistory(h.items))
+        .catch(() => setError("Історія недоступна."));
+  }, [goalsOpen]);
   async function open(id: string) {
-    if (working.current) return;
+    if (working.current || voiceBusy) return;
     working.current = true;
     setBusy(true);
     setError("");
@@ -211,6 +268,7 @@ export function ConversationHome({
         setText("");
         setSource(null);
         setHistoryOpen(false);
+        setGoalsOpen(false);
       }
     } catch (e) {
       if (alive.current) setError(chatError((e as Error).message));
@@ -222,10 +280,11 @@ export function ConversationHome({
   async function send(
     purpose: "REFLECT" | "GOAL_PROPOSAL" | "CLOSURE" = "REFLECT",
     override?: string,
-    privateApproved=false,
+    privateApproved = false,
   ) {
     const input = override ?? text;
-    if (working.current || sessionBlocked || !validChatText(input)) return;
+    if (working.current || voiceBusy || sessionBlocked || !validChatText(input))
+      return;
     working.current = true;
     setBusy(true);
     setError("");
@@ -240,19 +299,68 @@ export function ConversationHome({
         creating.current = null;
         if (alive.current && seq === generation.current) selection(current);
       }
+      let voiceSource = source;
+      if (
+        voiceSource &&
+        (voiceReviewPending.current ||
+          voiceSource.text_hash !==
+            (await audioHash(new TextEncoder().encode(sent))))
+      ) {
+        const edited = await voiceCall(
+          csrf,
+          "/transcripts/" + voiceSource.transcript_id + "/edit",
+          { revision: voiceSource.revision, text: sent },
+        );
+        voiceSource = {
+          ...voiceSource,
+          revision: edited.revision,
+          text_hash: await audioHash(new TextEncoder().encode(sent)),
+        };
+        setSource(voiceSource);
+        voiceReviewPending.current = false;
+      }
       let binding = null;
       if (privateAI) {
-        if (!privateApproved) {
-          const preview=await api("/"+current!.conversation.id+"/private-context/preview",{
-            operation_id:crypto.randomUUID(),base_revision:current!.conversation.revision,text:sent,purpose,
-            selection:contextSelection,journal_entries:(journalChoices??[]).filter(e=>journalSelection[e.id]).map(e=>({id:e.id,revision:e.revision})),
-          });
-          setPrivatePreview({...preview,draft:sent});return;
+        if (
+          !privateApproved &&
+          (inspect || Object.values(journalSelection).some(Boolean))
+        ) {
+          const preview = await api(
+            "/" + current!.conversation.id + "/private-context/preview",
+            {
+              operation_id: crypto.randomUUID(),
+              base_revision: current!.conversation.revision,
+              text: sent,
+              purpose,
+              selection: contextSelection,
+              journal_entries: (journalChoices ?? [])
+                .filter((e) => journalSelection[e.id])
+                .map((e) => ({ id: e.id, revision: e.revision })),
+            },
+          );
+          setPrivatePreview({ ...preview, draft: sent });
+          setInspect(false);
+          return;
         }
-        if (!privatePreview||privatePreview.draft!==sent||privatePreview.purpose!==purpose) throw new Error("PRIVATE_PREVIEW_CHANGED");
-        binding={receipt_id:privatePreview.receipt_id,context_hash:privatePreview.context_hash,preview_hash:privatePreview.preview_hash};
+        if (privateApproved) {
+          if (
+            !privatePreview ||
+            privatePreview.draft !== sent ||
+            privatePreview.purpose !== purpose
+          )
+            throw new Error("PRIVATE_PREVIEW_CHANGED");
+          binding = {
+            receipt_id: privatePreview.receipt_id,
+            context_hash: privatePreview.context_hash,
+            preview_hash: privatePreview.preview_hash,
+          };
+        }
       }
-      if (!privateLocal && status?.mode && current!.conversation.mode === "DEEP") {
+      if (
+        !privateLocal &&
+        status?.mode &&
+        current!.conversation.mode === "DEEP"
+      ) {
         const preview =
           (override ? null : contextPreview) ??
           (await deepCall(csrf, current!.conversation.id, "context-preview", {
@@ -271,8 +379,18 @@ export function ConversationHome({
         ...(binding ? { context_binding: binding } : {}),
         base_revision: current!.conversation.revision,
         text: sent,
-        source_reference: source,
-        ...(privateAI?{purpose,owner_approved_external_text:true}:!privateLocal&&status?.mode?{purpose,synthetic_test_ack:true}:{}),
+        source_reference: voiceSource,
+        ...(privateAI
+          ? {
+              purpose,
+              owner_approved_external_text: true,
+              ...(!binding
+                ? { standard_send: true, selection: contextSelection }
+                : {}),
+            }
+          : !privateLocal && status?.mode
+            ? { purpose, synthetic_test_ack: true }
+            : {}),
       };
       const signature = JSON.stringify({ id: current!.conversation.id, body });
       if (pending.current?.signature !== signature)
@@ -280,7 +398,11 @@ export function ConversationHome({
       const result = await api(
         "/" +
           current!.conversation.id +
-          (privateAI?"/private-infer":!privateLocal&&status?.mode?"/inference":"/messages"),
+          (privateAI
+            ? "/private-infer"
+            : !privateLocal && status?.mode
+              ? "/inference"
+              : "/messages"),
         {
           ...body,
           operation_id: pending.current.operation_id,
@@ -295,6 +417,9 @@ export function ConversationHome({
         selection(fresh);
         setText("");
         setSource(null);
+        setVoiceReset((v) => v + 1);
+        setJournalSelection({});
+        setJournalChoices(null);
         setContextPreview(null);
         setGoalsOpen(false);
         pending.current = null;
@@ -308,6 +433,19 @@ export function ConversationHome({
       if (alive.current && seq === generation.current) {
         const code = (e as Error).message;
         setError(chatError(code));
+        if (code === "DEEP_SCOPE_APPROVAL_REQUIRED" && page) {
+          try {
+            setScope(
+              await api(
+                "/" + page.conversation.id + "/private-scope",
+                contextSelection,
+              ),
+            );
+            setError("");
+          } catch {
+            setError("Сфера сесії змінилася. Відкрийте її ще раз.");
+          }
+        }
         if (code === "REVISION_CONFLICT" && page) {
           try {
             const p = await load(page.conversation.id);
@@ -327,7 +465,7 @@ export function ConversationHome({
     c: Conversation,
     name: "archive" | "unarchive" | "delete",
   ) {
-    if (working.current) return;
+    if (working.current || voiceBusy) return;
     working.current = true;
     setBusy(true);
     setError("");
@@ -360,8 +498,19 @@ export function ConversationHome({
       if (alive.current) setBusy(false);
     }
   }
+  async function chooseDeep(profile: string) {
+    setBusy(true);
+    try {
+      setPilot(await pilotCall(csrf, "deep-profile", { profile }));
+      setPrivatePreview(null);
+    } catch {
+      setError("Профіль недоступний; заміни немає.");
+    } finally {
+      setBusy(false);
+    }
+  }
   async function startDeep(g: ReflectionGoal) {
-    if (working.current) return;
+    if (working.current || voiceBusy) return;
     working.current = true;
     setBusy(true);
     setError("");
@@ -380,6 +529,13 @@ export function ConversationHome({
         setSource(null);
         setGoalsOpen(false);
         deepCreating.current = null;
+        if (privateAI)
+          setScope(
+            await api(
+              "/" + p.conversation.id + "/private-scope",
+              contextSelection,
+            ),
+          );
       }
     } catch {
       if (alive.current)
@@ -392,11 +548,15 @@ export function ConversationHome({
     }
   }
   function reset() {
-    if (working.current) return;
+    if (working.current || voiceBusy) return;
     generation.current++;
     selection(null);
     setText("");
     setSource(null);
+    setPrivatePreview(null);
+    setJournalSelection({});
+    setJournalChoices(null);
+    setScope(null);
     pending.current = null;
     creating.current = null;
     setHistoryOpen(false);
@@ -404,20 +564,54 @@ export function ConversationHome({
     setNotice("");
     composer.current?.focus();
   }
+  useEffect(() => {
+    if (inspect && validChatText(text)) void send();
+  }, [inspect]);
   const hasMessages = !!page?.messages.length;
   const inferenceActive =
     !!page?.inference_job &&
     ["QUEUED", "RUNNING"].includes(page.inference_job.state);
   return (
     <section className="conversation-home" aria-label="Розмова">
-      {privateLocal&&<PrivatePilotControls csrf={csrf} onChanged={s=>{setPilot(s);setPrivatePreview(null);void api("/status").then(setStatus).catch(()=>setError("Не вдалося оновити статус."));}}/>}
       <div className="conversation-thread">
         <header className="conversation-toolbar">
           <h1>
             {page?.conversation.mode === "DEEP" ? "Глибока розмова" : "Розмова"}
           </h1>
           <div>
-            <button onClick={() => setGoalsOpen(true)}>Цілі</button>
+            <div
+              className="mode-switch"
+              role="group"
+              aria-label="Режим розмови"
+            >
+              <button
+                aria-pressed={page?.conversation.mode !== "DEEP"}
+                disabled={busy || voiceBusy}
+                onClick={() => {
+                  if (page?.conversation.mode === "DEEP") reset();
+                }}
+              >
+                Звичайна
+              </button>
+              <button
+                aria-pressed={page?.conversation.mode === "DEEP"}
+                disabled={busy || voiceBusy}
+                onClick={() => setGoalsOpen(true)}
+              >
+                Глибока
+              </button>
+            </div>
+            {privateAI && page?.conversation.mode === "DEEP" && (
+              <select
+                disabled={busy || voiceBusy || inferenceActive}
+                aria-label="Модель глибокої розмови"
+                value={pilot?.deep_profile}
+                onChange={(e) => void chooseDeep(e.target.value)}
+              >
+                <option value="DEEP_ECONOMICAL">Економний · Luna Max</option>
+                <option value="DEEP_QUALITY">Якісний · Sol 6.1 High</option>
+              </select>
+            )}
             {status?.mode &&
               page?.conversation.mode === "DEEP" &&
               hasMessages && (
@@ -426,22 +620,34 @@ export function ConversationHome({
                   onClick={() =>
                     void send(
                       "CLOSURE",
-                      privateLocal?"Явно прошу підсумувати цю сесію.":"ORIGINAL SYNTHETIC · Явно прошу підсумувати цю сесію.",
+                      privateLocal
+                        ? "Явно прошу підсумувати цю сесію."
+                        : "ORIGINAL SYNTHETIC · Явно прошу підсумувати цю сесію.",
                     )
                   }
                 >
                   Підсумувати
                 </button>
               )}
-            <button onClick={() => setHistoryOpen(true)}>Розмови</button>
-            <button disabled={busy} onClick={reset}>
+            <button disabled={voiceBusy} onClick={() => setHistoryOpen(true)}>
+              Розмови
+            </button>
+            <button
+              disabled={busy || voiceBusy}
+              onClick={() =>
+                page?.conversation.mode === "DEEP"
+                  ? setGoalsOpen(true)
+                  : reset()
+              }
+            >
               Нова розмова
             </button>
           </div>
         </header>
         {page?.conversation.mode === "DEEP" &&
           page.conversation.goal_binding &&
-          !status?.mode && !privateLocal && (
+          !status?.mode &&
+          !privateLocal && (
             <DeepContext
               key={page.conversation.id}
               csrf={csrf}
@@ -451,23 +657,24 @@ export function ConversationHome({
               refreshVersion={goalRefresh}
             />
           )}
-        {(status?.mode||privateLocal) && page?.conversation.mode === "DEEP" && (
-          <DeepSessionPanel
-            key={page.conversation.id}
-            csrf={csrf}
-            id={page.conversation.id}
-            revision={page.conversation.revision}
-            draft={text}
-            selection={contextSelection}
-            onSelection={setContextSelection}
-            preview={contextPreview}
-            onPreview={setContextPreview}
-            onSession={(s) =>
-              setSessionBlocked(["CLOSED", "PAUSED"].includes(s.phase))
-            }
-            onNext={() => setGoalsOpen(true)}
-          />
-        )}
+        {(status?.mode || privateLocal) &&
+          page?.conversation.mode === "DEEP" && (
+            <DeepSessionPanel
+              key={page.conversation.id}
+              csrf={csrf}
+              id={page.conversation.id}
+              revision={page.conversation.revision}
+              draft={text}
+              selection={contextSelection}
+              onSelection={setContextSelection}
+              preview={contextPreview}
+              onPreview={setContextPreview}
+              onSession={(s) =>
+                setSessionBlocked(["CLOSED", "PAUSED"].includes(s.phase))
+              }
+              onNext={() => setGoalsOpen(true)}
+            />
+          )}
         {status?.synthetic_demo && (
           <p className="demo-status">
             {status.mode === "LIVE_SYNTHETIC"
@@ -490,16 +697,16 @@ export function ConversationHome({
         >
           {!hasMessages ? (
             <div className="conversation-empty">
-              <h2>Про що хочеться поговорити?</h2>
+              <h2>Що у вас сьогодні на думці?</h2>
               <p>
                 Можна просто записати те, що на думці. Ви вирішуєте, що
                 зберігати й коли повертатися.
               </p>
               <div className="conversation-intents">
                 {[
-                  "Просто виговоритися",
+                  "Просто поговорити",
                   "Розібрати думку",
-                  "Подивитися з іншого боку",
+                  "Подумати над рішенням",
                 ].map((intent) => (
                   <button
                     key={intent}
@@ -511,7 +718,6 @@ export function ConversationHome({
                     {intent}
                   </button>
                 ))}
-                <button onClick={onPractice}>Практики</button>
               </div>
             </div>
           ) : (
@@ -591,17 +797,84 @@ export function ConversationHome({
           />
         )}
       </div>
-      {privateAI&&<details className="private-journal-selection"><summary>Контекст щоденника · лише вибрані записи</summary>
-        <p>За замовчуванням щоденник не надсилається. Виберіть до 10 записів і перевірте повний preview.</p>
-        <button type="button" onClick={()=>void fetch("/api/v1/entries",{credentials:"same-origin",cache:"no-store"}).then(async r=>{if(!r.ok)throw new Error();const d=await r.json();setJournalChoices(d.items.filter((e:{type:string})=>e.type!=="creative"));}).catch(()=>setError("Не вдалося відкрити записи."))}>Вибрати записи щоденника</button>
-        {journalChoices?.map(e=><label key={e.id}><input type="checkbox" checked={!!journalSelection[e.id]} disabled={!journalSelection[e.id]&&Object.values(journalSelection).filter(Boolean).length>=10} onChange={event=>{setJournalSelection(old=>({...old,[e.id]:event.target.checked}));setPrivatePreview(null);}}/>{e.raw_text}</label>)}
-      </details>}
-      {privatePreview&&<Sheet title="Підтвердити текст для OpenAI" onClose={()=>setPrivatePreview(null)} wide>
-        <p>{privatePreview.provider_profile.model} / {privatePreview.provider_profile.effort}. Через наявну підписку ChatGPT. Нульове зберігання не гарантоване. Аудіо не надсилається.</p>
-        {privatePreview.context.map((part,index)=><section key={index}><h3>{part.kind==="CURRENT_TURN"?"Ваше повідомлення":part.kind==="JOURNAL_SELECTED"?"Вибраний запис щоденника":"Погоджений контекст"}</h3><p className="preserve-text">{part.text}</p></section>)}
-        {privatePreview.reflection_state!==null&&<details><summary>Мета, фокус і карта глибокої розмови</summary><pre>{JSON.stringify(privatePreview.reflection_state,null,2)}</pre></details>}
-        <button className="primary" disabled={busy} onClick={()=>void send(privatePreview.purpose,privatePreview.draft,true)}>Підтверджую · надіслати цей текст до AI</button>
-      </Sheet>}
+      {journalPickerOpen && journalChoices && (
+        <Sheet
+          title="Додати записи до розмови"
+          onClose={() => setJournalPickerOpen(false)}
+        >
+          <p>
+            Щоденник вимкнений за замовчуванням. Виберіть до 10 записів. Перед
+            надсиланням ви підтвердите їх окремо.
+          </p>
+          {journalChoices.map((e) => (
+            <label className="journal-choice" key={e.id}>
+              <input
+                type="checkbox"
+                checked={!!journalSelection[e.id]}
+                disabled={
+                  !journalSelection[e.id] &&
+                  Object.values(journalSelection).filter(Boolean).length >= 10
+                }
+                onChange={(event) => {
+                  setJournalSelection((old) => ({
+                    ...old,
+                    [e.id]: event.target.checked,
+                  }));
+                  setPrivatePreview(null);
+                }}
+              />
+              {e.raw_text}
+            </label>
+          ))}
+          <button onClick={() => setJournalPickerOpen(false)}>Готово</button>
+        </Sheet>
+      )}
+      {privatePreview && (
+        <Sheet
+          title={
+            Object.values(journalSelection).some(Boolean)
+              ? `Додати ${Object.values(journalSelection).filter(Boolean).length} записів щоденника?`
+              : "Що буде надіслано"
+          }
+          onClose={() => setPrivatePreview(null)}
+          wide
+        >
+          <p>
+            {privatePreview.provider_profile.model} /{" "}
+            {privatePreview.provider_profile.effort}. Через наявну підписку
+            ChatGPT. Нульове зберігання не гарантоване. Аудіо не надсилається.
+          </p>
+          {privatePreview.context.map((part, index) => (
+            <section key={index}>
+              <h3>
+                {part.kind === "CURRENT_TURN"
+                  ? "Ваше повідомлення"
+                  : part.kind === "JOURNAL_SELECTED"
+                    ? "Вибраний запис щоденника"
+                    : "Погоджений контекст"}
+              </h3>
+              <p className="preserve-text">{part.text}</p>
+            </section>
+          ))}
+          {privatePreview.reflection_state !== null && (
+            <details>
+              <summary>Мета, фокус і карта глибокої розмови</summary>
+              <pre>
+                {JSON.stringify(privatePreview.reflection_state, null, 2)}
+              </pre>
+            </details>
+          )}
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={() =>
+              void send(privatePreview.purpose, privatePreview.draft, true)
+            }
+          >
+            Підтвердити й надіслати
+          </button>
+        </Sheet>
+      )}
       <form
         className="conversation-composer"
         aria-label="Нове повідомлення"
@@ -610,13 +883,27 @@ export function ConversationHome({
           void send();
         }}
       >
+        {privateLocal && (
+          <PrivatePilotControls
+            mode={page?.conversation.mode ?? "FREE"}
+            compact
+            csrf={csrf}
+            onChanged={(s) => {
+              setPilot(s);
+              setPrivatePreview(null);
+              void api("/status")
+                .then(setStatus)
+                .catch(() => setError("Не вдалося оновити статус."));
+            }}
+          />
+        )}
         {!status?.synthetic_demo && status && !privateAI && (
           <p className="composer-privacy">
             Помічник поки недоступний. Ваш текст можна залишити в цій розмові
             локально.
           </p>
         )}
-        {privateAI&&<p className="composer-privacy">AI отримує лише підтверджений preview. Аудіо, Health і невибрані записи не надсилаються.</p>}
+
         {status?.synthetic_demo && (
           <p className="composer-privacy">
             {status.mode === "LIVE_SYNTHETIC"
@@ -635,7 +922,8 @@ export function ConversationHome({
           value={text}
           onChange={(e) => {
             setText(e.target.value);
-            setContextPreview(null);setPrivatePreview(null);
+            setContextPreview(null);
+            setPrivatePreview(null);
           }}
           disabled={
             busy || inferenceActive || page?.conversation.state === "ARCHIVED"
@@ -651,35 +939,85 @@ export function ConversationHome({
           }}
         />
         <div className="composer-actions">
-          <button
-            type="button"
-            aria-label="Записати голосом"
-            aria-haspopup="dialog"
-            disabled={busy||(privateLocal&&pilot?.local_voice!=="ON")}
-            onClick={() => setVoice("record")}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              aria-hidden="true"
+          {privateAI && (
+            <button
+              type="button"
+              aria-label="Додати контекст щоденника"
+              onClick={() =>
+                void fetch("/api/v1/entries", {
+                  credentials: "same-origin",
+                  cache: "no-store",
+                })
+                  .then(async (r) => {
+                    if (!r.ok) throw new Error();
+                    const d = await r.json();
+                    setJournalChoices(
+                      d.items.filter(
+                        (e: { type: string }) => e.type !== "creative",
+                      ),
+                    );
+                    setJournalPickerOpen(true);
+                  })
+                  .catch(() => setError("Не вдалося відкрити записи."))
+              }
             >
-              <rect x="9" y="2" width="6" height="13" rx="3" />
-              <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8" />
-            </svg>
-          </button>
-          <button type="button" disabled={privateLocal&&pilot?.local_voice!=="ON"} onClick={() => setVoice("idle")}>
-            Голосові записи
-          </button>
-          {!privateLocal&&<button type="button" onClick={onPractice}>Практики</button>}
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                aria-hidden="true"
+              >
+                <path d="M12 4v16M4 12h16" />
+              </svg>
+            </button>
+          )}
+          <ComposerVoice
+            resetVersion={voiceReset}
+            available={
+              !privateLocal || !!pilot?.consent || pilot?.local_voice === "ON"
+            }
+            csrf={csrf}
+            onBusy={(value) => {
+              setVoiceBusy(value);
+              window.dispatchEvent(
+                new CustomEvent("pc-voice-busy", { detail: value }),
+              );
+            }}
+            onDraft={(value, ref) => {
+              setText((old) => (old.trim() ? old + "\n" + value : value));
+              setSource(ref);
+              voiceReviewPending.current = !!ref;
+              setPrivatePreview(null);
+              composer.current?.focus();
+            }}
+          />
+          {privateAI && (
+            <button
+              type="button"
+              className="context-inspect"
+              disabled={!validChatText(text) || busy || voiceBusy}
+              onClick={() => {
+                setInspect(true);
+              }}
+            >
+              Що буде надіслано
+            </button>
+          )}
+          {!privateLocal && (
+            <button type="button" onClick={onPractice}>
+              Практики
+            </button>
+          )}
           <span className="hint">Ctrl / ⌘ + Enter</span>
           <button
             className="primary"
             disabled={
               busy ||
+              voiceBusy ||
+              sessionBlocked ||
               inferenceActive ||
               !validChatText(text) ||
               page?.conversation.state === "ARCHIVED"
@@ -687,9 +1025,11 @@ export function ConversationHome({
           >
             {busy
               ? "Зберігаємо…"
-              : privateAI?"Переглянути перед надсиланням":status?.synthetic_demo
+              : privateAI
                 ? "Надіслати"
-                : "Зберегти у розмові"}
+                : status?.synthetic_demo
+                  ? "Надіслати"
+                  : "Зберегти у розмові"}
           </button>
         </div>
         {page?.conversation.state === "ARCHIVED" && (
@@ -697,7 +1037,18 @@ export function ConversationHome({
         )}
       </form>
       {goalsOpen && (
-        <Sheet title="Цілі" onClose={() => setGoalsOpen(false)} wide>
+        <Sheet
+          title="Глибока розмова · оберіть мету"
+          onClose={() => setGoalsOpen(false)}
+          wide
+        >
+          {history
+            .filter((c) => c.mode === "DEEP" && c.state === "ACTIVE")
+            .map((c) => (
+              <button key={c.id} onClick={() => void open(c.id)}>
+                Продовжити · {c.title}
+              </button>
+            ))}
           <ReflectionGoals
             csrf={csrf}
             initialText={goalPreset}
@@ -735,6 +1086,7 @@ export function ConversationHome({
                   onClick={() => void open(c.id)}
                 >
                   {c.title}
+                  <small>{c.mode === "DEEP" ? "Глибока" : "Звичайна"}</small>
                   <span>{new Date(c.updated_utc).toLocaleString("uk-UA")}</span>
                 </button>
                 <details>
@@ -757,7 +1109,11 @@ export function ConversationHome({
               </li>
             ))}
           </ul>
-          {history.length === 0 && <p>Розмов ще немає.</p>}
+          {historyLoading ? (
+            <p role="status">Відкриваю розмови…</p>
+          ) : (
+            history.length === 0 && <p>Розмов ще немає.</p>
+          )}
           {nextOffset !== null && (
             <button onClick={() => void recent(true)}>Старші розмови</button>
           )}
@@ -786,19 +1142,37 @@ export function ConversationHome({
           onClose={() => setJournalOpen(false)}
         />
       )}
-      {voice && (
-        <Sheet title="Голосовий ввід" onClose={() => setVoice(null)} wide>
-          <VoicePanel
-            csrf={csrf}
-            autoStart={voice === "record"}
-            allowSyntheticAsr={status?.synthetic_demo ?? false}
-            onInsert={(value, ref) => {
-              setText((old) => (old.trim() ? old + "\n" + value : value));
-              setSource(ref);
-              setVoice(null);
-              composer.current?.focus();
-            }}
-          />
+      {scope && page && (
+        <Sheet title="Сфера глибокої розмови" onClose={() => setScope(null)}>
+          <p>
+            <strong>Мета:</strong> {scope.goal_text}
+          </p>
+          <p>
+            <strong>Фокус:</strong>{" "}
+            {scope.focus || "Можна уточнити під час розмови"}
+          </p>
+          <p>
+            Ця розмова, погоджена редакція мети, її робоча карта та попередні
+            завершення. Щоденник і сторонні розмови не додаються. Діапазон:{" "}
+            {scope.selection.type === "GOAL_START"
+              ? "від початку мети"
+              : scope.selection.type}
+            .
+          </p>
+          <button
+            className="primary"
+            onClick={() =>
+              void api("/" + page.conversation.id + "/private-scope/approve", {
+                selection: contextSelection,
+                scope_hash: scope.scope_hash,
+                accepted: true,
+              })
+                .then(() => setScope(null))
+                .catch(() => setError("Сфера змінилася. Перевірте її знову."))
+            }
+          >
+            Погоджую сферу сесії
+          </button>
         </Sheet>
       )}
     </section>

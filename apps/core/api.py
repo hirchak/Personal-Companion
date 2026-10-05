@@ -24,7 +24,7 @@ from .conversation_controller import ConversationController
 from .conversation_runtime_contracts import InferenceStart,InferenceAction,JournalPointPreview,JournalPointConfirm
 from .reflection import Reflection
 from .reflection_contracts import GoalCreate, GoalChange, ContextRequest, Expansion, MessageEdit
-from .deep_session_contracts import DeepContextPreview,MapAction,SessionAction
+from .deep_session_contracts import DeepContextPreview,MapAction,SessionAction,ContextSelection
 from .conversation import Conversations
 from .conversation_contracts import NewConversation, SendMessage, ConversationAction
 from .practice import PracticeEngine
@@ -172,10 +172,12 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                 # Explicit allowlist makes future optional routes OFF until a separately reviewed profile.
                 allowed = path in {'/api/v1/status','/api/v1/auth/unlock','/api/v1/auth/session','/api/v1/auth/lock','/api/v1/entries','/api/v1/creative','/api/v1/creative/preview','/api/v1/creative/export','/api/v1/exports','/api/v1/exports/preview'} or re.fullmatch(r'/api/v1/entries/[0-9a-fA-F-]{36}(?:/revisions)?',path) is not None
                 if private_gate:
-                    optional_allowed=path in {'/api/v1/conversations','/api/v1/conversations/status','/api/v1/reflection/goals','/api/v1/private-pilot/status','/api/v1/private-pilot/acknowledge','/api/v1/private-pilot/disable','/api/v1/private-pilot/deep-profile','/api/v1/private-pilot/local-voice'} or re.fullmatch(r'/api/v1/conversations/[0-9a-fA-F-]{36}(?:/(?:messages|actions|private-infer|private-context/preview|context-preview|deep-session|deep-session/actions|working-map/actions|inference|inference/[0-9a-fA-F-]{36}(?:/actions)?|messages/[0-9a-fA-F-]{36}/edit|journal-point/(?:preview|confirm)))?',path) is not None or re.fullmatch(r'/api/v1/reflection/goals/[0-9a-fA-F-]{36}',path) is not None
+                    optional_allowed=path in {'/api/v1/conversations','/api/v1/conversations/status','/api/v1/reflection/goals','/api/v1/private-pilot/status','/api/v1/private-pilot/acknowledge','/api/v1/private-pilot/disable','/api/v1/private-pilot/deep-profile','/api/v1/private-pilot/local-voice','/api/v1/private-pilot/consent','/api/v1/private-pilot/resume','/api/v1/private-pilot/revoke'} or re.fullmatch(r'/api/v1/conversations/[0-9a-fA-F-]{36}(?:/(?:messages|actions|private-infer|private-context/preview|private-scope|private-scope/approve|context-preview|deep-session|deep-session/actions|working-map/actions|inference|inference/[0-9a-fA-F-]{36}(?:/actions)?|messages/[0-9a-fA-F-]{36}/edit|journal-point/(?:preview|confirm)))?',path) is not None or re.fullmatch(r'/api/v1/reflection/goals/[0-9a-fA-F-]{36}',path) is not None
                     allowed=allowed or optional_allowed
                     if path.startswith('/api/v1/voice/'):
-                        private_gate.require_voice(request.state.session);allowed=True
+                        local_audio_management=(request.method=='GET' and (path=='/api/v1/voice/audio' or re.fullmatch(r'/api/v1/voice/audio/[0-9a-fA-F-]{36}',path))) or re.fullmatch(r'/api/v1/voice/(?:audio/[0-9a-fA-F-]{36}/delete|transcripts/[0-9a-fA-F-]{36}/edit)',path) is not None
+                        if not local_audio_management:private_gate.require_voice(request.state.session)
+                        allowed=True
                     if '/api/v1/voice/audio/' in path and path.endswith('/transcribe') and request._body and __import__('json').loads(request._body).get('mode')!='LOCAL':raise SafeError('PRIVATE_LOCAL_ASR_ONLY',403)
                 if path.startswith('/api/') and not allowed:raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
                 if path.startswith('/phone'):raise SafeError('PRIVATE_CORE_CAPABILITY_OFF',403)
@@ -326,13 +328,36 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
 
     if private_gate:
         from .local_private_ai import OwnerAcknowledgement,LocalVoiceAcknowledgement,DeepProfileSelection,PROFILE as PRIVATE_AI_PROFILE
-        from .local_private_contracts import PrivateInferenceStart,PrivateContextPreview
+        from .local_private_contracts import PrivateInferenceStart,PrivateContextPreview,DurableConsentAcceptance,DeepScopeApproval
+        @app.post("/api/v1/private-pilot/consent")
+        def consent_accept(body:DurableConsentAcceptance,request:Request):
+            result=private_gate.accept_consent(request.state.session,body)
+            if private_gate.asr:voice.engines["LOCAL"]=private_gate.asr;voice.timeout=90
+            return result
+        @app.post("/api/v1/private-pilot/resume")
+        def consent_resume(body:Empty,request:Request):
+            result=private_gate.resume(request.state.session,enable=True)
+            if private_gate.asr:voice.engines["LOCAL"]=private_gate.asr;voice.timeout=90
+            return result
+        @app.post("/api/v1/private-pilot/revoke")
+        def consent_revoke(body:Empty):return private_gate.revoke_consent()
+        @app.get("/api/v1/conversations/{conversation_id}/private-scope")
+        def scope_preview(conversation_id:UUID):
+            from .deep_session_contracts import ContextSelection
+            return private_gate.consent.scope(controller,conversation_id,ContextSelection())
+        @app.post("/api/v1/conversations/{conversation_id}/private-scope")
+        def scope_preview_selection(conversation_id:UUID,body:ContextSelection):
+            return private_gate.consent.scope(controller,conversation_id,body)
+        @app.post("/api/v1/conversations/{conversation_id}/private-scope/approve")
+        def scope_approve(conversation_id:UUID,body:DeepScopeApproval,request:Request):
+            private_gate.require(request.state.session)
+            return private_gate.consent.approve_scope(controller,conversation_id,body.selection,body.scope_hash)
         @app.get('/api/v1/private-pilot/status')
         def private_status():return dict(private_gate.status(),capabilities=PRIVATE_AI_PROFILE)
         @app.post('/api/v1/private-pilot/acknowledge')
         def private_ack(body:OwnerAcknowledgement,request:Request):return private_gate.acknowledge(request.state.session,body)
         @app.post('/api/v1/private-pilot/disable')
-        def private_disable(body:Empty):return private_gate.disable()
+        def private_disable(body:Empty):return private_gate.user_disable()
         @app.post('/api/v1/private-pilot/deep-profile')
         def private_deep_profile(body:DeepProfileSelection,request:Request):return private_gate.select_deep(request.state.session,body.profile)
         @app.post('/api/v1/private-pilot/local-voice')
