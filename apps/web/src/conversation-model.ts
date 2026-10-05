@@ -32,15 +32,29 @@ export type ConversationPage = {
   messages: ChatMessage[];
   next_after: number | null;
   inference_job?: InferenceJob | null;
-  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE" | "PRIVATE_OWNER_CONSENTED";
+  responder:
+    | "OFF"
+    | "MOCK_SYNTHETIC"
+    | "LIVE_SYNTHETIC"
+    | "OFFLINE_FIXTURE"
+    | "PRIVATE_OWNER_CONSENTED";
 };
 export type ConversationStatus = {
   synthetic_demo: boolean;
-  responder: "OFF" | "MOCK_SYNTHETIC" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE" | "PRIVATE_OWNER_CONSENTED";
+  responder:
+    | "OFF"
+    | "MOCK_SYNTHETIC"
+    | "LIVE_SYNTHETIC"
+    | "OFFLINE_FIXTURE"
+    | "PRIVATE_OWNER_CONSENTED";
   actual_asr: string;
   clinical_active: 0;
   live_provider_calls: boolean;
-  mode?: "OFF" | "LIVE_SYNTHETIC" | "OFFLINE_FIXTURE" | "PRIVATE_OWNER_CONSENTED";
+  mode?:
+    | "OFF"
+    | "LIVE_SYNTHETIC"
+    | "OFFLINE_FIXTURE"
+    | "PRIVATE_OWNER_CONSENTED";
   provider?: { route: string; model: string; live: boolean };
 };
 export function validChatText(text: string) {
@@ -55,6 +69,10 @@ export function sendShortcut(e: {
   return e.key === "Enter" && (e.ctrlKey || e.metaKey) && !e.isComposing;
 }
 export function chatError(code: string) {
+  if (code === "JOURNAL_SELECTION_CHANGED")
+    return "Вибраний запис змінився. Оновіть вибрані записи й підтвердьте новий контекст. Повідомлення не надіслано.";
+  if (code === "GOAL_REVISION_CHANGED")
+    return "Мета має нову редакцію. Почніть глибоку розмову з актуальною метою.";
   if (code === "REVISION_CONFLICT")
     return "Розмова змінилася в іншому вікні. Перегляньте актуальні повідомлення; ваш текст залишився в полі.";
   if (code === "CONVERSATION_DELETED")

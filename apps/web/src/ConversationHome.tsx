@@ -498,6 +498,44 @@ export function ConversationHome({
       if (alive.current) setBusy(false);
     }
   }
+  async function chooseJournals() {
+    try {
+      const r = await fetch("/api/v1/entries", {
+        credentials: "same-origin",
+        cache: "no-store",
+      });
+      if (!r.ok) throw new Error();
+      const data = await r.json();
+      const choices = data.items.filter(
+        (e: { type: string }) => e.type !== "creative",
+      );
+      setJournalChoices(choices);
+      setJournalSelection((old) =>
+        Object.fromEntries(
+          choices.map((e: { id: string }) => [e.id, !!old[e.id]]),
+        ),
+      );
+      setPrivatePreview(null);
+      setJournalPickerOpen(true);
+      setError("");
+    } catch {
+      setError("Не вдалося оновити записи. Збережений текст залишається тут.");
+    }
+  }
+  async function refreshScope() {
+    if (!page) return;
+    try {
+      setScope(
+        await api(
+          "/" + page.conversation.id + "/private-scope",
+          contextSelection,
+        ),
+      );
+      setError("");
+    } catch (e) {
+      setError(chatError((e as Error).message));
+    }
+  }
   async function chooseDeep(profile: string) {
     setBusy(true);
     try {
@@ -864,6 +902,14 @@ export function ConversationHome({
               </pre>
             </details>
           )}
+          {error && (
+            <>
+              <p role="alert">{error}</p>
+              <button disabled={busy} onClick={() => void chooseJournals()}>
+                Оновити вибрані записи
+              </button>
+            </>
+          )}
           <button
             className="primary"
             disabled={busy}
@@ -944,23 +990,7 @@ export function ConversationHome({
             <button
               type="button"
               aria-label="Додати контекст щоденника"
-              onClick={() =>
-                void fetch("/api/v1/entries", {
-                  credentials: "same-origin",
-                  cache: "no-store",
-                })
-                  .then(async (r) => {
-                    if (!r.ok) throw new Error();
-                    const d = await r.json();
-                    setJournalChoices(
-                      d.items.filter(
-                        (e: { type: string }) => e.type !== "creative",
-                      ),
-                    );
-                    setJournalPickerOpen(true);
-                  })
-                  .catch(() => setError("Не вдалося відкрити записи."))
-              }
+              onClick={() => void chooseJournals()}
             >
               <svg
                 viewBox="0 0 24 24"
@@ -1160,6 +1190,14 @@ export function ConversationHome({
               : scope.selection.type}
             .
           </p>
+          {error && (
+            <>
+              <p role="alert">{error}</p>
+              <button disabled={busy} onClick={() => void refreshScope()}>
+                Оновити сферу сесії
+              </button>
+            </>
+          )}
           <button
             className="primary"
             onClick={() =>
