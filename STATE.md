@@ -9,16 +9,16 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: cee41e3a7638cf7efba511e93157ff5c3eb47ce7
+baseline_sha: aa5d027d1aa71994085c4100f2d6f36fab47f44e
 implementation_sha: d0b24846ced133864c45dc0b0eb71a1b01f0e947
-report_path: reports/M8D_PRIVATE_AI_VOICE_PILOT_REPORT.md
-last_reviewed_sha: a00a14277974b7f6c25846d0eb7a23879f86183a
+report_path: reports/M8D_REVIEW_FIX_REPORT.md
+last_reviewed_sha: d0b24846ced133864c45dc0b0eb71a1b01f0e947
 current_milestone: M8D
-current_goal: M8D_PRIVATE_AI_VOICE_PILOT
-current_goal_path: prompts/M8D_PRIVATE_AI_VOICE_PILOT.md
+current_goal: M8D_REVIEW_FIXES
+current_goal_path: prompts/M8D_REVIEW_FIXES.md
 current_contract_path: docs/M8D_CONTRACT.md
-implementation_status: AWAITING_REVIEW
-review_status: AWAITING_REVIEW
+implementation_status: IN_PROGRESS
+review_status: FIX_REQUIRED
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -30,17 +30,16 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8D — AWAITING_REVIEW
+# M8D review fixes — IN_PROGRESS
 
-Base cee41e3a7638cf7efba511e93157ff5c3eb47ce7; C d0b24846ced133864c45dc0b0eb71a1b01f0e947; evidence-only R contains final report/evidence; exact R/origin/CI externally verified.
-M8C ACCEPT/owner core activation durable; actual real vault/operator terminal NOT TOUCHED. Actual private AI
-activation NOT_STARTED. PRIVATE_AI/LOCAL_VOICE engineering READY for this owner only AFTER independent ACCEPT.
-Final owner profiles: FREE Luna/high, explicit DEEP Luna/max or Sol6.1/high; ceilings LunaMAX/SolHIGH.
-Native4/max4 COMPLETED, failures/retries0; no more attempts. Python780/web50/build/Chromium/nativeASR/Mac
-private lifecycle/privacy PASS; exact release/manifest/runtime lock and commands in final report.
-Distinct optional profile/session acknowledgements/defaultOFF/exact context/journal selection/OS filesystem-
-network boundary/protected temporary storage/backup-restart safeguards implemented. No actual owner data/voice,
-provider fallback/PAYG/new auth/billing/account/system/phone/Health action. Clinical0/all5OFF/27findingsOPEN.
-M7C-N02 ready only for this bounded owner pilot after review, universal/zero-retention gate OPEN; M7C-N03
-OPEN_HUMAN_TEST, M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW, M6-N01 final0.6.1 hardware NOT_RUN; phone separate.
-Post-ACCEPT owner procedure READY, not executed. Next: independent architect review; no automatic next goal.
+Actual clean main/origin aa5d027 verified. C1 d0b24846 independent FIX_REQUIRED: R01 blocking exact
+context order/binding; R02 required durable settings-confirmation correction. Current goal/contract/report pointers above.
+Canonical cached private provider payload/ordered context + serialized reflection-state binding being fixed;
+fixture-only tests, source/profile/draft/revision/frame freshness remains fail closed. Native ledger4/4 immutable;
+ZERO new inference. Model profiles/caps unchanged LunaHigh/LunaMax/Sol6.1High; no fallback/PAYG/auth/account/billing.
+TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+Literal-true runtime acknowledgements mandatory before activation; no account/settings inspection.
+Real vault/operator terminal/private audio untouched; actual AI/voice activation NOT_STARTED.
+HumanUA OPEN_HUMAN_TEST; clinical0/all5OFF/27findingsOPEN/HealthOFF/phone NEEDS_TRANSPORT_GATE.
+Next forward C2/exact-C2 checks/evidence-only R2/privacy/normal main FF; stop for independent review.

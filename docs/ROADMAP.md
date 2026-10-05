@@ -193,3 +193,9 @@ No samples/import/private-content reading; future developer content access remai
 M8C external ACCEPT / real core activation remain durable. M8D adds owner-gated private conversation and pinned local voice using synthetic engineering roots; final cost binding FREE Luna/high, explicit Deep Luna/max or Sol6.1/high, four new native attempts total. No real-vault access or AI/voice activation before independent review. M7C-N02 ready for this owner bounded route only after independent M8D ACCEPT; universal/zero-retention gate remains open. M7C-N03 OPEN_HUMAN_TEST, M7D-N02 OPEN_HUMAN_LANGUAGE_REVIEW, M6-N01 final0.6.1 hardware NOT_RUN, 27findingsOPEN/all5OFF/clinical0/phone separate.
 
 M8D C d0b24846: exact-C Python780/web50/build/private Chromium+native whisper/Mac lifecycle/privacy PASS; native4/4 COMPLETED, no repeats. Owner real vault untouched, actual AI activation NOT_STARTED. Activation procedure READY; independent review required.
+
+
+M8D independent review 2026-10-05: FIX_REQUIRED for C1 d0b24846/R1 aa5d027. R01 blocking exact private
+context ordering/binding; R02 durable settings-confirmation correction. Same M8D forward fix only, native
+ledger4/4 exhausted/no new calls. Real activation blocked until corrected independent ACCEPT; controls
+REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT. C2/R2 verification/publication pending.

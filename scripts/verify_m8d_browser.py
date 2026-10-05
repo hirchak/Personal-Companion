@@ -61,6 +61,12 @@ def main():
   def factory(mode,model,effort):
    adapter=FixtureProvider(model,effort);providers.append(adapter);return adapter
   application=create_app(data,port=port,web=package/'apps/web/dist',root_kind=RootKind.PRIVATE_LOCAL,release_identity=build,m8d_private=True,private_provider_factory=factory,private_asr_factory=lambda:engine,conversation_timeout=120)
+  # Exact ordered journal preview regression; ORIGINAL SYNTHETIC content in the owned test vault only.
+  from apps.core.models import Create
+  selected_id=uuid4()
+  application.state.journal.write('create',selected_id,Create(operation_id=uuid4(),entry_id=selected_id,base_revision=0,payload={'raw_text':'ORIGINAL SYNTHETIC explicitly selected browser journal'}))
+  hidden_id=uuid4()
+  application.state.journal.write('create',hidden_id,Create(operation_id=uuid4(),entry_id=hidden_id,base_revision=0,payload={'raw_text':'ORIGINAL SYNTHETIC UNSELECTED_BROWSER_JOURNAL_SENTINEL'}))
   server=uvicorn.Server(uvicorn.Config(application,host='127.0.0.1',port=port,access_log=False,log_level='critical'))
   thread=threading.Thread(target=server.run,daemon=True);thread.start()
   for _ in range(100):
@@ -115,6 +121,15 @@ def main():
    # Close existing voice sheet before explicit preview/send.
    dialog=page.get_by_role('dialog')
    if dialog.count():page.keyboard.press('Escape')
+   page.locator('.private-journal-selection summary').click()
+   page.get_by_role('button',name='Вибрати записи щоденника').click()
+   selected_label=page.locator('.private-journal-selection label').filter(has_text='explicitly selected browser journal')
+   expect(selected_label).to_be_visible();selected_label.get_by_role('checkbox').check()
+   page.locator('.private-journal-selection summary').click()
+   approved_preview=[]
+   def capture_preview(response):
+    if response.url.endswith('/private-context/preview') and response.status==200:approved_preview.append(response.json())
+   page.on('response',capture_preview)
    page.get_by_role('button',name='Переглянути перед надсиланням').click()
    expect(page.get_by_role('heading',name='Підтвердити текст для OpenAI')).to_be_visible()
    assert sum(len(adapter.calls) for adapter in providers)==0
@@ -125,6 +140,13 @@ def main():
    assert sum(len(adapter.calls) for adapter in providers)==1
    payload=next(adapter.calls[0] for adapter in providers if adapter.calls)
    assert payload['synthetic'] is False and 'audio_hash' not in encode(payload) and 'VOICE_TRANSCRIPT' not in encode(payload)
+   assert approved_preview and approved_preview[-1]['context']==payload['context']
+   assert approved_preview[-1]['reflection_state']==payload['reflection_state']
+   assert [part['kind'] for part in payload['context']][-2:]==['CURRENT_TURN','JOURNAL_SELECTED']
+   assert 'UNSELECTED_BROWSER_JOURNAL_SENTINEL' not in encode(payload)
+   exact=digest(encode({'context':payload['context'],'reflection_state':payload['reflection_state']}).encode())
+   assert approved_preview[-1]['context_hash']==exact
+   checks['R01_exact_ordered_preview_provider_context_reflection_hash']=True
    checks['explicit_preview_send_text_only']=True
    for width,height,name in [(1440,1000,'PRIVATE_DESKTOP.png'),(390,844,'PRIVATE_NARROW.png')]:
     page.set_viewport_size({'width':width,'height':height});page.locator('.conversation-messages').evaluate('(el)=>{el.scrollTop=el.scrollHeight}');page.screenshot(path=str(a.output/name),full_page=True)

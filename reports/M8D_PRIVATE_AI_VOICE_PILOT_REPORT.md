@@ -1,4 +1,9 @@
-# M8D — AWAITING_REVIEW
+# M8D C1/R1 — independent review FIX_REQUIRED
+
+Independent review 2026-10-05 found M8D-R01 exact preview ordering/binding BLOCKING and M8D-R02 durable
+settings-confirmation evidence REQUIRED correction. C1 results below are historical, not an accepted
+private activation gate. See [review](M8D_ARCHITECT_REVIEW.md) and [forward fix report](M8D_REVIEW_FIX_REPORT.md).
+Historical native4/4 samples stay bound to C1; no new inference is authorized or attributed to C2.
 
 Base: `cee41e3a7638cf7efba511e93157ff5c3eb47ce7`. Implementation C: `d0b24846ced133864c45dc0b0eb71a1b01f0e947`. Evidence R is the evidence-only successor containing this final report;
 its exact SHA is externally verified/returned after commit, without recursive self-hash.
@@ -15,8 +20,9 @@ Final owner binding supersedes all earlier instructions: FREE Luna/high; explici
 quality Sol6.1/high. Luna ceilingMAX, Sol6.1 ceilingHIGH. Four NEW native attempts total across checkpoints;
 failures/cancel/retries count, successful requests are not repeated. Native attempts consumed before final binding0,
 Sol aboveHigh/max-ultra attempts before binding0. Final engineering ledger4/max4: four COMPLETED, failures0/cancel0/retry0. No further native attempts authorized.
-No fallback/PAYG/credits purchase/new auth/billing/account route. Owner confirms training/environmentsOFF;
-no private account settings inspection and no zero-retention certification.
+No fallback/PAYG/credits purchase/new auth/billing/account route. TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+No private account/settings inspection or zero-retention certification.
 
 Private native client: read-only SDK auth reference, disposable state, installed public model catalog using supported
 model_catalog_json/model-list; catalog support alone is not completed inference entitlement. Main deny-egress;

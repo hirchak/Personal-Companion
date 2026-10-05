@@ -343,3 +343,12 @@ No real private/provider/Health/audio/phone samples/system changes or hardware/c
 `.venv/bin/python -m scripts.verify_m8d_browser --source-fixture` is pre-C UI engineering only (synthetic identity, fixture inference); final evidence runs `--package generated/releases/M8D-<C>` after exact-C build. Existing Chromium, synthetic fake microphone/Lesya TTS, genuine pinned private-scope local whisper; no real microphone or provider call. Screenshots contain original synthetic text only. Native subscription smoke is separate, uses the one persistent M8D max4 ledger, and runs only after final C/required checks. Successful calls are not repeated for benchmarking; no LLM judge.
 
 Actual owner vault/operator terminal/private audio never used. Human Ukrainian quality remains OPEN_HUMAN_TEST, owner five-utterance procedure after ACCEPT in PILOT_HANDOFF. Full tracked-tree/all-local-Git-object privacy scan before R/publication.
+
+
+M8D independent-review correction: deterministic fixture provider tests assert exact ordered preview=context
+and exact reflection_state/request/context hashes for FREE+journal/history and DEEP+goal/focus/map+journal;
+reordered canonical constructors/receipts/queued payloads and stale sources/draft/profile fail before provider
+invocation. Updated Chromium fixture path explicitly selects one journal and checks captured preview against
+transmitted fixture payload, excludes an unselected sentinel and all raw audio/source metadata. Native ledger
+4/4 is read-only fingerprinted before/after, no native inference rerun for C2. Settings confirmations are
+REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT; fixture ACKs are not owner evidence.

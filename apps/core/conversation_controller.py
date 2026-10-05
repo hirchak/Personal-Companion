@@ -188,7 +188,7 @@ class ConversationController:
         conv=self.conversations.row(c,id)
         if conv.revision!=body.base_revision:raise SafeError('CONVERSATION_CHANGED',409)
         return built,data
-    def assemble(self,c,conversation,user_message,receipt,parts,purpose,snapshot=None):
+    def assemble(self,c,conversation,user_message,receipt,parts,purpose,snapshot=None,*,pending_current=False):
         private=self.private_gate is not None
         if private:
             self.private_gate.require()
@@ -202,7 +202,9 @@ class ConversationController:
             if current.state!='ACTIVE':raise SafeError('GOAL_NOT_ACTIVE',409)
         aliases={s['id']:'s'+str(i) for i,s in enumerate(receipt['sources'])}
         if str(user_message.id) not in aliases:raise SafeError('CURRENT_MESSAGE_NOT_IN_RECEIPT',409)
+        if pending_current and not private:raise SafeError('PRIVATE_REQUEST_REQUIRED',403)
         for ref in receipt['sources']:
+            if pending_current and ref['id']==str(user_message.id):continue
             row=c.execute('SELECT payload FROM conversation_messages WHERE id=?',(ref['id'],)).fetchone()
             if not row or json.loads(row[0])['synthetic']!=self.conversations.synthetic_demo:raise SafeError('CONVERSATION_SCOPE_MISMATCH',403)
         selected=self.skills.select(conversation.mode,purpose)
@@ -267,12 +269,13 @@ class ConversationController:
                     c.execute('INSERT INTO retrieval_receipts VALUES(?,?,?,?)',(receipt['id'],str(uuid5(NAMESPACE,op+':context')),fingerprint,encode(receipt)))
             else:built=self.context.build_free(id,uuid5(NAMESPACE,op+':context'))
             with self.store.connect() as c:
-                user=Message.model_validate_json(c.execute('SELECT payload FROM conversation_messages WHERE id=?',(source_id,)).fetchone()[0]);payload,bindings,aliases=self.assemble(c,conv,user,built['receipt'],built['context'],body.purpose,snapshot)
-            if private_preview_data:
-                from .local_private_context import add_selected_journal
-                payload,aliases=add_selected_journal(self,payload,aliases,private_preview_data)
+                user=Message.model_validate_json(c.execute('SELECT payload FROM conversation_messages WHERE id=?',(source_id,)).fetchone()[0])
+                if private_preview_data:
+                    from .local_private_context import approved_private_payload
+                    payload,bindings,aliases=approved_private_payload(self,c,conv,user,built['receipt'],built['context'],body.purpose,snapshot,private_preview_data)
+                else:payload,bindings,aliases=self.assemble(c,conv,user,built['receipt'],built['context'],body.purpose,snapshot)
             request_hash=digest(encode(payload).encode());job_id=str(uuid5(NAMESPACE,op+':job'));metadata=provider.metadata()
-            context_hash=digest(encode(built['context']).encode())
+            context_hash=private_preview_data['context_hash'] if private_preview_data else digest(encode(built['context']).encode())
             request_type=ConversationRequest
             if private:
                 from .local_private_contracts import PrivateConversationRequest
@@ -302,11 +305,14 @@ class ConversationController:
         provider=self.provider_for(conv.mode)
         metadata=provider.metadata() if provider else {}
         if metadata.get('model')!=d['request_metadata']['provider_model'] or metadata.get('effort','low')!=d['request_metadata']['provider_effort'] or metadata.get('profile','M7C_COMPAT_LOW')!=d['request_metadata']['provider_profile']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
-        payload,bindings,aliases=self.assemble(c,conv,Message.model_validate_json(row[0]),built['receipt'],built['context'],d['purpose'],snapshot)
         if d.get('private_context'):
-            from .local_private_context import add_selected_journal
-            payload,aliases=add_selected_journal(self,payload,aliases,d['private_context'])
-        if digest(encode(payload).encode())!=d['request_hash'] or digest(encode(built['context']).encode())!=d['request_metadata']['context_hash']:raise SafeError('CONTEXT_CHANGED',409)
+            from .local_private_context import approved_private_payload,exact_context_hash
+            payload,bindings,aliases=approved_private_payload(self,c,conv,Message.model_validate_json(row[0]),built['receipt'],built['context'],d['purpose'],snapshot,d['private_context'])
+            context_hash=exact_context_hash(payload)
+        else:
+            payload,bindings,aliases=self.assemble(c,conv,Message.model_validate_json(row[0]),built['receipt'],built['context'],d['purpose'],snapshot)
+            context_hash=digest(encode(built['context']).encode())
+        if digest(encode(payload).encode())!=d['request_hash'] or context_hash!=d['request_metadata']['context_hash']:raise SafeError('CONTEXT_CHANGED',409)
         return payload
     def persist(self,c,d):
         d['updated_at']=now();c.execute('UPDATE conversation_inferences SET state=?,revision=?,payload=? WHERE id=?',(d['state'],d['revision'],encode(d),d['id']))

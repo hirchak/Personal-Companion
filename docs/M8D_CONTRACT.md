@@ -6,8 +6,9 @@ Development/live evidence only ORIGINAL SYNTHETIC content on disposable PRIVATE_
 attempts, persistent separate M8D ledger; failures/cancel/retries count, no historical ledger reset/LLM judge.
 
 Distinct narrow profile/capability gate: default PRIVATE_AI_OFF, explicit owner destination/retention/audio/context/
-no-fallback acknowledgement + confirmation ChatGPT trainingOFF/Codex Include environmentsOFF required. User confirmed
-both settings OFF in this session; runtime still requires exact local acknowledgement after independent ACCEPT.
+no-fallback acknowledgement + confirmation ChatGPT trainingOFF/Codex Include environmentsOFF required. TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+Runtime still requires exact local acknowledgement after independent ACCEPT; fixture acknowledgements are not owner/architect evidence.
 No account/credentials/settings inspection; no new auth/API billing/PAYG/credits/new provider/hidden endpoint.
 Existing first-party authenticated Codex app-server route only; FREE Luna/high; explicit DEEP Luna/max or Sol6.1/high, installed catalog verified.
 No silent substitutes; main process deny-egress, only isolated approved provider child allowed destination.
@@ -66,3 +67,14 @@ Production operator sends require session consent and exact per-send preview; lo
 receipts survive backup/restart. No automatic retries, auto-resume, profile fallback or quota bypass.
 
 Private provider/ASR temporary work directories require owner-only access and freshly verified protected local volume before writing text/audio/client state. Unsafe, cloud/Git or unverified temporary storage fails closed; no arbitrary TMPDIR escape of the at-rest policy.
+
+
+## M8D-R01/R02 forward correction
+
+Reviewed C1/R1 = FIX_REQUIRED; current correction goal prompts/M8D_REVIEW_FIXES.md. Canonical private
+context order is scoped base → CURRENT_TURN → explicitly selected journals. Preview shows the exact provider
+context (including ordered alias references) and serialized reflection_state. A frozen full provider payload,
+its request hash and ordered-context/reflection hash are signed into the local preview receipt. Send/queue/run
+reuse that frozen object after the same sole constructor verifies source, draft, profile, skills/frame and
+map freshness. Reordering/tampering fails closed. Legacy approvals without canonical version require a new
+preview; stored records/history are preserved, no automatic retry. Native ledger4/4, fixture-only correction.

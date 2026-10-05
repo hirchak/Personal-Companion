@@ -307,3 +307,123 @@ def test_private_sdk_temporary_volume_gate_before_auth_reference_or_process(isol
  monkeypatch.setattr(p,'volume_protection',lambda path:'NOT_RUN')
  with pytest.raises(SafeError,match='VOLUME_PROTECTION_REQUIRED'):provider.spec(work)
  assert not (work/'native-client').exists() and budget.summary()['total_requests']==0
+
+
+def exact_preview_request(c,id,text,refs=None,purpose='REFLECT'):
+ page=c.conversations.get(id)
+ preview=c.private_preview(id,PrivateContextPreview(operation_id=uuid4(),base_revision=page['conversation']['revision'],text=text,purpose=purpose,journal_entries=refs or []))
+ request=PrivateInferenceStart(operation_id=uuid4(),base_revision=page['conversation']['revision'],text=text,purpose=purpose,owner_approved_external_text=True,context_binding=ContextBinding(receipt_id=preview['receipt_id'],context_hash=preview['context_hash'],preview_hash=preview['preview_hash']))
+ return preview,request
+
+
+def assert_approved_provider_context(preview,payload,job):
+ from apps.core.storage import digest
+ assert preview['context']==payload['context']
+ assert encode(preview['context'])==encode(payload['context'])
+ assert preview['reflection_state']==payload['reflection_state']
+ expected=digest(encode({'context':payload['context'],'reflection_state':payload['reflection_state']}).encode())
+ assert preview['context_hash']==job['request_metadata']['context_hash']==expected
+ assert preview['provider_request_hash']==digest(encode(payload).encode())
+ assert [p['kind'] for p in payload['context']][-2:]==['CURRENT_TURN','JOURNAL_SELECTED']
+
+
+@pytest.mark.parametrize('history',[0,2])
+def test_R01_free_exact_order_and_request_hash_including_explicit_journal(controller,history):
+ from apps.core.conversation_contracts import SendMessage
+ c,g=controller;g.acknowledge('ORIGINAL_SYNTHETIC_SESSION',acknowledgement())
+ id=c.conversations.create(NewConversation(operation_id=uuid4()))['conversation']['id']
+ for i in range(history):
+  p=c.conversations.get(id);c.conversations.send(id,SendMessage(operation_id=uuid4(),base_revision=p['conversation']['revision'],text=f'ORIGINAL SYNTHETIC bounded history {i}'),respond=False)
+ journal=Journal(c.store);selected,_=create(journal,text='ORIGINAL SYNTHETIC explicitly selected journal')
+ create(journal,text='ORIGINAL SYNTHETIC UNSELECTED_SENTINEL_NO_TRANSMISSION')
+ preview,body=exact_preview_request(c,id,'ORIGINAL SYNTHETIC exact current turn',[{'id':selected.entry_id,'revision':1}])
+ job=c.send(id,body,launch=False)['inference_job']
+ with c.store.connect() as db:
+  data=c.row(db,job['id']);actual=c.request_for(db,data)
+  assert actual==data['private_context']['provider_payload']
+ assert_approved_provider_context(preview,actual,job)
+ c.launch(job['id']);assert finish(c,job['id'])['state']=='COMPLETED'
+ transmitted=g.provider('FREE').calls[0]
+ assert_approved_provider_context(preview,transmitted,job)
+ assert 'UNSELECTED_SENTINEL' not in encode(transmitted)
+ for i in range(history):assert f'bounded history {i}' in encode(transmitted)
+ assert len(transmitted['context'])==history+2
+ assert 'audio_hash' not in encode(transmitted) and 'source_reference' not in encode(transmitted)
+
+
+def test_R01_deep_exact_goal_focus_map_journal_and_reflection_approval(controller):
+ from apps.core.reflection_contracts import GoalCreate
+ from apps.core.conversation_contracts import SendMessage
+ from apps.core.deep_session_contracts import SessionAction,MapItem
+ c,g=controller;g.acknowledge('ORIGINAL_SYNTHETIC_SESSION',acknowledgement())
+ goal=c.context.create(GoalCreate(operation_id=uuid4(),text='ORIGINAL SYNTHETIC agreed goal',user_agreed=True))
+ id=c.conversations.create(NewConversation(operation_id=uuid4(),goal_id=goal['id'],goal_revision=1))['conversation']['id']
+ p=c.conversations.send(id,SendMessage(operation_id=uuid4(),base_revision=1,text='ORIGINAL SYNTHETIC exact map source'),respond=False);source=p['messages'][0]
+ c.deep.session_action(id,SessionAction(operation_id=uuid4(),base_revision=1,action='focus',focus='ORIGINAL SYNTHETIC agreed focus'))
+ with c.store.transaction() as db:
+  session=c.deep.session(db,id)
+  item=MapItem(id=uuid4(),kind='TAKEAWAY',text='ORIGINAL SYNTHETIC confirmed fixture takeaway',provenance='USER_CONFIRMED',sources=[{'id':source['id'],'revision':1}]).model_dump(mode='json')
+  c.deep.write(db,session,[item],{'provider_model':'ORIGINAL_SYNTHETIC_LOCAL_FIXTURE','provider_route':'LOCAL_EXPLICIT_FIXTURE','selected_skills':[],'request_hash':'a'*64})
+ selected,_=create(Journal(c.store),text='ORIGINAL SYNTHETIC selected Deep journal')
+ preview,body=exact_preview_request(c,id,'ORIGINAL SYNTHETIC Deep current',[{'id':selected.entry_id,'revision':1}])
+ job=c.send(id,body)['inference_job'];assert finish(c,job['id'])['state']=='COMPLETED'
+ payload=g.provider('DEEP').calls[0];assert_approved_provider_context(preview,payload,job)
+ assert payload['reflection_state']['focus']=='ORIGINAL SYNTHETIC agreed focus'
+ assert payload['reflection_state']['items'][0]['text']=='ORIGINAL SYNTHETIC confirmed fixture takeaway'
+ assert goal['text'] in encode(payload['context'])
+ assert payload['reflection_state']['items'][0]['source_refs']==['s0']
+
+
+@pytest.mark.parametrize('phase',['before_send','queued'])
+@pytest.mark.parametrize('mutation',['ordered_context','reflection_state','frame_hash'])
+def test_R01_changed_approved_representation_fails_before_fixture_transmission(controller,phase,mutation):
+ c,g=controller;g.acknowledge('ORIGINAL_SYNTHETIC_SESSION',acknowledgement())
+ id=c.conversations.create(NewConversation(operation_id=uuid4()))['conversation']['id']
+ selected,_=create(Journal(c.store),text='ORIGINAL SYNTHETIC selected journal')
+ preview,body=exact_preview_request(c,id,'ORIGINAL SYNTHETIC current',[{'id':selected.entry_id,'revision':1}])
+ if phase=='queued':job=c.send(id,body,launch=False)['inference_job']
+ with c.store.transaction() as db:
+  if phase=='before_send':
+   data=json.loads(db.execute('SELECT payload FROM deep_context_previews WHERE receipt_id=?',(preview['receipt_id'],)).fetchone()[0]);target=data
+  else:
+   data=c.row(db,job['id']);target=data['private_context']
+  if mutation=='ordered_context':target['provider_payload']['context'].reverse()
+  elif mutation=='reflection_state':target['provider_payload']['reflection_state']={'focus':'ORIGINAL SYNTHETIC unapproved focus','phase':'OPEN','map_version':0,'items':[],'prior_closures':[]}
+  else:target['provider_payload']['controller_frame_hash']='0'*64
+  if phase=='before_send':db.execute('UPDATE deep_context_previews SET payload=? WHERE receipt_id=?',(encode(data),preview['receipt_id']))
+  else:c.persist(db,data)
+ if phase=='before_send':
+  with pytest.raises(SafeError,match='PRIVATE_PREVIEW_CHANGED'):c.send(id,body)
+ else:
+  c.run(job['id']);assert c.get(id,job['id'])['state']=='FAILED'
+ assert not g.provider('FREE').calls
+
+
+@pytest.mark.parametrize('change',['draft','profile','journal','history'])
+def test_R01_source_draft_profile_changes_invalidate_exact_approval(controller,change):
+ from apps.core.conversation_contracts import SendMessage
+ from apps.core.models import Patch
+ c,g=controller;g.acknowledge('ORIGINAL_SYNTHETIC_SESSION',acknowledgement())
+ id=c.conversations.create(NewConversation(operation_id=uuid4()))['conversation']['id']
+ j=Journal(c.store);selected,_=create(j,text='ORIGINAL SYNTHETIC journal revision')
+ preview,body=exact_preview_request(c,id,'ORIGINAL SYNTHETIC current draft',[{'id':selected.entry_id,'revision':1}])
+ if change=='draft':body=body.model_copy(update={'text':'ORIGINAL SYNTHETIC unapproved draft'})
+ elif change=='profile':g.select_deep('ORIGINAL_SYNTHETIC_SESSION','DEEP_ECONOMICAL')
+ elif change=='journal':j.write('edit',selected.entry_id,Patch(operation_id=uuid4(),base_revision=1,changes={'raw_text':'ORIGINAL SYNTHETIC edited journal'}))
+ else:c.conversations.send(id,SendMessage(operation_id=uuid4(),base_revision=1,text='ORIGINAL SYNTHETIC history after preview'),respond=False)
+ with pytest.raises(SafeError):c.send(id,body)
+ assert not g.provider('FREE').calls
+
+
+def test_R01_reordered_constructor_cannot_replace_frozen_approved_payload(controller,monkeypatch):
+ from apps.core import local_private_context as private
+ c,g=controller;g.acknowledge('ORIGINAL_SYNTHETIC_SESSION',acknowledgement())
+ id=c.conversations.create(NewConversation(operation_id=uuid4()))['conversation']['id']
+ selected,_=create(Journal(c.store),text='ORIGINAL SYNTHETIC selected journal')
+ preview,body=exact_preview_request(c,id,'ORIGINAL SYNTHETIC current',[{'id':selected.entry_id,'revision':1}])
+ original=private.canonical_private_payload
+ def reordered(*args,**kwargs):
+  payload,skills,aliases=original(*args,**kwargs);payload['context'].reverse();return payload,skills,aliases
+ monkeypatch.setattr(private,'canonical_private_payload',reordered)
+ with pytest.raises(SafeError,match='PRIVATE_EXACT_CONTEXT_CHANGED'):c.send(id,body)
+ assert not g.provider('FREE').calls

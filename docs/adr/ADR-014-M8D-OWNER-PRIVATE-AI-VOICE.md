@@ -8,8 +8,9 @@ Preserve ADR-013 PRIVATE_LOCAL identity, storage/security/backup policy and sche
 adds a distinct MAC_PRIVATE_AI_VOICE_PILOT_V1 manifest-bound optional profile. Core vault is unchanged;
 post-review application upgrade preserves it. AI and local voice start OFF after restart/lock/restore.
 Session-local seven Boolean owner disclosures/settings confirmations, separate three local-voice acknowledgements,
-and exact per-send private context preview are required. Owner's in-chat settings confirmation authorizes
-engineering; it cannot bypass local future runtime acknowledgements. No account/settings/credential inspection.
+and exact per-send private context preview are required. TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+Synthetic fixture acknowledgements establish no real owner/architect confirmation. No account/settings/credential inspection.
 
 Use one existing neutral ConversationController. Private contracts are separately typed, synthetic=false;
 private records retain PRIVATE_PERSONAL/USER_AUTHORED/MODEL_GENERATED provenance. Original synthetic test
@@ -57,3 +58,12 @@ Clinical0/all five specialistsOFF/27findingsOPEN. Health/phone/cloudASR/embeddin
 M7D-N02 human language review stays OPEN; actual owner vault is never accessed in M8D engineering.
 
 Private provider/ASR temporary work directories require owner-only access and freshly verified protected local volume before writing text/audio/client state. Unsafe, cloud/Git or unverified temporary storage fails closed; no arbitrary TMPDIR escape of the at-rest policy.
+
+
+2026-10-05 independent review correction (M8D-R01/R02): C1 exact preview ordering claim was invalid with
+selected journals. Use one canonical provider payload constructor, freeze the full validated object at preview,
+bind ordered context + exact reflection_state and the whole request to approval hashes, and reuse that object
+after freshness checks. Preview-only source placeholder maps to the subsequently persisted current-message
+alias without changing any provider representation. Local source snapshots remain for freshness/provenance;
+they are not the displayed/transmitted object. Stored legacy approvals fail closed; no historical record rewrite
+or live inference. Current correction status AWAITING_REVIEW after checks/publication, never self-ACCEPT.

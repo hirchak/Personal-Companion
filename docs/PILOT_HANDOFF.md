@@ -124,3 +124,15 @@ consent. Never recreate the actual vault to activate AI. Clinical/all specialist
 cloud ASR/sync/telemetry/publication remain OFF/NONE. Actual private AI activation during M8D = NOT_STARTED.
 
 M8D delivered C `d0b24846ced133864c45dc0b0eb71a1b01f0e947`, release `M8D-d0b24846ced133864c45dc0b0eb71a1b01f0e947`, manifest `4dcef73b066f3adf7c969baedb9d76b39d7885e58967c44c90e8cd986a57a866`, runtime lock `f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e`. Use only after independent ACCEPT of that exact implementation; current actual AI activation NOT_STARTED.
+
+
+### Independent M8D review gate — 2026-10-05
+
+C1 d0b24846 / R1 aa5d027 = FIX_REQUIRED (R01/R02); the C1 activation procedure is not authorized for execution
+until a corrected exact implementation receives independent ACCEPT.
+TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
+No owner-settings confirmation to the architect is asserted. Owner must explicitly provide the required
+literal-true local runtime acknowledgements at real activation; no account/settings inspection or real activation
+occurs in engineering. Canonical preview must show the exact ordered provider context and reflection state;
+stale/reordered approval fails. Native engineering ledger exhausted4/4; only fixture providers for this correction.
