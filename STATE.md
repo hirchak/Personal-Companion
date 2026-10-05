@@ -11,14 +11,14 @@ review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: aa5d027d1aa71994085c4100f2d6f36fab47f44e
 implementation_sha: 96a61da305b98c7c33112f47fc134be8e36e79ec
-report_path: reports/M8D_REVIEW_FIX_REPORT.md
-last_reviewed_sha: d0b24846ced133864c45dc0b0eb71a1b01f0e947
+report_path: reports/M8D_OWNER_ACTIVATION_REPORT.md
+last_reviewed_sha: 96a61da305b98c7c33112f47fc134be8e36e79ec
 current_milestone: M8D
-current_goal: M8D_REVIEW_FIXES
-current_goal_path: prompts/M8D_REVIEW_FIXES.md
+current_goal: M8D_OWNER_ACTIVATION
+current_goal_path: prompts/M8D_OWNER_ACTIVATION.md
 current_contract_path: docs/M8D_CONTRACT.md
-implementation_status: AWAITING_REVIEW
-review_status: AWAITING_REVIEW
+implementation_status: ACCEPTED
+review_status: ACCEPTED
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -30,17 +30,16 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8D review fixes — AWAITING_REVIEW
+# M8D — externally ACCEPTED; owner activation IN_PROGRESS
 
-Base R1 aa5d027d1aa71994085c4100f2d6f36fab47f44e; reviewed C1 d0b24846 FIX_REQUIRED; forward C2 96a61da305b98c7c33112f47fc134be8e36e79ec.
-R01 canonical frozen exact ordered context/reflection/request hash and source/profile/draft freshness fixed;
-R02 current durable evidence corrected. Independent ACCEPT not claimed. Exact-C2 Python794/web50/build/
-Chromium selected journal+native local whisper/private Mac lifecycle/privacy PASS; fixture-only AI.
-TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
-CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
-Literal-true runtime gates unchanged; account/settings not inspected. Native ledger4/4 byte-identical,
-new inference0; old samples stay C1, no C2 native rerun. Same LunaHigh/LunaMax/Sol6.1High and ceilings,
-no fallback/PAYG/auth/account/billing/system changes. Real vault/operator/human voice untouched, actual
-private AI activationNOT_STARTED. HumanUA OPEN_HUMAN_TEST/clinical0/all5OFF/HealthOFF/27findingsOPEN/
-phone NEEDS_TRANSPORT_GATE. Evidence-only R2/normal FF/origin verified externally; CI NOT_CONFIGURED.
-Next independent review only; no real activation or next milestone.
+Exact external C2/R2 ACCEPT durable in reports/M8D_ARCHITECT_REVIEW.md. Actual origin/main20e86a7 verified
+clean; accepted C2 package96a61da/manifest84626638 validated. Historical findings/evidence preserved.
+Owner now explicitly authorizes upgrade of EXISTING private Mac core pilot, protected backup/native preflight/
+pinned local whisper/startup only; no new vault/unrelated scan/import/private-content inspection or logging.
+Training/environmentsOFF explicitly OWNER_CONFIRMED_FOR_THIS_ACTIVATION; account/settings not inspected.
+Runtime AI disclosures/voice acknowledgements/unlock/first message/recording remain OWNER_MANUAL_ONLY.
+AI/voice defaultOFF; preparing READY_FOR_OWNER_MANUAL_ENABLE. Native engineering ledger4/4 unchanged,
+no agent inference/conversation/audio, downloads/install/auth/billing/network/trust/phone/Health changes.
+LunaHigh/LunaMax/Sol6.1High, LunaMAX/SolHIGH ceilings; raw audio externalNEVER; journal explicit selection only.
+Clinical0/all5OFF/HealthOFF/phoneOFF/cloudASR/embeddings/sync/telemetry/publication/sharingOFF/NONE.
+HumanUA OPEN_HUMAN_TEST,27findingsOPEN. Next: authorized existing-root preflight/backup/upgrade/start, then STOP.

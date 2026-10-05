@@ -138,3 +138,14 @@ occurs in engineering. Canonical preview must show the exact ordered provider co
 stale/reordered approval fails. Native engineering ledger exhausted4/4; only fixture providers for this correction.
 
 Corrected M8D candidate C2 `96a61da305b98c7c33112f47fc134be8e36e79ec`, release `M8D-96a61da305b98c7c33112f47fc134be8e36e79ec`, manifest `846266388233eeded13fe332064df4d41d415a654c1d30fb47556cbf05d3d4dd`. Earlier C1 activation reference is superseded; use corrected exact release only after independent ACCEPT and explicit local real-activation settings confirmations. This procedure remains NOT EXECUTED.
+
+
+### Owner-authorized M8D activation — external ACCEPT, 2026-10-05
+
+Exact C2 96a61da305b98c7c33112f47fc134be8e36e79ec / R2 20e86a7e7204d0332638e30348b1329364de7ac0
+is now independently ACCEPTED. Owner explicitly confirms training/environment controls OFF for this activation
+only (no account/settings inspection, zero-retention/commercial/third-party certification). The historical
+NOT_YET_CONFIRMED_TO_ARCHITECT status above is superseded for this new activation by explicit owner statements,
+not retroactively changed in engineering evidence. Upgrade EXISTING vault only; no initialize/new vault/import.
+Owner manually unlocks, acknowledges disclosures, enables voice, chooses Deep model, records/reviews/previews/sends.
+Agent performs only preflight/protected backup/preservation/app upgrade/pinned assets/startup; no AI send or recording.

@@ -78,3 +78,10 @@ its request hash and ordered-context/reflection hash are signed into the local p
 reuse that frozen object after the same sole constructor verifies source, draft, profile, skills/frame and
 map freshness. Reordering/tampering fails closed. Legacy approvals without canonical version require a new
 preview; stored records/history are preserved, no automatic retry. Native ledger4/4, fixture-only correction.
+
+
+2026-10-05 activation addendum: external ACCEPT exact C2/R2 recorded in M8D_ARCHITECT_REVIEW.
+TRAINING_CONTROL_CONFIRMATION = OWNER_EXPLICITLY_CONFIRMED_OFF_FOR_THIS_ACTIVATION.
+CODEX_ENVIRONMENTS_CONFIRMATION = OWNER_EXPLICITLY_CONFIRMED_OFF_FOR_THIS_ACTIVATION.
+Account/settings not inspected; real runtime literal-true owner acknowledgement still mandatory. Scope existing
+owner vault application/preflight/backup/local assets/start only; no agent message/conversation/audio or new vault.

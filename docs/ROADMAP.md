@@ -201,3 +201,5 @@ ledger4/4 exhausted/no new calls. Real activation blocked until corrected indepe
 REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT. C2/R2 verification/publication pending.
 
 M8D forward corrections C2 96a61da305b98c7c33112f47fc134be8e36e79ec: R01 resolved engineering/R02 evidence corrected, AWAITING_REVIEW. Exact-C2 Python794/web50/build/fixture Chromium+local whisper/lifecycle/privacy PASS; native ledger4/4 immutable/new inference0. Both settings REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT. No real activation or next milestone.
+
+M8D external architect ACCEPT 2026-10-05 for exact C2 96a61da305b98c7c33112f47fc134be8e36e79ec / R2 20e86a7e7204d0332638e30348b1329364de7ac0. Owner separately authorizes existing-vault application upgrade/security/backup/local whisper/start only; manual AI/voice enable/send/record remain with owner. Historical review/evidence unchanged, no next milestone.
