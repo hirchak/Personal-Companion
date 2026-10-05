@@ -30,7 +30,7 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8D — externally ACCEPTED; owner activation IN_PROGRESS
+# M8D — externally ACCEPTED; owner application activation COMPLETE
 
 Exact external C2/R2 ACCEPT durable in reports/M8D_ARCHITECT_REVIEW.md. Actual origin/main20e86a7 verified
 clean; accepted C2 package96a61da/manifest84626638 validated. Historical findings/evidence preserved.
@@ -38,8 +38,8 @@ Owner now explicitly authorizes upgrade of EXISTING private Mac core pilot, prot
 pinned local whisper/startup only; no new vault/unrelated scan/import/private-content inspection or logging.
 Training/environmentsOFF explicitly OWNER_CONFIRMED_FOR_THIS_ACTIVATION; account/settings not inspected.
 Runtime AI disclosures/voice acknowledgements/unlock/first message/recording remain OWNER_MANUAL_ONLY.
-AI/voice defaultOFF; preparing READY_FOR_OWNER_MANUAL_ENABLE. Native engineering ledger4/4 unchanged,
+AI/voice defaultOFF; READY_FOR_OWNER_MANUAL_ENABLE. Native engineering ledger4/4 unchanged,
 no agent inference/conversation/audio, downloads/install/auth/billing/network/trust/phone/Health changes.
 LunaHigh/LunaMax/Sol6.1High, LunaMAX/SolHIGH ceilings; raw audio externalNEVER; journal explicit selection only.
 Clinical0/all5OFF/HealthOFF/phoneOFF/cloudASR/embeddings/sync/telemetry/publication/sharingOFF/NONE.
-HumanUA OPEN_HUMAN_TEST,27findingsOPEN. Next: authorized existing-root preflight/backup/upgrade/start, then STOP.
+HumanUA OPEN_HUMAN_TEST,27findingsOPEN. Completed existing-root security/backup/upgrade/preservation/whisper/start PASS; app running localhost8765. Owner manual unlock/disclosures/enable/record/review/preview/send pending; agent did none. STOP, no next milestone.

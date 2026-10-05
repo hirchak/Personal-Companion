@@ -1,4 +1,4 @@
-# M8D — external ACCEPT; bounded owner activation IN_PROGRESS
+# M8D — external ACCEPT; bounded owner application activation COMPLETE
 
 Accepted C2 96a61da305b98c7c33112f47fc134be8e36e79ec / R2 20e86a7e7204d0332638e30348b1329364de7ac0;
 exact existing package/manifest validated, actual clean origin/main R2 verified. External ACCEPT appended to
@@ -10,4 +10,4 @@ Owner will manually unlock/acknowledge/enable AI+voice/choose profile/record/rev
 on their behalf, no agent inference/test conversation/microphone. Existing native engineering ledger4/4 stays unchanged.
 FREE Luna/high; economical Deep Luna/max; quality Deep Sol6.1/high; no Sol aboveHigh/fallback/PAYG/new auth.
 Raw audio externalNEVER/journal explicit only; clinical/all5/Health/phone/cloud/telemetry/sharingOFF; humanUA OPEN.
-No actual private paths/receipts/codes/records/audio/transcripts in Git/evidence. Complete authorized activation then STOP.
+No actual private paths/receipts/codes/records/audio/transcripts in Git/evidence. Existing-root preflight/protected pre-upgrade backup/accepted upgrade/binary preservation/whisper/start PASS. App running http://127.0.0.1:8765, browser opened, code only local operator terminal. ACTUAL_PRIVATE_AI_ACTIVATION=READY_FOR_OWNER_MANUAL_ENABLE, no agent message/conversation/audio. STOP.
