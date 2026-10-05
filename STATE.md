@@ -9,13 +9,13 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: 49d03d97d444083a63d18f3f3ec9ec8d295c19fd
-implementation_sha: c571c41e59d9f53d96480d1fc20e2cce60a54936
-report_path: reports/M8E_IMPLEMENTATION_REPORT.md
-last_reviewed_sha: 96a61da305b98c7c33112f47fc134be8e36e79ec
+baseline_sha: 7a9f2c9839dfa9265780b75f59874fe9ab73178f
+implementation_sha: 55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d
+report_path: reports/M8E_REVIEW_FIX_REPORT.md
+last_reviewed_sha: 7a9f2c9839dfa9265780b75f59874fe9ab73178f
 current_milestone: M8E
-current_goal: M8E_CONVERSATION_FIRST_MOBILE_VOICE
-current_goal_path: prompts/M8E_CONVERSATION_FIRST_MOBILE_VOICE.md
+current_goal: M8E_REVIEW_FIXES
+current_goal_path: prompts/M8E_REVIEW_FIXES.md
 current_contract_path: docs/M8E_CONTRACT.md
 implementation_status: AWAITING_REVIEW
 review_status: AWAITING_REVIEW
@@ -30,21 +30,21 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8E — implementation complete, AWAITING_REVIEW
+# M8E independent review fixes — AWAITING_REVIEW
 
-Conversation-first optional private profile; four primary actions, Free/Deep/history, explicit goal/session scope.
-Versioned durable local consent, ordinary Send with exact canonical binding/no repeated popup; journal defaultOFF,
-expanded/stale context requires visible fresh approval. Composer record→save→local whisper→editable draft,
-no auto-send; Voice History/retry/local delete and encrypted offline PWA queue, no phone transport activation.
-FREE Luna/high; Deep Luna/max or Sol6.1/high, ceilingsMAX/HIGH, no fallback/PAYG. Clinical0/all5/HealthOFF.
+Base/origin at start: `7a9f2c9839dfa9265780b75f59874fe9ab73178f`. Forward implementation commits: C2
+`5d50a724932b6f51f4cf0be6074c0c2c42150299`, C3 `6c2a828786757ca28b5427ac986615d4f50d09cf`, and test-only C4
+`55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d`. R2 is the evidence-only successor; its hash and verified
+origin/main are returned after publication.
 
-Exact C c571c41: Python800/web51/build/Chromium+native synthetic TTS/Mac lifecycle PASS. Privacy/docs/context checks
-and normal FF main publication follow evidence-only R. CI NOT_RUN/no repo workflow. No real vault access,
-agent live provider calls0, real install/upgrade/release/tag/deploy/next milestone. Public M8D native4/4 unchanged.
+R01 preserves old Deep goal/session/scope/map/closure/source bindings across ACTIVE goal edits and reload. New
+Deep sessions bind the current ACTIVE revision; PAUSED/COMPLETED current goals fail closed. N01 updates
+journal-first unlock/loading copy. N02 marks M8D externally ACCEPTED and M8E AWAITING_REVIEW without rewriting
+detailed history.
 
-Forward owner clarification: first real AI/manual voice test happened before independent external account
-setting verification. TRAINING_CONTROL_CONFIRMATION and CODEX_ENVIRONMENTS_CONFIRMATION =
-NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER. Historical activation claims are superseded in M8E report/contract,
-not rewritten. HUMAN_UA_ASR PARTIAL_OWNER_PILOT / OPEN; PHONE NOT_ACTIVATED / NEEDS_TRANSPORT_GATE.
+Exact checks: full Python802, Web51, C3 build, C4 unlock-browser1, R01 tests2, docs/context/privacy PASS.
+Provider calls0; real vault/account settings not inspected. M8D native evidence remains unchanged. External
+controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER; HUMAN_UA_ASR PARTIAL_OWNER_PILOT/OPEN; phone
+NOT_ACTIVATED/NEEDS_TRANSPORT_GATE; clinical0/all5OFF/HealthOFF; CI NOT_RUN/no configured workflow.
 
-Next: independent architect review of exact pushed C/R. Owner manually runs accepted build later; STOP.
+Next: independent architect review of exact pushed C/R2. No real-vault action or next milestone. STOP.

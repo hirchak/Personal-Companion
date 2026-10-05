@@ -16,7 +16,7 @@ M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/unin
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
-M8E = AWAITING_REVIEW — C2 fixes independent R01/N01/N02 findings; no next milestone, phone gate still OFF.
+M8E = AWAITING_REVIEW — forward C2/C3/C4 fixes independent R01/N01/N02; phone gate remains OFF.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -218,3 +218,18 @@ Owner clarifies first real AI/manual voice test occurred BEFORE independent exte
 Earlier historical confirmed-OFF claims are superseded, not rewritten: both controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
 HumanUA PARTIAL_OWNER_PILOT/OPEN; phone NOT_ACTIVATED/NEEDS_TRANSPORT_GATE; clinical/all5/HealthOFF.
 See reports/M8E_IMPLEMENTATION_REPORT.md and docs/M8E_CONTRACT.md. Normal FF main C/R; stop for architect review.
+
+
+## M8E independent review fixes — 2026-10-05
+
+Independent verdict M8E=FIX_REQUIRED applied only R01/N01/N02. R01 preserves each Deep conversation's pinned goal
+revision/text/scope/map/closures across ACTIVE goal edits and reload; new conversations bind the newer revision.
+PAUSED/COMPLETED current goals fail closed. N01 changes all stale unlock-screen journal copy to Personal
+Companion wording. N02 marks M8D externally ACCEPTED and M8E AWAITING_REVIEW in the top summary; historical
+sections/evidence are preserved.
+
+Forward code commits C2 `5d50a724932b6f51f4cf0be6074c0c2c42150299`, C3
+`6c2a828786757ca28b5427ac986615d4f50d09cf`, and test-locator C4
+`55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d`. Python802/Web51/build and relevant browser/R01 regressions PASS;
+provider calls0, real-vault inspection NO. Evidence/report: `reports/M8E_REVIEW_FIX_REPORT.md`.
+Overall M8E remains AWAITING_REVIEW. Phone gate unchanged; no next milestone.
