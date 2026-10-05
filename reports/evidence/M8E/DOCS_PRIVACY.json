@@ -1,0 +1,39 @@
+{
+  "implementation_sha": "c571c41e59d9f53d96480d1fc20e2cce60a54936",
+  "checks": [
+    {
+      "command": ".venv/bin/python scripts/check_docs.py",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0
+    }
+  ],
+  "privacy": {
+    "status": "PASS",
+    "errors": [],
+    "metrics": {
+      "worktree_text_files": 693,
+      "git_objects": 2204,
+      "git_text_objects": 1569,
+      "tracked_files": 798
+    },
+    "git_scope": "SCANNED_ALL_LOCAL_OBJECTS_INCLUDING_UNREACHABLE_AND_STAGED",
+    "generated_included": true,
+    "limitations": "Heuristics for token/private-key/private-IPv4/URL-credential patterns and denied paths. Not proof of absence of personal data, account IDs, private endpoints, copyright problems, runtime egress or secure storage. Dependency caches are excluded."
+  },
+  "public_data_review": {
+    "status": "PASS",
+    "scope": "BASE_TO_FINAL_C_AND_EVIDENCE_R",
+    "original_synthetic_screenshots_only": true,
+    "real_vault_content_paths_receipts_audio_transcripts": false,
+    "actual_owner_consent_receipt_in_git": false,
+    "external_copyright_assets": false,
+    "native_m8d_public_evidence_changed": false
+  }
+}

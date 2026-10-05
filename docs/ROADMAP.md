@@ -15,7 +15,8 @@ M7D: external ACCEPT — live-synthetic engineering + bounded provider-quality e
 M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/uninstall readiness only.
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
-M8D: AWAITING_REVIEW — optional private AI/local voice; real owner vault NOT TOUCHED, actual AI activation NOT_STARTED.
+M8D: external ACCEPT — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
+M8E: AWAITING_REVIEW — conversation-first mobile UX/seamless local voice; synthetic engineering, phone gate still OFF.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -205,3 +206,15 @@ M8D forward corrections C2 96a61da305b98c7c33112f47fc134be8e36e79ec: R01 resolve
 M8D external architect ACCEPT 2026-10-05 for exact C2 96a61da305b98c7c33112f47fc134be8e36e79ec / R2 20e86a7e7204d0332638e30348b1329364de7ac0. Owner separately authorizes existing-vault application upgrade/security/backup/local whisper/start only; manual AI/voice enable/send/record remain with owner. Historical review/evidence unchanged, no next milestone.
 
 Owner-authorized existing-vault M8D application activation PASS: native preflight/protected backup/exact accepted upgrade/content-free preservation/pinned whisper/startup verified; app ready for owner manual AI/voice enable only. No agent message/conversation/recording; no new vault/migration/next milestone. ACTUAL_PRIVATE_AI_ACTIVATION=READY_FOR_OWNER_MANUAL_ENABLE, humanUA OPEN_HUMAN_TEST.
+
+
+## M8E owner goal and forward activation clarification — 2026-10-05
+
+Final C c571c41e59d9f53d96480d1fc20e2cce60a54936; implementation AWAITING_REVIEW, no self-ACCEPT.
+Conversation-first mobile shell, Free/Deep/history, versioned durable local consent, exact ordinary Send,
+explicit journal/Deep scope approval, integrated local voice and encrypted offline queue. Python800/web51/
+build/private Chromium+native synthetic TTS/Mac lifecycle PASS. No agent provider call or real-vault access.
+Owner clarifies first real AI/manual voice test occurred BEFORE independent external-account setting verification.
+Earlier historical confirmed-OFF claims are superseded, not rewritten: both controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
+HumanUA PARTIAL_OWNER_PILOT/OPEN; phone NOT_ACTIVATED/NEEDS_TRANSPORT_GATE; clinical/all5/HealthOFF.
+See reports/M8E_IMPLEMENTATION_REPORT.md and docs/M8E_CONTRACT.md. Normal FF main C/R; stop for architect review.

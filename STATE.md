@@ -9,16 +9,16 @@ default_branch: main
 actual_remote_default_branch: main
 review_branch: null
 historical_review_branch: review/m0-bootstrap
-baseline_sha: aa5d027d1aa71994085c4100f2d6f36fab47f44e
-implementation_sha: 96a61da305b98c7c33112f47fc134be8e36e79ec
-report_path: reports/M8D_OWNER_ACTIVATION_REPORT.md
+baseline_sha: 49d03d97d444083a63d18f3f3ec9ec8d295c19fd
+implementation_sha: c571c41e59d9f53d96480d1fc20e2cce60a54936
+report_path: reports/M8E_IMPLEMENTATION_REPORT.md
 last_reviewed_sha: 96a61da305b98c7c33112f47fc134be8e36e79ec
-current_milestone: M8D
-current_goal: M8D_OWNER_ACTIVATION
-current_goal_path: prompts/M8D_OWNER_ACTIVATION.md
-current_contract_path: docs/M8D_CONTRACT.md
-implementation_status: ACCEPTED
-review_status: ACCEPTED
+current_milestone: M8E
+current_goal: M8E_CONVERSATION_FIRST_MOBILE_VOICE
+current_goal_path: prompts/M8E_CONVERSATION_FIRST_MOBILE_VOICE.md
+current_contract_path: docs/M8E_CONTRACT.md
+implementation_status: AWAITING_REVIEW
+review_status: AWAITING_REVIEW
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -30,16 +30,21 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8D — externally ACCEPTED; owner application activation COMPLETE
+# M8E — implementation complete, AWAITING_REVIEW
 
-Exact external C2/R2 ACCEPT durable in reports/M8D_ARCHITECT_REVIEW.md. Actual origin/main20e86a7 verified
-clean; accepted C2 package96a61da/manifest84626638 validated. Historical findings/evidence preserved.
-Owner now explicitly authorizes upgrade of EXISTING private Mac core pilot, protected backup/native preflight/
-pinned local whisper/startup only; no new vault/unrelated scan/import/private-content inspection or logging.
-Training/environmentsOFF explicitly OWNER_CONFIRMED_FOR_THIS_ACTIVATION; account/settings not inspected.
-Runtime AI disclosures/voice acknowledgements/unlock/first message/recording remain OWNER_MANUAL_ONLY.
-AI/voice defaultOFF; READY_FOR_OWNER_MANUAL_ENABLE. Native engineering ledger4/4 unchanged,
-no agent inference/conversation/audio, downloads/install/auth/billing/network/trust/phone/Health changes.
-LunaHigh/LunaMax/Sol6.1High, LunaMAX/SolHIGH ceilings; raw audio externalNEVER; journal explicit selection only.
-Clinical0/all5OFF/HealthOFF/phoneOFF/cloudASR/embeddings/sync/telemetry/publication/sharingOFF/NONE.
-HumanUA OPEN_HUMAN_TEST,27findingsOPEN. Completed existing-root security/backup/upgrade/preservation/whisper/start PASS; app running localhost8765. Owner manual unlock/disclosures/enable/record/review/preview/send pending; agent did none. STOP, no next milestone.
+Conversation-first optional private profile; four primary actions, Free/Deep/history, explicit goal/session scope.
+Versioned durable local consent, ordinary Send with exact canonical binding/no repeated popup; journal defaultOFF,
+expanded/stale context requires visible fresh approval. Composer record→save→local whisper→editable draft,
+no auto-send; Voice History/retry/local delete and encrypted offline PWA queue, no phone transport activation.
+FREE Luna/high; Deep Luna/max or Sol6.1/high, ceilingsMAX/HIGH, no fallback/PAYG. Clinical0/all5/HealthOFF.
+
+Exact C c571c41: Python800/web51/build/Chromium+native synthetic TTS/Mac lifecycle PASS. Privacy/docs/context checks
+and normal FF main publication follow evidence-only R. CI NOT_RUN/no repo workflow. No real vault access,
+agent live provider calls0, real install/upgrade/release/tag/deploy/next milestone. Public M8D native4/4 unchanged.
+
+Forward owner clarification: first real AI/manual voice test happened before independent external account
+setting verification. TRAINING_CONTROL_CONFIRMATION and CODEX_ENVIRONMENTS_CONFIRMATION =
+NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER. Historical activation claims are superseded in M8E report/contract,
+not rewritten. HUMAN_UA_ASR PARTIAL_OWNER_PILOT / OPEN; PHONE NOT_ACTIVATED / NEEDS_TRANSPORT_GATE.
+
+Next: independent architect review of exact pushed C/R. Owner manually runs accepted build later; STOP.

@@ -1,0 +1,59 @@
+{
+  "implementation_sha": "c571c41e59d9f53d96480d1fc20e2cce60a54936",
+  "base_sha": "49d03d97d444083a63d18f3f3ec9ec8d295c19fd",
+  "provenance": "ORIGINAL_SYNTHETIC_ENGINEERING_ONLY",
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "node": "26.8.2",
+    "npm": "11.19.1",
+    "codex": "0.159.0"
+  },
+  "python": {
+    "command": ".venv/bin/python -m pytest -q",
+    "exit_code": 0,
+    "passed": 800
+  },
+  "web": {
+    "command": "npm --prefix apps/web test",
+    "exit_code": 0,
+    "passed": 51
+  },
+  "build": {
+    "command": ".venv/bin/python -m apps.core.release prepare --output generated/releases/M8D-c571c41e59d9f53d96480d1fc20e2cce60a54936",
+    "exit_code": 0
+  },
+  "chromium": {
+    "command": ".venv/bin/python -m scripts.verify_m8e_browser --package generated/releases/M8D-c571c41e59d9f53d96480d1fc20e2cce60a54936 --output generated/m8e-delivery-C",
+    "exit_code": 0,
+    "fixture_inference_only": true,
+    "native_asr": "ORIGINAL_SYNTHETIC_TTS_ONLY"
+  },
+  "lifecycle": {
+    "command": ".venv/bin/python -m scripts.verify_m8d --package generated/releases/M8D-c571c41e59d9f53d96480d1fc20e2cce60a54936 --previous-package generated/releases/M8C-a00a14277974b7f6c25846d0eb7a23879f86183a --output generated/m8e-delivery-lifecycle",
+    "exit_code": 0
+  },
+  "visual": {
+    "status": "PASS",
+    "desktop": "1440x960",
+    "mobile": "390x844",
+    "viewport_resize": "390x540",
+    "source": "ORIGINAL_SYNTHETIC_ONLY",
+    "detector": "ONE_PRE_EXISTING_STYLE_WARNING_NO_NEW_FINDING"
+  },
+  "owner_history": {
+    "first_real_private_ai_test": "BEFORE_INDEPENDENT_EXTERNAL_ACCOUNT_SETTING_VERIFICATION",
+    "training_control_confirmation": "NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER",
+    "codex_environments_confirmation": "NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER",
+    "human_ua_asr": "PARTIAL_OWNER_PILOT_OPEN"
+  },
+  "real_vault_inspected": false,
+  "live_provider_calls": 0,
+  "phone_transport": "NOT_ACTIVATED_NEEDS_TRANSPORT_GATE",
+  "clinical_active": 0,
+  "health": "OFF",
+  "review_status": "AWAITING_REVIEW",
+  "ci": "NO_REPOSITORY_WORKFLOW_NOT_RUN",
+  "publication": "NORMAL_FF_PUSH_AFTER_EVIDENCE_R; EXACT_R_REPORTED_EXTERNALLY"
+}
