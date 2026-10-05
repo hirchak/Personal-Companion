@@ -47,6 +47,7 @@ def test_A09_browser_end_to_end(isolated):
             page.on('console',lambda msg: errors.append(msg.text) if msg.type=='error' and 'Failed to load resource' not in msg.text else None)
             page.clock.install()
             page.goto(ORIGIN); expect(page.get_by_role('heading',name='Місце для ваших думок.')).to_be_visible()
+            expect(page.get_by_text('Локальний простір для розмов і записів на цьому Mac.',exact=True)).to_be_visible()
             page.get_by_label('Код розблокування').fill(app.state.auth.code)
             page.keyboard.press('Tab')
             expect(page.get_by_role('button',name='Відкрити Особистий простір')).to_be_focused()
