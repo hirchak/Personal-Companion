@@ -122,11 +122,52 @@ def operation_lock(data):
         yield
     finally: os.close(fd)  # Keep inode; unlink would permit a competing lock inode.
 
-def inspect_data(data, root_kind=RootKind.SYNTHETIC_TEST):
+def inspect_sqlite(database, root_kind=RootKind.SYNTHETIC_TEST, *, stage_callback=None):
+    """Validate one SQLite database through a read-only connection; optionally report safe stage names."""
+    current_stage = 'SQLITE_OPEN'
+    def stage(value):
+        nonlocal current_stage
+        current_stage = value
+        if stage_callback is not None:
+            stage_callback(value)
+    database = safe_path(database)
+    private = RootKind(root_kind)==RootKind.PRIVATE_LOCAL
+    connection = None
+    try:
+        stage('SQLITE_OPEN')
+        connection = sqlite3.connect(database.as_uri()+'?mode=ro', uri=True)
+        c = connection
+        c.row_factory = sqlite3.Row
+        stage('VAULT_META')
+        rows = c.execute('SELECT schema_version FROM vault_meta').fetchall()
+        if len(rows) != 1 or type(rows[0][0]) is not int: raise SafeError('INVALID_METADATA')
+        version = rows[0][0]
+        if not 2 <= version <= SCHEMA: raise SafeError('UNSUPPORTED_SCHEMA')
+        if not private and c.execute("SELECT 1 FROM sqlite_master WHERE name='private_root_identity'").fetchone():raise SafeError('ROOT_KIND_MISMATCH')
+        stage('STORE_CHECK')
+        Store.check(c, stage_callback=stage if stage_callback is not None else None)
+        stage('COMPLETE')
+        return version
+    except sqlite3.Error as exc:
+        if stage_callback is None:
+            raise SafeError('INVALID_METADATA') from None
+        name = str(getattr(exc, 'sqlite_errorname', ''))
+        if name.startswith('SQLITE_READONLY') or name in {'SQLITE_CANTOPEN', 'SQLITE_BUSY', 'SQLITE_LOCKED'}:
+            raise SafeError('SQLITE_READONLY_WAL_OPEN') from None
+        stage_name = re.sub(r'[^A-Z0-9_]', '_', str(current_stage).upper())[:48] or 'UNKNOWN'
+        if stage_name.startswith('SQLITE_'):
+            stage_name = stage_name[len('SQLITE_'):]
+        raise SafeError('SQLITE_' + stage_name + '_ERROR') from None
+    finally:
+        if connection is not None:
+            connection.close()
+
+def inspect_data(data, root_kind=RootKind.SYNTHETIC_TEST, *, stage_callback=None):
     """Read-only gate; never initializes/migrates/prints rows or private identifiers."""
     data = safe_path(data)
     if not data.exists(): return None
     private = RootKind(root_kind)==RootKind.PRIVATE_LOCAL
+    if stage_callback is not None: stage_callback('ROOT_IDENTITY')
     if private:
         from .local_private import validate_root
         validate_root(data)
@@ -134,20 +175,9 @@ def inspect_data(data, root_kind=RootKind.SYNTHETIC_TEST):
         if (data/'private-local.json').exists():raise SafeError('ROOT_KIND_MISMATCH')
         check_synthetic_marker(data)
     allowed = {'private-local.json' if private else 'synthetic.json', 'journal.sqlite3', 'journal.sqlite3-wal', 'journal.sqlite3-shm', 'preupgrade.sqlite3', 'audio', 'audio-staging'}
+    if stage_callback is not None: stage_callback('ROOT_CONTENTS')
     if {p.name for p in data.iterdir()} - allowed: raise SafeError('UNKNOWN_ROOT_CONTENT')
-    try:
-        with sqlite3.connect((data/'journal.sqlite3').as_uri()+'?mode=ro', uri=True) as c:
-            c.row_factory = sqlite3.Row
-            rows = c.execute('SELECT schema_version FROM vault_meta').fetchall()
-            if len(rows) != 1 or type(rows[0][0]) is not int: raise SafeError('INVALID_METADATA')
-            version = rows[0][0]
-            if not 2 <= version <= SCHEMA: raise SafeError('UNSUPPORTED_SCHEMA')
-            if not private and c.execute("SELECT 1 FROM sqlite_master WHERE name='private_root_identity'").fetchone():raise SafeError('ROOT_KIND_MISMATCH')
-            Store.check(c)
-            if c.execute('PRAGMA integrity_check').fetchone()[0] != 'ok': raise SafeError('DATABASE_INTEGRITY')
-            if c.execute('PRAGMA foreign_key_check').fetchone(): raise SafeError('DATABASE_INTEGRITY')
-            return version
-    except sqlite3.Error: raise SafeError('INVALID_METADATA') from None
+    return inspect_sqlite(data/'journal.sqlite3', root_kind, stage_callback=stage_callback)
 
 def runtime_checks(package):
     checks = []

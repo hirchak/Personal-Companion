@@ -216,8 +216,13 @@ def backup_gate(root, target):
     return receipt
 
 
-def preflight(package, expected_hash, app, data, backup_directory, port=8765):
+def preflight(package, expected_hash, app, data, backup_directory, port=8765, *, stage_callback=None):
     from . import release as r
+    def stage(name):
+        if stage_callback is not None:
+            stage_callback(name)
+
+    stage('PACKAGE_VALIDATION')
     package=r.package_path(package); app,data=r.separated(app,data)
     m=r.validate_package(package,expected_hash)
     if m['format'] not in {3,4}: raise SafeError('PRIVATE_RELEASE_REQUIRED')
@@ -226,15 +231,20 @@ def preflight(package, expected_hash, app, data, backup_directory, port=8765):
     b=local_path(backup_directory)
     if any(b==p or b.is_relative_to(p) or p.is_relative_to(b) for p in (app,data)):raise SafeError('BACKUP_PATH_OVERLAP')
     if data.exists() and any(data.iterdir()):
+        stage('ROOT_IDENTITY')
         value=validate_root(data)
         if value['backup_directory']!=str(b):raise SafeError('BACKUP_DIRECTORY_MISMATCH')
-        r.inspect_data(data,RootKind.PRIVATE_LOCAL)
+        r.inspect_data(data,RootKind.PRIVATE_LOCAL,stage_callback=stage_callback)
     if app.exists():
+        stage('APPLICATION_BINDING')
         r.selected(app,data,RootKind.PRIVATE_LOCAL)
+    stage('RUNTIME_CHECKS')
     checks=[{'gate':c['gate'],'status':c['status']} for c in r.runtime_checks(package)]
+    stage('OWNER_PERMISSIONS')
     for label,p in [('application',app),('data',data),('backup',b)]:
         owner_only(p if p.exists() else p.parent)
         checks.append({'gate':label+'_owner_only_permissions','status':'PASS'})
+    stage('VOLUME_PROTECTION')
     data_volume=volume_protection(data); backup_volume=volume_protection(b)
     for label,status in [('data_volume',data_volume),('backup_volume',backup_volume)]:checks.append({'gate':label,'status':status})
     import shutil,socket
@@ -247,6 +257,7 @@ def preflight(package, expected_hash, app, data, backup_directory, port=8765):
     checks += [{'gate':'exact_release_and_private_profile','status':'PASS'},{'gate':'path_safety_app_data_separation','status':'PASS'},{'gate':'runtime_off_defaults','status':'PASS'}]
     failed=[c['status'] for c in checks if c['status'] not in {'PASS','OPTIONAL_UNAVAILABLE','NOT_RUN'} or c['gate'] in {'data_volume','backup_volume'} and c['status']!='PASS']
     status='PASS' if not failed else ('BLOCKED_BY_PERMISSION' if 'BLOCKED_BY_PERMISSION' in failed else failed[0])
+    stage('COMPLETE')
     return PrivatePreflight(format=1,scope='PRIVATE_LOCAL_SECURITY_TESTED_MAC_ONLY',status=status,
         release_id=m['release_id'],manifest_hash=expected_hash,runtime_input_hash=m['runtime_input_hash'],
         os=platform.system(),architecture=platform.machine(),python=platform.python_version(),root_kind='PRIVATE_LOCAL',

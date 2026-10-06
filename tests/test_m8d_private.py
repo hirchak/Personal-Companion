@@ -591,3 +591,357 @@ def test_pinned_deep_fails_closed_when_current_goal_is_paused(controller):
         current.send(old_id, deep_request(current.conversations.get(old_id), 'ORIGINAL SYNTHETIC paused goal turn'))
     assert current.conversations.get(old_id)['messages'] == []
     assert gate.provider('DEEP').calls == []
+
+
+def test_m8e_preflight_m8c_to_m8d_synthetic_wal_readonly_states(
+    private_package, isolated, protected,
+):
+    """Synthetic M8C-to-M8D-style root stays read-only across valid SQLite journal states."""
+    import base64
+    import shutil
+    import socket
+    import sqlite3
+    from pathlib import Path
+
+    from apps.core import release as r, local_private as p
+    from apps.core.conversation import Conversations
+    from apps.core.conversation_contracts import NewConversation, SendMessage
+    from apps.core.domain import Journal
+    from apps.core.root_types import RootKind
+    from apps.core.storage import digest
+    from apps.core.sync import SyncService
+    from apps.core.voice import Voice, CHUNK_SIZE
+    from apps.core.voice_contracts import ASRRequest, AudioBegin, AudioChunk
+    from test_m4_voice import wav
+
+    m8c_source, m8c_hash = private_package
+    m8c_package = isolated / 'ORIGINAL SYNTHETIC M8C package copy'
+    shutil.copytree(m8c_source, m8c_package)
+    m8d_package = isolated / 'ORIGINAL SYNTHETIC M8D package copy'
+    shutil.copytree(m8c_package, m8d_package)
+    shutil.copyfile(
+        Path(__file__).resolve().parents[1] / 'packages/pilot/MAC_PRIVATE_AI_VOICE_PROFILE.json',
+        m8d_package / 'packages/pilot/MAC_PRIVATE_AI_VOICE_PROFILE.json',
+    )
+    m8d_manifest = r.read_json(m8d_package / 'release-manifest.json')
+    m8d_manifest.update(format=4, release_id='M8D-' + m8d_manifest['git_commit'])
+    m8d_manifest['files'] = r.file_hashes(m8d_package)
+    m8d_manifest['manifest_hash'] = r.identity(m8d_manifest)
+    (m8d_package / 'release-manifest.json').write_text(r.encode(m8d_manifest))
+    m8d_hash = m8d_manifest['manifest_hash']
+    app = isolated / 'M8E synthetic app'
+    data = isolated / 'M8E PRIVATE_LOCAL ORIGINAL SYNTHETIC'
+    backups = isolated / 'M8E protected synthetic backups'
+    backups.mkdir(mode=0o700)
+    with socket.socket() as sock:
+        sock.bind(('127.0.0.1', 0))
+        port = sock.getsockname()[1]
+
+    r.initialize_private(
+        m8c_package, m8c_hash, app, data, backups,
+        'INITIALIZE_PRIVATE_LOCAL:' + str(data), p.CONSENT, True, port=port,
+    )
+    upgrade_backup = backups / 'ORIGINAL_SYNTHETIC_M8C_TO_M8D'
+    upgraded = r.upgrade(
+        m8d_package, m8d_hash, app, data, upgrade_backup,
+        root_kind=RootKind.PRIVATE_LOCAL, port=port,
+    )
+    assert upgraded['status'] == 'PASS'
+
+    # M8D-style conversation state with a local synthetic message; no provider is constructed.
+    store = Store(data, root_kind=RootKind.PRIVATE_LOCAL)
+    conversations = Conversations(store, synthetic_demo=False, mock_responses=False)
+    page = conversations.create(NewConversation(operation_id=uuid4()))
+    conversations.send(
+        page['conversation']['id'],
+        SendMessage(
+            operation_id=uuid4(),
+            base_revision=page['conversation']['revision'],
+            text='ORIGINAL SYNTHETIC M8D conversation for preflight validation',
+        ),
+        respond=False,
+    )
+
+    # Optional local voice/transcript state is fixture-generated, never microphone audio.
+    class SyntheticLocalASR:
+        def metadata(self):
+            return {
+                'engine': 'WHISPER_LOCAL_SYNTHETIC_FIXTURE',
+                'cloud_asr': False,
+                'model': 'ORIGINAL_SYNTHETIC_FIXTURE',
+                'model_hash': 'a' * 64,
+                'available': True,
+                'speech_guard': True,
+            }
+
+        def transcribe(self, data, language, cancel, deadline):
+            return {
+                'text': 'ORIGINAL SYNTHETIC local transcript',
+                'language': 'uk',
+                'speech_state': 'SPEECH_DETECTED',
+            }
+
+    journal = Journal(store)
+    voice = Voice(journal, SyncService(journal))
+    voice.engines['LOCAL'] = SyntheticLocalASR()
+    audio_bytes = wav(1)
+    audio_id = uuid4()
+    begin = AudioBegin(
+        audio_id=audio_id,
+        operation_id=uuid4(),
+        content_hash=digest(audio_bytes),
+        byte_size=len(audio_bytes),
+        mime='audio/wav',
+        created_at_utc='2099-01-01T12:00:00Z',
+        local_date='2099-01-01',
+    )
+    voice.begin(begin)
+    for index, offset in enumerate(range(0, len(audio_bytes), CHUNK_SIZE)):
+        part = audio_bytes[offset:offset + CHUNK_SIZE]
+        voice.chunk(audio_id, AudioChunk(
+            index=index, content_hash=digest(part), data=base64.b64encode(part).decode(),
+        ))
+    voice.finalize(audio_id)
+    job = voice.enqueue(audio_id, ASRRequest(mode='LOCAL'))
+    voice.run(job['transcript_id'], 'LOCAL')
+    assert voice.get(audio_id)['transcript']['state'] in {'TRANSCRIPT_READY', 'REVIEW_REQUIRED'}
+    assert r.backup(
+        app, data, backups / 'ORIGINAL_SYNTHETIC_M8D_WITH_CONVERSATION_AND_TRANSCRIPT',
+        root_kind=RootKind.PRIVATE_LOCAL,
+    )['status'] == 'PASS'
+
+    def preflight(target_app=app, target_data=data):
+        return p.preflight(
+            m8d_package, m8d_hash, target_app, target_data, backups, port,
+        )['status']
+
+    assert preflight() == 'PASS'
+    db = data / 'journal.sqlite3'
+    # The manager's protected backup snapshot is a checkpointed DELETE-journal database.
+    delete_backup = backups / 'ORIGINAL_SYNTHETIC_DELETE_JOURNAL_SNAPSHOT'
+    assert r.backup(app, data, delete_backup, root_kind=RootKind.PRIVATE_LOCAL)['status'] == 'PASS'
+    delete_data = isolated / 'M8E PRIVATE_LOCAL ORIGINAL SYNTHETIC DELETE SNAPSHOT'
+    delete_app = isolated / 'M8E synthetic app DELETE snapshot'
+    delete_data.mkdir(mode=0o700)
+    shutil.copyfile(delete_backup / 'snapshot.sqlite3', delete_data / 'journal.sqlite3')
+    shutil.copyfile(data / 'private-local.json', delete_data / 'private-local.json')
+    (delete_data / 'journal.sqlite3').chmod(0o600)
+    (delete_data / 'private-local.json').chmod(0o600)
+    shutil.copytree(app, delete_app)
+    delete_install = r.read_json(delete_app / 'installation.json')
+    delete_install['data_root'] = str(delete_data)
+    (delete_app / 'installation.json').write_text(r.encode(delete_install))
+    (delete_app / 'installation.json').chmod(0o600)
+    assert p.validate_root(delete_data)['root_kind'] == 'PRIVATE_LOCAL'
+    delete_hash = digest((delete_data / 'journal.sqlite3').read_bytes())
+    assert r.inspect_data(delete_data, RootKind.PRIVATE_LOCAL) == 11
+    assert p.preflight(
+        m8d_package, m8d_hash, delete_app, delete_data, backups, port,
+    )['status'] == 'PASS'
+    assert digest((delete_data / 'journal.sqlite3').read_bytes()) == delete_hash
+
+    # WAL and SHM remain live while the accepted read-only inspector opens a second connection.
+    writer = sqlite3.connect(db, timeout=5, isolation_level=None)
+    assert writer.execute('PRAGMA journal_mode=WAL').fetchone()[0].lower() == 'wal'
+    writer.execute('BEGIN IMMEDIATE')
+    writer.execute('UPDATE vault_meta SET restore_epoch=restore_epoch+1')
+    writer.commit()
+    assert Path(str(db) + '-wal').is_file() and Path(str(db) + '-shm').is_file()
+    wal_hashes = {
+        suffix: digest(Path(str(db) + suffix).read_bytes())
+        for suffix in ('', '-wal')
+    }
+    shm_size = Path(str(db) + '-shm').stat().st_size
+    assert r.inspect_data(data, RootKind.PRIVATE_LOCAL) == 11
+    assert preflight() == 'PASS'
+    assert wal_hashes == {
+        suffix: digest(Path(str(db) + suffix).read_bytes())
+        for suffix in ('', '-wal')
+    }
+    # SQLite may update transient WAL-index lock bytes in SHM during a read-only WAL open.
+    assert Path(str(db) + '-shm').stat().st_size == shm_size
+
+    # Preserve a valid, quiescent WAL/SHM snapshot in another disposable root. No app server or
+    # SQLite connection is active on this copy when its read-only preflight runs.
+    data_copy = isolated / 'M8E PRIVATE_LOCAL ORIGINAL SYNTHETIC WAL SNAPSHOT'
+    app_copy = isolated / 'M8E synthetic app WAL snapshot'
+    shutil.copytree(data, data_copy)
+    shutil.copytree(app, app_copy)
+    install = r.read_json(app_copy / 'installation.json')
+    install['data_root'] = str(data_copy)
+    (app_copy / 'installation.json').write_text(r.encode(install))
+    (app_copy / 'installation.json').chmod(0o600)
+    assert Path(str(data_copy / 'journal.sqlite3') + '-wal').is_file()
+    assert Path(str(data_copy / 'journal.sqlite3') + '-shm').is_file()
+    writer.close()
+    writer = None
+    copy_hashes = {
+        suffix: digest(Path(str(data_copy / 'journal.sqlite3') + suffix).read_bytes())
+        for suffix in ('', '-wal')
+    }
+    assert r.inspect_data(data_copy, RootKind.PRIVATE_LOCAL) == 11
+    assert p.preflight(
+        m8d_package, m8d_hash, app_copy, data_copy, backups, port,
+    )['status'] == 'PASS'
+    assert copy_hashes == {
+        suffix: digest(Path(str(data_copy / 'journal.sqlite3') + suffix).read_bytes())
+        for suffix in ('', '-wal')
+    }
+
+    if writer is not None:
+        writer.close()
+    assert r.inspect_data(data, RootKind.PRIVATE_LOCAL) == 11
+    assert preflight() == 'PASS'
+
+
+def _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, port):
+    from apps.core import local_private as p
+    stages = []
+    try:
+        report = p.preflight(
+            package, manifest_hash, app, data, backups, port,
+            stage_callback=stages.append,
+        )
+        status = report['status'] if report['status'] in {'PASS', 'INCOMPATIBLE', 'BLOCKED_BY_PERMISSION'} else 'FAIL'
+        code = 'NONE' if status == 'PASS' else status
+    except SafeError as exc:
+        status = 'FAIL'
+        code = exc.code if exc.code.isascii() and exc.code.replace('_', '').isalnum() else 'VALIDATION_ERROR'
+    except Exception:
+        # Diagnostic output never serializes an exception message or repr.
+        status, code = 'FAIL', 'VALIDATION_ERROR'
+    stage = stages[-1] if stages else 'PREFLIGHT'
+    if not stage.isascii() or not stage.replace('_', '').isalnum():
+        stage = 'UNKNOWN_STAGE'
+    return {
+        'status': status,
+        'stage': stage,
+        'error': code,
+        'store_check_entered': any(value in {'STORE_CHECK', 'SQLITE_INTEGRITY', 'FOREIGN_KEYS'} for value in stages),
+    }
+
+
+def test_m8e_private_preflight_diagnostics_are_sanitized_and_read_only(vault, isolated, capsys):
+    import sqlite3
+    from apps.core import release as r
+    from apps.core.storage import digest
+
+    package, manifest_hash, app, data, backups = vault
+    db = data / 'journal.sqlite3'
+    before = digest(db.read_bytes())
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    assert result == {
+        'status': 'PASS',
+        'stage': 'COMPLETE',
+        'error': 'NONE',
+        'store_check_entered': True,
+    }
+    assert digest(db.read_bytes()) == before
+
+    sentinel = 'SYNTHETIC_DIAGNOSTIC_SENTINEL'
+    with sqlite3.connect(db) as connection:
+        connection.execute('UPDATE vault_meta SET schema_version=?', ('MALFORMED_' + sentinel,))
+    corrupted_hash = digest(db.read_bytes())
+    active_hash = digest((app / 'active.json').read_bytes())
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    assert result == {
+        'status': 'FAIL',
+        'stage': 'VAULT_META',
+        'error': 'INVALID_METADATA',
+        'store_check_entered': False,
+    }
+    assert sentinel not in json.dumps(result)
+    captured = capsys.readouterr()
+    assert captured.out == '' and captured.err == ''
+
+    refused_backup = isolated / 'must-not-be-created-after-failed-preflight'
+    with pytest.raises(SafeError):
+        r.upgrade(
+            package, manifest_hash, app, data, refused_backup,
+            root_kind=RootKind.PRIVATE_LOCAL, port=8765,
+        )
+    assert not refused_backup.exists()
+    assert digest(db.read_bytes()) == corrupted_hash
+    assert digest((app / 'active.json').read_bytes()) == active_hash
+    assert not (app / 'upgrade-pending.json').exists()
+
+
+def test_m8e_readonly_wal_open_error_has_sanitized_stage_and_code(vault, monkeypatch, capsys):
+    import sqlite3
+    from apps.core import release as r
+
+    package, manifest_hash, app, data, backups = vault
+    original_connect = sqlite3.connect
+    calls = 0
+
+    class ReadOnlyOpenError(sqlite3.OperationalError):
+        @property
+        def sqlite_errorname(self):
+            return 'SQLITE_READONLY'
+
+    def fail_inspector_open(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 3:
+            raise ReadOnlyOpenError('PRIVATE_SENTINEL_PATH_MUST_NOT_ESCAPE')
+        return original_connect(*args, **kwargs)
+
+    monkeypatch.setattr(r.sqlite3, 'connect', fail_inspector_open)
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    assert result == {
+        'status': 'FAIL',
+        'stage': 'SQLITE_OPEN',
+        'error': 'SQLITE_READONLY_WAL_OPEN',
+        'store_check_entered': False,
+    }
+    assert 'PRIVATE_SENTINEL' not in json.dumps(result)
+    captured = capsys.readouterr()
+    assert captured.out == '' and captured.err == ''
+
+
+@pytest.mark.parametrize(
+    ('invariant', 'expected_stage'),
+    [
+        ('integrity', 'SQLITE_INTEGRITY'),
+        ('foreign_key', 'FOREIGN_KEYS'),
+        ('typed_domain', 'ENTRY_DOMAIN_VALIDATION'),
+    ],
+)
+def test_m8e_preflight_diagnostic_rejects_integrity_fk_and_domain_failures(
+    vault, invariant, expected_stage,
+):
+    import sqlite3
+    from apps.core.domain import Journal
+
+    package, manifest_hash, app, data, backups = vault
+    db = data / 'journal.sqlite3'
+    sentinel = 'SYNTHETIC_DIAGNOSTIC_SENTINEL'
+    if invariant == 'integrity':
+        with sqlite3.connect(db) as connection:
+            duplicate_root = connection.execute(
+                "SELECT rootpage FROM sqlite_master WHERE type='table' AND name='entry_revisions'"
+            ).fetchone()[0]
+            connection.execute('PRAGMA writable_schema=ON')
+            connection.execute(
+                "UPDATE sqlite_master SET rootpage=? WHERE type='table' AND name='entries'",
+                (duplicate_root,),
+            )
+    elif invariant == 'foreign_key':
+        with sqlite3.connect(db) as connection:
+            connection.execute('PRAGMA foreign_keys=OFF')
+            connection.execute(
+                'INSERT INTO entry_revisions(entry_id,revision,payload) VALUES(?,?,?)',
+                (sentinel, 1, '{}'),
+            )
+    else:
+        journal = Journal(Store(data, root_kind=RootKind.PRIVATE_LOCAL))
+        create(journal, text=sentinel)
+        with sqlite3.connect(db) as connection:
+            connection.execute("UPDATE entries SET payload='{}'")
+
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    assert result['status'] == 'FAIL'
+    assert result['stage'] == expected_stage
+    assert result['error'] in {'DATABASE_INTEGRITY', 'DOMAIN_INTEGRITY', 'SQLITE_INTEGRITY_ERROR'}
+    assert result['store_check_entered'] is True
+    assert sentinel not in json.dumps(result)

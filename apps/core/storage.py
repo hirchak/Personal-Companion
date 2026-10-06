@@ -306,11 +306,21 @@ class Store:
                 raise
 
     @staticmethod
-    def check(c):
-        if c.execute('PRAGMA integrity_check').fetchone()[0] != 'ok' or c.execute('PRAGMA foreign_key_check').fetchall():
+    def check(c, stage_callback=None):
+        def stage(name):
+            if stage_callback is not None:
+                stage_callback(name)
+
+        stage('SQLITE_INTEGRITY')
+        if c.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
             raise SafeError('DATABASE_INTEGRITY')
+        stage('FOREIGN_KEYS')
+        if c.execute('PRAGMA foreign_key_check').fetchall():
+            raise SafeError('DATABASE_INTEGRITY')
+        stage('VAULT_META')
         if c.execute('SELECT count(*) FROM vault_meta').fetchone()[0] != 1:
             raise SafeError('INVALID_METADATA')
+        stage('REQUIRED_SCHEMA')
         tables = {row[0] for row in c.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         if not {'vault_meta', 'entries', 'entry_revisions', 'tombstones', 'operation_receipts', 'search_index', 'devices', 'sync_meta', 'sync_receipts', 'sync_checkpoints'} <= tables:
             raise SafeError('INCOMPLETE_SCHEMA')
@@ -318,23 +328,28 @@ class Store:
         from .models import EntryInput, EntryOutput, EntryRevisionOutput, VaultMetadata
         from pydantic import ValidationError
         try:
+            stage('VAULT_METADATA_VALIDATION')
             metadata = VaultMetadata.model_validate(dict(c.execute('SELECT * FROM vault_meta').fetchone()))
             if metadata.schema_version >= 3 and not {'ai_consents','ai_jobs','suggestions','memories'} <= tables:
                 raise SafeError('INCOMPLETE_SCHEMA')
             if metadata.schema_version >= 4 and not {'audio','audio_chunks','transcripts'} <= tables:
                 raise SafeError('INCOMPLETE_SCHEMA')
             if metadata.schema_version >= 5:
+                stage('M5')
                 if not {'feedback_drafts','personal_space'} <= tables: raise SafeError('INCOMPLETE_SCHEMA')
                 from .feedback import check_m5
                 check_m5(c)
             if metadata.schema_version >= 6:
+                stage('HEALTH')
                 if not {'health_records','health_revisions','health_state'} <= tables:raise SafeError('INCOMPLETE_SCHEMA')
                 from .health import check_health
                 check_health(c)
             if metadata.schema_version>=11:
+                stage('DEEP')
                 if not {'deep_sessions','working_maps','deep_actions','deep_context_previews'} <= tables:raise SafeError('INCOMPLETE_SCHEMA')
                 from .deep_session import check_deep
                 check_deep(c)
+            stage('VAULT_METADATA_VALIDATION')
             owner = str(metadata.owner_id)
             for table in ('entries', 'tombstones', 'operation_receipts'):
                 if c.execute(f'SELECT count(*) FROM {table} WHERE owner_id IS NULL OR owner_id!=?', (owner,)).fetchone()[0]:
@@ -342,12 +357,14 @@ class Store:
         except (ValueError, TypeError, ValidationError):
             raise SafeError('METADATA_INTEGRITY') from None
         try:
+            stage('ENTRY_DOMAIN_VALIDATION')
             for row in c.execute('SELECT * FROM entries'):
                 payload = json.loads(row['payload'])
                 EntryInput.model_validate(payload)
                 EntryOutput.model_validate(dict(payload, id=row['id'], owner_id=row['owner_id'],
                     revision=row['revision'], created_at_utc=row['created'], updated_at_utc=row['updated'],
                     schema_version=2, privacy_class='PRIVATE_PERSONAL', provenance_type='USER_REPORTED'))
+            stage('ENTRY_REVISION_VALIDATION')
             for row in c.execute('SELECT entry_id,revision,payload FROM entry_revisions'):
                 entry = json.loads(row['payload'])
                 historical = EntryRevisionOutput.model_validate(entry)
