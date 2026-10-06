@@ -1,4 +1,4 @@
-# M8E existing-owner pilot activation — IN_PROGRESS
+# M8E existing-owner pilot activation — PREFLIGHT_BLOCKED
 
 ## Accepted implementation
 
@@ -21,22 +21,24 @@ removed before use; no R2-built package was used for activation.
 | Starting worktree clean at R2 | PASS |
 | Exact C4 local package | PASS; manifest above |
 | Existing app process on the accepted loopback port | NONE LISTENING; nothing to stop |
-| Existing-root private security preflight | NOT_RUN |
-| Protected pre-upgrade backup | NOT_RUN |
+| Existing-root C4 private security preflight | FAIL: `INVALID_METADATA` |
+| Protected pre-upgrade backup | PASS; active accepted M8D C2 manager verified it |
 | Existing-app upgrade | NOT_RUN |
-| Existing vault preserved | UNVERIFIED; no root was selected or opened |
+| Existing vault preserved across upgrade | UNVERIFIED; upgrade did not run |
+| Root receipt / schema / SQLite integrity / foreign-key checks before upgrade | PASS / schema 11 |
 | Schema/integrity after upgrade | NOT_RUN |
-| UI/profile/assets/feature verification | NOT_RUN |
+| C4 profile declarations / local whisper assets | PASS; installed pilot UI not upgraded |
 | Local app started / browser opened | NO / NO |
 
-The accepted sanitized activation record does not expose the existing pilot's app/data/backup/local-ASR root
-bindings, and no listener is available to resolve the bindings from its foreground command. A path-free lookup
-checked only for an installation marker under the single Application Support layout documented by the project;
-it found no match. No receipt or vault content was read, and no recursive filesystem/content search or path
-guess was performed. Activation awaits an owner-approved local root resolver/manager entry point; private path
-values are not requested in chat or recorded here.
+One matching PRIVATE_LOCAL install was located by a bounded install-marker lookup under Application Support.
+Its paths, root identity, backup location and backup hashes remain local and are absent from this report. The
+accepted manager verified the protected backup. C4's application preflight failed with `INVALID_METADATA`, even
+under elevated execution, so the accepted upgrade was not attempted. A separate read-only check returned schema
+11, SQLite integrity PASS and foreign-key PASS; it does not override the failed application preflight. No
+row-level content diagnosis or repair was attempted.
 
 No new vault, restore, data migration, message, conversation, microphone capture, AI/provider call, account
-setting, phone transport, system package, deploy, tag, or GitHub Release was created or changed. Existing external
-controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone transport remains OFF; clinical and Health remain
-OFF; HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
+setting, phone transport, system package, deploy, tag, or GitHub Release was created or changed. No private
+content was printed, exported or retained in evidence. Existing external controls remain
+`NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone transport remains OFF; clinical and Health remain OFF;
+HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.

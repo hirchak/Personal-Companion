@@ -19,7 +19,7 @@ current_goal_path: prompts/M8E_OWNER_ACTIVATION.md
 current_contract_path: docs/M8E_CONTRACT.md
 implementation_status: ACCEPTED
 review_status: ACCEPTED
-owner_pilot_activation_status: IN_PROGRESS
+owner_pilot_activation_status: BLOCKED_BY_PREFLIGHT_INVALID_METADATA
 next_authorized_milestone: null
 research_status: RECEIVED_EXTERNALLY_PARTIAL_PRIMARY_CHECKS
 clinical_protocols_enabled: false
@@ -42,12 +42,14 @@ The exact local package was built from a clean detached clone at C4 using existi
 `4c8cfd0d2e827dc3d50c21614c51f076a878207c8792a5cebab7fc69226136b0`. The package manifest binds C4 and all
 payload files; no runtime/vault data is in the package.
 
-Owner-authorized activation is limited to the existing PRIVATE_LOCAL pilot. At this checkpoint, security
-preflight, backup, upgrade, ASR verification, and app startup have not run: the exact local app/data/backup/ASR
-root bindings have not been resolved through an owner-approved local mechanism. No vault, private content,
-receipt, or path was read by this checkpoint. Do not infer preservation or readiness until the accepted local
-workflow reports them. No new vault, provider/account-setting call, conversation, message, microphone recording,
-phone transport, deploy, tag, or GitHub Release is authorized.
+Owner-authorized activation is limited to the existing PRIVATE_LOCAL pilot. A path-free metadata lookup found
+one matching managed install; local paths and root identity remain owner-local. Its accepted M8D C2 manager
+created and verified the protected pre-upgrade backup. Exact-C4 `private-preflight` still fails closed with
+`INVALID_METADATA`, although the separate receipt check, schema-version check (11), SQLite integrity check and
+foreign-key check pass. Upgrade, post-upgrade preservation verification, app startup and browser opening remain
+NOT_RUN. Do not bypass the failed application metadata gate or infer that the upgrade completed. No new vault,
+provider/account-setting call, conversation, message, microphone recording, phone transport, deploy, tag, or
+GitHub Release is authorized.
 
 External controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`;
 phone transport remains OFF / `NEEDS_TRANSPORT_GATE`; clinical and Health remain OFF. See the activation report

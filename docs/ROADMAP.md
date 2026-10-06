@@ -16,7 +16,7 @@ M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/unin
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
-M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; owner activation is the current goal. Phone gate remains OFF.
+M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; existing-pilot activation is blocked by C4 preflight `INVALID_METADATA` after a protected backup PASS. Phone gate remains OFF.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -246,3 +246,14 @@ The current authorized goal is to activate exact C4 on the existing PRIVATE_LOCA
 authorize a new vault, private-content inspection, AI message/conversation creation, microphone recording,
 provider calls, phone transport, account-setting changes, deploy, tag or GitHub Release. The two external account
 controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone transport remains OFF; clinical and Health remain OFF.
+
+
+## M8E existing-pilot activation checkpoint — 2026-10-06
+
+One existing managed PRIVATE_LOCAL installation was identified through its install marker; local paths and root
+identity remain owner-local. The accepted current M8D C2 manager created and verified the protected pre-upgrade
+backup. C4 `private-preflight` failed closed with `INVALID_METADATA`; separate root-receipt, schema-version 11,
+SQLite integrity and foreign-key metadata checks passed. The M8E app upgrade, post-upgrade preservation check,
+startup and browser opening were not performed. Do not bypass the preflight or diagnose by reading private
+records. External account controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone remains OFF, clinical
+and Health remain OFF, and HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
