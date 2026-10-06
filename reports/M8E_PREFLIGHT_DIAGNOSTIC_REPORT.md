@@ -1,4 +1,4 @@
-# M8E preflight diagnostic — AWAITING_REVIEW
+# M8E preflight diagnostic — ACCEPTED
 
 ## Scope and result
 
@@ -41,8 +41,15 @@ Environment: Python 3.13 virtual environment on the local Mac; all tests used di
 
 No live provider calls occurred. No real private content was printed, logged, exported, or retained in evidence. No application data or protected backup was changed. The main database and WAL metadata were unchanged; SQLite may refresh transient WAL shared-memory lock metadata during a read-only open.
 
+## Independent review follow-up — 2026-10-07
+
+The owner reports independent verdict `M8E_PREFLIGHT_DIAGNOSTIC = ACCEPT`, limited to sanitized preflight
+observability. The verdict is recorded here as acceptance of diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27`
+and publication R `d7de88f33db77c6dbb86971fce1d2b4c514e0eb1`. The original `INVALID_METADATA` cause remains
+UNCONFIRMED. No claim is made that an application defect or private-data invariant was repaired.
+
 ## Current status
 
-No root cause for the original `INVALID_METADATA` result is confirmed. Do not claim the activation defect is fixed. The diagnostic candidate awaits independent review. `OWNER_PILOT_ACTIVATION` remains `BLOCKED_PENDING_REVIEW`; the accepted product remains M8E/C4. Phone transport stays OFF, clinical and Health stay OFF, external account controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`, and HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
+The diagnostic candidate is ACCEPTED for its stated observability scope. The original `INVALID_METADATA` cause remains UNCONFIRMED. The accepted product remains M8E/C4; owner-pilot activation is IN_PROGRESS under a separate exact-C4 activation goal. Phone transport stays OFF, clinical and Health stay OFF, external account controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`, and HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
 
 Base SHA is recorded above; implementation C is the diagnostic candidate above. This report is the evidence-only R commit; its own SHA is intentionally not embedded. Push status at report creation: PENDING; the authorized normal fast-forward push and post-push `origin/main` check will be reported in the final handoff. CI: NOT_RUN.

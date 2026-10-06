@@ -9,3 +9,9 @@
 - Follow-up diagnosis used the accepted M8C and M8D C2 packages on disposable synthetic data, including fixture-only conversation/local transcript state and DELETE/WAL/SHM preflight. Exact C4 passed all synthetic states.
 - Owner-authorized read-only diagnostics then passed on the existing root and verified backup snapshot (`COMPLETE`); the live root was WAL with sidecars and main database/WAL file metadata stayed unchanged. The prior `INVALID_METADATA` did not reproduce and its cause is unconfirmed. No real content was emitted and no upgrade/start/browser action occurred.
 - C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` adds only optional fixed-name diagnostic stages and synthetic regressions; 183 exact-C storage/private/conversation/voice tests passed. Candidate awaits independent review; M8E product C4 remains ACCEPTED and owner activation remains BLOCKED_PENDING_REVIEW.
+
+# 2026-10-07 — M8E diagnostic acceptance and activation resume
+
+- Owner reports `M8E_PREFLIGHT_DIAGNOSTIC = ACCEPT`, limited to sanitized preflight observability for C1/R. Recorded the verdict without asserting an application/data fix; original `INVALID_METADATA` cause remains UNCONFIRMED.
+- M8E product C4/R2 remains externally ACCEPTED. Owner-pilot activation status is IN_PROGRESS from clean `main` at d7de88f, verified against live `origin/main`.
+- Before the private activation steps, run the accepted C1 read-only validator, then exact C4 private-preflight once immediately before upgrade. Use a new protected backup target and preserve all existing backup artifacts.

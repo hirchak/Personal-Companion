@@ -1,4 +1,4 @@
-# M8E existing-owner pilot activation — PREFLIGHT_BLOCKED
+# M8E existing-owner pilot activation — IN_PROGRESS
 
 ## Accepted implementation
 
@@ -13,7 +13,7 @@ attempted Git worktree creation was denied because repository `.git` is read-onl
 succeeded and was removed after validation. An initial misdirected build was rejected by its manifest check and
 removed before use; no R2-built package was used for activation.
 
-## Sanitized operation checkpoint
+## Initial sanitized operation checkpoint — 2026-10-06
 
 | Check | Result |
 |---|---|
@@ -42,3 +42,15 @@ setting, phone transport, system package, deploy, tag, or GitHub Release was cre
 content was printed, exported or retained in evidence. Existing external controls remain
 `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone transport remains OFF; clinical and Health remain OFF;
 HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
+
+## Resumed activation checkpoint — 2026-10-07
+
+The owner reports independent verdict `M8E_PREFLIGHT_DIAGNOSTIC = ACCEPT`, scoped to sanitized preflight
+observability only. Diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` and publication R
+`d7de88f33db77c6dbb86971fce1d2b4c514e0eb1` are recorded as accepted. The original `INVALID_METADATA` cause remains
+UNCONFIRMED; no claim is made that it was fixed.
+
+This resume begins from clean repository `main` at `d7de88f33db77c6dbb86971fce1d2b4c514e0eb1`, verified against
+live `origin/main`. The accepted C4 product package remains the owner runtime target. At this checkpoint the fresh
+read-only diagnostic run, exact-C4 preflight for this resume, new protected backup, and upgrade are NOT_RUN. The prior
+protected backup is preserved. No private content or private path is included in this report.
