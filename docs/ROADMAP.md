@@ -16,7 +16,7 @@ M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/unin
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
-M8E = AWAITING_REVIEW — forward C2/C3/C4 fixes independent R01/N01/N02; phone gate remains OFF.
+M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; owner activation is the current goal. Phone gate remains OFF.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -233,3 +233,16 @@ Forward code commits C2 `5d50a724932b6f51f4cf0be6074c0c2c42150299`, C3
 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d`. Python802/Web51/build and relevant browser/R01 regressions PASS;
 provider calls0, real-vault inspection NO. Evidence/report: `reports/M8E_REVIEW_FIX_REPORT.md`.
 Overall M8E remains AWAITING_REVIEW. Phone gate unchanged; no next milestone.
+
+
+## M8E external ACCEPT / existing PRIVATE_LOCAL pilot activation — 2026-10-06
+
+Owner reports independent M8E verdict ACCEPT for implementation C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d`
+and review publication R2 `519bac8f77965ae7165ff536391dd75f19af284b`. The live GitHub `main` branch was verified
+at R2; R2 is a direct child of C4. Per owner, C4 differs from C3 only by a browser-test locator; the accepted
+runtime implementation is unchanged. Durable review record: `reports/M8E_ARCHITECT_REVIEW.md`.
+
+The current authorized goal is to activate exact C4 on the existing PRIVATE_LOCAL Mac pilot only. It does not
+authorize a new vault, private-content inspection, AI message/conversation creation, microphone recording,
+provider calls, phone transport, account-setting changes, deploy, tag or GitHub Release. The two external account
+controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone transport remains OFF; clinical and Health remain OFF.
