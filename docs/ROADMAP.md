@@ -16,7 +16,7 @@ M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/unin
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
-M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; existing-pilot activation is blocked by C4 preflight `INVALID_METADATA` after a protected backup PASS. Phone gate remains OFF.
+M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; follow-up exact-C4 preflight now PASSes on the existing root and verified backup, while the earlier `INVALID_METADATA` remains unreproduced and unexplained. Diagnostic candidate `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` awaits independent review; owner activation remains BLOCKED_PENDING_REVIEW. Phone gate remains OFF.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -257,3 +257,14 @@ SQLite integrity and foreign-key metadata checks passed. The M8E app upgrade, po
 startup and browser opening were not performed. Do not bypass the preflight or diagnose by reading private
 records. External account controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone remains OFF, clinical
 and Health remain OFF, and HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
+
+## M8E existing-owner preflight diagnosis — 2026-10-06
+
+Follow-up synthetic reproduction used the accepted M8C and M8D C2 packages, fixture-only conversation/local
+transcript state, a protected synthetic backup, and exact C4 preflight. DELETE and WAL/SHM states passed. The
+owner-authorized read-only comparison also passed on the existing root and verified backup snapshot; both reached
+`COMPLETE`. The live root is in WAL mode, and main database/WAL file metadata remained unchanged. The prior
+`INVALID_METADATA` did not reproduce and its original cause is unconfirmed. The diagnostic-stage candidate is
+`1edacfb4749205cf1ccdc22f0601b5dac43a0d27`; it preserves all gates and awaits independent review. No real-vault
+upgrade or application start occurred. M8E product C4 remains ACCEPTED; owner activation remains
+`BLOCKED_PENDING_REVIEW`. See `reports/M8E_PREFLIGHT_DIAGNOSTIC_REPORT.md`.
