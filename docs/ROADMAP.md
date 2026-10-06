@@ -16,7 +16,7 @@ M8A: external ACCEPT — synthetic release/install/upgrade/restore/rollback/unin
 M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHITECT_REVIEW.md).
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
-M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` independently ACCEPTED for sanitized preflight observability only. The original `INVALID_METADATA` cause remains UNCONFIRMED. Exact-C4 preflight previously passed on the existing root and verified backup; owner activation is IN_PROGRESS under a fresh exact-C4 recheck. Phone gate remains OFF.
+M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` independently ACCEPTED for sanitized preflight observability only. The original `INVALID_METADATA` cause remains UNCONFIRMED. Exact C4 is active on the existing owner pilot after a verified new backup, successful upgrade and local start. Phone gate remains OFF.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -265,6 +265,7 @@ transcript state, a protected synthetic backup, and exact C4 preflight. DELETE a
 owner-authorized read-only comparison also passed on the existing root and verified backup snapshot; both reached
 `COMPLETE`. The live root is in WAL mode, and main database/WAL file metadata remained unchanged. The prior
 `INVALID_METADATA` did not reproduce and its original cause is unconfirmed. Independent review ACCEPTED diagnostic
-C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` for sanitized observability only. M8E product C4 remains ACCEPTED;
-owner activation has resumed IN_PROGRESS under exact-C4 revalidation. The earlier upgrade/start remained NOT_RUN.
-See `reports/M8E_PREFLIGHT_DIAGNOSTIC_REPORT.md`.
+C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` for sanitized observability only. M8E product C4 remains ACCEPTED.
+Exact C4 upgraded the existing root after the fresh diagnostic and exact preflight passed; the new backup and
+content-free preservation checks passed, and the foreground app is running locally. Owner activation is ACTIVE.
+See `reports/M8E_PREFLIGHT_DIAGNOSTIC_REPORT.md` and `reports/M8E_OWNER_ACTIVATION_REPORT.md`.

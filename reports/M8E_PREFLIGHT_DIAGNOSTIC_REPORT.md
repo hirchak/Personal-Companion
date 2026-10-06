@@ -50,6 +50,6 @@ UNCONFIRMED. No claim is made that an application defect or private-data invaria
 
 ## Current status
 
-The diagnostic candidate is ACCEPTED for its stated observability scope. The original `INVALID_METADATA` cause remains UNCONFIRMED. The accepted product remains M8E/C4; owner-pilot activation is IN_PROGRESS under a separate exact-C4 activation goal. Phone transport stays OFF, clinical and Health stay OFF, external account controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`, and HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
+The diagnostic candidate is ACCEPTED for its stated observability scope. The original `INVALID_METADATA` cause remains UNCONFIRMED. The accepted product remains M8E/C4; owner-pilot activation completed successfully on exact C4 and the foreground app is running locally for manual owner testing. Phone transport stays OFF, clinical and Health stay OFF, external account controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`, and HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
 
 Base SHA is recorded above; implementation C is the diagnostic candidate above. This report is the evidence-only R commit; its own SHA is intentionally not embedded. Push status at report creation: PENDING; the authorized normal fast-forward push and post-push `origin/main` check will be reported in the final handoff. CI: NOT_RUN.

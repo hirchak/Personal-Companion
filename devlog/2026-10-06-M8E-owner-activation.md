@@ -15,3 +15,11 @@
 - Owner reports `M8E_PREFLIGHT_DIAGNOSTIC = ACCEPT`, limited to sanitized preflight observability for C1/R. Recorded the verdict without asserting an application/data fix; original `INVALID_METADATA` cause remains UNCONFIRMED.
 - M8E product C4/R2 remains externally ACCEPTED. Owner-pilot activation status is IN_PROGRESS from clean `main` at d7de88f, verified against live `origin/main`.
 - Before the private activation steps, run the accepted C1 read-only validator, then exact C4 private-preflight once immediately before upgrade. Use a new protected backup target and preserve all existing backup artifacts.
+
+# 2026-10-07 — M8E exact C4 owner-pilot activation
+
+- Recorded and pushed independent ACCEPT of the diagnostic follow-up, limited to sanitized observability. Original `INVALID_METADATA` cause remains UNCONFIRMED.
+- Accepted C1 diagnostic on the existing root: PASS / COMPLETE. Exact C4 package manifest, payload and `git_commit` verified; exact C4 private-preflight immediately before upgrade: PASS.
+- Exact C4 manager created and verified a new protected backup without overwriting the previous backup, then upgraded the existing root. Post-upgrade root identity, schema/integrity, active release and content-free preservation checks passed.
+- Static Conversation/Free/Deep profiles, journal/creative, local Whisper assets and OFF defaults verified. No AI/provider call, real conversation/message, microphone recording or external account-setting inspection occurred.
+- Exact C4 app is running at loopback `127.0.0.1:8765`; local page opened. Unlock/consent/use remain owner-manual. Owner-pilot activation is ACTIVE.

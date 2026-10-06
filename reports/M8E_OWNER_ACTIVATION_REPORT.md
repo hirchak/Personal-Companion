@@ -1,4 +1,4 @@
-# M8E existing-owner pilot activation — IN_PROGRESS
+# M8E existing-owner pilot activation — ACTIVE
 
 ## Accepted implementation
 
@@ -43,7 +43,7 @@ content was printed, exported or retained in evidence. Existing external control
 `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone transport remains OFF; clinical and Health remain OFF;
 HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
 
-## Resumed activation checkpoint — 2026-10-07
+## Resume authorization checkpoint — 2026-10-07
 
 The owner reports independent verdict `M8E_PREFLIGHT_DIAGNOSTIC = ACCEPT`, scoped to sanitized preflight
 observability only. Diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` and publication R
@@ -52,5 +52,31 @@ UNCONFIRMED; no claim is made that it was fixed.
 
 This resume begins from clean repository `main` at `d7de88f33db77c6dbb86971fce1d2b4c514e0eb1`, verified against
 live `origin/main`. The accepted C4 product package remains the owner runtime target. At this checkpoint the fresh
-read-only diagnostic run, exact-C4 preflight for this resume, new protected backup, and upgrade are NOT_RUN. The prior
-protected backup is preserved. No private content or private path is included in this report.
+read-only diagnostic run, exact-C4 preflight for this resume, new protected backup, and upgrade were NOT_RUN. The
+prior protected backup was preserved. No private content or private path is included in this report.
+
+## Completed activation — 2026-10-07
+
+| Check | Result |
+|---|---|
+| Durable diagnostic review | `M8E_PREFLIGHT_DIAGNOSTIC = ACCEPT`; sanitized observability only |
+| Original `INVALID_METADATA` cause | UNCONFIRMED |
+| Accepted diagnostic validator on existing root | PASS / `COMPLETE` |
+| Exact C4 private-preflight immediately before upgrade | PASS |
+| Exact product package and manager | PASS; release `M8D-55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` |
+| New protected pre-upgrade backup | PASS; new target, prior backup preserved |
+| Existing-root upgrade | PASS |
+| Post-upgrade schema/integrity | PASS |
+| Root identity and active C4 release | PASS / PASS |
+| Existing vault preserved | YES; root identity, schema and content-free table-count checks stable |
+| Conversation landing, Free/Deep profiles, journal/creative | PASS |
+| Local whisper assets | AVAILABLE; validated without transcription |
+| Provider and consent default | AI OFF, voice OFF; no consent or provider action performed |
+| Phone / clinical / Health | OFF / OFF / OFF |
+| Local app and browser | RUNNING / OPEN at `http://127.0.0.1:8765` |
+
+The exact accepted C4 manager created and verified the new backup as part of the upgrade. All prior backup artifacts
+were left intact. No real conversation was opened or created; no AI message was sent; no microphone was used; no live
+provider call or external account-setting check occurred. No private paths, root IDs, backup names/hashes, record
+values, unlock code, or exception messages are recorded here. External controls remain
+`NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; HUMAN_UA_ASR remains `PARTIAL_OWNER_PILOT / OPEN`.
