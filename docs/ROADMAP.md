@@ -17,6 +17,7 @@ M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHI
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
 M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` independently ACCEPTED for sanitized preflight observability only. The original `INVALID_METADATA` cause remains UNCONFIRMED. Exact C4 is active on the existing owner pilot after a verified new backup, successful upgrade and local start. Phone gate remains OFF.
+Current same-milestone M8E owner UX hotfix: C `8d3c528eb3364f01ee60b42c033d1bfe22ef4149` is AWAITING_REVIEW; C4 pilot was not rechecked, touched, or upgraded, and the hotfix is NOT_INSTALLED pending independent review.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -269,3 +270,17 @@ C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` for sanitized observability only. M
 Exact C4 upgraded the existing root after the fresh diagnostic and exact preflight passed; the new backup and
 content-free preservation checks passed, and the foreground app is running locally. Owner activation is ACTIVE.
 See `reports/M8E_PREFLIGHT_DIAGNOSTIC_REPORT.md` and `reports/M8E_OWNER_ACTIVATION_REPORT.md`.
+
+## M8E owner UX hotfix — 2026-10-07
+
+The owner authorized a forward M8E usability correction, not a new milestone. C
+`8d3c528eb3364f01ee60b42c033d1bfe22ef4149` adds one-click AI ON/OFF after valid durable consent, one concise
+first-use acceptance, nonblocking external-setting reminder under More → AI & Privacy, AI-independent local
+microphone/Whisper, and sanitized activation reasons from bounded account/model readiness without thread/turn/
+inference. The exact canonical payload, freshness/Deep/journal gates, no-fallback/PAYG, clinical/Health OFF, and
+phone OFF contracts remain unchanged.
+
+Exact-C evidence: Python810, web53/build, exact release package and Chromium synthetic PRIVATE_LOCAL/local Whisper
+flow, schemas, docs, and UI detector PASS. Live provider calls0; real-vault inspection NO. The existing accepted
+C4 owner pilot was not inspected or modified; hotfix installation waits for independent review ACCEPT. See
+`reports/M8E_OWNER_UX_HOTFIX_REPORT.md`. M8E hotfix remains AWAITING_REVIEW; no next milestone.
