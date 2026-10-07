@@ -1,23 +1,19 @@
-# M8E-H01 final protocol correction — AWAITING_REVIEW
+# M8E-H01 final account-shape correction — AWAITING_REVIEW
 
-Base R: `9e6119707c6a9d4d13bd8bca92df4bd65eb80edd` (local main and live origin/main verified before work). C3:
-`611d2726e9a69d6e195c677a0a6adb3f46d4daf7`. H02 remains ACCEPTED; C3 fixes the last H01 malformed-result issue.
-Same M8E only; no new milestone.
+Base R3: `df1c151eeca5920d3e2721726fd0ae77f0d09beb` (local main and live origin/main verified equal before work).
+C4: `c95e49ff92b5e4d42b877e91e5e9464258dc7588`. Same M8E only; no new milestone.
 
-Readiness requires response ID correlation, exactly one result/error branch, and expected dictionary result types for
-initialize/account/read/model/list. Malformed or absent results become protocol/route failures. A well-formed
-account-null or non-ChatGPT result remains `EXISTING_CHATGPT_AUTH_REQUIRED`; missing/unverifiable required model
-remains `PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; unsupported required effort remains `PROVIDER_EFFORT_UNSUPPORTED`.
-Tests cover null/list/false/missing results across all three RPCs, account/catalog fields, raw-data suppression, and
-no thread/turn/inference.
+Account/read semantics now match the owner requirement. A well-formed `account: null` or valid non-ChatGPT string
+account type is auth-required. An empty account object or missing/empty/whitespace-only/non-string account type
+is protocol/route failure. Synthetic regressions cover each malformed shape. H02 remains ACCEPTED; explicit
+error-code allowlisting and all previously accepted M8E behavior are unchanged.
 
-Exact-C3 verification: full Python841; web53/build; exact package and Chromium21 PASS on final official run; schemas,
-docs/context, and privacy PASS. Two earlier exact-package browser runs hit assistant-count timeouts at different
-explicit sends; a final rerun of the same package passed. No live provider calls or non-loopback requests.
-See `reports/M8E_H01_FINAL_PROTOCOL_REPORT.md`.
+Exact-C4 verification: full Python846, web53/build, exact package, Chromium21, docs/context and privacy PASS.
+Live inference calls0; non-loopback requests0. See `reports/M8E_H01_ACCOUNT_SHAPE_REPORT.md`.
 
-The accepted C4 owner pilot was not inspected, modified, upgraded, or rechecked; C3 was not installed. External
-settings remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone OFF / `NEEDS_TRANSPORT_GATE`; clinical and Health OFF.
+The accepted C4 owner pilot was not inspected or changed; candidate installation remains
+`NOT_INSTALLED_AWAITING_REVIEW`. External settings are `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone OFF /
+`NEEDS_TRANSPORT_GATE`; clinical and Health OFF.
 
-Delivery: C3 → exact-C3 checks → evidence-only R3 → privacy/public-tree scan → normal fast-forward push → verify
-origin/main equals R3 → STOP for independent review. No owner-pilot installation or new milestone under this goal.
+Delivery: C4 → exact-C4 checks → evidence-only R4 → privacy scan → normal fast-forward push → verify
+origin/main equals R4 → STOP for independent review. Do not install into the owner pilot or start another milestone.

@@ -17,7 +17,7 @@ M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHI
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
 M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` independently ACCEPTED for sanitized preflight observability only. The original `INVALID_METADATA` cause remains UNCONFIRMED. Exact C4 is active on the existing owner pilot after a verified new backup, successful upgrade and local start. Phone gate remains OFF.
-Current same-milestone M8E-H01 final protocol correction: C3 `611d2726e9a69d6e195c677a0a6adb3f46d4daf7` is AWAITING_REVIEW from R `9e6119707c6a9d4d13bd8bca92df4bd65eb80edd`. H02 remains ACCEPTED; C4 pilot is untouched and no candidate is installed.
+Current same-milestone M8E-H01 final account-shape correction: C4 `c95e49ff92b5e4d42b877e91e5e9464258dc7588` is AWAITING_REVIEW from R3 `df1c151eeca5920d3e2721726fd0ae77f0d09beb`. H02 remains ACCEPTED; C4 owner pilot is untouched and no candidate is installed.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -309,3 +309,12 @@ live provider calls, real vault not inspected. Two earlier exact-package browser
 count timeouts; the final official run passed all21 checks with zero page errors/non-loopback requests. The owner
 pilot remains untouched/uninstalled. `M8E-H01=FIXED_FORWARD / AWAITING_REVIEW`; `H02=ACCEPTED`.
 Evidence: `reports/M8E_H01_FINAL_PROTOCOL_REPORT.md`. No new milestone.
+
+## M8E-H01 account-shape correction — 2026-10-07
+
+The owner identified the last auth-classification ambiguity: empty account object or missing/invalid
+`account.type` must fail as protocol/route, while a well-formed `account: null` or valid non-ChatGPT account remains
+auth-required. Forward C4 `c95e49ff92b5e4d42b877e91e5e9464258dc7588` adds negative synthetic account-shape cases.
+Exact-C4 Python846, web53/build, package Chromium21, schemas/docs/context/privacy PASS; provider calls0; owner vault
+not inspected and candidate not installed. H02 remains ACCEPTED; H01 is AWAITING_REVIEW. Evidence:
+`reports/M8E_H01_ACCOUNT_SHAPE_REPORT.md`.
