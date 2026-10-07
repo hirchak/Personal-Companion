@@ -119,8 +119,9 @@ class PrivatePilotGate:
   if not callable(readiness):raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
   try:proof=readiness()
   except SafeError as exc:
-   if exc.code in {'PROVIDER_TIMEOUT','PROVIDER_PROTOCOL_INVALID','PROVIDER_PROCESS_FAILED','PROVIDER_OUTPUT_LIMIT','PROVIDER_RPC_FAILED','PRIVATE_PROVIDER_TRANSPORT_UNAVAILABLE'}:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
+   if exc.code in {'PROVIDER_TIMEOUT','PROVIDER_PROTOCOL_INVALID','PROVIDER_PROCESS_FAILED','PROVIDER_OUTPUT_LIMIT','PROVIDER_RPC_FAILED','PROVIDER_TOOL_REQUEST_DENIED','PRIVATE_PROVIDER_TRANSPORT_UNAVAILABLE'}:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
    raise
+  except OSError:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
   if not isinstance(proof,dict) or proof.get('inference_started') is not False or proof.get('thread_started') is not False or proof.get('fallback') is not False or proof.get('payg') is not False:raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
   if proof.get('account_type')!='chatgpt':raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
   supported=proof.get('models')

@@ -1,5 +1,3 @@
-const SAFE_CODE = /^[A-Z][A-Z0-9_]{1,79}$/;
-
 export class PilotCallError extends Error {
   readonly code: string;
 
@@ -21,12 +19,12 @@ export function safePilotErrorCode(value: unknown): string {
         : typeof value === "object" && value !== null && "code" in value
           ? (value as { code?: unknown }).code
           : undefined;
-  return typeof candidate === "string" && SAFE_CODE.test(candidate)
+  return typeof candidate === "string" && DISPLAYABLE_CODES.has(candidate)
     ? candidate
     : "LOCAL_SERVICE_UNAVAILABLE";
 }
 
-const MESSAGES: Record<string, string> = {
+const MESSAGES = {
   DURABLE_CONSENT_REQUIRED:
     "Для цього пристрою потрібна згода. Перегляньте коротке повідомлення й увімкніть AI.",
   PRIVATE_PROVIDER_ROUTE_UNAVAILABLE:
@@ -49,11 +47,13 @@ const MESSAGES: Record<string, string> = {
     "Умови приватності змінилися. Перегляньте повідомлення й підтвердьте згоду знову.",
   LOCAL_SERVICE_UNAVAILABLE:
     "Локальний сервіс недоступний. Перевірте його стан і повторіть дію.",
-};
+} as const;
+
+const DISPLAYABLE_CODES: ReadonlySet<string> = new Set(Object.keys(MESSAGES));
 
 export function pilotErrorMessage(code: string): string {
   return (
-    MESSAGES[code] ??
+    MESSAGES[code as keyof typeof MESSAGES] ??
     "Дію не виконано. Перевірте локальний сервіс і повторіть спробу."
   );
 }

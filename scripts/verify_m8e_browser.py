@@ -21,6 +21,7 @@ class DelayedASR:
 class BrowserFixtureProvider(FixtureProvider):
  def __init__(self,model,effort,state):super().__init__(model,effort);self.readiness_state=state
  def readiness(self):
+  if self.readiness_state['failure_code']:raise SafeError(self.readiness_state['failure_code'],503)
   if self.readiness_state['blocked']:raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
   return super().readiness()
 
@@ -29,7 +30,7 @@ def main():
  if bool(a.package)==bool(a.source_fixture):raise ValueError('Exactly one source required')
  a.output.mkdir(parents=True,exist_ok=True)
  work=Path(tempfile.mkdtemp(prefix='m8e-original-synthetic-',dir=Path(tempfile.gettempdir()).resolve()))
- server=None;thread=None;providers=[];checks={};errors=[];external=[];readiness_state={'blocked':False}
+ server=None;thread=None;providers=[];checks={};errors=[];external=[];readiness_state={'blocked':False,'failure_code':None}
  try:
   if a.source_fixture:package,m=source_package(work);build='DEVELOPMENT'
   else:package=a.package;m=r.read_json(package/'release-manifest.json');r.validate_package(package,m['manifest_hash']);build=m['git_commit']
@@ -91,6 +92,8 @@ def main():
    payload=next(p.calls[-1] for p in providers if p.calls);assert payload['context'][-1]['kind']=='JOURNAL_SELECTED' and 'UNSELECTED_SENTINEL' not in encode(payload);checks['journal_expansion_explicit_exact']=True
    page.get_by_role('button',name='Вимкнути AI',exact=True).click();expect(page.get_by_role('button',name='Увімкнути AI',exact=True)).to_be_visible();assert page.get_by_role('dialog').count()==0;checks['ai_on_to_off_one_click']=True
    page.get_by_role('button',name='Увімкнути AI',exact=True).click();expect(page.get_by_role('button',name='Вимкнути AI',exact=True)).to_have_text('Luna · High');assert page.get_by_role('dialog').count()==0;checks['ai_off_to_on_existing_consent_one_click']=True
+   page.get_by_role('button',name='Вимкнути AI',exact=True).click();readiness_state['failure_code']='PROVIDER_CAPABILITY_MISSING';page.get_by_role('button',name='Увімкнути AI',exact=True).click();expect(page.get_by_role('alert')).to_contain_text('LOCAL_SERVICE_UNAVAILABLE');assert 'PROVIDER_CAPABILITY_MISSING' not in page.get_by_role('alert').inner_text();checks['unknown_backend_code_suppressed']=True
+   readiness_state['failure_code']=None;page.get_by_role('button',name='Увімкнути AI',exact=True).click();expect(page.get_by_role('button',name='Вимкнути AI',exact=True)).to_have_text('Luna · High');assert page.get_by_role('dialog').count()==0
    page.get_by_role('button',name='Розмови',exact=True).click();expect(page.locator('.conversation-history li')).to_have_count(1);shot('desktop-history');expect(page.get_by_text('Звичайна',exact=True).last).to_be_visible();page.get_by_role('button',name='Закрити: Розмови',exact=True).click()
    page.get_by_role('button',name='Нова розмова',exact=True).click();expect(page.get_by_label('Ваше повідомлення',exact=True)).to_have_count(0)
    page.set_viewport_size({'width':390,'height':844});shot('mobile-empty')

@@ -11,9 +11,15 @@ describe("private pilot activation errors", () => {
     );
   });
 
-  it("keeps unknown stable codes while suppressing raw exception data", () => {
+  it("allows only explicitly displayable codes", () => {
+    expect(safePilotErrorCode("EXISTING_CHATGPT_AUTH_REQUIRED")).toBe(
+      "EXISTING_CHATGPT_AUTH_REQUIRED",
+    );
     expect(safePilotErrorCode("PROVIDER_CAPABILITY_MISSING")).toBe(
-      "PROVIDER_CAPABILITY_MISSING",
+      "LOCAL_SERVICE_UNAVAILABLE",
+    );
+    expect(safePilotErrorCode("SYNTHETIC_SECRET_TOKEN_ABC123")).toBe(
+      "LOCAL_SERVICE_UNAVAILABLE",
     );
     expect(
       safePilotErrorCode(
@@ -21,7 +27,10 @@ describe("private pilot activation errors", () => {
       ),
     ).toBe("LOCAL_SERVICE_UNAVAILABLE");
     expect(pilotErrorMessage("PROVIDER_CAPABILITY_MISSING")).not.toContain(
-      "auth.json",
+      "PROVIDER_CAPABILITY_MISSING",
+    );
+    expect(pilotErrorMessage("SYNTHETIC_SECRET_TOKEN_ABC123")).not.toContain(
+      "SYNTHETIC_SECRET_TOKEN_ABC123",
     );
   });
 });

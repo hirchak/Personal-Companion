@@ -95,3 +95,17 @@ Ukrainian recovery text; arbitrary exception messages, paths, and account data n
 The hotfix changes no conversation payload/source/Deep scope freshness rules, journal defaults, model ceilings,
 fallback/PAYG boundary, clinical/Health state, or phone transport. The existing accepted C4 pilot remains
 unmodified until the hotfix receives independent review acceptance.
+
+## 2026-10-07 independent-review corrections — M8E-H01/H02
+
+Readiness preserves the distinction between evidence of missing/non-ChatGPT authentication and readiness
+infrastructure failure. A successful `account/read` response with a missing account or non-ChatGPT account returns
+`EXISTING_CHATGPT_AUTH_REQUIRED`; process, transport, timeout, protocol, and RPC failures return
+`PRIVATE_PROVIDER_ROUTE_UNAVAILABLE`. A successful but missing/unverifiable required model/profile returns
+`PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; a present model without its required effort returns
+`PROVIDER_EFFORT_UNSUPPORTED`. RPC/provider exception text is never returned or rendered.
+
+The frontend may render only an explicit allowlist of mapped stable error codes. Any unknown backend code,
+including syntactically safe uppercase codes, maps to `LOCAL_SERVICE_UNAVAILABLE` and the generic recovery
+message; the unknown code is not displayed. This does not change provider readiness operations or introduce
+thread/turn/inference calls.

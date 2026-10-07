@@ -101,8 +101,14 @@ class CodexConversationProvider:
             shutil.rmtree(work)
     def readiness(self):
         """Bounded activation probe: existing ChatGPT auth type and model/effort catalog only."""
-        work=Path(tempfile.mkdtemp(prefix='m8d-private-readiness-' if self.private_scope else 'm7d-readiness-',dir=Path(tempfile.gettempdir()).resolve()))
-        process=None;selector=selectors.DefaultSelector();buffer=bytearray();seen_bytes=0;deadline=time.monotonic()+8
+        try:work=Path(tempfile.mkdtemp(prefix='m8d-private-readiness-' if self.private_scope else 'm7d-readiness-',dir=Path(tempfile.gettempdir()).resolve()))
+        except OSError:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
+        process=None
+        try:selector=selectors.DefaultSelector()
+        except OSError:
+            shutil.rmtree(work,ignore_errors=True)
+            raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
+        buffer=bytearray();seen_bytes=0;deadline=time.monotonic()+getattr(self,'readiness_timeout',8)
         def send(identifier,method,params):
             message={'method':method,'params':params}
             if identifier is not None:message['id']=identifier
@@ -124,6 +130,7 @@ class CodexConversationProvider:
             send(identifier,method,params)
             while True:
                 message=incoming()
+                if not isinstance(message,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
                 if message.get('method') and 'id' in message:raise SafeError('PROVIDER_TOOL_REQUEST_DENIED',403)
                 if message.get('id')==identifier:
                     if 'error' in message:raise SafeError('PROVIDER_RPC_FAILED',503)
@@ -134,29 +141,51 @@ class CodexConversationProvider:
             selector.register(process.stdout,selectors.EVENT_READ)
             exchange(1,'initialize',{'clientInfo':{'name':'personal_companion_private_readiness','version':'0.1.0'},'capabilities':{'experimentalApi':True}})
             send(None,'initialized',{})
-            try:account=exchange(2,'account/read',{'refreshToken':False})
-            except SafeError:raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403) from None
-            account_type=(account.get('account') or {}).get('type')
-            del account
-            if account_type!='chatgpt':raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
-            try:catalog=exchange(3,'model/list',{'includeHidden':False})
-            except SafeError:raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403) from None
+            account=exchange(2,'account/read',{'refreshToken':False})
+            if not isinstance(account,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+            account_info=account.get('account')
+            if account_info is not None and not isinstance(account_info,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+            chatgpt_authenticated=isinstance(account_info,dict) and account_info.get('type')=='chatgpt'
+            del account_info,account
+            if not chatgpt_authenticated:raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
+            catalog=exchange(3,'model/list',{'includeHidden':False})
+            if not isinstance(catalog,dict) or not isinstance(catalog.get('data'),list) or any(not isinstance(item,dict) for item in catalog['data']):
+                raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
             models={}
             for model in ('gpt-6-luna','gpt-6.1-sol'):
                 matches=[item for item in catalog.get('data',[]) if item.get('model')==model or item.get('id')==model]
-                if len(matches)==1:models[model]=self.supported_settings({'data':matches},model)
-            return {'account_type':account_type,'models':models,'inference_started':False,'thread_started':False,'payg':False,'fallback':False}
+                if len(matches)==1:
+                    efforts=matches[0].get('supportedReasoningEfforts')
+                    if not isinstance(efforts,list) or any(not isinstance(item,dict) or not isinstance(item.get('reasoningEffort'),str) for item in efforts):
+                        raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
+                    try:models[model]=self.supported_settings({'data':matches},model)
+                    except SafeError as exc:
+                        if exc.code=='MODEL_CAPABILITY_UNVERIFIED':raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403) from None
+                        raise
+            del catalog
+            return {'account_type':'chatgpt','models':models,'inference_started':False,'thread_started':False,'payg':False,'fallback':False}
+        except SafeError:raise
+        except OSError:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
         finally:
-            selector.close()
+            try:selector.close()
+            except OSError:pass
             if process:
                 if process.poll() is None:
                     try:os.killpg(process.pid,signal.SIGTERM)
                     except ProcessLookupError:pass
                 try:process.wait(timeout=2)
-                except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=2)
-                if process.stdin:process.stdin.close()
-                if process.stdout:process.stdout.close()
-            shutil.rmtree(work)
+                except subprocess.TimeoutExpired:
+                    try:os.killpg(process.pid,signal.SIGKILL)
+                    except ProcessLookupError:pass
+                    try:process.wait(timeout=2)
+                    except subprocess.TimeoutExpired:pass
+                if process.stdin:
+                    try:process.stdin.close()
+                    except OSError:pass
+                if process.stdout:
+                    try:process.stdout.close()
+                    except OSError:pass
+            shutil.rmtree(work,ignore_errors=True)
     def execute(self,payload,response_schema,cancel,deadline,on_delta=None):
         from .conversation_runtime_contracts import ProviderPayload
         payload_type=ProviderPayload
