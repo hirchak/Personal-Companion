@@ -1,25 +1,25 @@
-# M8E owner UX hotfix — AWAITING_REVIEW
+# M8E-H01/H02 — AWAITING_REVIEW
 
-Current base: `8459c5ecceb19447967c9aa10f20ecc5a0cef113` (local main and live origin/main were verified equal before
-work). Implementation C: `8d3c528eb3364f01ee60b42c033d1bfe22ef4149`. M8E product C4/R2 remain externally accepted;
-this is a bounded forward correction in the same milestone, not a new milestone.
+Base R: `16868ac34f50651b4c04465f6de0921c5f631ce3` (local main and live origin/main verified equal before
+work). Implementation C2: `e0f56b79f305b5bf937487e73dc3f3222b2ec7c8`, a direct child of R. Prior UX C1 was
+`8d3c528eb3364f01ee60b42c033d1bfe22ef4149`. Same M8E only; no new milestone.
 
-The hotfix implements an actual AI toggle; existing durable consent resumes with one tap, while first-use/revoked
-consent has one concise acceptance sheet. External ChatGPT/Codex control reminders are nonblocking and live only in
-More → AI & Privacy. Local microphone and pinned local Whisper work without AI consent and remain available when AI
-is OFF. Missing ASR assets leave recording saved and show a mapped recovery state. Activation readiness checks only
-the existing account type and model/effort catalog; it starts no thread, turn, or inference and exposes only safe
-error codes/messages.
+H01 separates successful missing/non-ChatGPT account results (`EXISTING_CHATGPT_AUTH_REQUIRED`) from process,
+transport, timeout, protocol, and RPC infrastructure failures (`PRIVATE_PROVIDER_ROUTE_UNAVAILABLE`). A missing or
+unverifiable required model/profile returns `PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; a verified model without its
+required effort returns `PROVIDER_EFFORT_UNSUPPORTED`. Local fake-app-server tests cover account/read and model/list
+RPC errors, process exits, malformed protocol, timeouts, missing auth/model, malformed profile, and absent effort.
+Raw RPC text is dropped and readiness starts no thread/turn/inference.
 
-Exact-C verification: `.venv/bin/python -m pytest -q` → 810 passed; `npm test` → 53 passed; `npm run build` PASS;
-exact package `generated/releases/M8D-8d3c528eb3364f01ee60b42c033d1bfe22ef4149` verified in Chromium using only
-synthetic PRIVATE_LOCAL fixtures, synthetic TTS, and local Whisper. Live provider calls 0; non-loopback requests 0.
-See `reports/M8E_OWNER_UX_HOTFIX_REPORT.md` for commands, package manifest hash, and evidence.
+H02 now uses an explicit displayable-code allowlist. Unknown uppercase and secret-like synthetic codes collapse to
+`LOCAL_SERVICE_UNAVAILABLE` and generic Ukrainian copy; the unknown string is never rendered.
 
-The existing C4 owner pilot was not opened, inspected, modified, or upgraded during this goal. Candidate install is
-`NOT_INSTALLED_AWAITING_REVIEW`. External settings remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; human UA ASR
-remains `PARTIAL_OWNER_PILOT / OPEN`; phone is OFF / `NEEDS_TRANSPORT_GATE`; clinical and Health remain OFF.
+Exact-C2 verification: full Python825, web53/build, exact package and Chromium21, schemas, docs/context, and privacy
+checks PASS. Provider calls0; non-loopback requests0. See `reports/M8E_H01_H02_FIX_REPORT.md`.
 
-Delivery sequence is C → exact-C checks → evidence-only R → privacy/public-tree scan → normal fast-forward push
-to main → verify origin/main equals R, then stop for independent review. Do not install the hotfix into the existing
-owner pilot or start another milestone under this goal.
+The accepted C4 owner pilot is recorded active at its prior checkpoint but was not inspected, modified, or upgraded
+in this goal. C2 is `NOT_INSTALLED_AWAITING_REVIEW`. External settings remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`;
+human UA ASR remains `PARTIAL_OWNER_PILOT / OPEN`; phone OFF / `NEEDS_TRANSPORT_GATE`; clinical and Health OFF.
+
+Delivery: C2 → exact-C2 checks → evidence-only R → privacy/public-tree scan → normal fast-forward push → verify
+origin/main equals R → stop for independent review. Do not install into the owner pilot or start another milestone.
