@@ -1,25 +1,23 @@
-# M8E-H01/H02 — AWAITING_REVIEW
+# M8E-H01 final protocol correction — AWAITING_REVIEW
 
-Base R: `16868ac34f50651b4c04465f6de0921c5f631ce3` (local main and live origin/main verified equal before
-work). Implementation C2: `e0f56b79f305b5bf937487e73dc3f3222b2ec7c8`, a direct child of R. Prior UX C1 was
-`8d3c528eb3364f01ee60b42c033d1bfe22ef4149`. Same M8E only; no new milestone.
+Base R: `9e6119707c6a9d4d13bd8bca92df4bd65eb80edd` (local main and live origin/main verified before work). C3:
+`611d2726e9a69d6e195c677a0a6adb3f46d4daf7`. H02 remains ACCEPTED; C3 fixes the last H01 malformed-result issue.
+Same M8E only; no new milestone.
 
-H01 separates successful missing/non-ChatGPT account results (`EXISTING_CHATGPT_AUTH_REQUIRED`) from process,
-transport, timeout, protocol, and RPC infrastructure failures (`PRIVATE_PROVIDER_ROUTE_UNAVAILABLE`). A missing or
-unverifiable required model/profile returns `PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; a verified model without its
-required effort returns `PROVIDER_EFFORT_UNSUPPORTED`. Local fake-app-server tests cover account/read and model/list
-RPC errors, process exits, malformed protocol, timeouts, missing auth/model, malformed profile, and absent effort.
-Raw RPC text is dropped and readiness starts no thread/turn/inference.
+Readiness requires response ID correlation, exactly one result/error branch, and expected dictionary result types for
+initialize/account/read/model/list. Malformed or absent results become protocol/route failures. A well-formed
+account-null or non-ChatGPT result remains `EXISTING_CHATGPT_AUTH_REQUIRED`; missing/unverifiable required model
+remains `PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; unsupported required effort remains `PROVIDER_EFFORT_UNSUPPORTED`.
+Tests cover null/list/false/missing results across all three RPCs, account/catalog fields, raw-data suppression, and
+no thread/turn/inference.
 
-H02 now uses an explicit displayable-code allowlist. Unknown uppercase and secret-like synthetic codes collapse to
-`LOCAL_SERVICE_UNAVAILABLE` and generic Ukrainian copy; the unknown string is never rendered.
+Exact-C3 verification: full Python841; web53/build; exact package and Chromium21 PASS on final official run; schemas,
+docs/context, and privacy PASS. Two earlier exact-package browser runs hit assistant-count timeouts at different
+explicit sends; a final rerun of the same package passed. No live provider calls or non-loopback requests.
+See `reports/M8E_H01_FINAL_PROTOCOL_REPORT.md`.
 
-Exact-C2 verification: full Python825, web53/build, exact package and Chromium21, schemas, docs/context, and privacy
-checks PASS. Provider calls0; non-loopback requests0. See `reports/M8E_H01_H02_FIX_REPORT.md`.
+The accepted C4 owner pilot was not inspected, modified, upgraded, or rechecked; C3 was not installed. External
+settings remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; phone OFF / `NEEDS_TRANSPORT_GATE`; clinical and Health OFF.
 
-The accepted C4 owner pilot is recorded active at its prior checkpoint but was not inspected, modified, or upgraded
-in this goal. C2 is `NOT_INSTALLED_AWAITING_REVIEW`. External settings remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`;
-human UA ASR remains `PARTIAL_OWNER_PILOT / OPEN`; phone OFF / `NEEDS_TRANSPORT_GATE`; clinical and Health OFF.
-
-Delivery: C2 → exact-C2 checks → evidence-only R → privacy/public-tree scan → normal fast-forward push → verify
-origin/main equals R → stop for independent review. Do not install into the owner pilot or start another milestone.
+Delivery: C3 → exact-C3 checks → evidence-only R3 → privacy/public-tree scan → normal fast-forward push → verify
+origin/main equals R3 → STOP for independent review. No owner-pilot installation or new milestone under this goal.

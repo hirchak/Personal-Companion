@@ -17,7 +17,7 @@ M8B: external ACCEPT — real-reference-Mac synthetic dry run (reports/M8B_ARCHI
 M8C: external ACCEPT — private-local Mac core engineering; separately authorized owner core pilot STARTED.
 M8D = externally ACCEPTED — owner reports first manual private AI/local voice test; external account controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.
 M8E = externally ACCEPTED — exact C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` / R2 `519bac8f77965ae7165ff536391dd75f19af284b`; diagnostic C `1edacfb4749205cf1ccdc22f0601b5dac43a0d27` independently ACCEPTED for sanitized preflight observability only. The original `INVALID_METADATA` cause remains UNCONFIRMED. Exact C4 is active on the existing owner pilot after a verified new backup, successful upgrade and local start. Phone gate remains OFF.
-Current same-milestone M8E independent-review correction: C2 `e0f56b79f305b5bf937487e73dc3f3222b2ec7c8` fixes H01/H02 from R `16868ac34f50651b4c04465f6de0921c5f631ce3` and is AWAITING_REVIEW. The accepted C4 pilot was not rechecked, touched, or upgraded; candidate remains NOT_INSTALLED.
+Current same-milestone M8E-H01 final protocol correction: C3 `611d2726e9a69d6e195c677a0a6adb3f46d4daf7` is AWAITING_REVIEW from R `9e6119707c6a9d4d13bd8bca92df4bd65eb80edd`. H02 remains ACCEPTED; C4 pilot is untouched and no candidate is installed.
 M6 early Galaxy USB/Health Connect verified; private HTTPS/Tailscale remains NOT_RUN.
 Порядок нижче — рекомендований; optional модулі не повинні затримувати корисне ядро.
 
@@ -294,3 +294,18 @@ and bounded timeout failures. Unknown UI error codes now collapse to a generic s
 web53/build, package Chromium21, schemas/docs/context/privacy PASS; provider calls0, real vault inspected NO.
 M8E-H01/H02 remains AWAITING_REVIEW; owner pilot remains untouched/uninstalled and no next milestone starts.
 Evidence: `reports/M8E_H01_H02_FIX_REPORT.md`.
+
+## M8E-H01 final protocol correction — 2026-10-07
+
+The owner clarified that malformed/missing JSON-RPC results must not masquerade as missing ChatGPT auth. C3
+`611d2726e9a69d6e195c677a0a6adb3f46d4daf7`, based on R `9e6119707c6a9d4d13bd8bca92df4bd65eb80edd`, validates
+response IDs, exclusive result/error envelopes, and object result types for `initialize`, `account/read`, and
+`model/list`. Well-formed `account: null`/non-ChatGPT auth remains `EXISTING_CHATGPT_AUTH_REQUIRED`; malformed
+results become protocol/route failure; model/profile and effort categories remain separate. Deterministic local
+fixture tests cover null/list/false/missing results and missing account/catalog fields; no thread/turn/inference.
+
+Exact-C3: Python841, web53/build, exact package Chromium21, schema/docs/admission/qualification/privacy PASS; zero
+live provider calls, real vault not inspected. Two earlier exact-package browser attempts hit transient assistant
+count timeouts; the final official run passed all21 checks with zero page errors/non-loopback requests. The owner
+pilot remains untouched/uninstalled. `M8E-H01=FIXED_FORWARD / AWAITING_REVIEW`; `H02=ACCEPTED`.
+Evidence: `reports/M8E_H01_FINAL_PROTOCOL_REPORT.md`. No new milestone.
