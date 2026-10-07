@@ -358,8 +358,9 @@ REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT; fixture ACKs are n
 `.venv/bin/python -m pytest -q tests/test_m8d_private.py tests/test_m8e_experience.py tests/test_m8e_readiness.py` covers the existing
 private payload/scope contracts plus durable AI OFF→ON/ON→OFF, sanitized bounded readiness errors, local ASR
 without durable AI consent, AI disable preserving local ASR, and audio persistence when ASR assets are absent.
-`tests/test_m8e_readiness.py` runs a local synthetic JSON-RPC app-server executable to distinguish well-formed
-missing auth, malformed/missing initialize/account/read/model/list results, account/model RPC failures, transport
+`tests/test_m8e_readiness.py` runs a local synthetic JSON-RPC app-server executable to distinguish a well-formed
+missing auth/account-null, a valid non-ChatGPT account, empty/missing/invalid account type, malformed/missing
+initialize/account/read/model/list results, account/model RPC failures, transport
 exits, protocol errors, bounded timeouts, missing models, and unsupported efforts. It asserts raw RPC data is
 suppressed and readiness never starts a thread or turn.
 `npm --prefix apps/web test` checks stable activation-code mapping and rejects raw path/account exception data;

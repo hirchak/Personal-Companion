@@ -155,10 +155,16 @@ class CodexConversationProvider:
             send(None,'initialized',{})
             account=exchange(2,'account/read',{'refreshToken':False},dict)
             if 'account' not in account:raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
-            account_info=account.get('account')
-            if account_info is not None and not isinstance(account_info,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
-            chatgpt_authenticated=isinstance(account_info,dict) and account_info.get('type')=='chatgpt'
-            del account_info,account
+            account_info=account['account']
+            if account_info is None:
+                del account_info,account
+                raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
+            if not isinstance(account_info,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+            account_type=account_info.get('type')
+            if not isinstance(account_type,str) or not account_type or account_type.strip()!=account_type:
+                raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+            chatgpt_authenticated=account_type=='chatgpt'
+            del account_type,account_info,account
             if not chatgpt_authenticated:raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
             catalog=exchange(3,'model/list',{'includeHidden':False},dict)
             if 'data' not in catalog or not isinstance(catalog['data'],list) or any(not isinstance(item,dict) for item in catalog['data']):

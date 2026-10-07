@@ -71,6 +71,16 @@ for line in sys.stdin:
             send_result(identifier, {{"accountId": RAW}}, "account")
         elif SCENARIO == "account_bad_field":
             send_result(identifier, {{"account": RAW}}, "account")
+        elif SCENARIO == "account_empty_object":
+            send_result(identifier, {{"account": {{}}}}, "account")
+        elif SCENARIO == "account_type_null":
+            send_result(identifier, {{"account": {{"type": None}}}}, "account")
+        elif SCENARIO == "account_type_number":
+            send_result(identifier, {{"account": {{"type": 7}}}}, "account")
+        elif SCENARIO == "account_type_empty":
+            send_result(identifier, {{"account": {{"type": ""}}}}, "account")
+        elif SCENARIO == "account_type_whitespace":
+            send_result(identifier, {{"account": {{"type": "  "}}}}, "account")
         else:
             send_result(identifier, {{"account": {{"type": "chatgpt", "accountId": RAW}}}}, "account")
     elif method == "model/list":
@@ -152,6 +162,11 @@ def fixture_gate(store, executable: Path):
         ("model_data_null", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("auth_missing", "EXISTING_CHATGPT_AUTH_REQUIRED"),
         ("auth_non_chatgpt", "EXISTING_CHATGPT_AUTH_REQUIRED"),
+        ("account_empty_object", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_type_null", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_type_number", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_type_empty", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_type_whitespace", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("model_missing", "PRIVATE_PROVIDER_PROFILE_UNVERIFIED"),
         ("model_unverifiable", "PRIVATE_PROVIDER_PROFILE_UNVERIFIED"),
         ("effort_missing", "PROVIDER_EFFORT_UNSUPPORTED"),

@@ -100,8 +100,9 @@ unmodified until the hotfix receives independent review acceptance.
 
 Readiness validates JSON-RPC response IDs, exactly one result/error branch, and the expected object result type
 before interpreting auth or catalog data. Missing/malformed initialize, account/read, or model/list results fail
-as protocol/route failures. A well-formed `account/read` result with `account: null` or a non-ChatGPT account
-returns `EXISTING_CHATGPT_AUTH_REQUIRED`; process, transport, timeout, protocol, and RPC infrastructure failures
+as protocol/route failures. A well-formed `account/read` result with `account: null` or a valid non-ChatGPT account
+returns `EXISTING_CHATGPT_AUTH_REQUIRED`. An empty account object or missing/empty/non-string `account.type`
+fails as protocol/route before auth classification. Process, transport, timeout, protocol, and RPC infrastructure failures
 return `PRIVATE_PROVIDER_ROUTE_UNAVAILABLE`. A well-formed catalog missing/unverifiable required model/profile
 returns `PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; a verified model without its required effort returns
 `PROVIDER_EFFORT_UNSUPPORTED`. RPC/provider exception text is never returned or rendered.
