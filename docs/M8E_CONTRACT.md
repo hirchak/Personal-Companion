@@ -16,10 +16,10 @@ no fallback/PAYG. Details and controls live in Settings; messages remain readabl
 
 One local consent acceptance replaces seven checkboxes for new M8E activation. Consent binds version,
 privacy contract, destination, all approved profiles, vault identity and restore epoch. SQLite local consent
-is never public evidence; lock/restart suspend runtime but retain consent. Authenticated client restores an
-enabled consent without repeated disclosures. Disable persists AI OFF; revoke deletes consent and Deep scope
+is never public evidence; lock/restart suspend runtime but retain consent. An explicit user toggle can resume
+valid consent without repeated disclosures. Disable persists AI OFF; revoke deletes consent and Deep scope
 approvals and cancels runtime. Restore and material contract/destination/profile changes invalidate consent.
-Authenticated local audio history/delete and transcript edits remain available after AI revoke; new recording/ASR still requires local voice consent. Local voice can be explicitly enabled independently of AI.
+Authenticated local audio history/delete and transcript edits remain available after AI revoke; local voice operates independently of AI.
 Legacy M8D session-only acknowledgement remains a compatibility endpoint, never creates durable consent.
 External OpenAI settings are owner-controlled; app never verifies them or asserts zero retention.
 
@@ -71,3 +71,27 @@ ACTIVE revision does not invalidate or rebind the older conversation. Editing re
 new Deep conversations only. Each revision retains its own revision-keyed Working Map and source lineage.
 A PAUSED or COMPLETED current goal continues to fail closed with `GOAL_NOT_ACTIVE`, before message persistence
 or provider execution. This preserves the M7D pinned-revision contract.
+
+## 2026-10-07 owner UX hotfix — one-click AI and independent local voice
+
+The compact conversation AI control is a real toggle: active → disable; inactive with valid durable consent →
+activate in one click. A missing/revoked/materially stale consent opens one concise first-use sheet with one
+acceptance button. Startup does not silently resume an inactive AI runtime. External ChatGPT/Codex controls
+remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER` and appear only as a nonblocking reminder under More → AI & Privacy.
+
+Local recording and Whisper are authenticated-device capabilities, independent of AI consent and AI ON/OFF.
+The first microphone action may initialize the pinned local ASR engine, but asset/profile failure never blocks
+recording or local persistence; it reports a sanitized state and leaves the audio available in Voice History.
+There is no application-level voice checklist, cloud ASR, automatic AI send, or raw-audio provider field.
+Disabling/revoking AI does not clear the local ASR engine or voice history. Authentication lock/expiry suspends
+both runtimes and cancels active voice work.
+
+Activation readiness is limited to the existing Codex app-server: `initialize`, `account/read` with
+`refreshToken=false`, and `model/list`. It discards account fields except the ChatGPT account type and retains
+only the allowlisted model/effort capability catalog. It never starts a thread or turn, sends a prompt, reserves
+an inference attempt, uses PAYG, or falls back. Activation errors expose stable sanitized codes and mapped
+Ukrainian recovery text; arbitrary exception messages, paths, and account data never reach the UI.
+
+The hotfix changes no conversation payload/source/Deep scope freshness rules, journal defaults, model ceilings,
+fallback/PAYG boundary, clinical/Health state, or phone transport. The existing accepted C4 pilot remains
+unmodified until the hotfix receives independent review acceptance.

@@ -110,3 +110,13 @@ Exact operator activation after independent ACCEPT: [PILOT_HANDOFF](PILOT_HANDOF
 
 M8D is a separate owner-bounded optional profile, defaultOFF. [ADR-014](adr/ADR-014-M8D-OWNER-PRIVATE-AI-VOICE.md) defines seven explicit disclosures/settings confirmations, exact text/context previews, isolated native client and fixed-destination TLS-blind local transport. Existing subscription only, no credential extraction/copy, provider fallback/PAYG/new auth. Current message/bounded same-conversation history; journal explicit selection only; raw audio NEVER sent. Consumer route is NOT zero-retention/commercial/third-party certified. TRAINING_CONTROL_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT.
 CODEX_ENVIRONMENTS_CONFIRMATION = REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT. Explicit runtime confirmation remains required; account settings are not inspected. At-rest/FileVault/permissions/backup policy remains ADR-013. No real owner-vault access during M8D.
+
+## M8E owner UX hotfix — 2026-10-07
+
+The owner-directed M8E hotfix uses one concise durable AI-consent action, followed by an explicit ON/OFF toggle.
+External ChatGPT/Codex data controls remain `NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER`; the application does not
+inspect them and they do not block activation. Readiness uses only existing account type and supported model/effort
+catalog, with account fields discarded; no thread, turn, prompt, or inference call is part of readiness.
+Local recording/Whisper requires the authenticated device session, not AI consent. AI disable/revoke leaves local
+recording and audio history available; session lock/expiry suspends voice processing. Missing ASR assets preserve
+the local audio and show a sanitized retry state. See [ADR-016](adr/ADR-016-M8E-ONE-CLICK-AI-INDEPENDENT-LOCAL-VOICE.md).

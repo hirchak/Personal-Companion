@@ -81,6 +81,9 @@ class PrivateCodexConversationProvider(CodexConversationProvider):
  def discover(self):
   try:return super().discover()
   finally:self.stop_transport()
+ def readiness(self):
+  try:return super().readiness()
+  finally:self.stop_transport()
  def execute(self,*args,**kwargs):
   try:return super().execute(*args,**kwargs)
   finally:self.stop_transport()

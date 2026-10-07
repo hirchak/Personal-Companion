@@ -110,7 +110,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
         def revoke_private_voice():
             for event in list(voice.cancel_events.values()):event.set()
             voice.engines.pop('LOCAL',None)
-        private_gate.revocation_hooks.append(revoke_private_voice)
+        private_gate.voice_suspend_hooks.append(revoke_private_voice)
     app.state.conversation_controller=controller
     if local_asr is not None:
         voice.engines['LOCAL']=local_asr
@@ -163,7 +163,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
                 token = request.cookies.get('m1_session', '')
                 try:s = auth.session(token)
                 except SafeError:
-                    if private_gate:private_gate.disable()
+                    if private_gate:private_gate.suspend()
                     raise
                 request.state.session = token
                 if request.method not in {'GET', 'HEAD'} and not secrets.compare_digest(request.headers.get('x-csrf-token', '').encode('utf-8', 'surrogatepass'), s['csrf'].encode('ascii')):
@@ -230,6 +230,9 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
         def voice_delete(audio_id: UUID,body: AudioDelete,request: Request):return voice.delete(audio_id,body,voice_auth(request))
         def voice_asr(audio_id: UUID,body: ASRRequest,request: Request):
             if private_gate and body.mode!='LOCAL':raise SafeError('PRIVATE_LOCAL_ASR_ONLY',403)
+            if private_gate:
+                private_gate.prepare_local_asr(request.state.session)
+                voice.engines['LOCAL']=private_gate.asr;voice.timeout=90
             auth_args=voice_auth(request);result=voice.enqueue(audio_id,body,auth_args)
             threading.Thread(target=voice.run,args=(result['transcript_id'],body.mode,auth_args),daemon=True).start()
             return result
@@ -327,7 +330,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
         return controller.journal_confirm(journal,conversation_id,body)
 
     if private_gate:
-        from .local_private_ai import OwnerAcknowledgement,LocalVoiceAcknowledgement,DeepProfileSelection,PROFILE as PRIVATE_AI_PROFILE
+        from .local_private_ai import OwnerAcknowledgement,DeepProfileSelection,PROFILE as PRIVATE_AI_PROFILE
         from .local_private_contracts import PrivateInferenceStart,PrivateContextPreview,DurableConsentAcceptance,DeepScopeApproval
         @app.post("/api/v1/private-pilot/consent")
         def consent_accept(body:DurableConsentAcceptance,request:Request):
@@ -361,8 +364,8 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
         @app.post('/api/v1/private-pilot/deep-profile')
         def private_deep_profile(body:DeepProfileSelection,request:Request):return private_gate.select_deep(request.state.session,body.profile)
         @app.post('/api/v1/private-pilot/local-voice')
-        def private_voice(body:LocalVoiceAcknowledgement,request:Request):
-            result=private_gate.enable_voice(request.state.session,body)
+        def private_voice(body:Empty,request:Request):
+            result=private_gate.prepare_local_asr(request.state.session)
             voice.engines['LOCAL']=private_gate.asr;voice.timeout=90
             return result
         @app.post('/api/v1/conversations/{conversation_id}/private-context/preview')
@@ -422,7 +425,7 @@ def create_app(root, port=8765, clock=time.monotonic, web=None, m2=False, scheme
     def lock(request: Request):
         auth.sessions.pop(request.state.session, None)
         runtime.set_mode('OFF')
-        if private_gate:private_gate.disable()
+        if private_gate:private_gate.suspend()
         with store.transaction() as c:
             c.execute('UPDATE ai_consents SET revoked=1 WHERE session=?',(digest(request.state.session.encode()),))
         journal.plans = {k: v for k, v in journal.plans.items() if v['session'] != request.state.session}

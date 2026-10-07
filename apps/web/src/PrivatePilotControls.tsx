@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Sheet } from "./Sheet";
+import {
+  PilotCallError,
+  pilotErrorMessage,
+  safePilotErrorCode,
+} from "./private-pilot-errors";
+
 export type PilotState = {
   state: "PRIVATE_AI_OFF" | "PRIVATE_AI_OWNER_CONSENTED";
   local_voice: "OFF" | "ON";
@@ -12,24 +18,45 @@ export type PilotState = {
   consent_version: number;
   privacy_version: string;
 };
+
 export async function pilotCall(
   csrf: string,
   path: string,
   body?: unknown,
 ): Promise<PilotState> {
-  const r = await fetch("/api/v1/private-pilot/" + path, {
-    method: body !== undefined ? "POST" : "GET",
-    credentials: "same-origin",
-    cache: "no-store",
-    headers:
-      body !== undefined
-        ? { "Content-Type": "application/json", "X-CSRF-Token": csrf }
-        : {},
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
-  if (!r.ok) throw new Error((await r.json()).code);
-  return r.json();
+  let response: Response;
+  try {
+    response = await fetch("/api/v1/private-pilot/" + path, {
+      method: body !== undefined ? "POST" : "GET",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers:
+        body !== undefined
+          ? { "Content-Type": "application/json", "X-CSRF-Token": csrf }
+          : {},
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new PilotCallError("LOCAL_SERVICE_UNAVAILABLE");
+  }
+  let result: unknown;
+  try {
+    result = await response.json();
+  } catch {
+    throw new PilotCallError("LOCAL_SERVICE_UNAVAILABLE");
+  }
+  if (!response.ok) {
+    throw new PilotCallError(
+      safePilotErrorCode(
+        typeof result === "object" && result !== null && "code" in result
+          ? (result as { code?: unknown }).code
+          : undefined,
+      ),
+    );
+  }
+  return result as PilotState;
 }
+
 export function PrivatePilotControls({
   csrf,
   onChanged,
@@ -46,97 +73,111 @@ export function PrivatePilotControls({
   const [state, setState] = useState<PilotState | null>(null),
     [open, setOpen] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
-  function changed(s: PilotState) {
-    setState(s);
-    onChanged?.(s);
+    [failure, setFailure] = useState<{ code: string; message: string } | null>(
+      null,
+    );
+  const onChangedRef = useRef(onChanged);
+  onChangedRef.current = onChanged;
+
+  function changed(next: PilotState) {
+    setState(next);
+    onChanged?.(next);
   }
+
+  function reportFailure(error: unknown) {
+    const code = safePilotErrorCode(error);
+    setFailure({ code, message: pilotErrorMessage(code) });
+  }
+
   useEffect(() => {
     let alive = true;
     void pilotCall(csrf, "status")
-      .then(async (s) => {
-        if (s.consent?.ai_enabled && s.state === "PRIVATE_AI_OFF")
-          s = await pilotCall(csrf, "resume", {});
-        if (alive) changed(s);
+      .then((next) => {
+        if (alive) {
+          setState(next);
+          onChangedRef.current?.(next);
+        }
       })
-      .catch(() => {
-        if (alive)
-          setError(
-            "AI недоступний. Перевірте локальний сервіс і повторіть увімкнення.",
-          );
+      .catch((error: unknown) => {
+        if (alive) {
+          const code = safePilotErrorCode(error);
+          setFailure({ code, message: pilotErrorMessage(code) });
+        }
       });
     return () => {
       alive = false;
     };
-  }, []);
+  }, [csrf]);
+
   async function action(path: string, body: unknown) {
     setBusy(true);
-    setError("");
+    setFailure(null);
     try {
       changed(await pilotCall(csrf, path, body));
       setOpen(false);
-    } catch {
-      setError(
-        "Дію не виконано. Перевірте локальний сервіс. Автоматичної заміни провайдера немає.",
-      );
+    } catch (error) {
+      reportFailure(error);
+      if (path === "consent") {
+        // Consent is durable even when the bounded provider readiness check fails.
+        setOpen(false);
+        try {
+          changed(await pilotCall(csrf, "status"));
+        } catch {
+          // Keep the original sanitized activation reason visible.
+        }
+      }
     } finally {
       setBusy(false);
     }
   }
+
   const active = state?.state === "PRIVATE_AI_OWNER_CONSENTED";
-  const privacy = (
+  const profileLabel =
+    mode === "DEEP"
+      ? (deepProfile ?? state?.deep_profile) === "DEEP_ECONOMICAL"
+        ? "Deep · Luna Max"
+        : "Deep · Sol 6.1 High"
+      : "Luna · High";
+  const disclosure = (
     <>
       <p>
-        Підтверджений текст і обмежений контекст цієї розмови обробляє OpenAI
-        через наявну підписку ChatGPT.
+        AI може надсилати підтверджений текст і вибраний контекст до OpenAI.
+        Аудіо з мікрофона залишається локально. Щоденник не додається
+        автоматично.
       </p>
       <p>
-        Мікрофонне аудіо залишається локально. Щоденник не додається
-        автоматично. Нульове зберігання провайдером не гарантоване.
-        Автоматичного переходу до іншої моделі чи провайдера немає.
-      </p>
-      <p>
-        Перед наступним приватним AI використанням перевірте зовнішні
-        налаштування:
-      </p>
-      <ul>
-        <li>ChatGPT: Improve the model for everyone = OFF</li>
-        <li>Codex: Include environments = OFF</li>
-      </ul>
-      <p>
-        Цими Data Controls керуєте ви. Застосунок їх не перевіряв і не
-        підтверджує їхній стан.
-      </p>
-      <p>
-        Згода зберігається лише на цьому пристрої. Зміна приватності або
-        адресата потребуватиме нової згоди. Аудіо зберігається до вашого
-        видалення; повне стирання резервних копій не гарантоване.
+        Згода зберігається на цьому пристрої. Нульове зберігання провайдером не
+        гарантоване; автоматичної заміни провайдера немає.
       </p>
     </>
   );
+
   return (
     <div className={compact ? "ai-compact" : "privacy-settings"}>
       {compact ? (
         <button
           type="button"
           className="quiet"
-          disabled={busy}
-          onClick={() =>
-            state?.consent ? void action("resume", {}) : setOpen(true)
-          }
+          disabled={busy || !state}
+          aria-pressed={!!active}
+          aria-label={active ? "Вимкнути AI" : "Увімкнути AI"}
+          onClick={() => {
+            if (active) void action("disable", {});
+            else if (state?.consent) void action("resume", {});
+            else if (state) setOpen(true);
+          }}
         >
-          {active
-            ? mode === "DEEP"
-              ? (deepProfile ?? state?.deep_profile) === "DEEP_ECONOMICAL"
-                ? "Deep · Luna Max"
-                : "Deep · Sol 6.1 High"
-              : "Luna · High"
-            : "AI вимкнено · увімкнути"}
+          {active ? profileLabel : "AI вимкнено"}
         </button>
       ) : (
         <>
           <h2>AI & Privacy</h2>
-          {privacy}
+          {disclosure}
+          <p>
+            Зовнішні налаштування OpenAI/Codex застосунок не перевіряє. Перед
+            використанням перегляньте їх у ChatGPT та Codex; їхній стан
+            залишається непідтвердженим.
+          </p>
           <p>
             {state?.consent
               ? `Локальну згоду прийнято ${new Date(state.consent.accepted_at).toLocaleDateString("uk-UA")}. Версія ${state.consent_version}.`
@@ -144,7 +185,7 @@ export function PrivatePilotControls({
           </p>
           <div className="actions">
             <button
-              disabled={busy}
+              disabled={busy || !state || !!active}
               onClick={() =>
                 state?.consent ? void action("resume", {}) : setOpen(true)
               }
@@ -167,36 +208,27 @@ export function PrivatePilotControls({
           <h2>Моделі</h2>
           <p>
             Звичайна: Luna / High. Глибока: Економний — Luna / Max; Якісний —
-            Sol 6.1 / High. Стелі: Luna ≤ Max; Sol 6.1 ≤ High. PAYG і fallback
+            Sol 6.1 / High. Стелі: Luna ≤ Max/Sol ≤ High. PAYG і fallback
             вимкнені.
           </p>
           <h2>Локальний голос</h2>
           <p>
-            Лише whisper.cpp.{" "}
-            {state?.local_voice === "ON"
-              ? "Локальне розпізнавання доступне."
-              : "Розпізнавання наразі недоступне; збережені записи можна повторити пізніше."}{" "}
-            Хмарного ASR немає. Перевірте й відредагуйте текст перед
-            надсиланням. Аудіо зберігається локально до вашого видалення.
+            Мікрофон працює незалежно від AI. Аудіо залишається на цьому
+            пристрої; локальне whisper.cpp запускається з мікрофона. {state?.local_voice === "ON"
+              ? "Розпізнавання підготовлено."
+              : "Якщо локальні моделі недоступні, запис усе одно збережеться для повторної спроби."}{" "}
+            Перед надсиланням текст можна перевірити й відредагувати.
           </p>
-          <button
-            disabled={busy || state?.local_voice === "ON"}
-            onClick={() =>
-              void action("local-voice", {
-                local_audio_only: true,
-                review_before_send: true,
-                manual_audio_deletion_understood: true,
-              })
-            }
-          >
-            Увімкнути локальне розпізнавання
-          </button>
         </>
       )}
-      {error && <p role="alert">{error}</p>}
+      {failure && (
+        <p role="alert">
+          {failure.message} <small>Код: {failure.code}</small>
+        </p>
+      )}
       {open && state && (
         <Sheet title="Приватність розмови" onClose={() => setOpen(false)}>
-          {privacy}
+          {disclosure}
           <button
             className="primary"
             disabled={busy}
@@ -208,7 +240,7 @@ export function PrivatePilotControls({
               })
             }
           >
-            Приймаю · увімкнути AI та локальний голос
+            Увімкнути AI
           </button>
         </Sheet>
       )}

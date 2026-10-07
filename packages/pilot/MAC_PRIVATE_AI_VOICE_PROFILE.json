@@ -9,7 +9,7 @@
   "explicit_local_export": "ON",
   "conversation": "ON",
   "private_ai": "EXPLICIT_OWNER_GATE_DEFAULT_OFF",
-  "local_voice": "EXPLICIT_OWNER_GATE_DEFAULT_OFF",
+  "local_voice": "LOCAL_SESSION_ONLY_NO_AI_CONSENT",
   "local_asr": "PINNED_WHISPER_CPP_LOCAL_ONLY",
   "provider_route": "EXISTING_CODEX_CHATGPT_SUBSCRIPTION_ONLY",
   "profiles": {

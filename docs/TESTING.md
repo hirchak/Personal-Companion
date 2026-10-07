@@ -352,3 +352,19 @@ invocation. Updated Chromium fixture path explicitly selects one journal and che
 transmitted fixture payload, excludes an unselected sentinel and all raw audio/source metadata. Native ledger
 4/4 is read-only fingerprinted before/after, no native inference rerun for C2. Settings confirmations are
 REQUIRED_AT_REAL_ACTIVATION / NOT_YET_CONFIRMED_TO_ARCHITECT; fixture ACKs are not owner evidence.
+
+## M8E owner UX hotfix
+
+`.venv/bin/python -m pytest -q tests/test_m8d_private.py tests/test_m8e_experience.py` covers the existing
+private payload/scope contracts plus durable AI OFF→ON/ON→OFF, sanitized bounded readiness errors, local ASR
+without durable AI consent, AI disable preserving local ASR, and audio persistence when ASR assets are absent.
+`npm --prefix apps/web test` checks stable activation-code mapping and rejects raw path/account exception data;
+`npm --prefix apps/web run build` typechecks/builds the UI.
+`PYTHONPATH=. .venv/bin/python scripts/verify_m8e_browser.py --source-fixture` is pre-C engineering only.
+After C, run `.venv/bin/python -m apps.core.release prepare --output generated/releases/M8D-<C>`, then
+`PYTHONPATH=. .venv/bin/python scripts/verify_m8e_browser.py --package generated/releases/M8D-<C>` on that
+exact package. Chromium uses a disposable PRIVATE_LOCAL fixture to check
+one concise consent, auth-readiness failure/retry without a second sheet, both toggle directions, local recording
+with AI OFF and missing ASR, editable Whisper draft/no auto-send, Voice History recovery, no non-loopback requests,
+and no raw audio in provider payload. No live provider/auth readiness, owner microphone, owner vault, phone
+transport, clinical, or Health checks occur.

@@ -18,6 +18,7 @@ from apps.core.local_private_ai import PROFILE
 class FixtureProvider:
  def __init__(self,model,effort):self.model=model;self.effort=effort;self.calls=[]
  def metadata(self):return {'route':'CODEX_SUBSCRIPTION','model':self.model,'effort':self.effort,'profile':self.model+':'+self.effort,'live':False,'fallback':False,'payg':False}
+ def readiness(self):return {'account_type':'chatgpt','models':{'gpt-6-luna':['low','medium','high','xhigh','max'],'gpt-6.1-sol':['low','medium','high']},'inference_started':False,'thread_started':False,'payg':False,'fallback':False}
  def execute(self,payload,*args):
   self.calls.append(payload)
   value={'assistant_text':'ORIGINAL SYNTHETIC · Який невеликий крок ви обираєте?','source_refs':[payload['current_message_ref']],'goal_suggestion':None,'closure':None,'topics':['self_reflection'],'working_map':None}

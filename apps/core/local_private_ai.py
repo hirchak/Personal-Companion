@@ -11,7 +11,7 @@ PROFILES={'FREE':{'model':'gpt-6-luna','effort':'high'},'DEEP_ECONOMICAL':{'mode
 EFFORT_CEILINGS={'gpt-6-luna':('low','medium','high','xhigh','max'),'gpt-6.1-sol':('low','medium','high')}
 PROFILE={'profile_id':PROFILE_ID,'profile_version':1,'root_kind':'PRIVATE_LOCAL',
  'journal':'ON','creative':'ON','local_search':'ON','backup_restore':'ON','explicit_local_export':'ON',
- 'conversation':'ON','private_ai':'EXPLICIT_OWNER_GATE_DEFAULT_OFF','local_voice':'EXPLICIT_OWNER_GATE_DEFAULT_OFF',
+ 'conversation':'ON','private_ai':'EXPLICIT_OWNER_GATE_DEFAULT_OFF','local_voice':'LOCAL_SESSION_ONLY_NO_AI_CONSENT',
  'local_asr':'PINNED_WHISPER_CPP_LOCAL_ONLY','provider_route':'EXISTING_CODEX_CHATGPT_SUBSCRIPTION_ONLY',
  'profiles':PROFILES,'clinical_active':0,'specialists':'OFF','health_bridge':'OFF','health_to_ai':'OFF',
  'phone':'OFF','external_embeddings':'OFF','cloud_asr':'NONE','cloud_sync':'NONE','telemetry':'NONE',
@@ -60,8 +60,8 @@ class PrivatePilotGate:
   self.consent=LocalConsent(store)
   self.store=store;self.provider_factory=provider_factory;self.asr_factory=asr_factory
   self.deep_profile=(self.consent.read() or {}).get('deep_profile','DEEP_QUALITY')
-  self.lock=threading.RLock();self.session=None;self.ack_hash=None;self.adapters={};self.asr=None
-  self.revocation_hooks=[];self.profile_change_hooks=[];self.generation=0;self.durable_session=False
+  self.lock=threading.RLock();self.session=None;self.voice_session=None;self.ack_hash=None;self.adapters={};self.asr=None
+  self.revocation_hooks=[];self.voice_suspend_hooks=[];self.profile_change_hooks=[];self.generation=0;self.durable_session=False
  def status(self):
   consent=self.consent.read();contract=self.consent.contract()
   with self.lock:
@@ -73,19 +73,25 @@ class PrivatePilotGate:
     'consent_version':contract['version'],'privacy_version':contract['privacy_version'],
     'external_settings':'NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER','local_asr_available':self.asr is not None}
  def accept_consent(self,session,body):
+  if not session:raise SafeError('OWNER_SESSION_REQUIRED',401)
   if body.version!=self.consent.contract()['version'] or body.privacy_version!=self.consent.contract()['privacy_version']:raise SafeError('CONSENT_VERSION_CHANGED',409)
   self.consent.accept()
+  self.disable()
   return self.resume(session,enable=True)
  def resume(self,session,enable=False):
+  if not session:raise SafeError('OWNER_SESSION_REQUIRED',401)
   data=self.consent.read()
   if not data:raise SafeError('DURABLE_CONSENT_REQUIRED',403)
   if enable:
    data['ai_enabled']=True;self.consent.write(data)
-  if data['ai_enabled'] and not self.adapters:
-   self.activate(session,digest(encode(data).encode()),durable=True)
-  if data.get('voice_enabled') and self.asr is None and self.asr_factory:
-   try:self.enable_voice(session,dict(local_audio_only=True,review_before_send=True,manual_audio_deletion_understood=True))
-   except SafeError:pass # Capture/history remain available, local transcription waits safely.
+  try:
+   with self.lock:needs_activation=not self.adapters or not self.durable_session or self.session!=digest(session.encode())
+   if data['ai_enabled'] and needs_activation:
+    self.activate(session,digest(encode(data).encode()),durable=True)
+  except SafeError:
+   if enable:
+    data['ai_enabled']=False;self.consent.write(data)
+   raise
   return self.status()
  def user_disable(self):
   self.consent.disable()
@@ -100,12 +106,29 @@ class PrivatePilotGate:
  def activate(self,session,ack_hash,durable=False):
   if not session:raise SafeError('OWNER_SESSION_REQUIRED',401)
   if self.provider_factory is None:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503)
-  candidates={mode:self.provider_factory(mode,**settings) for mode,settings in PROFILES.items()}
+  try:candidates={mode:self.provider_factory(mode,**settings) for mode,settings in PROFILES.items()}
+  except SafeError as exc:
+   if exc.code in {'CODEX_CLI_UNAVAILABLE','PRIVATE_PROVIDER_OS_ISOLATION_UNAVAILABLE','PRIVATE_PROVIDER_TRANSPORT_UNAVAILABLE'}:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
+   raise
+  except OSError:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
   for mode,adapter in candidates.items():
    meta=adapter.metadata();p=PROFILES[mode]
    if meta.get('route')!='CODEX_SUBSCRIPTION' or meta.get('model')!=p['model'] or meta.get('effort')!=p['effort'] or meta.get('fallback') is not False or meta.get('payg') is not False:
     raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
-  self.disable()
+  readiness=getattr(candidates['FREE'],'readiness',None)
+  if not callable(readiness):raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
+  try:proof=readiness()
+  except SafeError as exc:
+   if exc.code in {'PROVIDER_TIMEOUT','PROVIDER_PROTOCOL_INVALID','PROVIDER_PROCESS_FAILED','PROVIDER_OUTPUT_LIMIT','PROVIDER_RPC_FAILED','PRIVATE_PROVIDER_TRANSPORT_UNAVAILABLE'}:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
+   raise
+  if not isinstance(proof,dict) or proof.get('inference_started') is not False or proof.get('thread_started') is not False or proof.get('fallback') is not False or proof.get('payg') is not False:raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
+  if proof.get('account_type')!='chatgpt':raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
+  supported=proof.get('models')
+  if not isinstance(supported,dict):raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
+  for mode,p in PROFILES.items():
+   efforts=supported.get(p['model'])
+   if not isinstance(efforts,list):raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
+   if p['effort'] not in efforts:raise SafeError('PROVIDER_EFFORT_UNSUPPORTED',403)
   with self.lock:
    self.session=digest(session.encode());self.ack_hash=ack_hash;self.adapters=candidates;self.durable_session=durable
   return self.status()
@@ -132,24 +155,38 @@ class PrivatePilotGate:
   if durable:durable['deep_profile']=profile;self.consent.write(durable)
   for callback in callbacks:callback()
   return self.status()
- def enable_voice(self,session,body):
-  LocalVoiceAcknowledgement.model_validate(body)
+ def prepare_local_asr(self,session):
   if not session:raise SafeError('OWNER_SESSION_REQUIRED',401)
   if self.asr_factory is None:raise SafeError('LOCAL_ASR_ASSET_UNAVAILABLE',503)
-  engine=self.asr_factory()
+  with self.lock:
+   if self.asr is not None and self.voice_session==digest(session.encode()):return self.status()
+   if self.voice_session and self.voice_session!=digest(session.encode()):raise SafeError('OWNER_SESSION_CHANGED',403)
+  try:engine=self.asr_factory()
+  except SafeError:raise
+  except (OSError,FileNotFoundError):raise SafeError('LOCAL_ASR_ASSET_UNAVAILABLE',503) from None
   if engine.metadata().get('cloud_asr') is not False or engine.metadata().get('engine')!='whisper.cpp':raise SafeError('LOCAL_ASR_PROFILE_UNVERIFIED',403)
   with self.lock:
-   if self.session and self.session!=digest(session.encode()):raise SafeError('OWNER_SESSION_CHANGED',403)
-   self.session=digest(session.encode());self.asr=engine
+   if self.voice_session and self.voice_session!=digest(session.encode()):raise SafeError('OWNER_SESSION_CHANGED',403)
+   self.voice_session=digest(session.encode());self.asr=engine
   return self.status()
+ def enable_voice(self,session,body=None):
+  """Compatibility method: local ASR requires an authenticated session, never a consent checklist."""
+  return self.prepare_local_asr(session)
  def require_voice(self,session):
-  durable=self.consent.read()
+  if not session:raise SafeError('OWNER_SESSION_REQUIRED',401)
   with self.lock:
-   if not (durable and durable.get('voice_enabled')) and (self.asr is None or self.session!=digest(session.encode())):raise SafeError('PRIVATE_LOCAL_VOICE_ACK_REQUIRED',403)
+   if self.voice_session and self.voice_session!=digest(session.encode()):raise SafeError('OWNER_SESSION_CHANGED',403)
  def disable(self):
   with self.lock:
    self.generation+=1
    callbacks=list(self.revocation_hooks)
-   self.adapters={};self.asr=None;self.session=None;self.ack_hash=None;self.durable_session=False
+   self.adapters={};self.session=None;self.ack_hash=None;self.durable_session=False
+  for callback in callbacks:callback()
+  return self.status()
+ def suspend(self):
+  with self.lock:
+   self.generation+=1
+   callbacks=list(self.revocation_hooks)+list(self.voice_suspend_hooks)
+   self.adapters={};self.asr=None;self.session=None;self.voice_session=None;self.ack_hash=None;self.durable_session=False
   for callback in callbacks:callback()
   return self.status()

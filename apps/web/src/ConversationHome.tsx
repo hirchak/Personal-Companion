@@ -1011,10 +1011,13 @@ export function ConversationHome({
           )}
           <ComposerVoice
             resetVersion={voiceReset}
-            available={
-              !privateLocal || !!pilot?.consent || pilot?.local_voice === "ON"
-            }
             csrf={csrf}
+            onStart={() => {
+              if (privateLocal)
+                void pilotCall(csrf, "local-voice", {})
+                  .then(setPilot)
+                  .catch(() => undefined);
+            }}
             onBusy={(value) => {
               setVoiceBusy(value);
               window.dispatchEvent(

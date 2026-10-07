@@ -99,6 +99,64 @@ class CodexConversationProvider:
                 except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=2)
                 process.stdin.close();process.stdout.close()
             shutil.rmtree(work)
+    def readiness(self):
+        """Bounded activation probe: existing ChatGPT auth type and model/effort catalog only."""
+        work=Path(tempfile.mkdtemp(prefix='m8d-private-readiness-' if self.private_scope else 'm7d-readiness-',dir=Path(tempfile.gettempdir()).resolve()))
+        process=None;selector=selectors.DefaultSelector();buffer=bytearray();seen_bytes=0;deadline=time.monotonic()+8
+        def send(identifier,method,params):
+            message={'method':method,'params':params}
+            if identifier is not None:message['id']=identifier
+            process.stdin.write((encode(message)+'\n').encode());process.stdin.flush()
+        def incoming():
+            nonlocal buffer,seen_bytes
+            while True:
+                if time.monotonic()>=deadline:raise SafeError('PROVIDER_TIMEOUT',503)
+                if b'\n' in buffer:
+                    line,rest=buffer.split(b'\n',1);buffer=bytearray(rest)
+                    try:return json.loads(line)
+                    except (ValueError,UnicodeError):raise SafeError('PROVIDER_PROTOCOL_INVALID',503) from None
+                if process.poll() is not None:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503)
+                if selector.select(.05):
+                    part=os.read(process.stdout.fileno(),8192);seen_bytes+=len(part)
+                    if seen_bytes>262144:raise SafeError('PROVIDER_OUTPUT_LIMIT',503)
+                    buffer.extend(part)
+        def exchange(identifier,method,params):
+            send(identifier,method,params)
+            while True:
+                message=incoming()
+                if message.get('method') and 'id' in message:raise SafeError('PROVIDER_TOOL_REQUEST_DENIED',403)
+                if message.get('id')==identifier:
+                    if 'error' in message:raise SafeError('PROVIDER_RPC_FAILED',503)
+                    return message.get('result') or {}
+        try:
+            try:process=subprocess.Popen(**self.spec(work),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,start_new_session=True)
+            except OSError:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
+            selector.register(process.stdout,selectors.EVENT_READ)
+            exchange(1,'initialize',{'clientInfo':{'name':'personal_companion_private_readiness','version':'0.1.0'},'capabilities':{'experimentalApi':True}})
+            send(None,'initialized',{})
+            try:account=exchange(2,'account/read',{'refreshToken':False})
+            except SafeError:raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403) from None
+            account_type=(account.get('account') or {}).get('type')
+            del account
+            if account_type!='chatgpt':raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
+            try:catalog=exchange(3,'model/list',{'includeHidden':False})
+            except SafeError:raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403) from None
+            models={}
+            for model in ('gpt-6-luna','gpt-6.1-sol'):
+                matches=[item for item in catalog.get('data',[]) if item.get('model')==model or item.get('id')==model]
+                if len(matches)==1:models[model]=self.supported_settings({'data':matches},model)
+            return {'account_type':account_type,'models':models,'inference_started':False,'thread_started':False,'payg':False,'fallback':False}
+        finally:
+            selector.close()
+            if process:
+                if process.poll() is None:
+                    try:os.killpg(process.pid,signal.SIGTERM)
+                    except ProcessLookupError:pass
+                try:process.wait(timeout=2)
+                except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=2)
+                if process.stdin:process.stdin.close()
+                if process.stdout:process.stdout.close()
+            shutil.rmtree(work)
     def execute(self,payload,response_schema,cancel,deadline,on_delta=None):
         from .conversation_runtime_contracts import ProviderPayload
         payload_type=ProviderPayload

@@ -101,11 +101,54 @@ def test_private_capture_available_without_asr_and_waiting_history(vault):
   assert browser.post('/api/v1/voice/audio',json=meta).status_code==200
   assert browser.post('/api/v1/voice/audio/'+id+'/chunks',json={'index':0,'content_hash':digest(data),'data':base64.b64encode(data).decode()}).status_code==200
   assert browser.post('/api/v1/voice/audio/'+id+'/finalize',json={}).status_code==200
-  assert browser.post('/api/v1/voice/audio/'+id+'/transcribe',json={'mode':'LOCAL','language':'uk'}).json()['code']=='LOCAL_ASR_BACKEND_NOT_RUN'
+  assert browser.post('/api/v1/voice/audio/'+id+'/transcribe',json={'mode':'LOCAL','language':'uk'}).json()['code']=='LOCAL_ASR_ASSET_UNAVAILABLE'
   assert browser.get('/api/v1/voice/audio').json()['items'][0]['ux_state']=='WAITING_FOR_LOCAL_ASR'
   assert app.state.voice.path(id).read_bytes()==data
   assert browser.post("/api/v1/private-pilot/revoke",json={}).status_code==200
   assert len(browser.get("/api/v1/voice/audio").json()["items"])==1
-  assert browser.post("/api/v1/voice/audio",json=meta).status_code==403
+  next_meta={**meta,'audio_id':str(uuid4()),'operation_id':str(uuid4())}
+  assert browser.post("/api/v1/voice/audio",json=next_meta).status_code==200
   assert browser.post("/api/v1/voice/audio/"+id+"/delete",json={"confirm":True}).status_code==200
-  assert not browser.get("/api/v1/voice/audio").json()["items"]
+  remaining=browser.get("/api/v1/voice/audio").json()["items"]
+  assert len(remaining)==1 and remaining[0]['id']==next_meta['audio_id']
+
+
+def test_local_asr_without_ai_consent_and_ai_toggle_preserves_it(vault):
+ from fastapi.testclient import TestClient
+ from apps.core.api import create_app
+ from apps.core.storage import Store
+ from apps.core.root_types import RootKind
+ class Engine:
+  def metadata(self):return {'engine':'whisper.cpp','cloud_asr':False,'available':True}
+ _,_,_,root,_=vault
+ providers=[]
+ def factory(mode,model,effort):
+  provider=PrivateFixtureProvider(model,effort);providers.append(provider);return provider
+ app=create_app(root,root_kind=RootKind.PRIVATE_LOCAL,release_identity='ORIGINAL_SYNTHETIC_BUILD',m8d_private=True,private_provider_factory=factory,private_asr_factory=Engine)
+ with TestClient(app,base_url='http://127.0.0.1:8765') as client:
+  client.headers.update({'Origin':'http://127.0.0.1:8765','X-PC-Build':'ORIGINAL_SYNTHETIC_BUILD'})
+  token=client.post('/api/v1/auth/unlock',json={'code':app.state.auth.code}).json();client.headers['X-CSRF-Token']=token['csrf_token']
+  prepared=client.post('/api/v1/private-pilot/local-voice',json={})
+  assert prepared.status_code==200 and prepared.json()['local_voice']=='ON'
+  assert app.state.private_gate.consent.read() is None
+  accepted=client.post('/api/v1/private-pilot/consent',json={'version':1,'privacy_version':app.state.private_gate.consent.contract()['privacy_version'],'accepted':True})
+  assert accepted.status_code==200 and accepted.json()['state']=='PRIVATE_AI_OWNER_CONSENTED'
+  off=client.post('/api/v1/private-pilot/disable',json={}).json()
+  assert off['state']=='PRIVATE_AI_OFF' and off['local_voice']=='ON'
+  resumed=client.post('/api/v1/private-pilot/resume',json={}).json()
+  assert resumed['state']=='PRIVATE_AI_OWNER_CONSENTED' and resumed['local_voice']=='ON'
+  assert not any(provider.calls for provider in providers)
+
+
+def test_bounded_activation_readiness_reports_auth_without_turn(vault):
+ from apps.core.local_private_ai import PrivatePilotGate
+ from apps.core.local_private_contracts import DurableConsentAcceptance
+ from apps.core.storage import Store
+ from apps.core.root_types import RootKind
+ class MissingAuthProvider(PrivateFixtureProvider):
+  def readiness(self):return {'account_type':'api','models':{},'inference_started':False,'thread_started':False,'payg':False,'fallback':False}
+ _,_,_,root,_=vault
+ gate=PrivatePilotGate(Store(root,root_kind=RootKind.PRIVATE_LOCAL),provider_factory=lambda mode,model,effort:MissingAuthProvider(model,effort))
+ with pytest.raises(SafeError,match='EXISTING_CHATGPT_AUTH_REQUIRED'):
+  gate.accept_consent('ORIGINAL_SYNTHETIC_SESSION',DurableConsentAcceptance(version=1,privacy_version=gate.consent.contract()['privacy_version'],accepted=True))
+ assert gate.consent.read()['ai_enabled'] is False and not gate.adapters

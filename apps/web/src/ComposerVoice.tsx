@@ -10,6 +10,7 @@ import {
 } from "./audio-types";
 import type { PhoneStore } from "./phone-store";
 import type { VoiceReference } from "./conversation-model";
+import { PilotCallError, pilotErrorMessage, safePilotErrorCode } from "./private-pilot-errors";
 export type VoiceItem = {
   id: string;
   state: string;
@@ -31,7 +32,15 @@ export async function voiceCall(csrf: string, path: string, body?: unknown) {
     },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
-  if (!r.ok) throw new Error((await r.json()).code);
+  if (!r.ok) {
+    let code: unknown;
+    try {
+      code = (await r.json()).code;
+    } catch {
+      code = undefined;
+    }
+    throw new PilotCallError(safePilotErrorCode(code));
+  }
   return r.json();
 }
 async function list(csrf: string, phone?: PhoneStore): Promise<VoiceItem[]> {
@@ -64,6 +73,7 @@ export function ComposerVoice({
   phone,
   onDraft,
   onBusy,
+  onStart,
   available = true,
   resetVersion = 0,
 }: {
@@ -73,6 +83,7 @@ export function ComposerVoice({
   resetVersion?: number;
   onDraft: (text: string, source: VoiceReference | null) => void;
   onBusy?: (value: boolean) => void;
+  onStart?: () => void;
 }) {
   const [state, setState] = useState("IDLE"),
     [seconds, setSeconds] = useState(0),
@@ -84,6 +95,8 @@ export function ComposerVoice({
     working = useRef(false);
   const callback = useRef(onDraft);
   callback.current = onDraft;
+  const busyCallback = useRef(onBusy);
+  busyCallback.current = onBusy;
   useEffect(() => {
     if (
       resetVersion > 0 &&
@@ -101,7 +114,7 @@ export function ComposerVoice({
     };
   }, []);
   useEffect(() => {
-    onBusy?.(
+    busyCallback.current?.(
       ["RECORDING", "STARTING", "TRANSCRIBING", "SAVING"].includes(state) ||
         !!draft,
     );
@@ -167,11 +180,14 @@ export function ComposerVoice({
           throw new Error(t.error ?? t.state);
       }
       if (alive.current) throw new Error("ASR_TIMEOUT");
-    } catch {
+    } catch (error) {
       if (alive.current) {
         setState("WAITING_FOR_LOCAL_ASR");
+        const code = safePilotErrorCode(error);
         setMessage(
-          "Запис збережено. Розпізнаємо, коли локальний сервіс буде доступний. Повторіть у «Голосові записи».",
+          code === "LOCAL_SERVICE_UNAVAILABLE"
+            ? "Запис збережено. Перевірте локальний сервіс і повторіть у «Голосові записи»."
+            : pilotErrorMessage(code),
         );
       }
     }
@@ -247,6 +263,7 @@ export function ComposerVoice({
       () => setMessage("Запис перервано; зберігаю доступну частину."),
     );
     rec.current = recorder;
+    onStart?.();
     try {
       if ((await recorder.start()) && alive.current) setState("RECORDING");
     } catch {
@@ -386,8 +403,13 @@ export function VoiceHistory({
     try {
       await fn();
       await refresh();
-    } catch {
-      setError("Запис збережено. Перевірте локальний сервіс і повторіть.");
+    } catch (error) {
+      const code = safePilotErrorCode(error);
+      setError(
+        code === "LOCAL_SERVICE_UNAVAILABLE"
+          ? "Запис збережено. Перевірте локальний сервіс і повторіть."
+          : pilotErrorMessage(code),
+      );
     } finally {
       setBusy(false);
     }

@@ -42,6 +42,7 @@ def vault(private_ai_package,isolated,protected):
 class PrivateFixtureProvider:
  def __init__(self,model,effort):self.model=model;self.effort=effort;self.calls=[]
  def metadata(self):return {'route':'CODEX_SUBSCRIPTION','model':self.model,'effort':self.effort,'profile':self.model+':'+self.effort,'live':False,'fallback':False,'payg':False}
+ def readiness(self):return {'account_type':'chatgpt','models':{'gpt-6-luna':['low','medium','high','xhigh','max'],'gpt-6.1-sol':['low','medium','high']},'inference_started':False,'thread_started':False,'payg':False,'fallback':False}
  def execute(self,payload,schema,cancel,deadline,on_delta=None):
   self.calls.append(payload)
   candidate={'assistant_text':'ORIGINAL SYNTHETIC · Один нейтральний наступний крок?','source_refs':[payload['current_message_ref']],'goal_suggestion':None,'closure':None,'topics':['self_reflection'],'working_map':None}
@@ -125,7 +126,7 @@ def test_private_api_ack_default_off_and_capability_boundary(vault):
   body=acknowledgement();body.pop('codex_environments_off_confirmed')
   assert c.post('/api/v1/private-pilot/acknowledge',json=body).status_code==422
   assert c.post('/api/v1/private-pilot/acknowledge',json=acknowledgement()).status_code==200
-  for path in ['health/import','sync/invitations','practices/start','device/pair','voice/audio','ai/mode','external-embeddings']:
+  for path in ['health/import','sync/invitations','practices/start','device/pair','ai/mode','external-embeddings']:
    assert c.post('/api/v1/'+path,json={}).status_code==403
   assert c.post('/api/v1/private-pilot/disable',json={}).json()['state']=='PRIVATE_AI_OFF'
 
@@ -256,7 +257,6 @@ def test_private_provider_actual_os_sentinels_outside_read_write_network_denied(
 def test_private_voice_gate_rejects_non_local_modes(vault,mode):
  from fastapi.testclient import TestClient
  from apps.core.api import create_app
- from apps.core.local_private_ai import LocalVoiceAcknowledgement
  class Engine:
   def metadata(self):return {'engine':'whisper.cpp','cloud_asr':False}
  _,_,_,root,_=vault
@@ -264,8 +264,9 @@ def test_private_voice_gate_rejects_non_local_modes(vault,mode):
  with TestClient(app,base_url='http://127.0.0.1:8765') as c:
   c.headers.update({'Origin':'http://127.0.0.1:8765','X-PC-Build':'ORIGINAL_SYNTHETIC_BUILD'})
   r=c.post('/api/v1/auth/unlock',json={'code':app.state.auth.code});c.headers['X-CSRF-Token']=r.json()['csrf_token']
-  body={k:True for k in LocalVoiceAcknowledgement.model_fields}
-  assert c.post('/api/v1/private-pilot/local-voice',json=body).status_code==200
+  assert c.post('/api/v1/private-pilot/local-voice',json={}).status_code==200
+  assert app.state.private_gate.consent.read() is None
+  assert app.state.private_gate.status()['local_voice']=='ON'
   assert c.post('/api/v1/voice/audio/'+str(uuid4())+'/transcribe',json={'mode':mode,'language':'uk'}).status_code==403
   assert c.post('/api/v1/auth/lock',json={}).status_code==200
   assert app.state.private_gate.status()['local_voice']=='OFF' and 'LOCAL' not in app.state.voice.engines
@@ -284,10 +285,11 @@ def test_private_voice_review_edit_explicit_send_no_audio_to_provider(vault):
  _,_,_,root,_=vault
  app=create_app(root,root_kind=RootKind.PRIVATE_LOCAL,release_identity='ORIGINAL_SYNTHETIC_BUILD',m8d_private=True,private_provider_factory=lambda mode,model,effort:PrivateFixtureProvider(model,effort),private_asr_factory=Engine)
  voice=app.state.voice;c=app.state.conversation_controller;g=app.state.private_gate
- g.acknowledge('ORIGINAL_SYNTHETIC_SESSION',acknowledgement())
- g.enable_voice('ORIGINAL_SYNTHETIC_SESSION',{'local_audio_only':True,'review_before_send':True,'manual_audio_deletion_understood':True});voice.engines['LOCAL']=g.asr
+ g.prepare_local_asr('ORIGINAL_SYNTHETIC_SESSION');voice.engines['LOCAL']=g.asr
+ assert g.consent.read() is None and g.status()['state']=='PRIVATE_AI_OFF'
  audio,_=save(voice);job=voice.enqueue(audio,ASRRequest(mode='LOCAL'));voice.run(job['transcript_id'],'LOCAL');t=voice.get(audio)['transcript']
- assert not c.conversations.list()['items'] and not g.provider('FREE').calls
+ assert not c.conversations.list()['items'] and not g.adapters
+ g.acknowledge('ORIGINAL_SYNTHETIC_SESSION',acknowledgement())
  voice.edit(t['id'],TranscriptEdit(revision=t['revision'],text='ORIGINAL SYNTHETIC owner reviewed and edited'));t=voice.get(audio)['transcript']
  id=c.conversations.create(NewConversation(operation_id=uuid4()))['conversation']['id']
  preview=c.private_preview(id,PrivateContextPreview(operation_id=uuid4(),base_revision=1,text=t['edited']))
@@ -821,7 +823,7 @@ def _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, port):
     }
 
 
-def test_m8e_private_preflight_diagnostics_are_sanitized_and_read_only(vault, isolated, capsys):
+def test_m8e_private_preflight_diagnostics_are_sanitized_and_read_only(vault, isolated, isolated_preflight_port, capsys):
     import sqlite3
     from apps.core import release as r
     from apps.core.storage import digest
@@ -829,7 +831,7 @@ def test_m8e_private_preflight_diagnostics_are_sanitized_and_read_only(vault, is
     package, manifest_hash, app, data, backups = vault
     db = data / 'journal.sqlite3'
     before = digest(db.read_bytes())
-    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, isolated_preflight_port)
     assert result == {
         'status': 'PASS',
         'stage': 'COMPLETE',
@@ -843,7 +845,7 @@ def test_m8e_private_preflight_diagnostics_are_sanitized_and_read_only(vault, is
         connection.execute('UPDATE vault_meta SET schema_version=?', ('MALFORMED_' + sentinel,))
     corrupted_hash = digest(db.read_bytes())
     active_hash = digest((app / 'active.json').read_bytes())
-    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, isolated_preflight_port)
     assert result == {
         'status': 'FAIL',
         'stage': 'VAULT_META',
@@ -858,7 +860,7 @@ def test_m8e_private_preflight_diagnostics_are_sanitized_and_read_only(vault, is
     with pytest.raises(SafeError):
         r.upgrade(
             package, manifest_hash, app, data, refused_backup,
-            root_kind=RootKind.PRIVATE_LOCAL, port=8765,
+            root_kind=RootKind.PRIVATE_LOCAL, port=isolated_preflight_port,
         )
     assert not refused_backup.exists()
     assert digest(db.read_bytes()) == corrupted_hash
@@ -866,7 +868,7 @@ def test_m8e_private_preflight_diagnostics_are_sanitized_and_read_only(vault, is
     assert not (app / 'upgrade-pending.json').exists()
 
 
-def test_m8e_readonly_wal_open_error_has_sanitized_stage_and_code(vault, monkeypatch, capsys):
+def test_m8e_readonly_wal_open_error_has_sanitized_stage_and_code(vault, monkeypatch, isolated_preflight_port, capsys):
     import sqlite3
     from apps.core import release as r
 
@@ -887,7 +889,7 @@ def test_m8e_readonly_wal_open_error_has_sanitized_stage_and_code(vault, monkeyp
         return original_connect(*args, **kwargs)
 
     monkeypatch.setattr(r.sqlite3, 'connect', fail_inspector_open)
-    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, isolated_preflight_port)
     assert result == {
         'status': 'FAIL',
         'stage': 'SQLITE_OPEN',
@@ -908,7 +910,7 @@ def test_m8e_readonly_wal_open_error_has_sanitized_stage_and_code(vault, monkeyp
     ],
 )
 def test_m8e_preflight_diagnostic_rejects_integrity_fk_and_domain_failures(
-    vault, invariant, expected_stage,
+    vault, invariant, expected_stage, isolated_preflight_port,
 ):
     import sqlite3
     from apps.core.domain import Journal
@@ -939,7 +941,7 @@ def test_m8e_preflight_diagnostic_rejects_integrity_fk_and_domain_failures(
         with sqlite3.connect(db) as connection:
             connection.execute("UPDATE entries SET payload='{}'")
 
-    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, 8765)
+    result = _m8e_sanitized_preflight(package, manifest_hash, app, data, backups, isolated_preflight_port)
     assert result['status'] == 'FAIL'
     assert result['stage'] == expected_stage
     assert result['error'] in {'DATABASE_INTEGRITY', 'DOMAIN_INTEGRITY', 'SQLITE_INTEGRITY_ERROR'}

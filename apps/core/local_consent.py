@@ -32,7 +32,7 @@ class LocalConsent:
             c.execute('INSERT OR REPLACE INTO local_profile_consents VALUES(1,?)', (encode(data),))
 
     def accept(self):
-        self.write({'contract': self.contract(), 'accepted_at': now(), 'ai_enabled': True, 'voice_enabled': True,
+        self.write({'contract': self.contract(), 'accepted_at': now(), 'ai_enabled': False, 'voice_enabled': False,
                     'external_settings': 'NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER'})
 
     def disable(self):

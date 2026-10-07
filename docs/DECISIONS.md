@@ -20,6 +20,8 @@
 | ADR-012 | PROPOSED_BASELINE | Reviewed self-help і optional game layer | Без medical claims, штрафів і dependence design |
 | ADR-013 | PROPOSED_BASELINE | C implementation + R evidence commit | Перевірювані SHA без self-hash recursion |
 | ADR-014 | USER_REQUIREMENT · 2026-09-30 | Для test-stage explicit `/goal` власник дозволив normal fast-forward direct pushes у `main` після local checks і privacy scan; review branch optional. Project metadata schema v2 adds an explicit `push_main` permission | `push_main` відокремлений від `merge_main`; force push/rewrite, merge, deploy, paid calls/private data окремо заборонені; architect review відбувається після push; наступна milestone вимагає нової goal |
+| ADR-015 | USER_REQUIREMENT · 2026-10-05 | M8E durable local consent and canonical exact Send | Exact payload freshness and Deep/journal approval remain backend-bound; see [ADR-015](adr/ADR-015-M8E-CONSENT-AND-CONVERSATION-UX.md) |
+| ADR-016 | USER_REQUIREMENT · 2026-10-07 | M8E AI is a one-click toggle after valid local consent; local voice is independent of AI consent/state; activation readiness is non-inference and bounded | One first-use acceptance, local-only ASR, sanitized activation codes; external account settings remain unverified/nonblocking; see [ADR-016](adr/ADR-016-M8E-ONE-CLICK-AI-INDEPENDENT-LOCAL-VOICE.md) |
 
 Для зміни baseline створити ADR із альтернативами, impact на data/safety/compatibility,
 rollback і явним рішенням власника, коли змінюються межі або приватність.
