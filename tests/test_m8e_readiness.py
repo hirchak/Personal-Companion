@@ -27,6 +27,17 @@ MODELS = [
 def send(message):
     sys.stdout.write(json.dumps(message) + "\\n")
     sys.stdout.flush()
+def send_result(identifier, result, stage):
+    if SCENARIO == stage + "_missing_result":
+        send({{"id": identifier}})
+    elif SCENARIO == stage + "_null_result":
+        send({{"id": identifier, "result": None}})
+    elif SCENARIO == stage + "_list_result":
+        send({{"id": identifier, "result": []}})
+    elif SCENARIO == stage + "_false_result":
+        send({{"id": identifier, "result": False}})
+    else:
+        send({{"id": identifier, "result": result}})
 for line in sys.stdin:
     request = json.loads(line)
     method = request.get("method")
@@ -39,7 +50,7 @@ for line in sys.stdin:
         if SCENARIO == "initialize_rpc":
             send({{"id": identifier, "error": {{"code": -32000, "message": RAW}}}})
         else:
-            send({{"id": identifier, "result": {{}}}})
+            send_result(identifier, {{}}, "initialize")
     elif method == "initialized":
         continue
     elif method == "account/read":
@@ -55,9 +66,13 @@ for line in sys.stdin:
         elif SCENARIO == "auth_missing":
             send({{"id": identifier, "result": {{"account": None}}}})
         elif SCENARIO == "auth_non_chatgpt":
-            send({{"id": identifier, "result": {{"account": {{"type": "api", "accountId": RAW}}}}}})
+            send_result(identifier, {{"account": {{"type": "api", "accountId": RAW}}}}, "account")
+        elif SCENARIO == "account_missing_field":
+            send_result(identifier, {{"accountId": RAW}}, "account")
+        elif SCENARIO == "account_bad_field":
+            send_result(identifier, {{"account": RAW}}, "account")
         else:
-            send({{"id": identifier, "result": {{"account": {{"type": "chatgpt", "accountId": RAW}}}}}})
+            send_result(identifier, {{"account": {{"type": "chatgpt", "accountId": RAW}}}}, "account")
     elif method == "model/list":
         if SCENARIO == "model_rpc":
             send({{"id": identifier, "error": {{"code": -32000, "message": RAW}}}})
@@ -69,17 +84,21 @@ for line in sys.stdin:
             sys.stdout.write(RAW + "\\n")
             sys.stdout.flush()
         elif SCENARIO == "model_missing":
-            send({{"id": identifier, "result": {{"data": [MODELS[0]]}}}})
+            send_result(identifier, {{"data": [MODELS[0]]}}, "model")
         elif SCENARIO == "model_unverifiable":
             models = json.loads(json.dumps(MODELS))
             models[1].pop("supportedReasoningEfforts")
-            send({{"id": identifier, "result": {{"data": models}}}})
+            send_result(identifier, {{"data": models}}, "model")
         elif SCENARIO == "effort_missing":
             models = json.loads(json.dumps(MODELS))
             models[0]["supportedReasoningEfforts"] = [{{"reasoningEffort": x}} for x in ["low", "medium", "high"]]
-            send({{"id": identifier, "result": {{"data": models}}}})
+            send_result(identifier, {{"data": models}}, "model")
+        elif SCENARIO == "model_data_missing":
+            send_result(identifier, {{}}, "model")
+        elif SCENARIO == "model_data_null":
+            send_result(identifier, {{"data": None}}, "model")
         else:
-            send({{"id": identifier, "result": {{"data": MODELS}}}})
+            send_result(identifier, {{"data": MODELS}}, "model")
     else:
         send({{"id": identifier, "error": {{"code": -32000, "message": RAW}}}})
 '''
@@ -107,14 +126,30 @@ def fixture_gate(store, executable: Path):
     ("scenario", "expected"),
     [
         ("initialize_rpc", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("initialize_missing_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("initialize_null_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("initialize_list_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("initialize_false_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("account_rpc", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("account_exit", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("account_timeout", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("account_protocol", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_missing_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_null_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_list_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_false_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_missing_field", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("account_bad_field", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("model_rpc", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("model_exit", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("model_timeout", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("model_protocol", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("model_missing_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("model_null_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("model_list_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("model_false_result", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("model_data_missing", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
+        ("model_data_null", "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE"),
         ("auth_missing", "EXISTING_CHATGPT_AUTH_REQUIRED"),
         ("auth_non_chatgpt", "EXISTING_CHATGPT_AUTH_REQUIRED"),
         ("model_missing", "PRIVATE_PROVIDER_PROFILE_UNVERIFIED"),

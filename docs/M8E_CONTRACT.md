@@ -98,11 +98,12 @@ unmodified until the hotfix receives independent review acceptance.
 
 ## 2026-10-07 independent-review corrections — M8E-H01/H02
 
-Readiness preserves the distinction between evidence of missing/non-ChatGPT authentication and readiness
-infrastructure failure. A successful `account/read` response with a missing account or non-ChatGPT account returns
-`EXISTING_CHATGPT_AUTH_REQUIRED`; process, transport, timeout, protocol, and RPC failures return
-`PRIVATE_PROVIDER_ROUTE_UNAVAILABLE`. A successful but missing/unverifiable required model/profile returns
-`PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; a present model without its required effort returns
+Readiness validates JSON-RPC response IDs, exactly one result/error branch, and the expected object result type
+before interpreting auth or catalog data. Missing/malformed initialize, account/read, or model/list results fail
+as protocol/route failures. A well-formed `account/read` result with `account: null` or a non-ChatGPT account
+returns `EXISTING_CHATGPT_AUTH_REQUIRED`; process, transport, timeout, protocol, and RPC infrastructure failures
+return `PRIVATE_PROVIDER_ROUTE_UNAVAILABLE`. A well-formed catalog missing/unverifiable required model/profile
+returns `PRIVATE_PROVIDER_PROFILE_UNVERIFIED`; a verified model without its required effort returns
 `PROVIDER_EFFORT_UNSUPPORTED`. RPC/provider exception text is never returned or rendered.
 
 The frontend may render only an explicit allowlist of mapped stable error codes. Any unknown backend code,

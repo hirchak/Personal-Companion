@@ -126,31 +126,43 @@ class CodexConversationProvider:
                     part=os.read(process.stdout.fileno(),8192);seen_bytes+=len(part)
                     if seen_bytes>262144:raise SafeError('PROVIDER_OUTPUT_LIMIT',503)
                     buffer.extend(part)
-        def exchange(identifier,method,params):
+        def exchange(identifier,method,params,expected_type=dict):
             send(identifier,method,params)
             while True:
                 message=incoming()
                 if not isinstance(message,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
-                if message.get('method') and 'id' in message:raise SafeError('PROVIDER_TOOL_REQUEST_DENIED',403)
-                if message.get('id')==identifier:
-                    if 'error' in message:raise SafeError('PROVIDER_RPC_FAILED',503)
-                    return message.get('result') or {}
+                if 'method' in message:
+                    if not isinstance(message['method'],str):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+                    if 'id' in message:raise SafeError('PROVIDER_TOOL_REQUEST_DENIED',403)
+                    continue
+                if 'id' not in message or type(message['id']) is not type(identifier) or message['id']!=identifier:
+                    raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+                has_result='result' in message;has_error='error' in message
+                if has_result==has_error:raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+                if has_error:
+                    error=message['error']
+                    if not isinstance(error,dict) or not (type(error.get('code')) is int or isinstance(error.get('code'),str)) or not isinstance(error.get('message'),str):
+                        raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+                    raise SafeError('PROVIDER_RPC_FAILED',503)
+                result=message['result']
+                if not isinstance(result,expected_type):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+                return result
         try:
             try:process=subprocess.Popen(**self.spec(work),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,start_new_session=True)
             except OSError:raise SafeError('PRIVATE_PROVIDER_ROUTE_UNAVAILABLE',503) from None
             selector.register(process.stdout,selectors.EVENT_READ)
-            exchange(1,'initialize',{'clientInfo':{'name':'personal_companion_private_readiness','version':'0.1.0'},'capabilities':{'experimentalApi':True}})
+            exchange(1,'initialize',{'clientInfo':{'name':'personal_companion_private_readiness','version':'0.1.0'},'capabilities':{'experimentalApi':True}},dict)
             send(None,'initialized',{})
-            account=exchange(2,'account/read',{'refreshToken':False})
-            if not isinstance(account,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
+            account=exchange(2,'account/read',{'refreshToken':False},dict)
+            if 'account' not in account:raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
             account_info=account.get('account')
             if account_info is not None and not isinstance(account_info,dict):raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
             chatgpt_authenticated=isinstance(account_info,dict) and account_info.get('type')=='chatgpt'
             del account_info,account
             if not chatgpt_authenticated:raise SafeError('EXISTING_CHATGPT_AUTH_REQUIRED',403)
-            catalog=exchange(3,'model/list',{'includeHidden':False})
-            if not isinstance(catalog,dict) or not isinstance(catalog.get('data'),list) or any(not isinstance(item,dict) for item in catalog['data']):
-                raise SafeError('PRIVATE_PROVIDER_PROFILE_UNVERIFIED',403)
+            catalog=exchange(3,'model/list',{'includeHidden':False},dict)
+            if 'data' not in catalog or not isinstance(catalog['data'],list) or any(not isinstance(item,dict) for item in catalog['data']):
+                raise SafeError('PROVIDER_PROTOCOL_INVALID',503)
             models={}
             for model in ('gpt-6-luna','gpt-6.1-sol'):
                 matches=[item for item in catalog.get('data',[]) if item.get('model')==model or item.get('id')==model]
