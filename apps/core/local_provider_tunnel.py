@@ -31,7 +31,12 @@ def serve_client(client):
         if not connect_request(bytes(header)):
             client.sendall(b'HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n')
             return
-        upstream = socket.create_connection(DESTINATION, timeout=10)
+        # This Mac can resolve IPv6 while that route stalls. An explicit IPv4
+        # socket avoids waiting on IPv6 before the SDK's routing deadline.
+        # DNS still selects the fixed subscription host; TLS stays end-to-end.
+        upstream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        upstream.settimeout(10)
+        upstream.connect(DESTINATION)
         client.sendall(b'HTTP/1.1 200 Connection Established\r\n\r\n')
         client.settimeout(None)
         upstream.settimeout(None)

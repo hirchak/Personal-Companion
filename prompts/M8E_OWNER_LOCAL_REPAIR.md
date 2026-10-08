@@ -13,3 +13,9 @@ fallback/PAYG, phone/clinical/Health activation, deploy/tag/release. Do not self
 Owner authorizes upgrading/restarting the existing pilot for manual testing after relevant tests/preflight and
 protected backup. Any live non-inference readiness probe requires separate explicit owner authorization.
 Leave unlock, AI consent, messages, microphone and retries manual; provide a fresh code after final startup.
+
+Owner granted one bounded live account/read refresh=false + model/list probe. It returned workspace-routing
+timeout before inference; model/list succeeded. Anonymous fixed-host transport diagnostics then proved DNS
+IPv6-first, IPv6 TCP timeout and working IPv4. Correct only the helper address family for the same fixed host,
+preserving all endpoint/OS/TLS/credential boundaries, and add deterministic transport regressions. No additional
+live readiness probe is authorized by that single-use permission; do not send an inference to verify the repair.

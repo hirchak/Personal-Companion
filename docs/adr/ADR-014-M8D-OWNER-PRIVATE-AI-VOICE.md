@@ -59,6 +59,12 @@ M7D-N02 human language review stays OPEN; actual owner vault is never accessed i
 
 Private provider/ASR temporary work directories require owner-only access and freshly verified protected local volume before writing text/audio/client state. Unsafe, cloud/Git or unverified temporary storage fails closed; no arbitrary TMPDIR escape of the at-rest policy.
 
+2026-10-08 owner-local M8E transport correction (AWAITING_REVIEW): the reference Mac's DNS returns IPv6 first,
+but its IPv6 TCP route stalls while IPv4 reaches the fixed subscription destination. The TLS-blind helper now
+uses an explicit IPv4 socket to `chatgpt.com:443`. Host/port allowlisting, OS isolation, opaque TLS forwarding,
+SDK-only credentials, and all no-fallback/PAYG/inference boundaries remain. This is address-family selection for
+the same first-party route, not a model/provider substitution. Live readiness remains separately owner-scoped.
+
 
 2026-10-05 independent review correction (M8D-R01/R02): C1 exact preview ordering claim was invalid with
 selected journals. Use one canonical provider payload constructor, freeze the full validated object at preview,
