@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "historical_ledger_bytes_unchanged": {
+    "m7c": true,
+    "m7d": true,
+    "m8d": true
+  },
+  "skills_frames_admission_unchanged": {
+    "skills/conversation/session_closure.json": true,
+    "skills/conversation/core_reflection.json": true,
+    "skills/conversation/local_private_controller_frame.json": true,
+    "skills/conversation/deep_session.json": true,
+    "skills/conversation/goal_setting.json": true,
+    "skills/conversation/controller_frame.json": true,
+    "skills/qualification/sleep_review.json": true,
+    "skills/qualification/grounding.json": true,
+    "skills/qualification/cbt_reflection.json": true,
+    "skills/qualification/worry_rumination.json": true,
+    "skills/qualification/nightmare_review.json": true,
+    "research/admission/registry.json": true
+  },
+  "baseline_generation_equivalence": "BASELINE_GENERATION_WITH_CURRENT_REGISTER_VALIDATION",
+  "neutral_skills": {
+    "neutral": [
+      {
+        "skill_id": "core_reflection",
+        "version": "2.1.0",
+        "status": "AVAILABLE_NEUTRAL_SYNTHETIC_ONLY",
+        "clinical": false
+      },
+      {
+        "skill_id": "deep_session",
+        "version": "2.1.0",
+        "status": "AVAILABLE_NEUTRAL_SYNTHETIC_ONLY",
+        "clinical": false
+      },
+      {
+        "skill_id": "goal_setting",
+        "version": "2.0.0",
+        "status": "AVAILABLE_NEUTRAL_SYNTHETIC_ONLY",
+        "clinical": false
+      },
+      {
+        "skill_id": "session_closure",
+        "version": "2.0.0",
+        "status": "AVAILABLE_NEUTRAL_SYNTHETIC_ONLY",
+        "clinical": false
+      }
+    ],
+    "off": [
+      {
+        "skill_id": "cbt_reflection",
+        "status": "CONTRACT_ONLY_NOT_ACTIVE",
+        "clinical": true
+      },
+      {
+        "skill_id": "worry_rumination",
+        "status": "CONTRACT_ONLY_NOT_ACTIVE",
+        "clinical": true
+      },
+      {
+        "skill_id": "sleep_review",
+        "status": "CONTRACT_ONLY_NOT_ACTIVE",
+        "clinical": true
+      },
+      {
+        "skill_id": "nightmare_review",
+        "status": "CONTRACT_ONLY_NOT_ACTIVE",
+        "clinical": true
+      },
+      {
+        "skill_id": "grounding",
+        "status": "CONTRACT_ONLY_NOT_ACTIVE",
+        "clinical": true
+      }
+    ]
+  },
+  "new_native_ledger_exists": false,
+  "new_inference_attempts": 0,
+  "owner_pilot_access": false,
+  "macos_packaging": false
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "scope": "CURRENT_GUARD_OFFLINE_REPLAY_OF_HISTORICAL_ORIGINAL_SYNTHETIC_TEXT",
+  "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+  "source_sha256": "7b9b4ac8ecb03aef423fea0a253ca107803d5d170db8ee1e30d57e7baeaf2345",
+  "historical_profile": "gpt-6-sol/ultra",
+  "not_current_model_observation": true,
+  "case": "RANGE day1 turn1",
+  "assistant_text": "Обмежуся останніми сімома днями. Деталей розмови про чернетку в наданому контексті немає, тож не домислюватиму їх. Який її фрагмент за цей період хочеш розібрати?",
+  "current_policy": "FORMAL_VY",
+  "current_guard_result": "ACCEPTED",
+  "question_count": 1,
+  "informal_generated_verb": "хочеш",
+  "formal_equivalent": "хочете",
+  "finding": "Current guard only checks pronouns; this generated singular verb is not a source quotation and passes.",
+  "severity": "NEUTRAL_REGISTER_ENFORCEMENT_GAP",
+  "clinical_effectiveness_claim": false,
+  "live_inference_attempts": 0
+}

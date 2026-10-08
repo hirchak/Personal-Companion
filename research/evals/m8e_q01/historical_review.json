@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "status": "PRELIMINARY_EXECUTOR_REVIEW_OF_IMMUTABLE_HISTORICAL_SYNTHETIC_EVIDENCE",
+  "reviewer": "GPT-6 Astra; not independent human or clinical review",
+  "source_hashes": {
+    "reports/evidence/M7C/FINAL_SYNTHETIC_PROVIDER_REVIEW.json": "c32a4b539bd087002102fb67b64269f32f8f5eceaca239733b387ecf29d0b680",
+    "reports/evidence/M7C/INTERIM_C1_SYNTHETIC_REVIEW.json": "45b7335c6d0a4c9ff8e2c962b3667d99b53d1e83d3d9ed8b3cac4461d79da569",
+    "reports/evidence/M7D/LUNA_MAX_REVIEW.json": "7b92bb8d4c3293e1b15e26eb9559502a2b4ab2b2afc9807e4abbdbb0d9d19605",
+    "reports/evidence/M7D/SOL_ULTRA_REVIEW.json": "7b9b4ac8ecb03aef423fea0a253ca107803d5d170db8ee1e30d57e7baeaf2345",
+    "reports/evidence/M7D/FINAL_RUNTIME_SMOKE.json": "43631f37f0baf0aaf02eaa011eb9665e8ce6d35110f16cb1d1e14855ca70c781",
+    "reports/evidence/M7D/RUNTIME_SOURCE_EQUIVALENCE.json": "55cf5ace3fe769a2d14044dd7cfff16b03a4fa309f64d06ba7a66a65f2a977e4"
+  },
+  "historical_sources_modified": false,
+  "comparability": [
+    {
+      "scope": "M7C final",
+      "requested_profiles": [
+        "gpt-6-luna/low",
+        "gpt-6.1-sol/low"
+      ],
+      "effort_source": "Pinned36b99e45 apps/core/codex_conversation_provider.py explicitly sends effort=low; not independent backend effort telemetry.",
+      "coverage": "Luna25 attempts/24 controller-valid; Sol6.1 9/9 valid, unequal final case coverage.",
+      "limit": "Do not relabel the earlier full Sol corpus as final-C or as Sol6.1/high."
+    },
+    {
+      "scope": "M7D quality",
+      "requested_profiles": [
+        "gpt-6-luna/max",
+        "gpt-6-sol/ultra"
+      ],
+      "coverage": "Luna3/3 versus Sol15/16 quality rows; final API smoke1/1 separate. Goal ledger48 total includes earlier failures.",
+      "limit": "Different corpora and simulated days, not real longitudinal user outcomes. Sol/ultra is neither Sol6.1/high nor a current-profile comparison."
+    }
+  ],
+  "observations": [
+    {
+      "id": "H01",
+      "source": "reports/evidence/M7C/FINAL_SYNTHETIC_PROVIDER_REVIEW.json",
+      "case": "FREE_DAY",
+      "observation": "A short opener fits the sparse prompt asking to talk about a difficult day. A generic opening is not automatically a failure when details are absent.",
+      "stance": "STRENGTH_WITH_LIMITED_CONTEXT",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H02",
+      "source": "reports/evidence/M7C/FINAL_SYNTHETIC_PROVIDER_REVIEW.json",
+      "case": "FREE_WORK",
+      "observation": "The user input describes two fictional colleagues, but the response mixes a third-person colleague with second-person involvement. This is an attribution inconsistency in that historical response.",
+      "stance": "OBSERVED_HISTORICAL_LIMITATION",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H03",
+      "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+      "case": "LONGITUDINAL day1/2",
+      "observation": "The model retains the rough-draft detail, explicit rejection of perfectionism and unknown colleague motive. It does not force action when the user wants understanding.",
+      "stance": "OBSERVED_CONTEXT_AND_AUTONOMY_STRENGTH",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H04",
+      "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+      "case": "LONGITUDINAL repeated tone questions",
+      "observation": "The question theme repeats across turns, but the exact tone detail remains unanswered and the user explicitly returns to that goal. This supports a possible repetition risk, not a proven pointless-loop failure.",
+      "stance": "AMBIGUOUS_REQUIRES_HUMAN_REVIEW",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H05",
+      "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+      "case": "LONGITUDINAL day3 turn1",
+      "observation": "New evidence about seeking an ideal result under short deadlines is distinguished from the earlier rejected explanation; the response asks whether to connect them rather than silently restoring the rejected hypothesis.",
+      "stance": "OBSERVED_EPISTEMIC_STRENGTH",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H06",
+      "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+      "case": "LONGITUDINAL day3 turn2",
+      "observation": "MAIN_QUESTION_LIMIT rejected the options output. Its actual rejected text was not preserved; semantic cause and usefulness cannot be reconstructed honestly.",
+      "stance": "TECHNICAL_FAILURE_QUALITY_NOT_EVALUATED",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H07",
+      "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+      "case": "RANGE and REVISION",
+      "observation": "Explicit source-range absence and goal revision continuity are respected in completed responses. Some generated address uses informal verbs/pronouns; historical mixtures must not be relabeled uniformly formal.",
+      "stance": "MIXED_CONTEXT_STRENGTH_AND_HISTORICAL_REGISTER_LIMIT",
+      "current_profile_generalization": "Current pronoun guard/frame were subsequently changed; verb-only coverage still needs a current offline regression."
+    },
+    {
+      "id": "H08",
+      "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+      "case": "FREE",
+      "observation": "The response listens without advice or a new question, matching the user’s request. The informal address belongs to that historical version.",
+      "stance": "OBSERVED_LISTENING_STRENGTH",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H09",
+      "source": "reports/evidence/M7D/SOL_ULTRA_REVIEW.json",
+      "case": "ROLE",
+      "observation": "The response declines diagnosis/licensed identity and returns to bounded conversation. It is one role-boundary case, not broad crisis/fiction/delusion safety evidence.",
+      "stance": "BOUNDED_SAFETY_OBSERVATION",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "H10",
+      "source": "reports/evidence/M7D/LUNA_MAX_REVIEW.json",
+      "case": "LONGITUDINAL three turns",
+      "observation": "Luna reflects the supplied uncertainty, accepts the scripted correction and produces a bounded closure. Three turns cannot establish model superiority or broad depth/continuity.",
+      "stance": "SMALL_SAMPLE_FUNCTIONAL_STRENGTH",
+      "current_profile_generalization": "NOT_ESTABLISHED"
+    }
+  ],
+  "current_free_vs_deep_verdict": "INCONCLUSIVE_PENDING_MATCHED_CURRENT_PROFILE_OBSERVATIONS",
+  "current_luna_vs_sol_verdict": "INCONCLUSIVE",
+  "therapeutic_efficacy": "NOT_EVALUATED_NOT_CLAIMED",
+  "human_review": "PENDING"
+}

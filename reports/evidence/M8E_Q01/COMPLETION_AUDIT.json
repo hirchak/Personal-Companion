@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "scope_not_redefined": true,
+  "requirements": [
+    {
+      "id": "Q01-A01",
+      "status": "VERIFIED",
+      "evidence": "research/evals/m8e_q01/baseline_manifest.json",
+      "interpretation": "Actual base/model/source hashes and reviewed diff frozen."
+    },
+    {
+      "id": "Q01-A02",
+      "status": "VERIFIED",
+      "evidence": "reports/evidence/M8E_Q01/PRESERVATION.json",
+      "interpretation": "Four neutral skills, five OFF metadata candidates, unchanged admission/ledgers."
+    },
+    {
+      "id": "Q01-A03",
+      "status": "VERIFIED",
+      "evidence": "research/evals/m8e_q01/cases.json",
+      "interpretation": "44 original cases; scripted multistep contexts explicitly distinguished from live dialogue."
+    },
+    {
+      "id": "Q01-A04",
+      "status": "VERIFIED",
+      "evidence": "research/evals/m8e_q01/rubric.json",
+      "interpretation": "Eight anchored dimensions, missing values and separate critical failures."
+    },
+    {
+      "id": "Q01-A05",
+      "status": "VERIFIED_WITH_LIMITS",
+      "evidence": "reports/evidence/M8E_Q01/FINAL_CHARACTERIZATION.json",
+      "interpretation": "Critical counterexamples in Free/Deep; semantic gap exposed, not claimed fixed or representative of live rates."
+    },
+    {
+      "id": "Q01-A06",
+      "status": "VERIFIED",
+      "evidence": "research/evals/m8e_q01/historical_review.json",
+      "interpretation": "Historical models/efforts/unequal coverage and failures retained."
+    },
+    {
+      "id": "Q01-A07",
+      "status": "CONDITIONAL_LIVE_STAGE_BLOCKED",
+      "evidence": "reports/evidence/M8E_Q01/GATE_STATUS.json",
+      "interpretation": "Scoped24 grant recorded, runtime metadata execution rejected;0 inference. No fake live comparisons."
+    },
+    {
+      "id": "Q01-A08",
+      "status": "VERIFIED_WITH_LIMITS",
+      "evidence": "research/evals/m8e_q01/skill_audit.json",
+      "interpretation": "All nine skills: useful questions, unsafe replies, practical potential, observed limits and open gates."
+    },
+    {
+      "id": "Q01-A09",
+      "status": "VERIFIED_WITH_LIMITS",
+      "evidence": "reports/evidence/M8E_Q01/REGISTER_FIX.json",
+      "interpretation": "One concrete register fix with before/after replay and quote regressions. No claim of empirical model-quality improvement."
+    },
+    {
+      "id": "Q01-A10",
+      "status": "VERIFIED_WITH_LIMITS",
+      "evidence": "reports/evidence/M8E_Q01/HUMAN_REVIEW_PACKET.md",
+      "interpretation": "Masked actual historical pairs with known contexts and separate mapping. Current A/B unavailable; human review pending as required."
+    },
+    {
+      "id": "Q01-A11",
+      "status": "VERIFIED",
+      "evidence": "reports/evidence/M8E_Q01/CHECKS.json",
+      "interpretation": "Exact-C Python904/web53/build/browser-regression/admission/Ajv/docs/privacy PASS; no Mac packaging."
+    },
+    {
+      "id": "Q01-A12",
+      "status": "PENDING_PUBLICATION",
+      "evidence": "reports/M8E_Q01_CONVERSATION_QUALITY_REPORT.md",
+      "interpretation": "C exists; evidence-only R, FF and remote equality remain to verify."
+    }
+  ],
+  "central_quality_answer": "NOT_ESTABLISHED_FOR_CURRENT_PROFILES; INCONCLUSIVE; no therapeutic efficacy claim",
+  "explicit_boundaries": {
+    "clinical_five_off": true,
+    "raw_research_not_copied": true,
+    "owner_pilot_untouched": true,
+    "new_auth_billing_payg_credits": false,
+    "packaging_install_deploy_tag_release": false,
+    "live_attempts": 0,
+    "maximum_authorized_attempts": 24
+  },
+  "completion_claim": false
+}

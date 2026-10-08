@@ -1,31 +1,35 @@
-# M8E owner local repair — AWAITING_REVIEW
+# M8E-Q01 — AWAITING_REVIEW / live stage blocked
 
-Base published R4: `ed7ec39d904a6319f4f0911c042e04598422a94a` (live origin/main verified).
-Final implementation C6: `4124851adc08858e22e99b3adc6c70d5843c2b6b`; intermediate source fix C5: `1a286f2e840566873ef177f77904b982df620ecb`.
-Exact package manifest: `a3cc8564a6e0d327ebb169f9c9708f03b71c8270a68ba5ab87b95bb7c0a8297d`.
+Base3366d4692a3feda45b962716e2dff32c591775ad. Implementation C8b0a06442e339a553072ca32851b2f5dea6fb73c.
+Source spec/addendum and docs/M8E_Q01_CONTRACT.md define full scope. Actual executor GPT-6 Astra/low verified.
+Final report: reports/M8E_Q01_CONVERSATION_QUALITY_REPORT.md; CHECKS/COMPLETION_AUDIT under evidence/M8E_Q01.
 
-Source selection now recognizes the known pre-hotfix voice profile, preserving complete manifest/file validation
-and all other profile fields. Targets remain current-only; unknown source profiles fail before backup/activation.
-Seven source-upgrade regressions and seven opaque/fixed-host/IPv4 transport regressions use synthetic fixtures.
-C5 exact Python853/web53/Chromium21, protected preflight/backup/upgrade and vault preservation passed.
-C6 fixes confirmed IPv6-first timeout using IPv4 to the same fixed chatgpt.com:443 endpoint; helper TCP now PASS.
-Final exact-C6 Python860/web53/build/Chromium21/privacy PASS. Protected preflight/backup/upgrade PASS;
-root/schema/content-free counts preserved. Exact C6 is running at http://127.0.0.1:8765; static build/mode
-verified, page opened. Owner manually unlocks/enables/sends; post-fix readiness remains pending approval. The concurrent Chromium run had a5s assistant-count
-timeout; the isolated exact same scenario passed21 without assertion/code changes.
+Completed offline:44 original scenarios; eight anchored dimensions; baseline25 hashes/six snapshots; read-only
+historical comparisons; nine-skill audit; five non-executable clinical proposals; masked historical A/B packet
+with known contexts and separate mapping; tested scoped24-slot budget/funding gate/private-contract evaluator.
+All clinical candidates remainOFF, instructionsnull, behaviorNOT_IMPLEMENTED/NOT_TESTABLE;27 findingsOPEN.
 
-Owner now explicitly authorizes repair/upgrade/restart and inspection of the last test; only state/error were
-queried, never message/response/audio content. Last manual request: FAILED / PROVIDER_RPC_FAILED. This is not
-proof of auth failure or model unavailability. Offline SDK protocol tests are synthetic, network-denied and never
-start an inference turn. Live readiness (initialize/account-read refresh=false/model-list, no thread/turn) is
-initially rejected by auto-review, then explicitly authorized once by the owner: account/read workspace-routing
-timeout, model/list PASS, no inference. That authorization is consumed; one post-fix control probe is pending approval. The helper
-connectivity defect was independently isolated through anonymous DNS/TCP-only probes, with no auth/HTTP/RPC.
+Bounded fix: FORMAL_VY now rejects the observed unquoted generated «хочеш»; source/labeled fiction quotes and
+formal alternatives pass. Same-text before/after controller proof is recorded. No instruction/frame, address
+policy, clinical/source/consent/crypto/sync change. No broad morphology or conversational-benefit claim.
+Fourteen unsafe/unwanted scripted texts remain structurally accepted: semantic safety is not proved by schema.
+This is not measured live-model error frequency. Current Free/Deep/Luna/Sol quality remains INCONCLUSIVE.
 
-Original product C4 `55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d` and H02 remain externally ACCEPTED;
-this candidate is AWAITING_REVIEW. Phone/clinical/Health OFF, external controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER,
-human UA PARTIAL_OWNER_PILOT / OPEN. Keep all unlock, AI enable, messages and microphone actions manual.
-See `reports/M8E_OWNER_LOCAL_REPAIR_REPORT.md` and `prompts/M8E_OWNER_LOCAL_REPAIR.md`.
+Exact-C Python904 (including synthetic browser regressions), web53/build, Ajv7/12/14, admission/qualification,
+docs/privacy PASS. Twelve-slot offline rehearsal completed with explicit scripted placeholders, NOT quality
+responses. Matched Deep context hashes and full downstream fingerprints verified; near-duplicate unselected
+journal/thread sources excluded. Historical ledger bytes and skill/frame/admission hashes unchanged.
 
-An unrelated untracked `prompts/M8E_Q01_CONVERSATION_QUALITY_AUDIT.md` appeared during work; it was not read,
-changed or staged. Preserve it; no quality-audit or next-milestone work was started.
+Live0/24. Explicit inference grant is recorded. Metadata preflight was rejected BEFORE execution by automatic
+approval review because direct confirmation for network account/usage metadata was missing. Async confirmation
+question pending. No retry/bypass; no actual native ledger or preflight/current-model outputs. Do not retry
+based on elapsed time/preselection. Any resumed live work must honor the original24 aggregate cap, real SDK
+included-usage/no-Credits/profile proof and current authorization, never use old ledgers or fake proof.
+Generation inputs did not change; a duplicate CANDIDATE arm is NOT_RUN_NO_MODEL_INPUT_CHANGE. Baseline-generation
+checks disclose current register validation and prove other sources unchanged. No owner-pilot request from the
+older repair is part of Q01.
+
+Owner pilot/private content/audio/credentials/settings untouched; no Mac packaging/install, clinical/Health/
+phone activation, new auth/billing/provider, deploy/tag/release or next milestone. No efficacy or independent
+clinical/human-review claim. Remaining publication step: evidence-only R → privacy → normalFF main → verify
+origin==R. Do not self-ACCEPT. After delivery stop for independent review; live limitations remain explicit.

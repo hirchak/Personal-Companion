@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "implementation_sha": "8b0a06442e339a553072ca32851b2f5dea6fb73c",
+  "base_sha": "3366d4692a3feda45b962716e2dff32c591775ad",
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "node": "26.8.2",
+    "npm": "11.19.1",
+    "dependencies": "EXISTING_ONLY"
+  },
+  "commands": [
+    {
+      "command": ".venv/bin/python -m pytest -q",
+      "exit_code": 0,
+      "result": "PASS",
+      "passed": 904,
+      "warnings": 1,
+      "seconds": 397.07,
+      "log_sha256": "5575a7518eea0fa6e0c9710d46c06a16ce175eb855af0715b6ed891c8d87459e"
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0,
+      "result": "PASS",
+      "passed": 53
+    },
+    {
+      "command": "npm --prefix apps/web run build",
+      "exit_code": 0,
+      "result": "PASS",
+      "scope": "TypeScript and Vite web build; no Mac package"
+    },
+    {
+      "command": "existing synthetic browser regression modules in full pytest",
+      "exit_code": 0,
+      "result": "PASS",
+      "scope": "Included in904; not owner browser or packaged Mac verification"
+    },
+    {
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "result": "PASS",
+      "checks": 7
+    },
+    {
+      "command": "node scripts/verify_m7c_schemas.mjs",
+      "exit_code": 0,
+      "result": "PASS",
+      "checks": 12
+    },
+    {
+      "command": "node scripts/verify_m7d_schemas.mjs",
+      "exit_code": 0,
+      "result": "PASS",
+      "checks": 14
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "result": "STRUCTURAL_PASS",
+      "open_findings": 27,
+      "clinical_active": 0
+    },
+    {
+      "command": ".venv/bin/python -m scripts.qualify_m7d_skills --check",
+      "exit_code": 0,
+      "result": "PASS",
+      "candidate_off": 5
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "result": "PASS",
+      "scope": "public tree, generated snapshots/UI, all local Git objects at exact-C checkpoint"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "offline_rehearsal": {
+    "slots_completed": 12,
+    "origin": "SCRIPTED_FIXTURE_NOT_MODEL_QUALITY",
+    "native_security_checks": true,
+    "matched_deep_context_hashes": true,
+    "no_unselected_sources": true,
+    "full_downstream_fingerprints_unchanged": true
+  },
+  "live_inference_attempts": 0,
+  "metadata_preflight": "BLOCKED_BY_AUTO_REVIEW_BEFORE_EXECUTION",
+  "actual_current_profile_quality": "NOT_EVALUATED",
+  "human_review": "PENDING",
+  "therapeutic_efficacy": "NOT_ESTABLISHED",
+  "not_run": {
+    "owner_pilot": "PROHIBITED_BY_GOAL",
+    "private_data": "PROHIBITED_BY_GOAL",
+    "macos_packaging_install": "PROHIBITED_BY_GOAL",
+    "native_current_model_comparison": "RUNTIME_APPROVAL_GATE_BLOCKED",
+    "clinical_protocol_execution": "OFF_NOT_IMPLEMENTED",
+    "CI": "NOT_CHECKED"
+  }
+}

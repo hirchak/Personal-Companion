@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "DETERMINISTIC_REPLAY_NOT_NEW_MODEL_OUTPUT",
+  "baseline_evidence": "reports/evidence/M8E_Q01/REGISTER_GAP.json",
+  "before": "ACCEPTED",
+  "after": "ADDRESS_FORM_MISMATCH",
+  "same_unmodified_historical_text_sha256": "dc39e9830f011c90be3e92539e72fc39599db8b79ba3b5b8939638c36816cdf6",
+  "formal_alternative": "ALLOWED",
+  "source_and_labeled_fiction_quotes": "ALLOWED_BY_REGRESSION",
+  "changed_runtime_function": "verify_address_form",
+  "address_policy_changed": false,
+  "clinical_or_source_consent_gate_changed": false,
+  "limitation": "One observed verb form, not a complete morphology or semantic-quality detector. No demonstrated change in model-generated response quality."
+}
