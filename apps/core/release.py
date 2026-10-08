@@ -45,7 +45,7 @@ def package_path(path):
         return p
     return safe_path(p)
 
-def validate_package(package, expected_hash):
+def validate_package(package, expected_hash, *, historical_source=False):
     package = package_path(package)
     m = read_json(package / 'release-manifest.json')
     validate_manifest(m)
@@ -58,7 +58,14 @@ def validate_package(package, expected_hash):
         if encode(read_json(package/'packages/pilot/MAC_PRIVATE_CORE_PROFILE.json'))!=encode(PROFILE):raise SafeError('PILOT_PROFILE_INCOMPATIBLE')
     if m['format']==4:
         from .local_private_ai import PROFILE as AI_PROFILE
-        if encode(read_json(package/'packages/pilot/MAC_PRIVATE_AI_VOICE_PROFILE.json'))!=encode(AI_PROFILE):raise SafeError('PILOT_PROFILE_INCOMPATIBLE')
+        profile=encode(read_json(package/'packages/pilot/MAC_PRIVATE_AI_VOICE_PROFILE.json'))
+        accepted={encode(AI_PROFILE)}
+        if historical_source:
+            # The pre-hotfix M8E source used a separate voice consent gate. Recognize
+            # only that exact prior declaration; targets still require the current
+            # profile, and manifest/file integrity is checked before either variant.
+            accepted.add(encode(dict(AI_PROFILE,local_voice='EXPLICIT_OWNER_GATE_DEFAULT_OFF')))
+        if profile not in accepted:raise SafeError('PILOT_PROFILE_INCOMPATIBLE')
     return m
 
 def prepare(output):
@@ -241,7 +248,7 @@ def selected(app, data, root_kind=RootKind.SYNTHETIC_TEST):
     active = read_json(app/'active.json')
     if set(active) != {'release_id', 'manifest_hash'} or not re.fullmatch(r'M8[ABCD]-[0-9a-f]{40}', active['release_id']): raise SafeError('INVALID_METADATA')
     package = app/'releases'/active['release_id']
-    return package, validate_package(package, active['manifest_hash'])
+    return package, validate_package(package, active['manifest_hash'],historical_source=True)
 
 def stage(package, app, m):
     releases = app/'releases'; releases.mkdir(exist_ok=True)

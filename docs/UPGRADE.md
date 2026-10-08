@@ -85,3 +85,11 @@ never remove marker to bypass recovery. Detailed initial activation: [PILOT_HAND
 M8C→M8D is an explicit application upgrade with protected pre-upgrade backup and fresh private security preflight. Preserve the same root identity/schema11 and journal data; no existing-data migration/discovery during M8D. Optional AI/voice stay OFF after startup and need local acknowledgements. See [pilot handoff](PILOT_HANDOFF.md#m8d-optional-aivoice--post-accept-owner-procedure-not-executed).
 
 M8D lifecycle commands accept an explicit loopback `--port` for initialize/upgrade/restore/rollback as well as preflight/start. Default8765 is unchanged. The actual selected port must be free; this isolates disposable engineering roots from an existing core pilot without weakening the socket preflight.
+
+### M8E historical source profile
+
+Source selection recognizes the exact previous voice declaration `EXPLICIT_OWNER_GATE_DEFAULT_OFF` alongside
+the current `LOCAL_SESSION_ONLY_NO_AI_CONSENT`. All other profile fields, manifest identity and the complete
+file-hash set must still match. New upgrade targets require the current profile; an unknown or modified source
+profile fails before backup/activation. This permits the protected existing-vault upgrade to the independent
+local-microphone hotfix without editing the installed source manifest, its files, or the vault.
