@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "goal": "M8E_Q01_OWNER_2026_10_08",
+  "authority": "EXPLICIT_HUMAN_GOAL_MESSAGE_AND_ADDENDUM",
+  "authorized": true,
+  "scope": "ORIGINAL_SYNTHETIC_ONLY",
+  "maximum_inference_attempts": 24,
+  "count_fail_cancel_retry": true,
+  "routes": [
+    "CODEX_SUBSCRIPTION"
+  ],
+  "profiles": {
+    "FREE": {
+      "model": "gpt-6-luna",
+      "effort": "high"
+    },
+    "DEEP_ECONOMICAL": {
+      "model": "gpt-6-luna",
+      "effort": "max"
+    },
+    "DEEP_QUALITY": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    }
+  },
+  "additional_money_budget": 0,
+  "purchased_credits_allowed": false,
+  "payg_allowed": false,
+  "new_auth_or_keys_allowed": false,
+  "model_provider_fallback_allowed": false,
+  "clinical_activation_allowed": false,
+  "private_owner_data_allowed": false,
+  "owner_pilot_access_or_install_allowed": false,
+  "runtime_gate": "PENDING_VERIFICATION_NO_LIVE_INFERENCE_YET",
+  "independent_review_required": true,
+  "global_live_provider_calls": false,
+  "global_permissions_changed": false
+}

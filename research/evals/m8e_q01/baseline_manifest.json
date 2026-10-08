@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "base_sha": "3366d4692a3feda45b962716e2dff32c591775ad",
+  "last_reviewed_implementation_sha": "55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d",
+  "reviewed_to_base_diff_sha256": "fe129a06e9dadb23d82b89d65c10b4dac4e041ba7e4546b24492bd78b4d7e76b",
+  "tracked_worktree": "CLEAN",
+  "owner_goal_file": "UNTRACKED_OWNER_INPUT_PRESERVED",
+  "executor": {
+    "model": "gpt-6-astra",
+    "effort": "low",
+    "verified_from": "CURRENT_TURN_CONTEXT_METADATA",
+    "not_inferred_from_catalog": true
+  },
+  "files": {
+    "skills/conversation/session_closure.json": "c67d784acc293002e3cb8281a46d1c78867d96a1e0f78b950bf5b95f92df240b",
+    "skills/conversation/core_reflection.json": "70b57039fb82a4909bfb088ad1798caadd3a0f89c1c49790ef9bd770cd0a392b",
+    "skills/conversation/local_private_controller_frame.json": "9fa7f7f101a6d98d49f128cd9b45c9cb97a1dfcc9e5e0447d52019e4c6bafb60",
+    "skills/conversation/deep_session.json": "05393d0bcfe737cf82c2e61a1cfc173da975115e6bea666aa70e49825f77cbbc",
+    "skills/conversation/goal_setting.json": "f8e278cd764fff2a0b816cdf2216b6fa78facb917f059b20c5338e5c5cfc786e",
+    "skills/conversation/controller_frame.json": "eac569b68d9fd35ea98c347acfbab575e1d507bfd4f8fcf073cdf24e8e661dc0",
+    "skills/qualification/sleep_review.json": "f31d84181131a9df7bc3c6060fe282cde4ba735c9d18fef08fc1606804eda973",
+    "skills/qualification/grounding.json": "75187909ffb9e275d40f77a79088925f8681d0ffcf7599865c875d20d33973b5",
+    "skills/qualification/cbt_reflection.json": "5ff840254d56e4858e86eb6a68756cf7ed645e1ffb6fc4d591683316afe365c0",
+    "skills/qualification/worry_rumination.json": "5cead892a0d00b02505f0bacaa06c20299153ee1f31b75a4398f96ddfb9ae2f4",
+    "skills/qualification/nightmare_review.json": "845a4fd17eddc5c7e5f14bb7e3afc655b99b23a6112cddc41bd05f9107c828ec",
+    "apps/core/conversation_controller.py": "f42f9c4c8cb2ac299bf5aefab309cdd624b42def94472e3d6c23632f45c26ba4",
+    "apps/core/conversation_skills.py": "9fc949ce3d7ce4f39c5ad790da61cea8cb564ba09e1ca2c201b9ee777ed474fe",
+    "apps/core/conversation_runtime_contracts.py": "22ded73ead0b0e6c8de833b80b3dfb81683ca8637f01ff823cb8ed9c1df95250",
+    "apps/core/reflection.py": "f951d19492e84718074b2d81e709ecbbbc2fff1188e4e371e20e6a1a202a5ed6",
+    "apps/core/deep_session.py": "b7b5a24139fbdc98f47a1e039c30d606f8094883182979cf02b76716c0199048",
+    "apps/core/codex_conversation_provider.py": "0fc5191feff6ce2dd0f1d1e4ab7bbd98c53b91fde81541dc5271c805ecfa25ff",
+    "apps/core/local_private_provider.py": "e72503c0b1a790924df1a2d08b12a5594208dfe4ff4f362c2f231a3609b4d493",
+    "apps/core/local_private_context.py": "996c08ed00ba4753f7f03e4e3d4a17af71db86a9950dbd3d8d0ce13fa5b3a7a9",
+    "apps/core/local_consent.py": "7cfe052ce35ab5cb11f22878341490b3cdb8b48d8d343dd44597312b795de6f5",
+    "research/admission/registry.json": "8aab44e94922ef3860e2777a9611cf574b9bb65d46fd9b4c9d5f9d2e2fa5a1df",
+    "docs/SAFETY.md": "8a9941e59cb5aedde0c939e6f0b47b56a2d5323581c4b2d31adf3f258b3106ed",
+    "docs/M8E_CONTRACT.md": "e4d9d6e86ccf4e3882b8a709112d52e252b063a3c72d94f621f74743f40060ca",
+    "docs/M7C_CONTRACT.md": "d5290d16934ea244920bf3be2fedd724fa3fc41a19bce0464e5b94e65ae0b7bf",
+    "docs/M7D_CONTRACT.md": "dfc1f2879153550e94ac3606b52fe4d3d9ed4f1e90d0e5f89f4f554e765ab9d6"
+  },
+  "neutral_skills": {
+    "session_closure": {
+      "version": "2.0.0",
+      "sha256": "c67d784acc293002e3cb8281a46d1c78867d96a1e0f78b950bf5b95f92df240b"
+    },
+    "core_reflection": {
+      "version": "2.1.0",
+      "sha256": "70b57039fb82a4909bfb088ad1798caadd3a0f89c1c49790ef9bd770cd0a392b"
+    },
+    "deep_session": {
+      "version": "2.1.0",
+      "sha256": "05393d0bcfe737cf82c2e61a1cfc173da975115e6bea666aa70e49825f77cbbc"
+    },
+    "goal_setting": {
+      "version": "2.0.0",
+      "sha256": "f8e278cd764fff2a0b816cdf2216b6fa78facb917f059b20c5338e5c5cfc786e"
+    }
+  },
+  "clinical_candidates": [
+    {
+      "skill_id": "cbt_reflection",
+      "status": "CANDIDATE_METADATA_ONLY",
+      "activation_state": "OFF",
+      "runtime_instructions": null,
+      "rights_status": "NOT_CLEARED_FOR_RUNTIME_CONTENT",
+      "evidence_status": "UNRESOLVED_CANONICAL_FINDINGS",
+      "unresolved_finding_ids": [
+        "RG-01",
+        "RG-10",
+        "RG-13",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "qualified_content_review_required": true
+    },
+    {
+      "skill_id": "grounding",
+      "status": "CANDIDATE_METADATA_ONLY",
+      "activation_state": "OFF",
+      "runtime_instructions": null,
+      "rights_status": "NOT_CLEARED_FOR_RUNTIME_CONTENT",
+      "evidence_status": "UNRESOLVED_CANONICAL_FINDINGS",
+      "unresolved_finding_ids": [
+        "RG-01",
+        "RG-02",
+        "RG-04",
+        "RG-09",
+        "RG-11",
+        "RG-12",
+        "RG-13",
+        "RG-15",
+        "RG-26",
+        "RG-27"
+      ],
+      "qualified_content_review_required": true
+    },
+    {
+      "skill_id": "nightmare_review",
+      "status": "CANDIDATE_METADATA_ONLY",
+      "activation_state": "OFF",
+      "runtime_instructions": null,
+      "rights_status": "NOT_CLEARED_FOR_RUNTIME_CONTENT",
+      "evidence_status": "UNRESOLVED_CANONICAL_FINDINGS",
+      "unresolved_finding_ids": [
+        "RG-01",
+        "RG-04",
+        "RG-05",
+        "RG-06",
+        "RG-07",
+        "RG-09",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-26",
+        "RG-27"
+      ],
+      "qualified_content_review_required": true
+    },
+    {
+      "skill_id": "sleep_review",
+      "status": "CANDIDATE_METADATA_ONLY",
+      "activation_state": "OFF",
+      "runtime_instructions": null,
+      "rights_status": "NOT_CLEARED_FOR_RUNTIME_CONTENT",
+      "evidence_status": "UNRESOLVED_CANONICAL_FINDINGS",
+      "unresolved_finding_ids": [
+        "RG-01",
+        "RG-04",
+        "RG-08",
+        "RG-09",
+        "RG-20",
+        "RG-23",
+        "RG-26",
+        "RG-27"
+      ],
+      "qualified_content_review_required": true
+    },
+    {
+      "skill_id": "worry_rumination",
+      "status": "CANDIDATE_METADATA_ONLY",
+      "activation_state": "OFF",
+      "runtime_instructions": null,
+      "rights_status": "NOT_CLEARED_FOR_RUNTIME_CONTENT",
+      "evidence_status": "UNRESOLVED_CANONICAL_FINDINGS",
+      "unresolved_finding_ids": [
+        "RG-01",
+        "RG-02",
+        "RG-13",
+        "RG-15",
+        "RG-17",
+        "RG-18",
+        "RG-19",
+        "RG-20",
+        "RG-26",
+        "RG-27"
+      ],
+      "qualified_content_review_required": true
+    }
+  ],
+  "active_clinical_protocols": 0,
+  "historical_ledgers": {
+    "m7c": {
+      "sha256": "3ec23fde9dd9bfb8d0d2ae12aea70bd4ab1ad24b139fa29c75ba3ea01d7bdbfb",
+      "rows": [
+        [
+          "M7C_OWNER_2026_10_03",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6-luna",
+          "COMPLETED",
+          58
+        ],
+        [
+          "M7C_OWNER_2026_10_03",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6-luna",
+          "FAILED",
+          1
+        ],
+        [
+          "M7C_OWNER_2026_10_03",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6.1-sol",
+          "COMPLETED",
+          35
+        ]
+      ],
+      "access": "READ_ONLY_EXISTING_LEDGER_NO_RESET"
+    },
+    "m7d": {
+      "sha256": "a0726610cb152b531fb3a941fceff57799e213a8e850005ef2e08ba12bba1af2",
+      "rows": [
+        [
+          "M7D_OWNER_2026_10_04",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6-luna",
+          "COMPLETED",
+          14
+        ],
+        [
+          "M7D_OWNER_2026_10_04",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6-luna",
+          "FAILED",
+          17
+        ],
+        [
+          "M7D_OWNER_2026_10_04",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6-sol",
+          "COMPLETED",
+          16
+        ],
+        [
+          "M7D_OWNER_2026_10_04",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6-sol",
+          "FAILED",
+          1
+        ]
+      ],
+      "access": "READ_ONLY_EXISTING_LEDGER_NO_RESET"
+    },
+    "m8d": {
+      "sha256": "49b2093a46e008f789af441bdb792d3ebaf70fabbe9cfff78dc45948cfa4211e",
+      "rows": [
+        [
+          "M8D_OWNER_PRIVATE_PILOT_SYNTHETIC_2026_10_04",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6-luna",
+          "COMPLETED",
+          3
+        ],
+        [
+          "M8D_OWNER_PRIVATE_PILOT_SYNTHETIC_2026_10_04",
+          "CODEX_SUBSCRIPTION",
+          "gpt-6.1-sol",
+          "COMPLETED",
+          1
+        ]
+      ],
+      "access": "READ_ONLY_EXISTING_LEDGER_NO_RESET"
+    }
+  },
+  "historical_claims_not_relabelled": true,
+  "owner_pilot_access": false,
+  "packaging": false,
+  "live_attempts_so_far": 0,
+  "quality_runtime_changes_since_reviewed": []
+}

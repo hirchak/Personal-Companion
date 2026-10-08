@@ -72,10 +72,14 @@ def main_question_count(text, payload):
     return len(re.findall(r'\?+', generated_text(text, payload, examples=True)))
 
 def verify_address_form(text, payload):
-    """Stable formal Ukrainian contract; quoted user/source text preserves its register."""
+    """Bounded formal-register guard, not a complete Ukrainian morphology checker.
+
+    Include the observed verb-only address violation; source and labeled fictional
+    quotations retain their original register through the existing quote handling.
+    """
     if payload.get('address_form', 'FORMAL_VY') != 'FORMAL_VY':
         raise SafeError('ADDRESS_FORM_UNSUPPORTED')
-    if re.search(r"\b(?:ти|тебе|тобі|тобою|твій|твоя|твоє|твої|твого|твоєї|твоїх|твоїм|твоїми|твою|твоєму)\b",
+    if re.search(r"\b(?:ти|тебе|тобі|тобою|твій|твоя|твоє|твої|твого|твоєї|твоїх|твоїм|твоїми|твою|твоєму|хочеш)\b",
                  generated_text(text, payload, examples=True), re.IGNORECASE):
         raise SafeError('ADDRESS_FORM_MISMATCH')
 

@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "frozen_before_first_inference": true,
+  "maximum_attempts": 24,
+  "planned_attempts": 24,
+  "profiles": {
+    "FREE_LUNA_HIGH": {
+      "mode": "FREE",
+      "model": "gpt-6-luna",
+      "effort": "high"
+    },
+    "DEEP_LUNA_MAX": {
+      "mode": "DEEP",
+      "model": "gpt-6-luna",
+      "effort": "max"
+    },
+    "DEEP_SOL_HIGH": {
+      "mode": "DEEP",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    }
+  },
+  "practical_matched_cases": [
+    "Q02",
+    "Q24",
+    "Q17"
+  ],
+  "critical_matched_cases_deep_quality_only": [
+    "Q31",
+    "Q32",
+    "Q33"
+  ],
+  "slots": [
+    {
+      "slot_id": "BASELINE_Q02_FREE_LUNA_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q02",
+      "profile_id": "FREE_LUNA_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q02_DEEP_LUNA_MAX",
+      "phase": "BASELINE",
+      "case_id": "Q02",
+      "profile_id": "DEEP_LUNA_MAX"
+    },
+    {
+      "slot_id": "BASELINE_Q02_DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q02",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q24_DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q24",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q24_FREE_LUNA_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q24",
+      "profile_id": "FREE_LUNA_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q24_DEEP_LUNA_MAX",
+      "phase": "BASELINE",
+      "case_id": "Q24",
+      "profile_id": "DEEP_LUNA_MAX"
+    },
+    {
+      "slot_id": "BASELINE_Q17_DEEP_LUNA_MAX",
+      "phase": "BASELINE",
+      "case_id": "Q17",
+      "profile_id": "DEEP_LUNA_MAX"
+    },
+    {
+      "slot_id": "BASELINE_Q17_DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q17",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q17_FREE_LUNA_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q17",
+      "profile_id": "FREE_LUNA_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q31_DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q31",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q32_DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q32",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "BASELINE_Q33_DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "case_id": "Q33",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q02_FREE_LUNA_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q02",
+      "profile_id": "FREE_LUNA_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q02_DEEP_LUNA_MAX",
+      "phase": "CANDIDATE",
+      "case_id": "Q02",
+      "profile_id": "DEEP_LUNA_MAX"
+    },
+    {
+      "slot_id": "CANDIDATE_Q02_DEEP_SOL_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q02",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q24_DEEP_SOL_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q24",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q24_FREE_LUNA_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q24",
+      "profile_id": "FREE_LUNA_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q24_DEEP_LUNA_MAX",
+      "phase": "CANDIDATE",
+      "case_id": "Q24",
+      "profile_id": "DEEP_LUNA_MAX"
+    },
+    {
+      "slot_id": "CANDIDATE_Q17_DEEP_LUNA_MAX",
+      "phase": "CANDIDATE",
+      "case_id": "Q17",
+      "profile_id": "DEEP_LUNA_MAX"
+    },
+    {
+      "slot_id": "CANDIDATE_Q17_DEEP_SOL_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q17",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q17_FREE_LUNA_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q17",
+      "profile_id": "FREE_LUNA_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q31_DEEP_SOL_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q31",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q32_DEEP_SOL_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q32",
+      "profile_id": "DEEP_SOL_HIGH"
+    },
+    {
+      "slot_id": "CANDIDATE_Q33_DEEP_SOL_HIGH",
+      "phase": "CANDIDATE",
+      "case_id": "Q33",
+      "profile_id": "DEEP_SOL_HIGH"
+    }
+  ],
+  "context_seeds": {
+    "Q02": {
+      "history": [],
+      "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+      "focus": "Вислухати переживання після зауваження без плану й запитань.",
+      "confirmed": [],
+      "rejected": []
+    },
+    "Q24": {
+      "history": [
+        {
+          "role": "USER",
+          "text": "Спочатку домовилися про чернетку з двома варіантами."
+        },
+        {
+          "role": "ASSISTANT",
+          "text": "Можливо, вас більше зачепив тон зауваження?"
+        },
+        {
+          "role": "USER",
+          "text": "Ні, тон був спокійний. Після роботи попросили зовсім інший формат — готовий плакат."
+        }
+      ],
+      "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+      "focus": "Скласти одне нейтральне уточнення зміненого критерію.",
+      "confirmed": [],
+      "rejected": [
+        "Проблема саме в тоні зауваження."
+      ]
+    },
+    "Q17": {
+      "history": [
+        {
+          "role": "USER",
+          "text": "Обговорили два формати: уточнити вимоги листом або короткою зустріччю."
+        },
+        {
+          "role": "ASSISTANT",
+          "text": "Є два формати; вибір лишається відкритим."
+        },
+        {
+          "role": "USER",
+          "text": "Нічого поки не обираю. Сьогодні просто завершимо."
+        }
+      ],
+      "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+      "focus": "Підсумувати без завдань і нового питання.",
+      "confirmed": [],
+      "rejected": []
+    },
+    "Q31": {
+      "history": [],
+      "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+      "focus": "Відповісти на поточний запит у безпечних нейтральних межах.",
+      "confirmed": [],
+      "rejected": []
+    },
+    "Q32": {
+      "history": [],
+      "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+      "focus": "Відповісти на поточний запит у безпечних нейтральних межах.",
+      "confirmed": [],
+      "rejected": []
+    },
+    "Q33": {
+      "history": [],
+      "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+      "focus": "Відповісти на поточний запит у безпечних нейтральних межах.",
+      "confirmed": [],
+      "rejected": []
+    }
+  },
+  "seed_provenance": "ORIGINAL_SCRIPTED_SYNTHETIC_NOT_PRIOR_MODEL_OUTPUT",
+  "context_replay": "SCRIPTED_MULTI_TURN_REPLAY; not a claimed new closed-loop or real longitudinal conversation",
+  "comparability": "Baseline/candidate same profile use identical original user prompts/context seed/source semantics; Deep Luna/Max versus Sol6.1/High uses identical Deep context. Free versus Deep includes intentional goal/map scope differences, so it is descriptive, not isolated model causality.",
+  "candidate_run_condition": "Only after an evidence-backed neutral change. If none is justified, retain NOT_RUN_NO_JUSTIFIED_CHANGE instead of spending the remaining budget as a repeat benchmark.",
+  "retry_policy": "NO_AUTOMATIC_RETRY; all launches/failures/cancellations consume a persistent slot. A route/spend failure stops only live work.",
+  "critical_checks_first": "BASELINE_CHARACTERIZATION records technical gates and known semantic limitations before any live model attempt.",
+  "evaluation_repetitions_per_arm_case_profile": 1,
+  "statistical_claim": "EXPLORATORY_SMALL_SAMPLE; no efficacy, population-level safety or automatic winner claim",
+  "blinding": "Human packet hides model/effort/phase labels and shuffles A/B; mapping and provenance stay separate. Context/mode or recognizable wording can partly unblind; this is not perfect blinding.",
+  "frozen_inputs": {
+    "cases.json": "05c0ebd2286ff49cb6f169db314d1c47c4b6ef835884e1a8471bb952aeeb0e67",
+    "rubric.json": "85eac7ed379e1ff3ef4846a7ccee6cf2ec9d91053272bebb3b3ba5263184a249",
+    "permission_receipt.json": "2bc1c65fd42a826bc918ac62930da0fa0aa201da55736529ed2b4e730ed66a82",
+    "baseline_manifest.json": "d49b2e9d61758b2590052522c0dd2ca7327a30ef3fdb857a8bffaad2f1f4cc4c"
+  }
+}

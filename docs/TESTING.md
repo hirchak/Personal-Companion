@@ -365,6 +365,27 @@ exits, protocol errors, bounded timeouts, missing models, and unsupported effort
 suppressed and readiness never starts a thread or turn.
 `npm --prefix apps/web test` checks stable activation-code mapping and rejects raw path/account exception data;
 unknown uppercase codes and synthetic secret-like strings collapse to the generic safe code/message.
+
+## M8E-Q01 supportive quality audit
+
+`pytest tests/test_m8e_q01_*.py -q` exercises original-synthetic characterization, budget/metadata fail-closed
+gates, private-contract context replay and the observed FORMAL_VY verb gap. The characterization intentionally
+records that structurally valid unsafe/unwanted fixture text can be accepted: test PASS is not a content-safety
+PASS. Unknown/missing funding permission never becomes included-only authorization; native metadata and model
+execution require their scoped owner/runtime gates. Historical ledgers are never reset or reused.
+
+`python -m scripts.audit_m8e_q01 --output <evidence.json>` reproduces the critical fixture audit.
+`python -m scripts.evaluate_m8e_q01 --phase BASELINE --offline-fixture` uses fresh original-synthetic
+PRIVATE_LOCAL Store fixtures, without packaging/install or owner-pilot access. Scripted responses are labeled
+NOT_MODEL_QUALITY. Matched context hashes and full downstream fingerprints are verified; near-duplicate
+unselected sources must remain excluded. Do not invoke `--live` or metadata preflight while the live gate is
+blocked. Native attempts have a persistent maximum24, including failed/cancelled/interrupted launches.
+
+The current change does not modify model-generation inputs. A duplicate live CANDIDATE arm is therefore
+NOT_RUN_NO_MODEL_INPUT_CHANGE, rather than an unearned before/after quality claim. Baseline-content evaluation
+discloses the current register validator and proves all other frozen generation/runtime sources unchanged.
+The full Python suite includes existing synthetic browser regressions; web unit/typecheck/build remain normal
+checks. Do not run Mac release preparation or install into the owner pilot for Q01.
 `npm --prefix apps/web run build` typechecks/builds the UI.
 `PYTHONPATH=. .venv/bin/python scripts/verify_m8e_browser.py --source-fixture` is pre-C engineering only.
 After C, run `.venv/bin/python -m apps.core.release prepare --output generated/releases/M8D-<C>`, then

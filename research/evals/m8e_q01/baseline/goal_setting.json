@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "skill_id": "goal_setting",
+  "version": "2.0.0",
+  "provenance": "ORIGINAL_PROJECT_AUTHORED",
+  "clinical": false,
+  "purpose": "Propose wording for explicit user agreement",
+  "instructions": "Запропонуй коротке формулювання конкретної цілі саморефлексії з явного наміру людини. Це лише кандидат: користувач переглядає, редагує й окремо погоджує. Не створюй і не змінюй ціль, не приписуй прихованих мотивів.",
+  "allowed_behavior": [
+    "neutral_reflection",
+    "explicit_context_only",
+    "user_can_reject_hypothesis"
+  ],
+  "forbidden_behavior": [
+    "diagnosis",
+    "medication_instruction",
+    "licensed_professional_claim",
+    "hidden_motive_or_trauma_inference",
+    "tools_or_files",
+    "goal_memory_journal_mutation",
+    "practice_activation",
+    "health_access"
+  ],
+  "required_input": [
+    "explicit_synthetic_scope",
+    "user_message",
+    "bounded_context",
+    "exact_goal_revision_for_deep"
+  ],
+  "output_contract": "M7D_SOURCE_BOUND_CANDIDATE_COMPAT_V1",
+  "evaluation_cases": "research/evals/M7D_SYNTHETIC_DEEP.json"
+}
