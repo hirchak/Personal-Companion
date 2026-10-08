@@ -1,0 +1,8 @@
+# M8E owner local repair
+
+- Base published R4 `ed7ec39d904a6319f4f0911c042e04598422a94a`; C5 `1a286f2e840566873ef177f77904b982df620ecb` recognizes the exact previous source voice profile, preserving target/hash/security checks.
+- C5 exact Python853/web53/build/Chromium21 PASS; existing owner protected preflight/backup/upgrade PASS; root/schema/content-free counts preserved.
+- Owner allowed last-test inspection; only state/error metadata read: FAILED / PROVIDER_RPC_FAILED. No message/response/audio content or credentials inspected.
+- Auto-review initially rejected live readiness; owner explicitly allowed one. Account/read routing timeout, model/list PASS, no inference. A diagnostic teardown typo was corrected and only owned ephemeral children/state cleaned.
+- Anonymous same-profile DNS/TCP isolated IPv6-first timeout with IPv4 working. Final C6 `4124851adc08858e22e99b3adc6c70d5843c2b6b` uses IPv4 to the same fixed host/port; no endpoint, TLS, auth, model or billing change. Helper TCP now PASS, focused65 PASS. Final exact-C6 Python860/web53/build/Chromium21/privacy PASS; protected preflight/backup/upgrade and metadata-only preservation PASS; exact C6 running on loopback, static build/mode verified and page opened. Post-fix control readiness is pending explicit approval; no agent inference. Concurrent Chromium timeout retained; isolated identical scenario PASS21.
+- Candidate AWAITING_REVIEW, original product/H02 remain externally ACCEPTED. Phone/clinical/Health OFF; external controls NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER; human UA PARTIAL_OWNER_PILOT / OPEN. Report: `reports/M8E_OWNER_LOCAL_REPAIR_REPORT.md`.
