@@ -16,6 +16,10 @@ Whisper. Both identities bind exact source C. Native metadata is additive; old
 release provenance is not relabeled as standalone. Data resides outside the app
 in a distinct PersonalCompanionStandalone Application Support container; it never
 discovers or upgrades the existing pilot. First initialization needs GUI consent.
+Only the generated native `.app/Contents/Resources/payload` build location is
+additively admitted by release.package_path; symlink/Git-content checks remain.
+Data roots inside Git remain forbidden. Installed payloads use the existing
+outside-Git path contract.
 PRIVATE_LOCAL still requires verified FileVault APFS, 0700/0600 and no ACL grants.
 No application-level encryption claim. Test builds have a different bundle ID,
 disposable-home boundary and independent test trust; production updates disabled.
