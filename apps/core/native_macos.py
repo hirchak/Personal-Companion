@@ -329,7 +329,16 @@ class NativeSession:
         restored_app, restored_data = self.restore_copy(target_backup,
             self.manifest['manifest_hash'], result['backup_manifest_hash'])
         r.inspect_data(restored_data, self.kind)
-        recovery = self.base/'previous-code.app'
+        # Signed versioned frameworks contain legitimate contained symlinks.
+        # Keep code outside the private managed data container so existing
+        # safe_path/private-root no-symlink policy remains unchanged.
+        recovery_dir=self.base.with_name(self.base.name+'-code-recovery')
+        if not recovery_dir.exists():recovery_dir.mkdir(mode=0o700)
+        if recovery_dir.is_symlink() or recovery_dir.stat().st_uid!=os.getuid() or recovery_dir.stat().st_mode & 0o777!=0o700:
+            raise SafeError('NATIVE_ROOT_INVALID')
+        if set(p.name for p in recovery_dir.iterdir())-{'previous-code.app'}:
+            raise SafeError('NATIVE_ROOT_INVALID')
+        recovery = recovery_dir/'previous-code.app'
         if recovery.exists():
             validate_bundle(recovery)
             shutil.rmtree(recovery)  # Only this app's previously verified managed code.

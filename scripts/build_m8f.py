@@ -36,7 +36,9 @@ def bundled_runtime(framework):
     # Framework Python's system installation is a build input, never a runtime path.
     run('/usr/bin/lipo', PYTHON_ROOT/'Python', '-thin','arm64','-output',framework/'Python')
     (framework/'bin').mkdir()
-    run('/usr/bin/lipo',PYTHON_ROOT/'bin/python3.13','-thin','arm64','-output',framework/'bin/python3.13')
+    # python.org's bin/python is a framework-app launcher. Bundle its actual
+    # interpreter, not the launcher that posix_spawns Resources/Python.app.
+    run('/usr/bin/lipo',PYTHON_ROOT/'Resources/Python.app/Contents/MacOS/Python','-thin','arm64','-output',framework/'bin/python3.13')
     stdlib = framework/'lib/python3.13'
     shutil.copytree(PYTHON_ROOT/'lib/python3.13',stdlib,
         ignore=shutil.ignore_patterns('site-packages','__pycache__','*.pyc','test','tests','idlelib','tkinter','_tkinter*','_test*','config-3.13-darwin','turtledemo','ensurepip'))

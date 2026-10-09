@@ -83,7 +83,9 @@ def test_real_backup_restore_copy_precedes_update_and_preserves_data(native):
     pending=r.read_json(native.base/'native-update.json')
     assert pending['restore_verified']
     r.verify_backup(native.base/'backups'/pending['backup'],native.manifest['manifest_hash'],pending['backup_manifest'])
-    assert n.validate_bundle(native.base/'previous-code.app')['build']==101
+    assert n.validate_bundle(native.base.with_name(native.base.name+'-code-recovery')/'previous-code.app')['build']==101
+    # Code's contained framework links never enter the private managed root.
+    native.close();reopened=n.NativeSession(native.bundle,native.base);reopened.close()
 
 
 def test_restore_requires_consent_keeps_prior_root_and_renews_identity(native):

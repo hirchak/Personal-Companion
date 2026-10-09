@@ -276,7 +276,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     }
     @objc func showBackups() {if FileManager.default.fileExists(atPath:base.appendingPathComponent("backups").path) {NSWorkspace.shared.open(base.appendingPathComponent("backups"))}}
     @objc func previousCode() {
-        let url=base.appendingPathComponent("previous-code.app")
+        let url=base.deletingLastPathComponent().appendingPathComponent(base.lastPathComponent+"-code-recovery/previous-code.app")
         guard FileManager.default.fileExists(atPath:url.path) else {problem("Попередня програма ще не збережена. Дані залишаються у локальному сховищі.");return}
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
