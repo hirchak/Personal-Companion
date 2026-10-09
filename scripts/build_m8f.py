@@ -39,7 +39,7 @@ def bundled_runtime(framework):
     run('/usr/bin/lipo',PYTHON_ROOT/'bin/python3.13','-thin','arm64','-output',framework/'bin/python3.13')
     stdlib = framework/'lib/python3.13'
     shutil.copytree(PYTHON_ROOT/'lib/python3.13',stdlib,
-        ignore=shutil.ignore_patterns('site-packages','__pycache__','*.pyc','test','tests','idlelib','tkinter','turtledemo','ensurepip'))
+        ignore=shutil.ignore_patterns('site-packages','__pycache__','*.pyc','test','tests','idlelib','tkinter','_tkinter*','_test*','turtledemo','ensurepip'))
     site = stdlib/'site-packages'; site.mkdir()
     existing = Path(sysconfig.get_path('purelib')).resolve()
     inventory = []
@@ -62,6 +62,7 @@ def bundled_runtime(framework):
         examined.add(p)
         listing = subprocess.check_output(['/usr/bin/otool','-L',str(p)],text=True)
         for line in listing.splitlines()[1:]:
+            if not line.startswith('\t'):continue  # Universal-architecture headings are not dependencies.
             dependency = line.strip().split(' (')[0]
             if not dependency.startswith('/') or dependency.startswith(('/usr/lib/','/System/Library/')): continue
             source = Path(dependency)
@@ -208,6 +209,9 @@ def build(args):
     if not json.loads(probe)['minimal']:raise SafeError('RUNTIME_ENVIRONMENT_NOT_MINIMAL')
     from apps.core.native_macos import validate_bundle
     validate_bundle(app)
+    if (subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()!=commit
+            or subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip()):
+        raise SafeError('CHECKOUT_CHANGED')
     if args.dmg:
         image=output/'Personal Companion.dmg'
         staging=output/'dmg-content';staging.mkdir()

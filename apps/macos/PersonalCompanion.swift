@@ -69,6 +69,21 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     var installing = false
     var observers: [NSObjectProtocol] = []
 
+    func testEvent(_ name:String,_ fields:[String:Any]=[:]) {
+        #if LOCAL_TEST
+        guard let base=base else {return}
+        // Only known mechanism states and public appcast field names, never
+        // note text, credentials, account fields or provider output.
+        var event=fields;event["event"]=name
+        event["build"]=Bundle.main.object(forInfoDictionaryKey:"CFBundleVersion")
+        guard var data=try? JSONSerialization.data(withJSONObject:event) else {return}
+        data.append(10)
+        let url=base.deletingLastPathComponent().appendingPathComponent("native-events.jsonl")
+        if !FileManager.default.fileExists(atPath:url.path) {FileManager.default.createFile(atPath:url.path,contents:nil,attributes:[.posixPermissions:0o600])}
+        if let handle=try? FileHandle(forWritingTo:url) {try? handle.seekToEnd();try? handle.write(contentsOf:data);try? handle.close()}
+        #endif
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Focus an existing native instance; never spawn another data writer.
         let identifier = Bundle.main.bundleIdentifier!
@@ -82,6 +97,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
             NSApp.terminate(nil); return
         }
         base = URL(fileURLWithPath:test).appendingPathComponent("Standalone")
+        setenv("CFFIXED_USER_HOME",test,1);setenv("HOME",test,1)
         #else
         base = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Application Support/PersonalCompanionStandalone")
@@ -101,6 +117,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         updater = SPUStandardUpdaterController(startingUpdater:true,updaterDelegate:self,userDriverDelegate:nil)
         #endif
         window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps:true)
+        testEvent("window-ready")
     }
 
     func buildWindow() {
@@ -197,6 +214,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         guard port>0 else { throw NativeFailure.unavailable }
         replaceContent(web);web.load(URLRequest(url:URL(string:"http://127.0.0.1:\(port)/")!))
         state.stringValue="Локальний простір заблоковано · AI недоступний";openButton.isEnabled=true
+        testEvent("core-started")
     }
     @objc func unlock() {
         #if LOCAL_TEST
@@ -218,7 +236,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
             // held in a lexical closure, never persisted or added to a URL.
             let js="(async()=>{const r=await fetch('/api/v1/auth/unlock',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-PC-Build':'\(sha)'},body:JSON.stringify({code:\(codeJSON)})});return r.ok})()"
             web.callAsyncJavaScript("return await "+js,arguments:[:],in:nil,in:.page) { result in
-                switch result {case .success(let value):if value as? Bool == true { self.web.reload();self.state.stringValue="Дані на цьому Mac · AI вимкнений" }
+                switch result {case .success(let value):if value as? Bool == true { self.web.reload();self.state.stringValue="Дані на цьому Mac · AI вимкнений";self.testEvent("native-unlocked") }
                 else {self.problem("Не вдалося відкрити простір. Повторіть підтвердження доступу.")}
                 case .failure: self.problem("Не вдалося відкрити простір. Повторіть підтвердження доступу.")}
             }
@@ -273,6 +291,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     func allowedChannels(for updater:SPUUpdater) -> Set<String> { ["M8F_LOCAL_TEST"] }
     func updater(_ updater:SPUUpdater, shouldProceedWithUpdate item:SUAppcastItem, updateCheck:SPUUpdateCheck) throws {
         #if LOCAL_TEST
+        testEvent("update-selected",["property_keys":item.propertiesDictionary.keys.map {String(describing:$0)}])
         // Signed appcast metadata, independently tied to embedded test public key.
         guard item.channel=="M8F_LOCAL_TEST",let build=Int(item.versionString),
               let product=item.propertiesDictionary["pc:product"] as? String,
@@ -284,14 +303,14 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         lock();state.stringValue="Готуємо оновлення: перевіряємо копію й відновлення…"
         do {_=try backend!.call("prepare-update",["target":["product":product,"channel":item.channel!,"arch":arch,
             "build":build,"source_sha":sha,"manifest_hash":hash,"schema":schema]])
-            prepared=true;state.stringValue="Доступна нова версія. Копію перевірено; дані призупинено до завершення оновлення."
+            prepared=true;state.stringValue="Доступна нова версія. Копію перевірено; дані призупинено до завершення оновлення.";testEvent("update-prepared")
         } catch {try? start();throw NSError(domain:"PersonalCompanion",code:1,userInfo:[NSLocalizedDescriptionKey:"Оновлення не пройшло перевірку. Попередня програма й дані збережені."])}
         #else
         throw NativeFailure.unavailable
         #endif
     }
-    func updater(_ updater:SPUUpdater,willInstallUpdate item:SUAppcastItem) {installing=true}
-    func updater(_ updater:SPUUpdater,didAbortWithError error:Error) {prepared=false;installing=false;try? start();state.stringValue="Оновлення не виконано. Попередня версія працює."}
+    func updater(_ updater:SPUUpdater,willInstallUpdate item:SUAppcastItem) {installing=true;testEvent("update-installing")}
+    func updater(_ updater:SPUUpdater,didAbortWithError error:Error) {prepared=false;installing=false;try? start();state.stringValue="Оновлення не виконано. Попередня версія працює.";testEvent("update-aborted")}
     func updater(_ updater:SPUUpdater,didFinishUpdateCycleFor updateCheck:SPUUpdateCheck,error:Error?) {
         if !installing {prepared=false;try? start()}
     }
