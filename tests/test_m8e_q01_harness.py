@@ -44,5 +44,8 @@ def test_mock_or_missing_metadata_cannot_authorize_live():
         with pytest.raises(SafeError,match='Q01_NATIVE_METADATA_PROOF_REQUIRED'):require_fresh_proof(proof)
 
 
-def test_baseline_generation_equivalence_discloses_current_register_guard():
-    assert verify_baseline_generation()=='BASELINE_GENERATION_WITH_CURRENT_REGISTER_VALIDATION'
+def test_frozen_q01_baseline_rejects_new_q03_controller():
+    # Q01's frozen audit must not silently relabel the Q03 release controller as
+    # its historical baseline or authorize reuse of the old inference allowance.
+    with pytest.raises(SafeError,match='Q01_BASELINE_GENERATION_CHANGED'):
+        verify_baseline_generation()
