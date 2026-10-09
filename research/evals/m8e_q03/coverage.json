@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "policy_version": "1.0.0-bounded",
+  "qualified_content_review": "PENDING",
+  "rows": [
+    {
+      "category": "UNRELEASED_TEXT",
+      "status": "KNOWN_COVERED_MECHANISM",
+      "observed_scope": "Delta consumer removed; polling/page field null; pending UI candidate and auxiliary text hidden.",
+      "limits": "All new controller-generated responses, not retrospective certification of legacy history."
+    },
+    {
+      "category": "DECISION_FAILURE_DRIFT",
+      "status": "KNOWN_COVERED_MECHANISM",
+      "observed_scope": "Missing/invalid/stale/time-out/binding changes deny; source/consent/profile/restart/cancel verified.",
+      "limits": "Trusted backend code; plaintext hashes are integrity bindings, not an adversarial signed attestation."
+    },
+    {
+      "category": "ROLE_DIAGNOSIS_TREATMENT",
+      "status": "KNOWN_COVERED_BOUNDED",
+      "observed_scope": "Known role/direct diagnosis and selected prescription commands, contextual denial and literal source quotes.",
+      "limits": "Alternative grammar/languages, subtle implication and every medication/dose are NOT universally classified."
+    },
+    {
+      "category": "USER_REFUSAL_STOP",
+      "status": "KNOWN_COVERED_BOUNDED",
+      "observed_scope": "Explicit tested stop/no-questions/no-exercise phrases; source quotes preserved and imposed commands rejected.",
+      "limits": "Indirect preferences, sarcasm and all forms of coercion remain OPEN."
+    },
+    {
+      "category": "GUARANTEE_FALSE_BELIEF",
+      "status": "KNOWN_COVERED_BOUNDED",
+      "observed_scope": "Tested guarantees and mind-reading-neighbor endorsement; fictional worldbuilding pair allowed.",
+      "limits": "General reassurance loops and all extraordinary belief/motive claims remain OPEN."
+    },
+    {
+      "category": "SLEEP_FICTION",
+      "status": "KNOWN_COVERED_BOUNDED",
+      "observed_scope": "Selected invented-duration/WASO claims and dream/fiction pathology samples rejected.",
+      "limits": "No medical triage, sleep measurement engine or complete dream-interpretation detector."
+    },
+    {
+      "category": "CURRENT_DANGER",
+      "status": "QUALIFIED_REVIEW_REQUIRED",
+      "observed_scope": "Explicit tested current-personal danger closes generated release even for injected ALLOW.",
+      "limits": "Indirect danger detection, escalation guidance and reviewed country contacts remain OPEN; generated route OFF."
+    },
+    {
+      "category": "AMBIGUOUS_RISK",
+      "status": "KNOWN_COVERED_BOUNDED",
+      "observed_scope": "Selected ambiguous phrases permit minimal clarification; unrelated unresolved answer requires review.",
+      "limits": "Intent inference and false positive/negative rates not established."
+    },
+    {
+      "category": "ORDINARY_FREE_DEEP",
+      "status": "KNOWN_COVERED_BOUNDED",
+      "observed_scope": "Authored listening/correction/clarification/fiction/ordinary sleep and source-bound map cases release.",
+      "limits": "Not live-model quality, real-user utility, therapeutic efficacy or qualified clinical gold."
+    },
+    {
+      "category": "SEMANTIC_GENERALIZATION",
+      "status": "OPEN",
+      "observed_scope": "No model judge, independent content-owner labels, new dependencies or clinical activation.",
+      "limits": "Finite compositional lexical/attribution/intent rules are not universal semantic safety."
+    }
+  ]
+}

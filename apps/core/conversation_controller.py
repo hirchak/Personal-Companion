@@ -10,6 +10,8 @@ from .reflection_contracts import ContextRequest,GoalRef
 from .deep_session import DeepSessions,DEEP_TABLES
 from .deep_session_contracts import DeepContextPreview,ContextSelection
 from datetime import datetime,timedelta,timezone
+from contextlib import nullcontext
+from .conversation_release import ReleasePolicy, ReleaseRejected, valid_receipt
 
 NAMESPACE=UUID('70000000-0000-4000-8000-000000000004')
 RUNTIME_TABLES=(
@@ -17,6 +19,46 @@ RUNTIME_TABLES=(
  'CREATE UNIQUE INDEX IF NOT EXISTS conversation_one_foreground ON conversation_inferences(conversation_id) WHERE state IN ("QUEUED","RUNNING")',
  'CREATE TABLE IF NOT EXISTS inference_actions(operation_id TEXT PRIMARY KEY,job_id TEXT NOT NULL,action TEXT NOT NULL,fingerprint TEXT NOT NULL)',
 )
+
+SAFE_FAILURE_CODES = frozenset('''ADDRESS_FORM_UNSUPPORTED ADDRESS_FORM_MISMATCH CANCELLED
+MODEL_OUTPUT_INVALID PROVIDER_FAILED PROVIDER_UNAVAILABLE PROVIDER_TIMEOUT PROVIDER_BINDING_CHANGED
+PROVIDER_TURN_FAILED PROVIDER_PROTOCOL_INVALID PROVIDER_RPC_FAILED PROVIDER_PROCESS_FAILED
+PROVIDER_TOOL_REQUEST_DENIED PROVIDER_OUTPUT_LIMIT PROVIDER_INPUT_LIMIT CONTROLLER_FRAME_CHANGED
+PRIVATE_PROVIDER_ROUTE_UNAVAILABLE PRIVATE_PROVIDER_PROFILE_UNVERIFIED PROVIDER_EFFORT_UNSUPPORTED
+EXISTING_CHATGPT_AUTH_REQUIRED MODEL_CAPABILITY_UNVERIFIED PRIVATE_PROVIDER_TRANSPORT_UNAVAILABLE
+PRIVATE_AI_DISABLED PRIVATE_AI_NOT_ENABLED PRIVATE_AI_CONSENT_CHANGED PRIVATE_ATTEMPT_LIMIT
+PRIVATE_OWNER_ACK_REQUIRED PRIVATE_PROFILE_NOT_AVAILABLE CODEX_CLI_UNAVAILABLE
+PRIVATE_PROVIDER_OS_ISOLATION_UNAVAILABLE PROVIDER_ISOLATION_UNVERIFIED
+CONVERSATION_CHANGED SOURCE_CHANGED SKILL_CHANGED SKILL_OFF CONTEXT_CHANGED MAP_CHANGED
+GOAL_NOT_ACTIVE GOAL_NOT_FOUND GOAL_REVISION_NOT_FOUND SESSION_NOT_OPEN
+PRIVATE_CONTEXT_SOURCE_CHANGED PRIVATE_EXACT_CONTEXT_CHANGED PRIVATE_PREVIEW_CHANGED
+PRIVATE_PROVIDER_BINDING_CHANGED JOURNAL_SELECTION_CHANGED PRIVATE_LOCAL_ROOT_REQUIRED
+MODEL_SOURCE_OUT_OF_SCOPE FREE_MAP_CANDIDATE_DENIED UNREQUESTED_GOAL_CANDIDATE
+CLOSURE_SCHEMA_REQUIRED MAIN_QUESTION_LIMIT USER_STATEMENT_QUOTE_REQUIRED MAP_CAPACITY_REVIEW_REQUIRED
+CONTENT_POLICY_INVALID CONTENT_POLICY_CHANGED CONTENT_DECISION_TIMEOUT CONTENT_DECISION_INVALID
+CONTENT_DECISION_BINDING_CHANGED CONTENT_DECISION_STALE CONTENT_RELEASE_REJECTED CONTENT_REVIEW_REQUIRED
+INFERENCE_PERSISTENCE_FAILED
+PROCESS_INTERRUPTED'''.split())
+
+def safe_result_metadata(result):
+    value={k:result[k] for k in ('route','model','effort','profile') if k in result}
+    if type(result.get('streaming_actual')) is bool:value['streaming_actual']=result['streaming_actual']
+    if type(result.get('elapsed_ms')) in (int,float) and 0<=result['elapsed_ms']<10**9:value['elapsed_ms']=result['elapsed_ms']
+    if isinstance(result.get('auth_type'),str) and result['auth_type'] in {'NONE','EXISTING_CHATGPT','EXISTING_CHATGPT_CLI_ONLY'}:value['auth_type']=result['auth_type']
+    if isinstance(result.get('frame_hash'),str) and re.fullmatch('[0-9a-f]{64}',result['frame_hash']):value['frame_hash']=result['frame_hash']
+    usage=result.get('usage')
+    if isinstance(usage,dict):value['usage']={k:v for k,v in usage.items() if k in {'inputTokens','outputTokens','totalTokens','cachedInputTokens','reasoningTokens'} and type(v) is int and 0<=v<10**12}
+    if isinstance(result.get('attempt_id'),str):
+        try:value['attempt_id']=str(UUID(result['attempt_id']))
+        except ValueError:pass
+    return value
+
+def safe_provider_failure(value):
+    result={'category':'UNCLASSIFIED_PROVIDER_TURN_FAILURE'}
+    if isinstance(value,dict):
+        if isinstance(value.get('category'),str) and value['category'] in {'UNCLASSIFIED_PROVIDER_TURN_FAILURE','INVALID_STRUCTURED_SCHEMA','REASONING_EFFORT_REJECTED','SUBSCRIPTION_LIMIT_REACHED','EXISTING_AUTH_ROUTE_UNAVAILABLE'}:result['category']=value['category']
+        if type(value.get('http_status')) is int and 100<=value['http_status']<=599:result['http_status']=value['http_status']
+    return result
 
 def check_inferences(c):
     """Typed snapshot validation; restore never grants provider activation or resumes work."""
@@ -38,7 +80,10 @@ def check_inferences(c):
                 'skills':[],'context':[],'current_message_ref':'s0','source_refs_allowed':['s0'],
                 'goal_revision':None,'tool_permissions':[],'controller_frame_hash':'0'*64}))
             if not re.fullmatch('[0-9a-f]{64}',d['request_hash']):raise ValueError()
-            if d['state']=='COMPLETED':ConversationCandidate.model_validate(d['candidate'])
+            if d['state']=='COMPLETED':
+                ConversationCandidate.model_validate(d['candidate'])
+                if 'release_policy_hash' in d and not valid_receipt(d):raise ValueError()
+            elif 'release_policy_hash' in d and (d['candidate'] is not None or d.get('release_receipt') is not None):raise ValueError()
     except (KeyError,ValueError,TypeError,ValidationError):raise SafeError('INFERENCE_INTEGRITY') from None
 
 QUOTE_PATTERN = r'«([^«»]{1,1000})»|“([^“”]{1,1000})”|"([^"\n]{1,1000})"'
@@ -84,14 +129,15 @@ def verify_address_form(text, payload):
         raise SafeError('ADDRESS_FORM_MISMATCH')
 
 class ConversationController:
-    def __init__(self,conversations,provider=None,skills=None,timeout=60,private_gate=None):
+    def __init__(self,conversations,provider=None,skills=None,timeout=60,private_gate=None,release_policy=None):
         self.conversations=conversations;self.store=conversations.store;self.context=Reflection(conversations);self.deep=DeepSessions(conversations);self.provider=provider;self.skills=skills or ConversationSkills();self.timeout=timeout
         self.private_gate=private_gate
+        self.release_policy=release_policy or ReleasePolicy()
         if not conversations.synthetic_demo and private_gate is None:raise SafeError('M7C_SYNTHETIC_SCOPE_REQUIRED',403)
         if private_gate is not None:
             from .root_types import RootKind
             if conversations.synthetic_demo or self.store.root_kind!=RootKind.PRIVATE_LOCAL:raise SafeError('PRIVATE_LOCAL_ROOT_REQUIRED',403)
-        self.lock=threading.RLock();self.events={};self.previews={};self.workers={}
+        self.lock=threading.RLock();self.events={};self.previews={};self.workers={};self.failure_notices={}
         with self.store.transaction() as c:
             for sql in RUNTIME_TABLES:c.execute(sql)
             for sql in DEEP_TABLES:c.execute(sql)
@@ -102,9 +148,10 @@ class ConversationController:
             return self.private_gate.provider(mode) if self.private_gate.adapters else None
         return self.provider
     def revoke_private(self):
-        for event in self.events.values():event.set()
-        with self.store.transaction() as c:
-            c.execute('UPDATE conversation_inferences SET state="CANCELLED",revision=revision+1,payload=json_set(payload,"$.state","CANCELLED","$.error","PRIVATE_AI_DISABLED","$.revision",revision+1) WHERE state IN ("QUEUED","RUNNING")')
+        with self.lock:
+            for event in self.events.values():event.set()
+            with self.store.transaction() as c:
+                c.execute('UPDATE conversation_inferences SET state="CANCELLED",revision=revision+1,payload=json_set(payload,"$.state","CANCELLED","$.error","PRIVATE_AI_DISABLED","$.revision",revision+1) WHERE state IN ("QUEUED","RUNNING")')
     def private_preview(self,id,body):
         from .local_private_context import private_preview
         return private_preview(self,id,body)
@@ -118,17 +165,33 @@ class ConversationController:
         if not r or conversation_id is not None and r['conversation_id']!=str(conversation_id):raise SafeError('INFERENCE_NOT_FOUND',404)
         d=json.loads(r['payload']);d.update(state=r['state'],revision=r['revision']);return d
     def public(self,d):
-        return {k:d[k] for k in ('id','conversation_id','state','revision','purpose','error','created_at','updated_at','candidate','request_metadata','provider_result')}
+        value={k:d[k] for k in ('id','conversation_id','state','revision','purpose','error','created_at','updated_at','candidate','request_metadata','provider_result')}
+        if value['error'] is not None and (not isinstance(value['error'],str) or value['error'] not in SAFE_FAILURE_CODES):value['error']='PROVIDER_FAILED'
+        if isinstance(value['provider_result'],dict):
+            observed=value['provider_result'];safe=safe_result_metadata(observed)
+            for k,field in [('route','provider_route'),('model','provider_model'),('effort','provider_effort'),('profile','provider_profile')]:
+                if k in safe and safe[k]!=d['request_metadata'].get(field):safe.pop(k)
+            if 'provider_failure' in observed:safe['provider_failure']=safe_provider_failure(observed['provider_failure'])
+            value['provider_result']=safe
+        elif value['provider_result'] is not None:value['provider_result']=None
+        released=d['state']=='COMPLETED' and ('release_policy_hash' not in d or valid_receipt(d))
+        if not released:value['candidate']=None
+        value['partial_candidate']=None  # retained wire field; never carries generated text
+        value['release_status']='RELEASED' if released else 'AWAITING_VALIDATION' if d.get('validation_started') and d['state']=='RUNNING' else 'GENERATING' if d['state'] in {'QUEUED','RUNNING'} else d['state']
+        if d['state']=='COMPLETED' and not released:
+            value.update(state='FAILED',error='CONTENT_RECEIPT_INVALID',release_status='FAILED')
+        if d['state'] in {'QUEUED','RUNNING'} and d['id'] in self.failure_notices:
+            value.update(state='FAILED',error='INFERENCE_PERSISTENCE_FAILED',release_status='FAILED',candidate=None)
+        return value
     def get(self,conversation_id,id):
         with self.store.connect() as c:d=self.row(c,id,conversation_id)
-        return dict(self.public(d),partial_candidate=self.previews.get(str(id)))
+        return self.public(d)
     def page(self,conversation_id):
         with self.store.connect() as c:
             c.execute('BEGIN')
             page=self.conversations.view(c,self.conversations.row(c,conversation_id))
             r=c.execute('SELECT id FROM conversation_inferences WHERE conversation_id=? ORDER BY json_extract(payload,"$.created_at") DESC LIMIT 1',(str(conversation_id),)).fetchone()
             job=self.public(self.row(c,r['id'],conversation_id)) if r else None
-            if job:job['partial_candidate']=self.previews.get(job['id'])
         return dict(page,inference_job=job,responder=self.status()['responder'])
     def journal_point(self,c,conversation_id,body):
         self.conversations.row(c,conversation_id)
@@ -294,6 +357,7 @@ class ConversationController:
             r=request_type(schema_version=2 if private else 1,request_id=UUID(job_id),mode=conv.mode,purpose=body.purpose,selected_skills=bindings,context_hash=context_hash,retrieval_receipt_id=UUID(built['receipt']['id']),provider_route=metadata['route'],provider_model=metadata['model'],provider_effort=metadata.get('effort','low'),provider_profile=metadata.get('profile','M7C_COMPAT_LOW'),selection_type=preview['selection']['type'] if preview else 'FREE_RECENT',selection_timezone=built['receipt']['timezone'],selected_window_start=built['receipt']['window_start'],selected_window_end=built['receipt']['window_end'],selected_receipt_id=UUID(preview['receipt_id']) if preview else None,selected_context_hash=preview['context_hash'] if preview else None,map_snapshot_hash=digest(encode(snapshot).encode()) if snapshot else None,consent_scope='M8D_THIS_OWNER_EXACT_APPROVED_PRIVATE_CONTEXT' if private else 'M7D_OWNER_AUTHORIZED_ORIGINAL_SYNTHETIC_ONLY',synthetic=not private,clinical_active=0,tools=[],timeout_seconds=self.timeout,input_byte_budget=48000,response_schema='M7C_CONVERSATION_CANDIDATE_V1',payload=payload)
             meta=r.model_dump(mode='json');meta.pop('payload')
             d={'id':job_id,'conversation_id':id,'purpose':body.purpose,'state':'QUEUED','revision':1,'error':None,'created_at':now(),'updated_at':now(),'candidate':None,'request_metadata':meta,'provider_result':None,'request_hash':request_hash,'source_message_id':source_id,'conversation_revision':conv.revision,'aliases':aliases,'attempt':0,'deep_snapshot':snapshot}
+            d['release_policy_hash']=self.release_policy.identity();d['release_receipt']=None
             if private_preview_data:d['private_context']=private_preview_data
             with self.store.transaction() as c:c.execute('INSERT INTO conversation_inferences VALUES(?,?,?,?,?,?,?)',(job_id,id,op,fingerprint,'QUEUED',1,encode(d)))
             self.events[job_id]=threading.Event()
@@ -302,6 +366,7 @@ class ConversationController:
     def launch(self,id):
         t=threading.Thread(target=self.run,args=(str(id),),daemon=True);self.workers[str(id)]=t;t.start()
     def request_for(self,c,d):
+        if 'release_policy_hash' in d and d['release_policy_hash']!=self.release_policy.identity():raise SafeError('CONTENT_POLICY_CHANGED',409)
         conv=self.conversations.row(c,d['conversation_id'])
         if conv.revision!=d['conversation_revision'] or conv.state!='ACTIVE':raise SafeError('CONVERSATION_CHANGED',409)
         self.skills.verify(d['request_metadata']['selected_skills'])
@@ -315,7 +380,7 @@ class ConversationController:
             if digest(encode(fresh).encode())!=d['request_metadata']['map_snapshot_hash']:raise SafeError('MAP_CHANGED',409)
         provider=self.provider_for(conv.mode)
         metadata=provider.metadata() if provider else {}
-        if metadata.get('model')!=d['request_metadata']['provider_model'] or metadata.get('effort','low')!=d['request_metadata']['provider_effort'] or metadata.get('profile','M7C_COMPAT_LOW')!=d['request_metadata']['provider_profile']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
+        if metadata.get('route')!=d['request_metadata']['provider_route'] or metadata.get('model')!=d['request_metadata']['provider_model'] or metadata.get('effort','low')!=d['request_metadata']['provider_effort'] or metadata.get('profile','M7C_COMPAT_LOW')!=d['request_metadata']['provider_profile']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
         if d.get('private_context'):
             from .local_private_context import approved_private_payload,exact_context_hash
             payload,bindings,aliases=approved_private_payload(self,c,conv,Message.model_validate_json(row[0]),built['receipt'],built['context'],d['purpose'],snapshot,d['private_context'])
@@ -328,23 +393,21 @@ class ConversationController:
     def persist(self,c,d):
         d['updated_at']=now();c.execute('UPDATE conversation_inferences SET state=?,revision=?,payload=? WHERE id=?',(d['state'],d['revision'],encode(d),d['id']))
     def run(self,id):
-        cancel=self.events.setdefault(id,threading.Event());started=time.monotonic()
-        result_metadata=None
+        cancel=self.events.setdefault(id,threading.Event());started=time.monotonic();deadline=started+self.timeout
+        result_metadata=None;attempt=None
         try:
             with self.store.transaction() as c:
                 d=self.row(c,id)
                 if d['state']!='QUEUED':return
                 payload=self.request_for(c,d);d['state']='RUNNING';d['revision']+=1;d['attempt']+=1;self.persist(c,d)
-            def preview(raw):
-                # Never log/store partial JSON/reasoning; text remains an explicitly ephemeral candidate.
-                m=re.search(r'"assistant_text"\s*:\s*"((?:[^"\\]|\\.)*)',raw)
-                if m:
-                    try:self.previews[id]=json.loads('"'+m.group(1)+'"')[:4000]
-                    except ValueError:pass
-            result=self.provider_for(payload['mode']).execute(payload,ConversationCandidate.model_json_schema(),cancel,started+self.timeout,preview)
+                attempt=d['attempt']
+            # Provider deltas never enter a cache, API or DOM. The final object is
+            # the only review input, and is serialized once before the release decision.
+            result=self.provider_for(payload['mode']).execute(payload,ConversationCandidate.model_json_schema(),cancel,deadline,None)
+            if time.monotonic()>=deadline:raise SafeError('PROVIDER_TIMEOUT')
             if result.get('route')!=d['request_metadata']['provider_route'] or result.get('model')!=d['request_metadata']['provider_model']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
-            result_metadata={k:result[k] for k in ('route','model','effort','profile','elapsed_ms','usage','auth_type','streaming_actual','frame_hash','attempt_id') if k in result}
             if result.get('effort','low')!=d['request_metadata']['provider_effort'] or result.get('profile','M7C_COMPAT_LOW')!=d['request_metadata']['provider_profile']:raise SafeError('PROVIDER_BINDING_CHANGED',409)
+            result_metadata=safe_result_metadata(result)
             candidate=ConversationCandidate.model_validate_json(result['text'])
             if candidate.working_map and d['request_metadata']['mode']!='DEEP':raise SafeError('FREE_MAP_CANDIDATE_DENIED')
             if any(s not in payload['source_refs_allowed'] for s in candidate.source_refs):raise SafeError('MODEL_SOURCE_OUT_OF_SCOPE')
@@ -352,12 +415,23 @@ class ConversationController:
             if (candidate.closure is not None)!=(d['purpose']=='CLOSURE'):raise SafeError('CLOSURE_SCHEMA_REQUIRED')
             if main_question_count(candidate.assistant_text,payload)>1:raise SafeError('MAIN_QUESTION_LIMIT')
             verify_address_form(candidate.assistant_text,payload)
+            candidate_json=encode(candidate.model_dump(mode='json'))
             with self.store.transaction() as c:
+                fresh=self.row(c,id)
+                if cancel.is_set() or fresh['state']!='RUNNING' or fresh['attempt']!=attempt:return
+                self.request_for(c,fresh)
+                fresh['validation_started']=True;fresh['revision']+=1;self.persist(c,fresh)
+            decision,review_input=self.release_policy.evaluate(payload,candidate_json,d,deadline,cancel)
+            with self.lock,(self.private_gate.lock if self.private_gate else nullcontext()),self.store.transaction() as c:
                 d=self.row(c,id)
+                if d['attempt']!=attempt:return
                 if cancel.is_set() or d['state']!='RUNNING':
                     if result_metadata:d['provider_result']=result_metadata;d['revision']+=1;self.persist(c,d)
                     return
                 self.request_for(c,d)
+                if time.monotonic()>=deadline:raise SafeError('CONTENT_DECISION_TIMEOUT')
+                self.release_policy.verify(decision,review_input)
+                if candidate_json!=encode(candidate.model_dump(mode='json')):raise SafeError('CONTENT_DECISION_BINDING_CHANGED')
                 if candidate.working_map:
                     rr=json.loads(c.execute('SELECT payload FROM retrieval_receipts WHERE id=?',(d['request_metadata']['retrieval_receipt_id'],)).fetchone()[0])
                     refs={r['id']:r for r in rr['sources']}
@@ -367,17 +441,31 @@ class ConversationController:
                 conv=self.conversations.row(c,d['conversation_id']);seq=c.execute('SELECT COALESCE(MAX(sequence),0)+1 FROM conversation_messages WHERE conversation_id=?',(d['conversation_id'],)).fetchone()[0]
                 message=Message(schema_version=1,id=uuid5(NAMESPACE,id+':assistant'),conversation_id=conv.id,role='ASSISTANT',raw_text=candidate.assistant_text,created_utc=now(),revision=1,provenance='MODEL_GENERATED',source_reference=None,source_message_id=UUID(d['source_message_id']),synthetic=self.conversations.synthetic_demo,privacy_class='PRIVATE_PERSONAL',inference_reference={'job_id':id,'request_hash':d['request_hash'],'provider_route':result['route'],'model':result['model'],'response_hash':digest(encode(candidate.model_dump(mode='json')).encode())})
                 c.execute('INSERT INTO conversation_messages VALUES(?,?,?,?)',(str(message.id),d['conversation_id'],seq,encode(message.model_dump(mode='json'))));conv.revision+=1;conv.updated_utc=now();c.execute('UPDATE conversations SET revision=?,payload=?,updated=? WHERE id=?',(conv.revision,encode(conv.model_dump(mode='json')),conv.updated_utc,d['conversation_id']))
-                d['candidate']=candidate.model_dump(mode='json');d['provider_result']=result_metadata;d['state']='COMPLETED';d['revision']+=1;self.persist(c,d)
+                self.release_policy.verify(decision,review_input)
+                if cancel.is_set():raise SafeError('CANCELLED')
+                d.pop('content_decision_metadata',None)
+                d['candidate']=json.loads(candidate_json);d['release_receipt']=self.release_policy.receipt(decision);d['provider_result']=result_metadata;d['state']='COMPLETED';d['revision']+=1;self.persist(c,d)
         except Exception as exc:
-            error=exc.code if isinstance(exc,SafeError) else 'MODEL_OUTPUT_INVALID' if isinstance(exc,ValueError) else 'PROVIDER_FAILED'
-            with self.store.transaction() as c:
-                row=c.execute('SELECT 1 FROM conversation_inferences WHERE id=?',(id,)).fetchone()
-                if row:
-                    d=self.row(c,id)
-                    if result_metadata:d['provider_result']=result_metadata
-                    elif getattr(exc,'inference_attempt_id',None):d['provider_result']={'attempt_id':exc.inference_attempt_id,**({'provider_failure':exc.provider_failure} if getattr(exc,'provider_failure',None) else {})}
-                    if d['state'] in {'QUEUED','RUNNING'}:d['state']='CANCELLED' if cancel.is_set() else 'FAILED';d['error']=error;d['revision']+=1;self.persist(c,d)
-                    elif result_metadata or getattr(exc,'inference_attempt_id',None):d['revision']+=1;self.persist(c,d)
+            error=exc.code if isinstance(exc,SafeError) and isinstance(exc.code,str) and exc.code in SAFE_FAILURE_CODES else 'MODEL_OUTPUT_INVALID' if isinstance(exc,ValueError) and not isinstance(exc,SafeError) else 'PROVIDER_FAILED'
+            try:
+                with self.store.transaction() as c:
+                    row=c.execute('SELECT 1 FROM conversation_inferences WHERE id=?',(id,)).fetchone()
+                    if row:
+                        d=self.row(c,id)
+                        if attempt is not None and d['attempt']!=attempt:return
+                        if isinstance(exc,ReleaseRejected):
+                            d['content_decision_metadata']={k:getattr(exc.decision,k) for k in ('verdict','reason','policy_hash','candidate_hash')}
+                        if result_metadata:d['provider_result']=result_metadata
+                        elif getattr(exc,'inference_attempt_id',None):
+                            metadata=safe_result_metadata({'attempt_id':exc.inference_attempt_id})
+                            if getattr(exc,'provider_failure',None):metadata['provider_failure']=safe_provider_failure(exc.provider_failure)
+                            d['provider_result']=metadata
+                        if d['state'] in {'QUEUED','RUNNING'}:d['state']='CANCELLED' if cancel.is_set() else 'FAILED';d['error']=error;d['candidate']=None;d['release_receipt']=None;d['revision']+=1;self.persist(c,d)
+                        elif result_metadata or getattr(exc,'inference_attempt_id',None):d['revision']+=1;self.persist(c,d)
+            except Exception:
+                # A failed error-write must not print the original rejected JSON
+                # through Python's chained worker traceback. No text is cached here.
+                self.failure_notices[id]=True
         finally:self.previews.pop(id,None)
     def action(self,conversation_id,id,body:InferenceAction):
         fingerprint=digest(encode({'id':str(id),'body':body.model_dump(mode='json')}).encode());op=str(body.operation_id);retry=False
@@ -393,7 +481,11 @@ class ConversationController:
             else:
                 if d['state'] not in {'FAILED','CANCELLED'}:raise SafeError('INFERENCE_TRANSITION_INVALID',409)
                 if str(id) in self.workers and self.workers[str(id)].is_alive():raise SafeError('INFERENCE_STOPPING',409)
-                self.request_for(c,d);d['state']='QUEUED';d['error']=None;retry=True
+                self.request_for(c,d)
+                if 'release_policy_hash' not in d:d['release_policy_hash']=self.release_policy.identity()
+                d.pop('content_decision_metadata',None)
+                self.failure_notices.pop(str(id),None)
+                d['state']='QUEUED';d['error']=None;d['candidate']=None;d['release_receipt']=None;d['validation_started']=False;retry=True
             d['revision']+=1;self.persist(c,d);c.execute('INSERT INTO inference_actions VALUES(?,?,?,?)',(op,str(id),body.action,fingerprint))
         if retry:self.events[str(id)]=threading.Event();self.launch(str(id))
         return self.get(conversation_id,id)

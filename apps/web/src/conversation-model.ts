@@ -103,6 +103,7 @@ export type InferenceJob = {
   purpose: string;
   error: string | null;
   partial_candidate?: string | null;
+  release_status?: "GENERATING" | "AWAITING_VALIDATION" | "RELEASED" | "FAILED" | "CANCELLED";
   candidate: {
     assistant_text: string;
     source_refs: string[];

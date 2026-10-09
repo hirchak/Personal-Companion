@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "version": "1.0.0-bounded",
+  "assessor": "LOCAL_COMPOSITIONAL_RULES",
+  "maximum_decision_age_seconds": 30,
+  "ordinary_bounded_release": true,
+  "immediate_danger_generated_release": false,
+  "qualified_content_review": "PENDING",
+  "universal_semantic_safety": "NOT_ESTABLISHED",
+  "unknown_high_risk_decision": "REQUIRE_REVIEW",
+  "provider_calls": 0
+}

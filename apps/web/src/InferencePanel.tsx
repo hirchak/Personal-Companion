@@ -53,12 +53,14 @@ export function InferencePanel({
   }, [job.id, job.revision]);
   useEffect(() => {
     alive.current = true;
+    let valid = true;
     let timer: ReturnType<typeof setTimeout>;
     async function poll() {
       try {
         const d = await call();
-        if (!alive.current) return;
-        setCurrent(d);
+        if (!alive.current || !valid) return;
+        if (d.id !== job.id || d.conversation_id !== conversationId) throw new Error("RESPONSE_BINDING_CHANGED");
+        setCurrent((old) => d.revision >= old.revision ? d : old);
         const final = !["QUEUED", "RUNNING"].includes(d.state);
         const signature = d.id + ":" + d.revision;
         if (signature !== delivered.current) {
@@ -67,7 +69,7 @@ export function InferencePanel({
         }
         if (!final) timer = setTimeout(() => void poll(), 350);
       } catch {
-        if (alive.current) {
+        if (alive.current && valid) {
           setError(
             "Не вдалося перевірити відповідь. Повідомлення збережене; спробуйте відкрити розмову ще раз.",
           );
@@ -79,6 +81,7 @@ export function InferencePanel({
     else if(delivered.current!==job.id+":"+job.revision){delivered.current=job.id+":"+job.revision;onChanged(job,true)}
     return () => {
       alive.current = false;
+      valid = false;
       clearTimeout(timer);
     };
   }, [job.id, job.state]);
@@ -104,10 +107,13 @@ export function InferencePanel({
     }
   }
   const active = ["QUEUED", "RUNNING"].includes(current.state);
+  const released = current.state === "COMPLETED" &&
+    current.release_status === "RELEASED";
+  const candidate = released ? current.candidate : null;
   if (
     current.state === "COMPLETED" &&
-    !current.candidate?.goal_suggestion &&
-    !current.candidate?.closure
+    !candidate?.goal_suggestion &&
+    !candidate?.closure
   )
     return null;
   return (
@@ -117,14 +123,10 @@ export function InferencePanel({
           <p role="status">
             {current.state === "QUEUED"
               ? "Готуємо відповідь…"
-              : "Помічник відповідає…"}
+              : current.release_status === "AWAITING_VALIDATION"
+                ? "Перевіряємо відповідь…"
+                : "AI формує відповідь…"}
           </p>
-          {current.partial_candidate && (
-            <article aria-label="Чернетка відповіді">
-              <p className="hint">Чернетка · ще не збережена відповідь</p>
-              <p className="entry-text">{current.partial_candidate}</p>
-            </article>
-          )}
           <button onClick={() => void action("cancel")}>
             Скасувати відповідь
           </button>
@@ -133,6 +135,11 @@ export function InferencePanel({
       {current.state === "FAILED" && (
         <p role="alert">
           Відповідь недоступна. Ваше повідомлення збережено.
+          {current.error === "CONTENT_RELEASE_REJECTED" ||
+          current.error === "CONTENT_REVIEW_REQUIRED" ||
+          current.error?.startsWith("CONTENT_DECISION_")
+            ? " Згенерований текст не пройшов перевірку допуску й не показаний."
+            : ""}
           {current.error === "CONVERSATION_CHANGED" ||
           current.error === "SOURCE_CHANGED"
             ? " Контекст змінився; надішліть новий запит."
@@ -150,30 +157,30 @@ export function InferencePanel({
         </button>
       )}
       {error && <p role="alert">{error}</p>}
-      {current.candidate?.goal_suggestion && (
+      {candidate?.goal_suggestion && (
         <div>
           <h3>Можливе формулювання цілі</h3>
-          <p>{current.candidate.goal_suggestion}</p>
+          <p>{candidate.goal_suggestion}</p>
           <p className="hint">
             Це пропозиція. Ви можете змінити її та окремо погодити.
           </p>
-          <button onClick={() => onGoal(current.candidate!.goal_suggestion!)}>
+          <button onClick={() => onGoal(candidate.goal_suggestion!)}>
             Переглянути формулювання
           </button>
         </div>
       )}
-      {current.candidate?.closure && (
+      {candidate?.closure && (
         <div aria-label="Кандидат підсумку">
           <h3>Підсумок для перегляду</h3>
           <ul>
-            {current.candidate.closure.discussed.map((s, i) => (
+            {candidate.closure.discussed.map((s, i) => (
               <li key={i}>{s}</li>
             ))}
           </ul>
-          <p>{current.candidate.closure.clearer}</p>
-          <p>{current.candidate.closure.unresolved}</p>
+          <p>{candidate.closure.clearer}</p>
+          <p>{candidate.closure.unresolved}</p>
           <ul>
-            {current.candidate.closure.possible_steps.map((s, i) => (
+            {candidate.closure.possible_steps.map((s, i) => (
               <li key={i}>{s}</li>
             ))}
           </ul>

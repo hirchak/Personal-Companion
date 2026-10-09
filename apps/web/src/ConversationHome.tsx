@@ -115,6 +115,7 @@ export function ConversationHome({
     pending = useRef<{ signature: string; operation_id: string } | null>(null);
   const pendingAction = useRef<{ signature: string; id: string } | null>(null);
   const deepCreating = useRef<{ signature: string; id: string } | null>(null);
+  const viewGeneration = generation.current;
   useEffect(() => {
     if (initialVoice) {
       setText(initialVoice.text);
@@ -798,13 +799,19 @@ export function ConversationHome({
             conversationId={page.conversation.id}
             job={page.inference_job}
             onChanged={(job, final) => {
-              setPage((old) => (old ? { ...old, inference_job: job } : old));
+              if (!alive.current || viewGeneration !== generation.current) return;
+              setPage((old) => (old && old.conversation.id === job.conversation_id &&
+                old.inference_job?.id === job.id && job.revision >= old.inference_job.revision
+                  ? { ...old, inference_job: job } : old));
               if (final)
                 void load(page.conversation.id)
                   .then((p) => {
-                    if (alive.current) selection(p);
+                    if (alive.current && viewGeneration === generation.current) selection(p);
                   })
-                  .catch(() => setError("Не вдалося оновити розмову."));
+                  .catch(() => {
+                    if (alive.current && viewGeneration === generation.current)
+                      setError("Не вдалося оновити розмову.");
+                  });
             }}
             onGoal={(value) => {
               setGoalPreset(value);
