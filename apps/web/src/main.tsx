@@ -34,6 +34,7 @@ import { SpacePanel } from "./SpacePanel";
 import { defaultSpace, type Space } from "./space-model";
 import { macCreativeAdapter } from "./m5-ui";
 import { MacSyncSettings } from "./MacSyncSettings";
+import { nativeShell, nativeUnlock } from "./native-macos";
 class ApiError extends Error {
   constructor(
     public code: string,
@@ -159,9 +160,15 @@ function App() {
         <p>
           Локальний простір для розмов і записів на цьому Mac.
           <br />
-          Введіть одноразовий код із термінала.
+          {nativeShell()
+            ? "Підтвердьте доступ засобами цього Mac."
+            : "Введіть одноразовий код із термінала."}
         </p>
-        <form onSubmit={unlock}>
+        {nativeShell() ? (
+          <button className="primary" onClick={nativeUnlock}>
+            Відкрити Особистий простір
+          </button>
+        ) : <form onSubmit={unlock}>
           <label htmlFor="code">Код розблокування</label>
           <input
             id="code"
@@ -175,7 +182,7 @@ function App() {
           <button className="primary" disabled={busy}>
             {busy ? "Відкриваємо Особистий простір…" : "Відкрити Особистий простір"}
           </button>
-        </form>
+        </form>}
         {error && <p role="alert">{error}</p>}
         <p className="hint">
           {rootKind === "PRIVATE_LOCAL"
