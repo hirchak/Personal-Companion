@@ -11,7 +11,7 @@ final class Backend {
     let process = Process(), input = Pipe(), output = Pipe()
     var serial = 0
     init(bundle: URL, base: URL) throws {
-        let runtime = bundle.appendingPathComponent("Contents/Frameworks/EmbeddedPython")
+        let runtime = bundle.appendingPathComponent("Contents/Resources/runtime")
         process.executableURL = runtime.appendingPathComponent("bin/python3.13")
         process.arguments = ["-I", "-B", bundle.appendingPathComponent("Contents/Resources/payload/native_entry.py").path]
         process.environment = ["PATH":"/var/empty", "HOME":base.deletingLastPathComponent().path,
@@ -80,7 +80,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         data.append(10)
         let url=base.deletingLastPathComponent().appendingPathComponent("native-events.jsonl")
         if !FileManager.default.fileExists(atPath:url.path) {FileManager.default.createFile(atPath:url.path,contents:nil,attributes:[.posixPermissions:0o600])}
-        if let handle=try? FileHandle(forWritingTo:url) {try? handle.seekToEnd();try? handle.write(contentsOf:data);try? handle.close()}
+        if let handle=try? FileHandle(forWritingTo:url) {_ = try? handle.seekToEnd();try? handle.write(contentsOf:data);try? handle.close()}
         #endif
     }
 

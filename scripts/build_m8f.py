@@ -39,7 +39,7 @@ def bundled_runtime(framework):
     run('/usr/bin/lipo',PYTHON_ROOT/'bin/python3.13','-thin','arm64','-output',framework/'bin/python3.13')
     stdlib = framework/'lib/python3.13'
     shutil.copytree(PYTHON_ROOT/'lib/python3.13',stdlib,
-        ignore=shutil.ignore_patterns('site-packages','__pycache__','*.pyc','test','tests','idlelib','tkinter','_tkinter*','_test*','turtledemo','ensurepip'))
+        ignore=shutil.ignore_patterns('site-packages','__pycache__','*.pyc','test','tests','idlelib','tkinter','_tkinter*','_test*','config-3.13-darwin','turtledemo','ensurepip'))
     site = stdlib/'site-packages'; site.mkdir()
     existing = Path(sysconfig.get_path('purelib')).resolve()
     inventory = []
@@ -72,8 +72,9 @@ def bundled_runtime(framework):
             relative = os.path.relpath(target,p.parent)
             run('/usr/bin/install_name_tool','-change',dependency,'@loader_path/'+relative,p)
         if p == framework/'Python':run('/usr/bin/install_name_tool','-id','@rpath/EmbeddedPython/Python',p)
+        elif p.suffix=='.dylib':run('/usr/bin/install_name_tool','-id','@loader_path/'+p.name,p)
         # Nested byte seals are made before the native inventory.
-        run('/usr/bin/codesign','--force','--sign','-','--options','runtime',p,
+        run('/usr/bin/codesign','--force','--sign','-','--options','runtime','--entitlements',REPO/'apps/macos/development.entitlements',p,
             stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     (framework/'bin/python3.13').chmod(0o755)
     for p in framework.rglob('*.dylib'): p.chmod(0o755)
@@ -135,7 +136,7 @@ def build(args):
     pm=dict(pm);pm['files']=release.file_hashes(resources/'payload');pm['manifest_hash']=release.identity(pm)
     (resources/'payload/release-manifest.json').write_text(encode(pm))
     framework=app/'Contents/Frameworks'; framework.mkdir()
-    runtime_inventory=bundled_runtime(framework/'EmbeddedPython')
+    runtime_inventory=bundled_runtime(resources/'runtime')
     shutil.copytree(SPARKLE_DIR/'Sparkle.framework',framework/'Sparkle.framework',symlinks=True)
     shutil.copyfile(SPARKLE_DIR/'LICENSE',resources/'licences/SPARKLE_LICENSE.txt')
     for name in ('react','react-dom'):
@@ -179,9 +180,8 @@ def build(args):
             raise SafeError('DISPOSABLE_TEST_HOME_REQUIRED')
         info.update(SUPublicEDKey=public_key,SUFeedURL=args.test_feed,PCTestHome=args.test_home)
     with (app/'Contents/Info.plist').open('wb') as f:plistlib.dump(info,f,sort_keys=True)
-    (output/'swift-cache').mkdir()
     cmd=['/usr/bin/xcrun','swiftc','-swift-version','5','-O','-target','arm64-apple-macos14.0',
-         '-module-cache-path',str(output/'swift-cache'),'-framework','AppKit','-framework','WebKit',
+         '-module-cache-path',str(REPO/'generated/m8f/swift-cache'),'-framework','AppKit','-framework','WebKit',
          '-framework','LocalAuthentication','-framework','AVFoundation','-F',str(framework),
          '-framework','Sparkle','-Xlinker','-rpath','-Xlinker','@executable_path/../Frameworks']
     if public_key:cmd+=['-D','LOCAL_TEST']
@@ -202,7 +202,7 @@ def build(args):
         REPO/'apps/macos/development.entitlements',app)
     run('/usr/bin/codesign','--verify','--deep','--strict',app)
     # Exact bundle byte proof with runtime PATH containing no developer tools.
-    python=framework/'EmbeddedPython/bin/python3.13'
+    python=resources/'runtime/bin/python3.13'
     probe=subprocess.check_output([str(python),'-I','-B','-c',
         'import sys,importlib.util,json;print(json.dumps({"prefix":sys.prefix,"minimal":all(importlib.util.find_spec(x) is None for x in ["pip","pytest","playwright","httpx"])}))'],
         env={'PATH':'/var/empty'},text=True)

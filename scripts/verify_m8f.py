@@ -77,7 +77,7 @@ def prepare():
 class PipeRuntime:
     def __init__(self,app,base):
         self.app=Path(app);self.number=0
-        python=self.app/'Contents/Frameworks/EmbeddedPython/bin/python3.13'
+        python=self.app/'Contents/Resources/runtime/bin/python3.13'
         self.process=subprocess.Popen([str(python),'-I','-B',str(self.app/'Contents/Resources/payload/native_entry.py')],
             cwd=base.parent,env={'PATH':'/var/empty','HOME':str(base.parent),'LANG':'uk_UA.UTF-8'},
             stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True)
