@@ -279,8 +279,13 @@ class NativeSession:
         if self.server is not None:
             self.lock()
             # Cancel local work before waiting for the server thread.
-            for event in self.application.state.voice.cancel_events.values():
+            for event in list(self.application.state.voice.cancel_events.values()):
                 event.set()
+            deadline=time.monotonic()+10
+            while self.application.state.voice.cancel_events and time.monotonic()<deadline:
+                time.sleep(.02)
+            if self.application.state.voice.cancel_events:
+                raise SafeError('NATIVE_OPERATION_FAILED')
             self.server.should_exit = True
             self.thread.join(15)
             if self.thread.is_alive():

@@ -6,6 +6,44 @@ import Sparkle
 
 enum NativeFailure: Error { case unavailable }
 
+// Supported Sparkle user-driver interface. One explicit Update choice, then
+// verified download/extraction/install/relaunch without a second install click.
+final class UpdateUI: NSObject, SPUUserDriver {
+    weak var owner: Companion?
+    var received: UInt64=0, expected: UInt64=0
+    func show(_ request:SPUUpdatePermissionRequest,reply:@escaping(SUUpdatePermissionResponse)->Void) {
+        reply(SUUpdatePermissionResponse(automaticUpdateChecks:false,sendSystemProfile:false))
+    }
+    func showUserInitiatedUpdateCheck(cancellation:@escaping()->Void) {owner?.state.stringValue="Перевіряємо локальний підписаний канал…"}
+    func showUpdateFound(with appcastItem:SUAppcastItem,state:SPUUserUpdateState,reply:@escaping(SPUUserUpdateChoice)->Void) {
+        let alert=NSAlert();alert.messageText="Доступна нова версія"
+        alert.informativeText="Копію даних і відновлення перевірено. Натисніть «Оновити»: програма перевірить пакет, встановить його й перезапуститься."
+        alert.addButton(withTitle:"Оновити");alert.addButton(withTitle:"Пізніше")
+        reply(alert.runModal() == .alertFirstButtonReturn ? .install : .dismiss)
+    }
+    func showUpdateReleaseNotes(with downloadData:SPUDownloadData) {}
+    func showUpdateReleaseNotesFailedToDownloadWithError(_ error:Error) {}
+    func showUpdateNotFoundWithError(_ error:Error,acknowledgement:@escaping()->Void) {
+        owner?.state.stringValue="Нової версії немає. Поточний простір збережено.";owner?.testEvent("update-not-found");acknowledgement()
+    }
+    func showUpdaterError(_ error:Error,acknowledgement:@escaping()->Void) {
+        owner?.state.stringValue="Оновлення не пройшло перевірку. Попередні дані й програма збережені.";owner?.testEvent("update-error");acknowledgement()
+    }
+    func showDownloadInitiated(cancellation:@escaping()->Void) {received=0;expected=0;owner?.state.stringValue="Завантажуємо локальний пакет…"}
+    func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength:UInt64) {expected=expectedContentLength}
+    func showDownloadDidReceiveData(ofLength length:UInt64) {
+        received+=length
+        if expected>0 {owner?.state.stringValue="Оновлення: \(min(100,Int(Double(received)*100/Double(expected))))% · дані збережено"}
+    }
+    func showDownloadDidStartExtractingUpdate() {owner?.state.stringValue="Підпис перевірено. Готуємо нову програму…"}
+    func showExtractionReceivedProgress(_ progress:Double) {owner?.state.stringValue="Готуємо нову програму: \(Int(progress*100))%"}
+    func showReady(toInstallAndRelaunch reply:@escaping(SPUUserUpdateChoice)->Void) {reply(.install)}
+    func showInstallingUpdate(withApplicationTerminated applicationTerminated:Bool,retryTerminatingApplication:@escaping()->Void) {owner?.state.stringValue="Встановлюємо й перезапускаємо…"}
+    func showUpdateInstalledAndRelaunched(_ relaunched:Bool,acknowledgement:@escaping()->Void) {acknowledgement()}
+    func dismissUpdateInstallation() {}
+    func showUpdateInFocus() {owner?.window.makeKeyAndOrderFront(nil)}
+}
+
 // A private inherited pipe, no socket/credential arguments or console logging.
 final class Backend {
     let process = Process(), input = Pipe(), output = Pipe()
@@ -63,7 +101,8 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     var content: NSView!
     let state = NSTextField(labelWithString:"Дані на цьому Mac · AI вимкнений")
     var openButton: NSButton!
-    var updater: SPUStandardUpdaterController?
+    var updater: SPUUpdater?
+    var updateUI: UpdateUI?
     var port: Int = 0
     var prepared = false
     var installing = false
@@ -114,7 +153,9 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
             observers.append(nc.addObserver(forName:name,object:nil,queue:.main) { [weak self] _ in self?.lock() })
         }
         #if LOCAL_TEST
-        updater = SPUStandardUpdaterController(startingUpdater:true,updaterDelegate:self,userDriverDelegate:nil)
+        updateUI=UpdateUI();updateUI!.owner=self
+        updater=SPUUpdater(hostBundle:Bundle.main,applicationBundle:Bundle.main,userDriver:updateUI!,delegate:self)
+        do {try updater!.start()} catch {state.stringValue="Локальний канал оновлень недоступний."}
         #endif
         window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps:true)
         testEvent("window-ready")
@@ -212,7 +253,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     func start() throws {
         let status=try backend!.call("start");port=status["port"] as? Int ?? 0
         guard port>0 else { throw NativeFailure.unavailable }
-        replaceContent(web);web.load(URLRequest(url:URL(string:"http://127.0.0.1:\(port)/")!))
+        web.isHidden=false;replaceContent(web);web.load(URLRequest(url:URL(string:"http://127.0.0.1:\(port)/")!))
         state.stringValue="Локальний простір заблоковано · AI недоступний";openButton.isEnabled=true
         testEvent("core-started")
     }
@@ -283,7 +324,17 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     @objc func guide() {NSWorkspace.shared.open(bundle.appendingPathComponent("Contents/Resources/User Guide.md"))}
     @objc func checkUpdates() {
         #if LOCAL_TEST
-        updater?.checkForUpdates(nil)
+        // Conservatively refuse to discard any visible unsaved text or an active
+        // recorder. Only a Boolean crosses the native bridge, no draft content.
+        let check="return Array.from(document.querySelectorAll('textarea,input[type=text]')).some(e=>e.getClientRects().length&&e.value.trim().length>0)||!!document.querySelector('.recording-strip')?.getClientRects().length"
+        web.callAsyncJavaScript(check,arguments:[:],in:nil,in:.page) {result in
+            if case .success(let value)=result,value as? Bool == false {
+                // No new drafts/capture may begin between check and quiescence.
+                self.web.isHidden=true;self.openButton.isEnabled=false
+                self.window.makeFirstResponder(nil);self.updater?.checkForUpdates()
+            }
+            else {self.problem("Збережіть чернетку або завершіть запис і закрийте редактор перед оновленням.")}
+        }
         #else
         problem("Канал оновлень ще не активований. Потрібен окремо перевірений підписаний реліз.")
         #endif
