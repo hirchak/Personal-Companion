@@ -1,0 +1,12 @@
+{
+  "poll_partial_visible_before_validation": true,
+  "page_partial_visible_before_validation": true,
+  "assistant_rows_before_validation": 0,
+  "state_before_validation": "RUNNING",
+  "live_calls": 0,
+  "unreviewed_role_claim_committed_on_baseline": true,
+  "base_sha": "5130e92e1454b95b5066ddb4fcd0b2212e142338",
+  "controller_sha256": "953249c2cd36f2a9aa5e13ae2662e58999df4dba41ce54f8af5918b1004c45b2",
+  "ui_sha256": "870d01f87aaa42accece42a93bfa5b0e579b1a5f7b5be7119a4171466e784d17",
+  "provider_origin": "ORIGINAL_SCRIPTED_FIXTURE_NOT_LIVE"
+}

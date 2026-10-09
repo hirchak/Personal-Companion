@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "implementation_sha": "a66008cf1b16b131f8c164d7cb9082e861966806",
+  "base_sha": "5130e92e1454b95b5066ddb4fcd0b2212e142338",
+  "exact_checkout_clean": true,
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "dependencies": "EXISTING_ONLY",
+    "Chromium": "EXISTING_LOCAL_CACHE"
+  },
+  "commands": [
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=<existing Chromium cache> .venv/bin/python -B -m pytest -q",
+      "exit_code": 0,
+      "passed": 1021,
+      "seconds": 467.89,
+      "warnings": 1,
+      "log_sha256": "0aa7d0fb7dc434d6c41960bae463972ad8d9ce331b72121cd845561b26419cf6",
+      "scope": "Complete exact-C2 suite including built synthetic Chromium/private-contract/backup/source/consent regressions"
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0,
+      "passed": 53,
+      "log_sha256": "1389b507b4f8c0387250ef6edc22c6017cb48a10e4d8dbc8c31e30b94800246f"
+    },
+    {
+      "command": "npm --prefix apps/web run build",
+      "exit_code": 0,
+      "log_sha256": "6471d8810668c0e8dabc576c46e6319c56bb02c75ee6c275c83c131c1fe36387",
+      "scope": "TypeScript/Vite; no Mac packaging"
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.audit_m8e_q03 --output <sanitized evidence>",
+      "exit_code": 0,
+      "known_bad_excluded": 24,
+      "ordinary_released": 32,
+      "live_calls": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "findings_preserved": 27,
+      "findings_closed": 0,
+      "clinical_active": 0,
+      "log_sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.qualify_m7d_skills --check",
+      "exit_code": 0,
+      "packages": 5,
+      "runtime_instructions": "null",
+      "activation": "OFF"
+    },
+    {
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "log_sha256": "c0906814b4abf5edc1d1aaf4a7f15761b56d03286dcef73990b22dbd3279a490"
+    },
+    {
+      "command": "impeccable detect --json apps/web/src/InferencePanel.tsx apps/web/src/ConversationHome.tsx",
+      "exit_code": 0,
+      "findings": 0,
+      "scope": "Mechanical UI detector; separate desktop/mobile screenshot inspection completed"
+    },
+    {
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "checks": 7
+    },
+    {
+      "command": "node scripts/verify_m7c_schemas.mjs",
+      "exit_code": 0,
+      "checks": 12
+    },
+    {
+      "command": "node scripts/verify_m7d_schemas.mjs",
+      "exit_code": 0,
+      "checks": 14
+    }
+  ],
+  "first_run_findings": "FIRST_RUN_FINDINGS.json",
+  "initial_C1_full_suite_pass": false,
+  "C2_full_suite_pass": true,
+  "raw_model_text_logged_or_exported": false,
+  "live_provider_calls": 0,
+  "owner_pilot_access": false,
+  "qualified_content_review": "PENDING",
+  "general_semantic_safety": "OPEN",
+  "ci": "NOT_CHECKED"
+}

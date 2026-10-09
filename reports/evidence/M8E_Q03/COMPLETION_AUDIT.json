@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "implementation_C2": "a66008cf1b16b131f8c164d7cb9082e861966806",
+  "requirements": [
+    {
+      "id": "Q03-1",
+      "requirement": "Exact baseline/reviewed diff, actual leakage and ADR",
+      "evidence": "BASELINE.json;BASELINE_LEAK.json;docs/adr/ADR-017-M8E-Q03-RESPONSE-RELEASE.md",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "Q03-2",
+      "requirement": "No pending/rejected generated text in API/DOM/history/map/closure",
+      "evidence": "tests/test_m8e_q03_release.py;tests/test_m8e_q03_browser.py;CHARACTERIZATION.json",
+      "status": "VERIFIED_EXACT_C2"
+    },
+    {
+      "id": "Q03-3",
+      "requirement": "Bounded policy/bindings/failures and explicit open coverage",
+      "evidence": "apps/core/conversation_release.py;research/evals/m8e_q03/coverage.json",
+      "status": "VERIFIED_BOUNDED_ONLY"
+    },
+    {
+      "id": "Q03-4",
+      "requirement": "24 old bad fixtures, ordinary pairs and races",
+      "evidence": "CHARACTERIZATION.json;DECISION_COUNTS.json;tests/test_m8e_q03_browser.py",
+      "status": "VERIFIED_AUTHORED_NOT_CLINICAL_GOLD"
+    },
+    {
+      "id": "Q03-5",
+      "requirement": "Five OFF/null, consent/source/backup preserved, zero live/private access",
+      "evidence": "PRESERVATION.json;qualification check;existing regressions",
+      "status": "VERIFIED_EXACT_C2"
+    },
+    {
+      "id": "Q03-6",
+      "requirement": "Report/contract/state/handoff/devlog/command evidence",
+      "evidence": "reports/M8E_Q03_SEMANTIC_RESPONSE_SAFETY_REPORT.md",
+      "status": "PREPARED_VERIFIED_FINAL_PUBLICATION_PENDING"
+    },
+    {
+      "id": "Q03-7",
+      "requirement": "C/R/privacy/FF/main equality/stop",
+      "evidence": "Final publication receipt after R",
+      "status": "PENDING"
+    }
+  ],
+  "universal_semantic_safety": "OPEN",
+  "qualified_content_review": "PENDING",
+  "current_danger_generated_route": "OFF_REVIEW_REQUIRED",
+  "live_calls": 0,
+  "completion_claim": false,
+  "remaining_executor_work": "Evidence-only R, staged privacy/public-source review, normalFF push and actual remote equality."
+}

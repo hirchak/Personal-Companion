@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "first_implementation_sha": "e220c3016b3753b4326e76358165740d739f8aeb",
+  "final_implementation_sha": "a66008cf1b16b131f8c164d7cb9082e861966806",
+  "C2_runtime_identical": true,
+  "first_full_run": {
+    "exit_code": 1,
+    "passed": 1019,
+    "failed": 2,
+    "seconds": 492.42,
+    "log_sha256": "8a7fe4b63535dce83579b5d1740191c433d9a81394ac108208760aa8a56037e4"
+  },
+  "findings": [
+    {
+      "test": "test_M4_A06_exact_command_sanitized_bounded_process[oversized-ASR_OUTPUT_LIMIT]",
+      "failure": "PermissionError terminating synthetic process group",
+      "same_C1_recheck": {
+        "exit_code": 0,
+        "passed": 1,
+        "seconds": 0.27
+      },
+      "ASR_source_changed": false
+    },
+    {
+      "test": "test_baseline_generation_equivalence_discloses_current_register_guard",
+      "failure": "Q01_BASELINE_GENERATION_CHANGED: correct historical evaluator refusal after Q03 controller change",
+      "forward_fix": "Test now requires the refusal; evaluator/permission/ledger unchanged.",
+      "targeted_harness_recheck": {
+        "exit_code": 0,
+        "passed": 6,
+        "seconds": 20.72
+      }
+    }
+  ],
+  "final_full_C2_run": {
+    "exit_code": 0,
+    "passed": 1021,
+    "seconds": 467.89
+  },
+  "live_calls": 0,
+  "raw_text_in_report": false
+}

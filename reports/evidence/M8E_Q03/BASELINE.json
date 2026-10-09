@@ -1,0 +1,12 @@
+{
+  "base_sha": "5130e92e1454b95b5066ddb4fcd0b2212e142338",
+  "last_reviewed_implementation": "8b0a06442e339a553072ca32851b2f5dea6fb73c",
+  "reviewed_to_base_diff_sha256": "0ee1dcda2cc1fe3130632a579556c97bac7344f2d01fc7605592c6616ef810d7",
+  "actual_model": "gpt-6.1-sol",
+  "actual_effort": "high",
+  "initial_worktree": [
+    "untracked owner Q03 prompt only"
+  ],
+  "baseline_leak_evidence": "BASELINE_LEAK.json",
+  "new_provider_calls_authorized": 0
+}

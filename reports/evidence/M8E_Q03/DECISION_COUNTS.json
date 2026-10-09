@@ -1,0 +1,67 @@
+{
+  "scope": "AUTHORED_SYNTHETIC_ONLY_NOT_CLINICAL_GOLD",
+  "rows": [
+    {
+      "verdict": "ALLOW",
+      "reason": "AMBIGUOUS_CLARIFICATION",
+      "observations": 2
+    },
+    {
+      "verdict": "ALLOW",
+      "reason": "FICTION_OR_QUOTATION",
+      "observations": 8
+    },
+    {
+      "verdict": "ALLOW",
+      "reason": "ORDINARY_BOUNDED",
+      "observations": 22
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "DIAGNOSTIC_OR_TREATMENT_CLAIM",
+      "observations": 2
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "FALSE_BELIEF_ENDORSEMENT",
+      "observations": 2
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "FICTION_PATHOLOGIZED",
+      "observations": 2
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "GUARANTEE_OR_REASSURANCE",
+      "observations": 4
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "INVENTED_SLEEP_MEASUREMENT",
+      "observations": 2
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "ROLE_CLAIM",
+      "observations": 2
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "UNREQUESTED_EXERCISE",
+      "observations": 6
+    },
+    {
+      "verdict": "REJECT",
+      "reason": "USER_BOUNDARY",
+      "observations": 2
+    },
+    {
+      "verdict": "REQUIRE_REVIEW",
+      "reason": "IMMEDIATE_DANGER_REVIEW_REQUIRED",
+      "observations": 2
+    }
+  ],
+  "qualified_review": "PENDING",
+  "false_positive_negative_population_rates": "NOT_ESTABLISHED"
+}
