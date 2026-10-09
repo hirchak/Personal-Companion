@@ -2,15 +2,20 @@
 
 **Implementation C:** `8b0a06442e339a553072ca32851b2f5dea6fb73c`
 **Base:** `3366d4692a3feda45b962716e2dff32c591775ad` (local and live origin/main verified before work).
-**Delivery status:** AWAITING_REVIEW; offline delivery complete, live stage blocked as documented. No self-ACCEPT.
+**Delivery status:** AWAITING_REVIEW; offline audit and authorized live baseline complete. No self-ACCEPT.
+**Resumed evidence base:** `b6ef40ff7e81b628ba20c18a76a0efd233ad7dcd`; runtime implementation C is unchanged.
 **Executor:** actual GPT-6 Astra / low, verified from current-turn metadata.
 
 ## Answer to the owner’s question
 
 **A noticeable improvement in the actual current models’ supportive conversation quality is NOT ESTABLISHED.**
-The live stage was blocked before execution by automatic approval review. No current Free Luna/high, Deep
-Luna/max or Deep Sol6.1/high responses were generated in Q01. Their comparative quality remains **INCONCLUSIVE**.
-No fixture, historical output or schema PASS is substituted for those missing observations.
+After explicit owner confirmation resolved the metadata preflight blocker,12 original-synthetic baseline
+responses ran successfully: Free Luna/high3, Deep Luna/max3, Deep Sol6.1/high6. The ordinary matched cases
+respected listening without questions, correction of a rejected hypothesis, and closure without tasks. Three
+additional Sol safety observations declined diagnosis/treatment replacement, separated fiction from author
+pathology, and prioritized immediate human help in crisis. Comparative superiority remains **INCONCLUSIVE**.
+No before/after generation improvement is claimed: instructions/frames are unchanged; the demonstrated fix
+remains the bounded register validator. These single observations do not establish reliability or human benefit.
 
 The completed offline work is substantive:44 original scenarios, an anchored rubric, nine-skill review,
 critical real-controller counterexamples, historical response analysis, a masked human-review packet, a scoped
@@ -47,7 +52,7 @@ copied into an active skill.
   original prompts/context seeds. Deep profile comparisons share context; Free versus Deep has intentional
   goal/map scope differences and cannot isolate a model-only causal effect. One sample per cell is exploratory.
 - [Case coverage](evidence/M8E_Q01/CASE_COVERAGE.json): explicit per-case evidence scope. Specifying/reviewing44
-  cases is not44 live passes. Current-profile semantic quality is NOT_EVALUATED for all44.
+  cases is not44 live passes. After resumption,6 cases have preliminary live observations;38 remain NOT_EVALUATED.
 - Scripted fixture outputs prove plumbing only. Historical outputs keep their exact original model/effort,
   source revision and corpus limitations. Executor observations are preliminary LLM judgments; independent
   human/qualified clinical review remains pending.
@@ -160,7 +165,10 @@ and separate [mapping](evidence/M8E_Q01/HISTORICAL_LABEL_MAPPING.json) contain t
 known context/map, exact answers and blank eight-dimension ratings. Model/effort/source mapping is opened after
 ratings are frozen. Different generated histories after turn1 are disclosed; recognizable wording/mode may
 partly unblind. This is a historical side-by-side review, **not current-profile A/B or proof of improvement**.
-Current-profile packet rows are unavailable because no live call ran. Human/architect ratings are PENDING.
+The resumed [current-profile packet](evidence/M8E_Q01/CURRENT_HUMAN_REVIEW.md),
+[full structured pairs](evidence/M8E_Q01/CURRENT_BLIND_PACKET.json) and
+[separate mapping](evidence/M8E_Q01/CURRENT_LABEL_MAPPING.json) add three actual matched Deep pairs.
+Human/architect ratings are PENDING; preliminary executor ratings are kept separately.
 
 ## Live gate and budget
 
@@ -176,10 +184,35 @@ usage permission, unknown plans or available/unlimited/unverified Credits fail c
 permission. [Official pricing](https://learn.chatgpt.com/docs/pricing) separates included allowance from available
 credits after exhaustion. No account setting is read or changed by pretending that adapter metadata proves funding.
 
-**Actual live stage: BLOCKED,0/24 inference attempts.** Automatic approval rejected the network metadata preflight
-before execution because a direct trusted confirmation for account/usage metadata transmission was missing.
-A specific confirmation question is pending. No retry, indirect execution or bypass occurred. See [gate record](evidence/M8E_Q01/GATE_STATUS.json).
-No actual preflight, native ledger or current-profile output exists; local fake-RPC tests are labeled as fixtures.
+**Actual live stage:12/24 attempts,12 COMPLETED,0 failed/cancelled/retried.** The prior automatic approval
+blocker was resolved by explicit owner confirmation on2026-10-09. The metadata-only
+[preflight](evidence/M8E_Q01/LIVE_PREFLIGHT.json) passed. The unchanged runner rechecked native auth/catalog/
+included-only funding before each attempt. No new auth, purchased Credits, PAYG or account setting change.
+The initial metadata receipt is a point-in-time snapshot, not permanent eligibility. See the
+[current gate record](evidence/M8E_Q01/GATE_STATUS.json) and [sanitized ledger](evidence/M8E_Q01/LIVE_LEDGER.json).
+
+[Actual baseline outputs](evidence/M8E_Q01/LIVE_BASELINE.json) retain exact synthetic payloads/final responses,
+source hashes, model/effort and latency metadata; no hidden reasoning or account fields.
+[Preliminary quality review](evidence/M8E_Q01/LIVE_QUALITY_REVIEW.json) rates all12 actual responses against
+all eight dimensions with excerpts and explicit limitations. No critical semantic failure was observed in
+these12 samples by the executor; this is not an independent safety approval. Structural counterexamples above
+remain valid and unfixed. Six of44 scenarios were sampled;38 remain NOT_EVALUATED by live models.
+
+| Profile | Actual observations | Observed behavior / limit |
+|---|---:|---|
+| Free Luna/high |3| Brief, relevant reflection; concrete criterion clarification; no-task closure. No live crisis sample. |
+| Deep Luna/max |3| Same intent alignment plus source-bound map; first listening response has slightly awkward phrasing. No live crisis sample. |
+| Deep Sol6.1/high |6| Same three ordinary behaviors plus bounded diagnosis/fiction/crisis responses. Safety coverage is unequal. |
+
+Deep pairs have identical comparison-context hashes. Free has the same current user/scripted history but
+intentionally different goal/map scope, so Free versus Deep is a product-profile comparison, not a pure model
+experiment. Histories are scripted, not earlier live model turns. One observation per cell cannot establish
+stability, statistical significance, a model winner, or a quality/latency tradeoff for general use.
+
+The candidate generation arm remains **NOT_RUN_NO_MODEL_INPUT_CHANGE** under the preregistered condition.
+No observed response justifies an additional neutral instruction fix in this bounded sample.12 authorized
+attempts remain unused; there is no automatic continuation/retry. The register correction has deterministic
+same-text before/after proof, not a claimed improvement in generated empathy. Stop for independent review.
 
 ## Verification and delivery
 
@@ -195,3 +228,18 @@ No packaging/install, new auth/provider/payment, clinical activation, phone/Heal
 later milestone. Synthetic evaluation is not therapeutic efficacy, clinical validation or independent human review.
 Normal C→exact-C checks→evidence-only R→privacy→FF main→remote verification remains the publication workflow.
 The report does not embed its own R hash; CI is NOT_CHECKED unless separately evidenced.
+
+### Resumed evidence verification
+
+Implementation C and all runtime/skill/frame/test sources remain unchanged from the exact-C verification above.
+The44 targeted Q01 offline regressions passed again (exit0,20.42s). No full-suite/build rerun is attributed to
+this evidence-only continuation: the exact-C904 Python/53 web/build results remain the applicable prior checks.
+[Resumed preservation](evidence/M8E_Q01/RESUMED_PRESERVATION.json) confirms historical ledger bytes and
+skills/frames/admission hashes unchanged. Current public-tree/docs/snapshot/privacy checks are recorded in
+RESUMED_CHECKS.json. Prior CHECKS/PRESERVATION files are pre-resumption checkpoints, not current live counts.
+The previous evidence R was published as b6ef40ff7e81b628ba20c18a76a0efd233ad7dcd. This continuation adds
+only evidence/docs; its final R is reported after commit and remote verification without a recursive self-hash.
+
+The original skill_audit.json is the offline checkpoint. Current per-skill observation scope is recorded in
+[LIVE_SKILL_REVIEW](evidence/M8E_Q01/LIVE_SKILL_REVIEW.json); goal-setting generation and all five clinical
+protocols remain untested live. Successful sampled skills do not confer clinical activation authority.

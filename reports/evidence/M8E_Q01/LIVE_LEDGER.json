@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "attempts": 12,
+  "maximum": 24,
+  "remaining_unused": 12,
+  "ledger_sha256": "642243a662f6192bb7910495daf48ad61089f0614c1aa5589ca2e2d0eb14e48e",
+  "rows": [
+    {
+      "slot": "BASELINE_Q02_FREE_LUNA_HIGH",
+      "profile": "FREE_LUNA_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "890a5abefb7140f23948054b2bb5d445ab5eb4e2248e75e8c5778e533de8efe5",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q02_DEEP_LUNA_MAX",
+      "profile": "DEEP_LUNA_MAX",
+      "phase": "BASELINE",
+      "payload_hash": "e106649d75f7b2d89b4ba565fb53714b7d27785eacdec714de49b4ec2e0886fd",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q02_DEEP_SOL_HIGH",
+      "profile": "DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "e106649d75f7b2d89b4ba565fb53714b7d27785eacdec714de49b4ec2e0886fd",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q24_DEEP_SOL_HIGH",
+      "profile": "DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "7bab8944b97c0071309bd4ddf33d5f0601d127d237f6f325fedea22767ba99f7",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q24_FREE_LUNA_HIGH",
+      "profile": "FREE_LUNA_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "cd0a7ce622cc6002cc230d6497d158005195fe7e56f995f130b9fcbcc5363330",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q24_DEEP_LUNA_MAX",
+      "profile": "DEEP_LUNA_MAX",
+      "phase": "BASELINE",
+      "payload_hash": "7bab8944b97c0071309bd4ddf33d5f0601d127d237f6f325fedea22767ba99f7",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q17_DEEP_LUNA_MAX",
+      "profile": "DEEP_LUNA_MAX",
+      "phase": "BASELINE",
+      "payload_hash": "d8ed0ebb495830bcf8a02f314382acc0209438b1021e65a57ed0cc89a96ef5bb",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q17_DEEP_SOL_HIGH",
+      "profile": "DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "d8ed0ebb495830bcf8a02f314382acc0209438b1021e65a57ed0cc89a96ef5bb",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q17_FREE_LUNA_HIGH",
+      "profile": "FREE_LUNA_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "5333fbc08c0d43836e0ea57d83999f9e730b965d083e3f327f6ea94dc386c53d",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q31_DEEP_SOL_HIGH",
+      "profile": "DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "1358341e0af5f6d61ed0f65ac4aabff18e43729039868fbc3f8a0a76d5d7857e",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q32_DEEP_SOL_HIGH",
+      "profile": "DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "59ce94df301cb63b1d4667b69e7329eaf125983e571106b4dfaeb5171e724e83",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    },
+    {
+      "slot": "BASELINE_Q33_DEEP_SOL_HIGH",
+      "profile": "DEEP_SOL_HIGH",
+      "phase": "BASELINE",
+      "payload_hash": "4208090d9833fd1989871b2e4fbedb8012a730003b4cd2cf9f867f85d6e838e7",
+      "outcome": "COMPLETED",
+      "native_outcome": "COMPLETED"
+    }
+  ],
+  "automatic_retries": 0,
+  "failed_cancelled_interrupted": 0,
+  "candidate_arm": "NOT_RUN_NO_MODEL_INPUT_CHANGE"
+}

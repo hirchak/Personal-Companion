@@ -40,27 +40,32 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8E-Q01 — AWAITING_REVIEW / live stage blocked
+# M8E-Q01 — AWAITING_REVIEW
 
-Base3366d4692a3feda45b962716e2dff32c591775ad; implementation C8b0a06442e339a553072ca32851b2f5dea6fb73c.
-Actual executor GPT-6 Astra/low verified. Offline audit covers four active neutral skills, both frames and five
-clinical metadata-only candidates.44 original synthetic scenarios, eight anchored dimensions, nine-skill audit,
-five non-executable shadow proposals and masked historical review packet/mapping are complete.
+Implementation C:8b0a06442e339a553072ca32851b2f5dea6fb73c; original base3366d4692a3feda45b962716e2dff32c591775ad.
+Resumed evidence base:b6ef40ff7e81b628ba20c18a76a0efd233ad7dcd. No runtime changes in this continuation.
+Goal/contract: prompts/M8E_Q01_CONVERSATION_QUALITY_AUDIT.md and docs/M8E_Q01_CONTRACT.md.
+Report: reports/M8E_Q01_CONVERSATION_QUALITY_REPORT.md.
 
-Bounded fix: existing FORMAL_VY guard now rejects observed unquoted «хочеш»; formal alternatives/source quotes/
-labeled fiction examples pass. No skill/frame wording or clinical/source/consent/crypto/sync gate changed.
-Fourteen intentionally unsafe/unwanted fixture outputs still pass structural validation: semantic safety is
-not proved by schema PASS. This is a validator limitation, not current-model failure frequency.
+Completed:44 original scenarios, eight-dimension rubric, nine-skill audit, five non-executable clinical shadow
+proposals, historical comparisons, deterministic semantic counterexamples and bounded FORMAL_VY fix for «хочеш».
+All clinical candidates remain OFF/NOT_IMPLEMENTED/NOT_TESTABLE;27 content findings OPEN.
 
-Current-profile quality and Luna-versus-Sol winner INCONCLUSIVE. Live0/24: automatic approval blocked metadata
-preflight before execution; specific confirmation is pending. Separate inference24 authorization remains
-recorded; no bypass. No native ledger; historical ledger bytes, skills/frames and admission hashes unchanged.
+Owner explicitly confirmed metadata preflight. Actual SDK preflight PASS; canonical live ledger12/24 attempts,
+all12 COMPLETED, no retries/failures. Free Luna/high3, Deep Luna/max3, Deep Sol6.1/high6. Six cases sampled;
+38 not live evaluated. Listening/correction/closure respected; three additional Sol diagnosis/fiction/crisis
+responses showed appropriate boundaries in this sample. Current Deep blinded pairs and separate mapping ready;
+executor ratings preliminary, independent human review PENDING. Model winner INCONCLUSIVE; no therapeutic claim.
 
-Exact-C Python904 (including existing synthetic browser regressions), web53/build, admission/Ajv,
-docs/privacy PASS. Evidence-only R/normalFF publication and remote verification follow this checkpoint.
-Final executor status AWAITING_REVIEW, not ACCEPTED. See reports/M8E_Q01_CONVERSATION_QUALITY_REPORT.md.
+No generation inputs changed or further instruction fix justified; CANDIDATE arm NOT_RUN_NO_MODEL_INPUT_CHANGE.
+Remaining12 attempts unused, no automatic continuation. Historical ledgers unchanged.14 bad fixture outputs still
+pass structural validation; schema is not a semantic safety guarantee. Register correction has same-text regression
+proof, not evidence of improved generated empathy or human benefit.
 
-Owner-pilot fields above are historical from the previous goal, not rechecked in Q01. No owner data/audio,
-owner-pilot access/install, account setting/credential inspection, macOS packaging, clinical/Health/phone
-activation, deploy/tag/release or later milestone.27 content findings OPEN; clinical five OFF and actual clinical
-behavior NOT_IMPLEMENTED / NOT_TESTABLE. No therapeutic efficacy or independent human review claim.
+Exact-C904 Python/53 web/build/browser-regression/admission/Ajv checks remain valid for unchanged implementation.
+Resumed44 Q01 regressions PASS; evidence/docs/snapshot/privacy checks recorded separately. Publish evidence-only
+continuation by normalFF and verify remote, then STOP AWAITING_REVIEW. No self-ACCEPT or next milestone.
+
+Owner pilot/private content/audio untouched in Q01; no packaging/install, auth/settings/billing change, Credits,
+PAYG, provider fallback, clinical/Health/phone activation or deploy/tag/release. Owner-pilot status fields are
+historical from the preceding goal, not rechecked. External account controls remain NOT_YET_EXTERNALLY_VERIFIED_BY_OWNER.

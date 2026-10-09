@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "open_after_human_ratings_frozen": true,
+  "mapping": [
+    {
+      "case_id": "Q02",
+      "label": "A",
+      "slot_id": "BASELINE_Q02_DEEP_SOL_HIGH",
+      "profile": [
+        "DEEP",
+        "gpt-6.1-sol",
+        "high"
+      ],
+      "source_file_sha256": "3f407de08960b1dc505910a62c81dc366820d6cb6929dd64f1c6205901fc9dfd"
+    },
+    {
+      "case_id": "Q02",
+      "label": "B",
+      "slot_id": "BASELINE_Q02_DEEP_LUNA_MAX",
+      "profile": [
+        "DEEP",
+        "gpt-6-luna",
+        "max"
+      ],
+      "source_file_sha256": "21c79cb82df7016a4be11f4968d41865fe3bdf731e1cf2893f260401fe2d18bd"
+    },
+    {
+      "case_id": "Q24",
+      "label": "A",
+      "slot_id": "BASELINE_Q24_DEEP_LUNA_MAX",
+      "profile": [
+        "DEEP",
+        "gpt-6-luna",
+        "max"
+      ],
+      "source_file_sha256": "3e1b3d126aa28404f70f1aff7676fce53c6099b0a522a45e9e719d4806452f23"
+    },
+    {
+      "case_id": "Q24",
+      "label": "B",
+      "slot_id": "BASELINE_Q24_DEEP_SOL_HIGH",
+      "profile": [
+        "DEEP",
+        "gpt-6.1-sol",
+        "high"
+      ],
+      "source_file_sha256": "881bb946d3016e56184aa110b55b11e01b99cfd7eaf9e9a8045e62ae557ef77c"
+    },
+    {
+      "case_id": "Q17",
+      "label": "A",
+      "slot_id": "BASELINE_Q17_DEEP_SOL_HIGH",
+      "profile": [
+        "DEEP",
+        "gpt-6.1-sol",
+        "high"
+      ],
+      "source_file_sha256": "9129ea1559aed710aa79a7a346c5fc69d80cf715842e0f2998c52de173a8d534"
+    },
+    {
+      "case_id": "Q17",
+      "label": "B",
+      "slot_id": "BASELINE_Q17_DEEP_LUNA_MAX",
+      "profile": [
+        "DEEP",
+        "gpt-6-luna",
+        "max"
+      ],
+      "source_file_sha256": "e01ac71f8d428a9fae5723e97be43f88496d5872f6bc91fcfaabc512f83a7cd6"
+    }
+  ]
+}

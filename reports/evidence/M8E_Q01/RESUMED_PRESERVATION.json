@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "historical_ledger_bytes_unchanged": {
+    "m7c": true,
+    "m7d": true,
+    "m8d": true
+  },
+  "skills_frames_admission_unchanged": {
+    "skills/conversation/session_closure.json": true,
+    "skills/conversation/core_reflection.json": true,
+    "skills/conversation/local_private_controller_frame.json": true,
+    "skills/conversation/deep_session.json": true,
+    "skills/conversation/goal_setting.json": true,
+    "skills/conversation/controller_frame.json": true,
+    "skills/qualification/sleep_review.json": true,
+    "skills/qualification/grounding.json": true,
+    "skills/qualification/cbt_reflection.json": true,
+    "skills/qualification/worry_rumination.json": true,
+    "skills/qualification/nightmare_review.json": true,
+    "research/admission/registry.json": true
+  },
+  "new_attempts": 12,
+  "all_no_downstream_writes": true,
+  "owner_pilot_access": false,
+  "clinical_active": 0,
+  "health_phone_changed": false
+}

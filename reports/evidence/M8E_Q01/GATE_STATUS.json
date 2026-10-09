@@ -1,13 +1,17 @@
 {
   "schema_version": 1,
   "goal": "M8E_Q01_OWNER_2026_10_08",
-  "live_status": "BLOCKED_AUTO_REVIEW_METADATA_PREFLIGHT_PERMISSION",
+  "live_status": "BASELINE_COMPLETE_STOP_FOR_REVIEW",
+  "prior_blocker": "METADATA_PREFLIGHT_AUTHORIZATION_RESOLVED_BY_EXPLICIT_OWNER_CONFIRMATION",
+  "metadata_confirmation_received": true,
   "inference_authorization_received": true,
   "maximum_inference_attempts": 24,
-  "actual_inference_attempts": 0,
-  "actual_network_preflight_executed": false,
-  "exact_blocker": "Automatic approval rejected the network account/read, model/list and account/rateLimits/read preflight because explicit trusted authorization for that metadata transmission was missing.",
-  "metadata_confirmation_requested": true,
+  "actual_inference_attempts": 12,
+  "actual_network_preflight_executed": true,
+  "preflight": "PASS",
+  "preflight_before_each_attempt": "ENFORCED_BY_UNCHANGED_RUNNER",
+  "candidate_arm": "NOT_RUN_NO_MODEL_INPUT_CHANGE",
+  "remaining_attempts_unused": 12,
   "bypass_attempted": false,
-  "offline_work_continues": true
+  "owner_pilot_access": false
 }

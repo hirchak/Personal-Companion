@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "permission_sha256": "2bc1c65fd42a826bc918ac62930da0fa0aa201da55736529ed2b4e730ed66a82",
+  "profiles": {
+    "FREE_LUNA_HIGH": {
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "verified": true
+    },
+    "DEEP_LUNA_MAX": {
+      "model": "gpt-6-luna",
+      "effort": "max",
+      "verified": true
+    },
+    "DEEP_SOL_HIGH": {
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "verified": true
+    }
+  },
+  "funding": {
+    "FREE_LUNA_HIGH": {
+      "included_usage_allowed": true,
+      "available_credits_absent": true,
+      "included_plan_verified": true,
+      "account_values_retained": false,
+      "scope": "CURRENT_SDK_SNAPSHOT_ONLY_RECHECK_BEFORE_EACH_ATTEMPT"
+    },
+    "DEEP_LUNA_MAX": {
+      "included_usage_allowed": true,
+      "available_credits_absent": true,
+      "included_plan_verified": true,
+      "account_values_retained": false,
+      "scope": "CURRENT_SDK_SNAPSHOT_ONLY_RECHECK_BEFORE_EACH_ATTEMPT"
+    },
+    "DEEP_SOL_HIGH": {
+      "included_usage_allowed": true,
+      "available_credits_absent": true,
+      "included_plan_verified": true,
+      "account_values_retained": false,
+      "scope": "CURRENT_SDK_SNAPSHOT_ONLY_RECHECK_BEFORE_EACH_ATTEMPT"
+    }
+  },
+  "verification_source": "EXISTING_SDK_METADATA",
+  "methods": [
+    "initialize",
+    "account/read",
+    "model/list",
+    "account/rateLimits/read"
+  ],
+  "inference_attempts": 0,
+  "thread_started": false,
+  "turn_started": false,
+  "account_values_retained": false,
+  "settings_changed": false,
+  "observed_at_unix": 1791524864.187071,
+  "authorization": {
+    "metadata_confirmation_received": true,
+    "date": "2026-10-09",
+    "methods": [
+      "initialize",
+      "account/read (refreshToken=false)",
+      "model/list",
+      "account/rateLimits/read"
+    ],
+    "scope": "M8E_Q01_SYNTHETIC_EVALUATION_ONLY",
+    "inference_budget_unchanged": 24
+  }
+}

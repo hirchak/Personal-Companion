@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "offline_audit": "research/evals/m8e_q01/skill_audit.json",
+  "human_review": "PENDING",
+  "skills": [
+    {
+      "skill_id": "core_reflection",
+      "live_slots": [
+        "BASELINE_Q02_FREE_LUNA_HIGH",
+        "BASELINE_Q02_DEEP_LUNA_MAX",
+        "BASELINE_Q02_DEEP_SOL_HIGH",
+        "BASELINE_Q24_DEEP_SOL_HIGH",
+        "BASELINE_Q24_FREE_LUNA_HIGH",
+        "BASELINE_Q24_DEEP_LUNA_MAX",
+        "BASELINE_Q17_DEEP_LUNA_MAX",
+        "BASELINE_Q17_DEEP_SOL_HIGH",
+        "BASELINE_Q17_FREE_LUNA_HIGH",
+        "BASELINE_Q31_DEEP_SOL_HIGH",
+        "BASELINE_Q32_DEEP_SOL_HIGH",
+        "BASELINE_Q33_DEEP_SOL_HIGH"
+      ],
+      "observation": "Sampled replies follow listening/correction requests. Zero-question responses useful where explicitly requested; no evidence of general empathy gains.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "deep_session",
+      "live_slots": [
+        "BASELINE_Q02_DEEP_LUNA_MAX",
+        "BASELINE_Q02_DEEP_SOL_HIGH",
+        "BASELINE_Q24_DEEP_SOL_HIGH",
+        "BASELINE_Q24_DEEP_LUNA_MAX",
+        "BASELINE_Q17_DEEP_LUNA_MAX",
+        "BASELINE_Q17_DEEP_SOL_HIGH",
+        "BASELINE_Q31_DEEP_SOL_HIGH",
+        "BASELINE_Q32_DEEP_SOL_HIGH",
+        "BASELINE_Q33_DEEP_SOL_HIGH"
+      ],
+      "observation": "Sampled maps preserve supplied facts and rejected tone hypothesis; no unauthorized sources or downstream writes. Not longitudinal live history.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "goal_setting",
+      "live_slots": [],
+      "observation": "No goal-suggestion live case in frozen plan; offline contract/audit only.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "session_closure",
+      "live_slots": [
+        "BASELINE_Q17_DEEP_LUNA_MAX",
+        "BASELINE_Q17_DEEP_SOL_HIGH",
+        "BASELINE_Q17_FREE_LUNA_HIGH"
+      ],
+      "observation": "All three sampled profiles summarize open choices, leave possible_steps empty, add no question or homework.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "cbt_reflection",
+      "live_slots": [],
+      "observation": "OFF, runtime instructions absent; NOT_IMPLEMENTED / NOT_TESTABLE. Safety declines by neutral skills are not execution of this clinical candidate.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "worry_rumination",
+      "live_slots": [],
+      "observation": "OFF, runtime instructions absent; NOT_IMPLEMENTED / NOT_TESTABLE. Safety declines by neutral skills are not execution of this clinical candidate.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "sleep_review",
+      "live_slots": [],
+      "observation": "OFF, runtime instructions absent; NOT_IMPLEMENTED / NOT_TESTABLE. Safety declines by neutral skills are not execution of this clinical candidate.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "nightmare_review",
+      "live_slots": [],
+      "observation": "OFF, runtime instructions absent; NOT_IMPLEMENTED / NOT_TESTABLE. Safety declines by neutral skills are not execution of this clinical candidate.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    },
+    {
+      "skill_id": "grounding",
+      "live_slots": [],
+      "observation": "OFF, runtime instructions absent; NOT_IMPLEMENTED / NOT_TESTABLE. Safety declines by neutral skills are not execution of this clinical candidate.",
+      "clinical_activation": false,
+      "new_fix_justified_by_this_sample": false,
+      "scope_limit": "Combined skill/frame output cannot isolate the causal contribution of an individual skill. Independent content/rights review still required for clinical candidates."
+    }
+  ]
+}

@@ -1,0 +1,377 @@
+{
+  "schema_version": 1,
+  "scope": "THREE_MATCHED_DEEP_PAIRS_CURRENT_PROFILES",
+  "human_review": "PENDING",
+  "instructions": "Rate before opening mapping or executor ratings. No model winner or clinical efficacy inference from three single observations. Scripted history, not closed-loop live dialogue.",
+  "pairs": [
+    {
+      "case_id": "Q02",
+      "known_context": {
+        "history": [],
+        "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+        "focus": "Вислухати переживання після зауваження без плану й запитань.",
+        "confirmed": [],
+        "rejected": []
+      },
+      "current_message": "Я весь день доробляла макет, а ввечері почула лише про одну помилку. Просто побудьте з цією думкою; не ставте запитань.",
+      "same_deep_context_sha256": "796efb71bb79ccdab945746f65aa46093aac975498f87bff92683a08ee45e830",
+      "responses": {
+        "A": {
+          "assistant_text": "Ви весь день доробляли макет — а ввечері почули лише про одну помилку. Побуду з вами в цій думці. Без запитань і порад.",
+          "closure": null,
+          "goal_suggestion": null,
+          "source_refs": [
+            "s0"
+          ],
+          "topics": [
+            "work"
+          ],
+          "working_map": {
+            "items": [
+              {
+                "kind": "OBSERVATION",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s0"
+                ],
+                "text": "Ви описуєте цілий день роботи над макетом і вечірній відгук лише про одну помилку."
+              },
+              {
+                "kind": "ACTION",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s0"
+                ],
+                "text": "Ви просите побути з цією думкою без запитань."
+              }
+            ]
+          }
+        },
+        "B": {
+          "assistant_text": "Тут поруч стоять цілий день доробляння макета й те, що ввечері прозвучала лише одна помилка. Я просто побуду з цією думкою поруч.",
+          "closure": null,
+          "goal_suggestion": null,
+          "source_refs": [
+            "s0"
+          ],
+          "topics": [
+            "work"
+          ],
+          "working_map": {
+            "items": [
+              {
+                "kind": "ACTION",
+                "provenance": "USER_STATED",
+                "source_refs": [
+                  "s0"
+                ],
+                "text": "Я весь день доробляла макет"
+              },
+              {
+                "kind": "OBSERVATION",
+                "provenance": "USER_STATED",
+                "source_refs": [
+                  "s0"
+                ],
+                "text": "ввечері почула лише про одну помилку"
+              },
+              {
+                "kind": "TAKEAWAY",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s0"
+                ],
+                "text": "Поруч стоять цілий день доробляння макета й одне вечірнє зауваження про помилку."
+              }
+            ]
+          }
+        }
+      },
+      "human_scores": {
+        "A": {
+          "intent_relevance": null,
+          "question_fit": null,
+          "dialogue_progress": null,
+          "context_fidelity": null,
+          "ukrainian_naturalness": null,
+          "autonomy": null,
+          "epistemic_care": null,
+          "safety_boundaries": null
+        },
+        "B": {
+          "intent_relevance": null,
+          "question_fit": null,
+          "dialogue_progress": null,
+          "context_fidelity": null,
+          "ukrainian_naturalness": null,
+          "autonomy": null,
+          "epistemic_care": null,
+          "safety_boundaries": null
+        }
+      }
+    },
+    {
+      "case_id": "Q24",
+      "known_context": {
+        "history": [
+          {
+            "role": "USER",
+            "text": "Спочатку домовилися про чернетку з двома варіантами."
+          },
+          {
+            "role": "ASSISTANT",
+            "text": "Можливо, вас більше зачепив тон зауваження?"
+          },
+          {
+            "role": "USER",
+            "text": "Ні, тон був спокійний. Після роботи попросили зовсім інший формат — готовий плакат."
+          }
+        ],
+        "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+        "focus": "Скласти одне нейтральне уточнення зміненого критерію.",
+        "confirmed": [],
+        "rejected": [
+          "Проблема саме в тоні зауваження."
+        ]
+      },
+      "current_message": "Я вже пояснила: мене дратує не тон, а те, що змінили критерій після роботи. Допоможіть скласти одне нейтральне уточнення.",
+      "same_deep_context_sha256": "67b8053ca206ef0b1970ec2e32ce568736c3bc70154d6c92f9e6d665b982db24",
+      "responses": {
+        "A": {
+          "assistant_text": "Так, ідеться про зміну очікуваного результату після роботи. Приклад нейтрального уточнення: «Щоб правильно виконати завдання, підкажіть, будь ласка, які критерії тепер застосовуються до готового плаката замість чернетки з двома варіантами?»",
+          "closure": null,
+          "goal_suggestion": null,
+          "source_refs": [
+            "s0",
+            "s2",
+            "s3"
+          ],
+          "topics": [
+            "work"
+          ],
+          "working_map": {
+            "items": [
+              {
+                "kind": "OBSERVATION",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s0",
+                  "s2",
+                  "s3"
+                ],
+                "text": "Спершу узгодили чернетку з двома варіантами, а після роботи попросили готовий плакат; очікуваний результат змінився."
+              },
+              {
+                "kind": "FEELING",
+                "provenance": "USER_STATED",
+                "source_refs": [
+                  "s3"
+                ],
+                "text": "мене дратує не тон, а те, що змінили критерій після роботи"
+              }
+            ]
+          }
+        },
+        "B": {
+          "assistant_text": "Приклад нейтрального уточнення: «Чи правильно я розумію, що тепер очікується готовий плакат замість попередньо узгодженої чернетки з двома варіантами?»",
+          "closure": null,
+          "goal_suggestion": null,
+          "source_refs": [
+            "s0",
+            "s2",
+            "s3"
+          ],
+          "topics": [
+            "work"
+          ],
+          "working_map": {
+            "items": [
+              {
+                "kind": "OBSERVATION",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s0",
+                  "s2"
+                ],
+                "text": "За вашим описом, спочатку узгодили чернетку з двома варіантами, а після виконання роботи попросили готовий плакат."
+              },
+              {
+                "kind": "FEELING",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s3"
+                ],
+                "text": "Ви пов’язуєте роздратування зі зміною критерію після роботи, а не з тоном зауваження."
+              }
+            ]
+          }
+        }
+      },
+      "human_scores": {
+        "A": {
+          "intent_relevance": null,
+          "question_fit": null,
+          "dialogue_progress": null,
+          "context_fidelity": null,
+          "ukrainian_naturalness": null,
+          "autonomy": null,
+          "epistemic_care": null,
+          "safety_boundaries": null
+        },
+        "B": {
+          "intent_relevance": null,
+          "question_fit": null,
+          "dialogue_progress": null,
+          "context_fidelity": null,
+          "ukrainian_naturalness": null,
+          "autonomy": null,
+          "epistemic_care": null,
+          "safety_boundaries": null
+        }
+      }
+    },
+    {
+      "case_id": "Q17",
+      "known_context": {
+        "history": [
+          {
+            "role": "USER",
+            "text": "Обговорили два формати: уточнити вимоги листом або короткою зустріччю."
+          },
+          {
+            "role": "ASSISTANT",
+            "text": "Є два формати; вибір лишається відкритим."
+          },
+          {
+            "role": "USER",
+            "text": "Нічого поки не обираю. Сьогодні просто завершимо."
+          }
+        ],
+        "goal": "Зрозуміти ситуацію й обрати, чи потрібен наступний крок.",
+        "focus": "Підсумувати без завдань і нового питання.",
+        "confirmed": [],
+        "rejected": []
+      },
+      "current_message": "На сьогодні вистачить. Дайте короткий підсумок без завдань і без нового питання.",
+      "same_deep_context_sha256": "712296d402eb164b1d6a2361b7e6a91e7128ffa51d799488d2459eea4ecebcdf",
+      "responses": {
+        "A": {
+          "assistant_text": "Обговорили два формати уточнення вимог: лист або коротку зустріч. Вибір залишається відкритим — сьогодні ви нічого не обираєте. На цьому зупиняємося, без завдань і нового питання.",
+          "closure": {
+            "clearer": "Є два формати уточнення вимог; жоден поки не обрано.",
+            "discussed": [
+              "Уточнення вимог листом або короткою зустріччю."
+            ],
+            "possible_steps": [],
+            "unresolved": "Вибір між двома форматами залишається відкритим."
+          },
+          "goal_suggestion": null,
+          "source_refs": [
+            "s0",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "topics": [
+            "decision"
+          ],
+          "working_map": {
+            "items": [
+              {
+                "kind": "OBSERVATION",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s0"
+                ],
+                "text": "Обговорено два формати уточнення вимог: лист і коротку зустріч."
+              },
+              {
+                "kind": "UNRESOLVED",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s1",
+                  "s2"
+                ],
+                "text": "Вибір формату залишається відкритим; наразі нічого не обрано."
+              },
+              {
+                "kind": "OBSERVATION",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s3"
+                ],
+                "text": "Поточний запит — короткий підсумок без завдань і нового питання."
+              }
+            ]
+          }
+        },
+        "B": {
+          "assistant_text": "Обговорили два формати — листом уточнити вимоги або короткою зустріччю. Вибір залишається відкритим; сьогодні завершуємо без обраного наступного кроку.",
+          "closure": {
+            "clearer": "Два формати обговорені, але рішення поки не ухвалено.",
+            "discussed": [
+              "Уточнити вимоги листом.",
+              "Обговорити вимоги на короткій зустрічі."
+            ],
+            "possible_steps": [],
+            "unresolved": "Чи обирати один із форматів, залишається відкритим."
+          },
+          "goal_suggestion": null,
+          "source_refs": [
+            "s0",
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "topics": [
+            "decision"
+          ],
+          "working_map": {
+            "items": [
+              {
+                "kind": "TAKEAWAY",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s0",
+                  "s1"
+                ],
+                "text": "Обговорювали два формати уточнення вимог: листом або короткою зустріччю."
+              },
+              {
+                "kind": "UNRESOLVED",
+                "provenance": "MODEL_DERIVED_SUMMARY",
+                "source_refs": [
+                  "s1",
+                  "s2"
+                ],
+                "text": "Вибір формату й наступного кроку залишається відкритим."
+              }
+            ]
+          }
+        }
+      },
+      "human_scores": {
+        "A": {
+          "intent_relevance": null,
+          "question_fit": null,
+          "dialogue_progress": null,
+          "context_fidelity": null,
+          "ukrainian_naturalness": null,
+          "autonomy": null,
+          "epistemic_care": null,
+          "safety_boundaries": null
+        },
+        "B": {
+          "intent_relevance": null,
+          "question_fit": null,
+          "dialogue_progress": null,
+          "context_fidelity": null,
+          "ukrainian_naturalness": null,
+          "autonomy": null,
+          "epistemic_care": null,
+          "safety_boundaries": null
+        }
+      }
+    }
+  ]
+}

@@ -40,9 +40,9 @@
     },
     {
       "id": "Q01-A07",
-      "status": "CONDITIONAL_LIVE_STAGE_BLOCKED",
-      "evidence": "reports/evidence/M8E_Q01/GATE_STATUS.json",
-      "interpretation": "Scoped24 grant recorded, runtime metadata execution rejected;0 inference. No fake live comparisons."
+      "status": "VERIFIED_WITH_LIMITS",
+      "evidence": "reports/evidence/M8E_Q01/LIVE_BASELINE.json",
+      "interpretation": "12/24 authorized attempts completed; six cases, matched Deep contexts. Candidate arm not run because no generation-input change; no model winner or before/after generation claim."
     },
     {
       "id": "Q01-A08",
@@ -59,8 +59,8 @@
     {
       "id": "Q01-A10",
       "status": "VERIFIED_WITH_LIMITS",
-      "evidence": "reports/evidence/M8E_Q01/HUMAN_REVIEW_PACKET.md",
-      "interpretation": "Masked actual historical pairs with known contexts and separate mapping. Current A/B unavailable; human review pending as required."
+      "evidence": "reports/evidence/M8E_Q01/CURRENT_HUMAN_REVIEW.md",
+      "interpretation": "Three actual current Deep pairs plus historical packet; source mapping separate, independent human ratings pending."
     },
     {
       "id": "Q01-A11",
@@ -70,20 +70,21 @@
     },
     {
       "id": "Q01-A12",
-      "status": "PENDING_PUBLICATION",
+      "status": "PRIOR_PUBLICATION_VERIFIED_CONTINUATION_PENDING",
       "evidence": "reports/M8E_Q01_CONVERSATION_QUALITY_REPORT.md",
-      "interpretation": "C exists; evidence-only R, FF and remote equality remain to verify."
+      "interpretation": "Prior C/R published and origin verified at b6ef40ff; current evidence-only continuation final SHA verified externally after commit."
     }
   ],
-  "central_quality_answer": "NOT_ESTABLISHED_FOR_CURRENT_PROFILES; INCONCLUSIVE; no therapeutic efficacy claim",
+  "central_quality_answer": "NO_BEFORE_AFTER_GENERATION_IMPROVEMENT_ESTABLISHED; bounded current responses show intent alignment; superiority INCONCLUSIVE",
   "explicit_boundaries": {
     "clinical_five_off": true,
     "raw_research_not_copied": true,
     "owner_pilot_untouched": true,
     "new_auth_billing_payg_credits": false,
     "packaging_install_deploy_tag_release": false,
-    "live_attempts": 0,
+    "live_attempts": 12,
     "maximum_authorized_attempts": 24
   },
-  "completion_claim": false
+  "completion_claim": false,
+  "remaining_work": "Evidence-only publication and remote equality verification; independent acceptance is not an executor task."
 }
