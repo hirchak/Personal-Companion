@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "location_authority": "EXPLICIT_OWNER_DESKTOP_SELECTION",
+  "raw_and_drafts_outside_git": true,
+  "separate_directories": true,
+  "raw_hashes_preserved": 10,
+  "selected_desktop_symlink": false,
+  "macos_icloud_desktop_preference": "0",
+  "icloud_desktop_sync": "DISABLED_OBSERVED",
+  "method": "defaults read com.apple.finder FXICloudDriveDesktop; exact selected directory symlink metadata",
+  "scope_limit": "Other third-party synchronization tools were not surveyed; no absolute no-exfiltration claim.",
+  "account_data_read": false,
+  "settings_changed": false
+}

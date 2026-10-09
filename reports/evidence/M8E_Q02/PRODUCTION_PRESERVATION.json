@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "files": {
+    "apps/core/conversation_skills.py": {
+      "sha256": "9fc949ce3d7ce4f39c5ad790da61cea8cb564ba09e1ca2c201b9ee777ed474fe",
+      "unchanged_from_base": true
+    },
+    "apps/core/conversation_controller.py": {
+      "sha256": "953249c2cd36f2a9aa5e13ae2662e58999df4dba41ce54f8af5918b1004c45b2",
+      "unchanged_from_base": true
+    },
+    "apps/core/deep_session.py": {
+      "sha256": "b7b5a24139fbdc98f47a1e039c30d606f8094883182979cf02b76716c0199048",
+      "unchanged_from_base": true
+    },
+    "research/admission/registry.json": {
+      "sha256": "8aab44e94922ef3860e2777a9611cf574b9bb65d46fd9b4c9d5f9d2e2fa5a1df",
+      "unchanged_from_base": true
+    },
+    ".project/project.json": {
+      "sha256": "893af47de673eabb72ad86259a16db5304bf6a6d3eb39ef090fa8244b02f985b",
+      "unchanged_from_base": true
+    },
+    "skills/qualification/sleep_review.json": {
+      "sha256": "f31d84181131a9df7bc3c6060fe282cde4ba735c9d18fef08fc1606804eda973",
+      "unchanged_from_base": true
+    },
+    "skills/qualification/grounding.json": {
+      "sha256": "75187909ffb9e275d40f77a79088925f8681d0ffcf7599865c875d20d33973b5",
+      "unchanged_from_base": true
+    },
+    "skills/qualification/cbt_reflection.json": {
+      "sha256": "5ff840254d56e4858e86eb6a68756cf7ed645e1ffb6fc4d591683316afe365c0",
+      "unchanged_from_base": true
+    },
+    "skills/qualification/worry_rumination.json": {
+      "sha256": "5cead892a0d00b02505f0bacaa06c20299153ee1f31b75a4398f96ddfb9ae2f4",
+      "unchanged_from_base": true
+    },
+    "skills/qualification/nightmare_review.json": {
+      "sha256": "845a4fd17eddc5c7e5f14bb7e3afc655b99b23a6112cddc41bd05f9107c828ec",
+      "unchanged_from_base": true
+    },
+    "skills/conversation/session_closure.json": {
+      "sha256": "c67d784acc293002e3cb8281a46d1c78867d96a1e0f78b950bf5b95f92df240b",
+      "unchanged_from_base": true
+    },
+    "skills/conversation/core_reflection.json": {
+      "sha256": "70b57039fb82a4909bfb088ad1798caadd3a0f89c1c49790ef9bd770cd0a392b",
+      "unchanged_from_base": true
+    },
+    "skills/conversation/local_private_controller_frame.json": {
+      "sha256": "9fa7f7f101a6d98d49f128cd9b45c9cb97a1dfcc9e5e0447d52019e4c6bafb60",
+      "unchanged_from_base": true
+    },
+    "skills/conversation/deep_session.json": {
+      "sha256": "05393d0bcfe737cf82c2e61a1cfc173da975115e6bea666aa70e49825f77cbbc",
+      "unchanged_from_base": true
+    },
+    "skills/conversation/goal_setting.json": {
+      "sha256": "f8e278cd764fff2a0b816cdf2216b6fa78facb917f059b20c5338e5c5cfc786e",
+      "unchanged_from_base": true
+    },
+    "skills/conversation/controller_frame.json": {
+      "sha256": "eac569b68d9fd35ea98c347acfbab575e1d507bfd4f8fcf073cdf24e8e661dc0",
+      "unchanged_from_base": true
+    }
+  },
+  "runtime_changes": false,
+  "live_calls": 0,
+  "owner_pilot_access": false
+}

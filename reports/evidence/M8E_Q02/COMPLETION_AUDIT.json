@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "requirements": [
+    {
+      "id": "Q02-1",
+      "requirement": "Five complete local drafts/version/hash, rule/source/gap mapping",
+      "evidence": "research/evals/m8e_q02/candidate_index.json",
+      "status": "LOCAL_CONTENT_VERIFIED; QUALIFIED_REVIEW_REQUIRED"
+    },
+    {
+      "id": "Q02-2",
+      "requirement": "Sanitized public index,50 cases, isolated shadow/checks",
+      "evidence": "reports/evidence/M8E_Q02/SHADOW_CHECKS.json",
+      "status": "VERIFIED_MECHANICAL_ONLY"
+    },
+    {
+      "id": "Q02-3",
+      "requirement": "Clinical OFF, semantic gap remains open, no runtime/source/consent changes",
+      "evidence": "reports/evidence/M8E_Q02/PRODUCTION_PRESERVATION.json",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "Q02-4",
+      "requirement": "Exact-C tests/admission/docs/privacy",
+      "evidence": "reports/evidence/M8E_Q02/CHECKS.json",
+      "status": "VERIFIED_WITH_RECORDED_ENVIRONMENT_RECHECK"
+    },
+    {
+      "id": "Q02-5",
+      "requirement": "Contract/report/state/handoff/local review index",
+      "evidence": "reports/M8E_Q02_FIVE_SKILLS_REPORT.md",
+      "status": "PREPARED"
+    },
+    {
+      "id": "Q02-6",
+      "requirement": "C/R normalFF and actual remote equality",
+      "evidence": "FINAL_PUBLICATION_RECEIPT",
+      "status": "PENDING_FINAL_PUBLICATION"
+    }
+  ],
+  "full_drafts_in_git": false,
+  "independent_review": "REQUIRED_NEXT_NOT_SELF_APPROVED",
+  "remaining_executor_work": "Final evidence commit, privacy/staged review, FF push and actual remote equality",
+  "completion_claim": false
+}

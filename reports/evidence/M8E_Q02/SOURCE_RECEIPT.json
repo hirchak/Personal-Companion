@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_INTEGRITY_PASS",
+  "manifest_sha256": "61c44ca01f4498e32c2ff801645956d326db37e63eda0be24fc5f017959e6626",
+  "files": [
+    {
+      "packet_id": "R01",
+      "name": "R01_RAW.docx",
+      "sha256": "d3c34a4f8c4a782e90ace0328259411fd26ffde68f3bc383dd944ba06fd0e149",
+      "size_bytes": 3058802,
+      "paragraph_count_including_tables": 543,
+      "table_count": 4,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R02",
+      "name": "R02_RAW.docx",
+      "sha256": "d515e9307cc530afd90f888d90c03aac6c5812bb707c02af21e799fec13ab5c5",
+      "size_bytes": 46871,
+      "paragraph_count_including_tables": 445,
+      "table_count": 4,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R03",
+      "name": "R03_RAW.docx",
+      "sha256": "053f5275abdab1c738004130dfdef19b7b0b09bf6b2bf55e58b6e7f4372baac9",
+      "size_bytes": 3060788,
+      "paragraph_count_including_tables": 721,
+      "table_count": 6,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R04",
+      "name": "R04_RAW.docx",
+      "sha256": "43f3c83fd3a9df41aac1925eb1dd1d047dd16dc4a8652d509b652884c96dee9a",
+      "size_bytes": 3056089,
+      "paragraph_count_including_tables": 735,
+      "table_count": 5,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R05",
+      "name": "R05_RAW.docx",
+      "sha256": "ffed6e32ad3ce0e2959e9daf72ff7a5d1913a7b4d0fd7e5dffc434bcab6fc2c7",
+      "size_bytes": 3056357,
+      "paragraph_count_including_tables": 824,
+      "table_count": 5,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R06",
+      "name": "R06_RAW.docx",
+      "sha256": "990df3a4d54a1b8bcfb64337a1c3e1981875b1678dd1460ef0266d5a2634138f",
+      "size_bytes": 57339,
+      "paragraph_count_including_tables": 755,
+      "table_count": 4,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R08",
+      "name": "R08_RAW.docx",
+      "sha256": "a481a0e12bc9adf1c9c4feefcbce793edf915ad0e66240014903b84f5fb6b8f4",
+      "size_bytes": 3055027,
+      "paragraph_count_including_tables": 683,
+      "table_count": 5,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R09",
+      "name": "R09_RAW.docx",
+      "sha256": "eb9395e6169a576a37875348d6354ca019c1e59cdfc558991124cdaa43100ce7",
+      "size_bytes": 3059231,
+      "paragraph_count_including_tables": 737,
+      "table_count": 6,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R11",
+      "name": "R11_RAW.docx",
+      "sha256": "b8ebd00eebff4cb036743abc933b76ddab1f23208230d1e21d64886d42bc0714",
+      "size_bytes": 39441,
+      "paragraph_count_including_tables": 352,
+      "table_count": 4,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    },
+    {
+      "packet_id": "R12",
+      "name": "R12_RAW.docx",
+      "sha256": "5fd0e750e4c5c3763dc319a124212c6dcbe832c0cf7474db7b8759cdb56b36df",
+      "size_bytes": 44699,
+      "paragraph_count_including_tables": 540,
+      "table_count": 9,
+      "receipt_status": "SOURCE_RECEIVED",
+      "evidence_status": "RAW_UNREVIEWED",
+      "rights_status": "RIGHTS_UNKNOWN",
+      "qualified_content_review": "PENDING"
+    }
+  ],
+  "raw_text_exported": false,
+  "network_calls": 0,
+  "clinical_activation": false
+}

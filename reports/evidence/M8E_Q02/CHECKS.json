@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "implementation_sha": "1237e0ce2652f960ea2179ca327f6eaafd0d319a",
+  "base_sha": "140a52f2ddc36abbeae957385cf54cf83abf01f5",
+  "exact_checkout_clean": true,
+  "environment": {
+    "platform": "Darwin",
+    "architecture": "arm64",
+    "python": "3.13.2",
+    "dependencies": "EXISTING_ONLY_NO_INSTALL"
+  },
+  "commands": [
+    {
+      "command": ".venv/bin/python -B -m pytest -q",
+      "exit_code": 1,
+      "passed": 878,
+      "failed": 47,
+      "seconds": 252.8,
+      "failure_class": "ALL47_BROWSER_EXECUTABLE_PATH_MISSING_IN_ISOLATED_CHECKOUT",
+      "log_sha256": "be69dc498f87b2b7e6f37b5b6602cb798a6648ddf6c5d0f1f6711077a978ca72"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=<existing local Chromium cache> .venv/bin/python -B -m pytest -q --lf",
+      "exit_code": 0,
+      "passed": 47,
+      "seconds": 186.3,
+      "log_sha256": "c3f9751e1fec52dcf6504f9efc5811f8325276e2d997b472f18b03fd77a5ee2b",
+      "lastfailed_cache_empty": true
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "exit_code": 0,
+      "passed": 53,
+      "log_sha256": "4b8311e0ef34f4774b53050ecfda0828af58bb14a0f75749073290cb3ae6ce71"
+    },
+    {
+      "command": "npm --prefix apps/web run build",
+      "exit_code": 0,
+      "scope": "TypeScript and Vite only;no Mac release",
+      "log_sha256": "9de002c689c13518b2cf5007e7e93af145c2219c93cfc837b6948fbd91548322"
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.m8e_q02_shadow --bundle-dir <owner-selected external directory> --output <sanitized evidence>",
+      "exit_code": 0,
+      "cases": 50,
+      "exact_authored_pairs": 15,
+      "result": "MECHANICAL_CONSISTENCY_ONLY"
+    },
+    {
+      "command": ".venv/bin/python -B -m scripts.audit_m8e_q02 --output <sanitized evidence>",
+      "exit_code": 0,
+      "q01_counterexamples": 14,
+      "specialist_counterexamples": 10,
+      "json_dispatch_rejected": 10,
+      "semantic_gap": "OPEN"
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "structural_status": "PASS",
+      "findings_preserved": 27,
+      "findings_closed": 0,
+      "clinical_active": 0
+    },
+    {
+      "command": ".venv/bin/python -m scripts.qualify_m7d_skills --check",
+      "exit_code": 0,
+      "packages": 5,
+      "activation": "OFF"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "scope": "exact-C public tree/generated snapshots/built UI/all local Git objects",
+      "log_sha256": "afacf2265f31550d9fc3ede99a6c8ba693d25be76c8b3a1a23fe078c9f435796"
+    }
+  ],
+  "aggregate_python_result": {
+    "unique_tests_passed": 925,
+    "unresolved_failures": 0,
+    "interpretation": "878 initial successes plus47 successful reruns after an environment-only cache-path correction; not a single all-green first run."
+  },
+  "warnings": "Existing upstream Starlette deprecation",
+  "provider_calls": 0,
+  "private_owner_data": false,
+  "independent_content_review": "PENDING",
+  "ci": "NOT_CHECKED"
+}
