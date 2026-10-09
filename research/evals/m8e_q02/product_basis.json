@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "rows": [
+    {
+      "id": "PRODUCT_INTENT",
+      "file": "prompts/M8E_Q02_FIVE_SKILL_CANDIDATES.md",
+      "sha256": "0e549f34ed8b39c4e4b7a38d2a35794ce10034dc732a0824e76d637bb16d52c9",
+      "locator": "Sections1 and3B: intent and voluntary reflection",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    },
+    {
+      "id": "PRODUCT_FORMAL_VY",
+      "file": "skills/conversation/core_reflection.json",
+      "sha256": "70b57039fb82a4909bfb088ad1798caadd3a0f89c1c49790ef9bd770cd0a392b",
+      "locator": "instructions: existing FORMAL_VY policy",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    },
+    {
+      "id": "PRODUCT_QUESTION_POLICY",
+      "file": "prompts/M8E_Q02_FIVE_SKILL_CANDIDATES.md",
+      "sha256": "0e549f34ed8b39c4e4b7a38d2a35794ce10034dc732a0824e76d637bb16d52c9",
+      "locator": "Section1: one question or none",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    },
+    {
+      "id": "PRODUCT_SOURCE_BINDING",
+      "file": "docs/adr/ADR-010-M7D-DEEP-SESSION.md",
+      "sha256": "df9698d0c4cbad0a2e536bfccce3031c13b046c25be06eaa67f4e7ade9133c2a",
+      "locator": "Exact context and source revision authority",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    },
+    {
+      "id": "PRODUCT_NO_AUTHORITY",
+      "file": "docs/adr/ADR-007-M7A-PRACTICE.md",
+      "sha256": "d25d4474a99be5721e65d9526f6aa15d9bff102b3a6e85a03d3cb81d63d07790",
+      "locator": "Candidate text cannot authorize runtime activation",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    },
+    {
+      "id": "PRODUCT_CLINICAL_BOUNDARY",
+      "file": "docs/SAFETY.md",
+      "sha256": "8a9941e59cb5aedde0c939e6f0b47b56a2d5323581c4b2d31adf3f258b3106ed",
+      "locator": "Product position and three levels of functions",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    },
+    {
+      "id": "PRODUCT_CRISIS_BOUNDARY",
+      "file": "docs/SAFETY.md",
+      "sha256": "8a9941e59cb5aedde0c939e6f0b47b56a2d5323581c4b2d31adf3f258b3106ed",
+      "locator": "Immediate situation and no surveillance promises",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    },
+    {
+      "id": "PRODUCT_CLOSURE",
+      "file": "skills/conversation/session_closure.json",
+      "sha256": "c67d784acc293002e3cb8281a46d1c78867d96a1e0f78b950bf5b95f92df240b",
+      "locator": "Explicit user request and no clinical-result claim",
+      "basis_type": "ORIGINAL_PROJECT_POLICY_NOT_CLINICAL_EVIDENCE"
+    }
+  ]
+}

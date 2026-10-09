@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "status": "PRELIMINARY_SOURCE_SCREENING_NOT_FULL_CLAIM_MATRIX",
+  "method": "Targeted local DOCX paragraphs inspected after SHA verification. Original sanitized design summaries; no source extracts or full drafts. Canonical dependency gates retain all additional RG findings.",
+  "rows": [
+    {
+      "id": "CBT01",
+      "skills": [
+        "cbt_reflection"
+      ],
+      "packet_id": "R05",
+      "source_sha256": "ffed6e32ad3ce0e2959e9daf72ff7a5d1913a7b4d0fd7e5dffc434bcab6fc2c7",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "J / P0031",
+      "proposed_design_boundary": "Do not derive a mandatory didactic style or efficacy claim from citation16.",
+      "related_finding": "RG-10",
+      "population_scope_limit": "RAW compares LLM dialogue styles; citation identity and underlying population remain unverified.",
+      "citation_as_located_in_RAW": "Citation16 as numbered in RAW; stable primary identity not resolved",
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "CBT02",
+      "skills": [
+        "cbt_reflection"
+      ],
+      "packet_id": "R05",
+      "source_sha256": "ffed6e32ad3ce0e2959e9daf72ff7a5d1913a7b4d0fd7e5dffc434bcab6fc2c7",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "K / P0033–P0034; L / P0037",
+      "proposed_design_boundary": "Treat rejection as a change of direction; no persuasion, automatic grounding or fixed clinical question limit.",
+      "related_finding": "RG-10",
+      "population_scope_limit": "Product proposal for chatbot interaction, not a validated clinical cutoff.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "CBT03",
+      "skills": [
+        "cbt_reflection"
+      ],
+      "packet_id": "R05",
+      "source_sha256": "ffed6e32ad3ce0e2959e9daf72ff7a5d1913a7b4d0fd7e5dffc434bcab6fc2c7",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "Z / P0103–P0107; AA / P0109",
+      "proposed_design_boundary": "Use original language; do not import forms, scale wording or a translation on the strength of a RAW licensing assertion.",
+      "related_finding": "RG-20",
+      "population_scope_limit": "Exact instrument/version/language/use rights must be checked separately.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "WORRY01",
+      "skills": [
+        "worry_rumination"
+      ],
+      "packet_id": "R06",
+      "source_sha256": "990df3a4d54a1b8bcfb64337a1c3e1981875b1678dd1460ef0266d5a2634138f",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "F / P0021–P0022; G / P0025",
+      "proposed_design_boundary": "Distinguish a user-named practical problem from an unknown outcome without labeling a disorder.",
+      "related_finding": "RG-17",
+      "population_scope_limit": "Clinical mechanism claims cannot validate a product heuristic or autonomous therapy.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "WORRY02",
+      "skills": [
+        "worry_rumination"
+      ],
+      "packet_id": "R06",
+      "source_sha256": "990df3a4d54a1b8bcfb64337a1c3e1981875b1678dd1460ef0266d5a2634138f",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "H / P0028; I / P0030–P0031; Z / P0079–P0083",
+      "proposed_design_boundary": "No guarantees or repetitive reassurance; allow refusal and pause without imposing another technique.",
+      "related_finding": "RG-13",
+      "population_scope_limit": "Repeated-request observation is not OCD/health-anxiety diagnosis or a validated iteration threshold.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "SLEEP01",
+      "skills": [
+        "sleep_review"
+      ],
+      "packet_id": "R02",
+      "source_sha256": "d515e9307cc530afd90f888d90c03aac6c5812bb707c02af21e799fec13ab5c5",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "I / P0054–P0056",
+      "proposed_design_boundary": "Unknown duration stays unknown; reject RAW suggestion to impute wake minutes under a confidence label.",
+      "related_finding": "RG-08",
+      "population_scope_limit": "Voluntary diary fields only; interval is not measured TST or sleep efficiency.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "SLEEP02",
+      "skills": [
+        "sleep_review"
+      ],
+      "packet_id": "R04",
+      "source_sha256": "43f3c83fd3a9df41aac1925eb1dd1d047dd16dc4a8652d509b652884c96dee9a",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "T / P0128–P0133",
+      "proposed_design_boundary": "No personalized sleep window, restriction/compression/titration or scripted stimulus-control prescription.",
+      "related_finding": "RG-09",
+      "population_scope_limit": "Guideline interventions do not grant autonomous LLM prescribing authority.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "SLEEP03",
+      "skills": [
+        "sleep_review"
+      ],
+      "packet_id": "R12",
+      "source_sha256": "5fd0e750e4c5c3763dc319a124212c6dcbe832c0cf7474db7b8759cdb56b36df",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "X / P0079–P0080; Y / P0082–P0083; Z / P0085–P0086",
+      "proposed_design_boundary": "No Health access or inferred wearable values/causes; R12 is a boundary input only.",
+      "related_finding": "RG-23",
+      "population_scope_limit": "Device observations and subjective reports remain distinct; no new hardware evidence.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "NIGHT01",
+      "skills": [
+        "nightmare_review"
+      ],
+      "packet_id": "R03",
+      "source_sha256": "053f5275abdab1c738004130dfdef19b7b0b09bf6b2bf55e58b6e7f4372baac9",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "V / P0145–P0149",
+      "proposed_design_boundary": "Do not copy IRT manuals/scales or turn a general concept into an executable treatment script.",
+      "related_finding": "RG-20",
+      "population_scope_limit": "Rights, exact adaptation, population and qualified review remain unresolved.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "NIGHT02",
+      "skills": [
+        "nightmare_review"
+      ],
+      "packet_id": "R03",
+      "source_sha256": "053f5275abdab1c738004130dfdef19b7b0b09bf6b2bf55e58b6e7f4372baac9",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "Z / P0165; bibliography P0176/P0198/P0199",
+      "proposed_design_boundary": "Do not assign a rehearsal dose or transfer efficacy to this draft; citation20 mapping remains unresolved.",
+      "related_finding": "RG-07",
+      "population_scope_limit": "Different guideline/population/intervention records require claim-level reconciliation, not number replacement.",
+      "citation_as_located_in_RAW": "RAW bibliography mentions 10.1080/15402002.2024.2437634 and 10.7326/M23-2757; not independently verified here",
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "NIGHT03",
+      "skills": [
+        "nightmare_review"
+      ],
+      "packet_id": "R11",
+      "source_sha256": "b8ebd00eebff4cb036743abc933b76ddab1f23208230d1e21d64886d42bc0714",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "Q / P0041; R / P0043",
+      "proposed_design_boundary": "Keep fiction and current personal intent distinct; no symbolic diagnosis or blanket emergency response to a story.",
+      "related_finding": "RG-26",
+      "population_scope_limit": "RAW architecture is itself a proposal; deterministic wording does not guarantee semantic detection.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "GROUND01",
+      "skills": [
+        "grounding"
+      ],
+      "packet_id": "R08",
+      "source_sha256": "a481a0e12bc9adf1c9c4feefcbce793edf915ad0e66240014903b84f5fb6b8f4",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "F / P0037–P0040",
+      "proposed_design_boundary": "Do not label an exact numbered sensory sequence validated, or silently substitute another sequence as evidence-based.",
+      "related_finding": "RG-13",
+      "population_scope_limit": "RAW itself states insufficient direct evidence; its modified sequence is a proposal, not validation.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "GROUND02",
+      "skills": [
+        "grounding"
+      ],
+      "packet_id": "R08",
+      "source_sha256": "a481a0e12bc9adf1c9c4feefcbce793edf915ad0e66240014903b84f5fb6b8f4",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "H / P0047",
+      "proposed_design_boundary": "Do not transfer pooled effect estimates or misattributed PMR evidence to a short original orientation option.",
+      "related_finding": "RG-11",
+      "population_scope_limit": "Exact technique, population, comparator and attribution need primary verification.",
+      "citation_as_located_in_RAW": "Stetter & Kupper2002 / citation21 as stated in RAW; unresolved attribution",
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "GROUND03",
+      "skills": [
+        "grounding"
+      ],
+      "packet_id": "R08",
+      "source_sha256": "a481a0e12bc9adf1c9c4feefcbce793edf915ad0e66240014903b84f5fb6b8f4",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "Z / P0119–P0120; AH / P0158–P0160",
+      "proposed_design_boundary": "Preserve choice/no action; no copied script, unreviewed breathing dose or exercise after refusal.",
+      "related_finding": "RG-12",
+      "population_scope_limit": "Original wording still needs qualified review; concept-level claims do not clear exact rights.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "COMMON01",
+      "skills": [
+        "worry_rumination",
+        "grounding"
+      ],
+      "packet_id": "R09",
+      "source_sha256": "eb9395e6169a576a37875348d6354ca019c1e59cdfc558991124cdaa43100ce7",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "C / P0008",
+      "proposed_design_boundary": "Record search execution and full-text access as UNVERIFIED; do not call this a systematic evidence review.",
+      "related_finding": "RG-02",
+      "population_scope_limit": "RAW declares a simulated search date and limited fragments, not reproducible search execution.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "COMMON02",
+      "skills": [
+        "worry_rumination",
+        "grounding"
+      ],
+      "packet_id": "R09",
+      "source_sha256": "eb9395e6169a576a37875348d6354ca019c1e59cdfc558991124cdaa43100ce7",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "AC / P0061; AD / P0063; AE / P0065",
+      "proposed_design_boundary": "Allow a return without backlog, guilt or dependence; do not create a clinical engagement threshold.",
+      "related_finding": "RG-15",
+      "population_scope_limit": "Product ethics propositions, not proof of adherence or effectiveness for this system.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "COMMON03",
+      "skills": [
+        "cbt_reflection",
+        "worry_rumination",
+        "nightmare_review"
+      ],
+      "packet_id": "R11",
+      "source_sha256": "b8ebd00eebff4cb036743abc933b76ddab1f23208230d1e21d64886d42bc0714",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "I–O / P0025–P0037; S / P0045",
+      "proposed_design_boundary": "Separate emotional acknowledgement from factual agreement; no dependence, impossible guarantee or judge-only safety approval.",
+      "related_finding": "RG-27",
+      "population_scope_limit": "RAW failure and judge-performance claims remain unverified; Q01 supplies independent engineering counterexamples only.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    },
+    {
+      "id": "COMMON04",
+      "skills": [
+        "sleep_review",
+        "nightmare_review",
+        "grounding"
+      ],
+      "packet_id": "R01",
+      "source_sha256": "d3c34a4f8c4a782e90ace0328259411fd26ffde68f3bc383dd944ba06fd0e149",
+      "locator_scheme": "word/document.xml top-level w:body/w:p, one-based including empty paragraphs; not rendered page numbers",
+      "locator": "G / P0067–P0070",
+      "proposed_design_boundary": "Do not replace assessment with optimistic causal explanations; track false-positive burden and limits of digital support.",
+      "related_finding": "RG-04",
+      "population_scope_limit": "Mixed evidence and clinical populations cannot confer efficacy on candidate prompts.",
+      "citation_as_located_in_RAW": null,
+      "verification": "RAW_ASSERTION_LOCATED_NOT_PRIMARY_VERIFIED",
+      "rights": "RIGHTS_UNKNOWN_EXACT_REVIEW_REQUIRED",
+      "content_review": "QUALIFIED_REVIEW_PENDING",
+      "finding_closed": false
+    }
+  ]
+}

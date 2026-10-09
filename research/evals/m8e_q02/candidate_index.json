@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "status": "CANDIDATE_OFF",
+  "bundle_index_sha256": "8f4bda248285b17017bdd51ee8cb13e3d5ad0fa2355765dce30accf83524b6f2",
+  "bundles": [
+    {
+      "skill_id": "cbt_reflection",
+      "version": "0.2.0-q02-draft",
+      "status": "CANDIDATE_OFF",
+      "files": [
+        {
+          "name": "cbt_reflection/candidate.json",
+          "sha256": "f5ccd2a75c7cf8ba6857505eb72153f30cf2ebd0c3c3deb6570e8742d2b0a92e"
+        },
+        {
+          "name": "cbt_reflection/REVIEW.md",
+          "sha256": "86241a556baf838cc08ecfc187a6bd38f5cfaf6253c92099ffdaa57fae485751"
+        }
+      ]
+    },
+    {
+      "skill_id": "worry_rumination",
+      "version": "0.2.0-q02-draft",
+      "status": "CANDIDATE_OFF",
+      "files": [
+        {
+          "name": "worry_rumination/candidate.json",
+          "sha256": "fcf6bfddedabe5b965854586e193c9e0762773e618d4d30b2b557b61a025ecd0"
+        },
+        {
+          "name": "worry_rumination/REVIEW.md",
+          "sha256": "55690a71f01fad59714773525a565848e967e35fbf286b5f2531847ac2837660"
+        }
+      ]
+    },
+    {
+      "skill_id": "sleep_review",
+      "version": "0.2.0-q02-draft",
+      "status": "CANDIDATE_OFF",
+      "files": [
+        {
+          "name": "sleep_review/candidate.json",
+          "sha256": "a2f65a7bec487dd1e2634d51b011df759e06fab110d708a466a8bf7854081a22"
+        },
+        {
+          "name": "sleep_review/REVIEW.md",
+          "sha256": "ecda257466079ed29da9a7f824c86fdf4403e777ba06ef7ac733e81dab135e87"
+        }
+      ]
+    },
+    {
+      "skill_id": "nightmare_review",
+      "version": "0.2.0-q02-draft",
+      "status": "CANDIDATE_OFF",
+      "files": [
+        {
+          "name": "nightmare_review/candidate.json",
+          "sha256": "d926cd1921c7d4bda0d18187c2e9cee112d479a3549ae4da1934254df61ec8c1"
+        },
+        {
+          "name": "nightmare_review/REVIEW.md",
+          "sha256": "e25671d2f7ec87bb0d3ed394495ebc5475b1adbb041b2cf890c02687ae419ca7"
+        }
+      ]
+    },
+    {
+      "skill_id": "grounding",
+      "version": "0.2.0-q02-draft",
+      "status": "CANDIDATE_OFF",
+      "files": [
+        {
+          "name": "grounding/candidate.json",
+          "sha256": "90ba426dea7dc9707e9ea7077437cff2fb723951f515b6b5b746e7b90d42693e"
+        },
+        {
+          "name": "grounding/REVIEW.md",
+          "sha256": "41de914ddf7bd76a4a4858129fdf6a46b845ae7acb2b7e9dc29eddd966b8b354"
+        }
+      ]
+    }
+  ],
+  "review_files": [
+    {
+      "name": "BLINDED_AUTHOR_PAIRS.json",
+      "sha256": "0a980f7c180a684babd7151ca907f9796ebd2b3c457124aae69799adf4b754a6"
+    },
+    {
+      "name": "BLIND_MAPPING.json",
+      "sha256": "bcb2265db972a856835a7012c73a66383e9d969eb3aeda01ce52c859b2bc9e1f"
+    }
+  ],
+  "source_map_sha256": "5364cc8188c9742f8bbe49033f682ab960ecbd772b0421b3b6c1464413064f37",
+  "source_location": "OWNER_SELECTED_LOCAL_OUTSIDE_GIT",
+  "cloud_sync_status": "NOT_INSPECTED_OWNER_SELECTED_DESKTOP",
+  "full_content_in_git": false,
+  "qualified_content_review": "PENDING",
+  "activation_allowed": false,
+  "live_inference_calls": 0,
+  "product_basis_sha256": "868e3a3b47abd17cb4f0ef14f3d7d3b433c95d304291b66d9144798f9c2f30c3"
+}
