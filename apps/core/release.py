@@ -37,7 +37,10 @@ def file_hashes(root):
 
 def package_path(path):
     p=Path(path).absolute()
-    if p.is_relative_to(REPO/'generated/releases') or (p == REPO and (p/'release-manifest.json').is_file() and not (p/'.git').exists()):
+    native_build = (p.is_relative_to(REPO/'generated/m8f') and p.name=='payload'
+                    and p.parent.name=='Resources' and p.parent.parent.name=='Contents'
+                    and p.parent.parent.parent.suffix=='.app')
+    if p.is_relative_to(REPO/'generated/releases') or native_build or (p == REPO and (p/'release-manifest.json').is_file() and not (p/'.git').exists()):
         if '..' in p.parts or any(c.is_symlink() for c in (p,*p.parents)):
             raise SafeError('SYMLINK_DENIED')
         if p.exists() and any(x.is_symlink() or x.name=='.git' for x in p.rglob('*')):
