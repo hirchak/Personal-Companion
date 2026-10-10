@@ -10,7 +10,11 @@ import {
 } from "./audio-types";
 import type { PhoneStore } from "./phone-store";
 import type { VoiceReference } from "./conversation-model";
-import { PilotCallError, pilotErrorMessage, safePilotErrorCode } from "./private-pilot-errors";
+import {
+  PilotCallError,
+  pilotErrorMessage,
+  safePilotErrorCode,
+} from "./private-pilot-errors";
 export type VoiceItem = {
   id: string;
   state: string;
@@ -265,11 +269,17 @@ export function ComposerVoice({
     rec.current = recorder;
     onStart?.();
     try {
-      if ((await recorder.start()) && alive.current) setState("RECORDING");
-    } catch {
-      if (alive.current) {
+      if ((await recorder.start()) && alive.current && rec.current === recorder)
+        setState("RECORDING");
+    } catch (error) {
+      if (alive.current && rec.current === recorder) {
+        rec.current = null;
         setState("IDLE");
-        setMessage("Дозвольте доступ до мікрофона й повторіть запис.");
+        setMessage(
+          error instanceof DOMException && error.name === "TimeoutError"
+            ? "Мікрофон не відповів. Перевірте дозвіл і повторіть запис."
+            : "Не вдалося почати запис. Перевірте доступ до мікрофона й повторіть.",
+        );
       }
     }
   }
@@ -280,7 +290,10 @@ export function ComposerVoice({
       className={"composer-voice voice-" + state.toLowerCase()}
       data-voice-state={state}
       data-native-unsaved={
-        state === "STARTING" || state === "RECORDING" || state === "SAVING" || Boolean(draft)
+        state === "STARTING" ||
+        state === "RECORDING" ||
+        state === "SAVING" ||
+        Boolean(draft)
       }
     >
       {recording || pending ? (
@@ -305,6 +318,7 @@ export function ComposerVoice({
             type="button"
             onClick={() => {
               rec.current?.cancel();
+              rec.current = null;
               setState("CANCELLED");
               setMessage("Запис скасовано.");
             }}

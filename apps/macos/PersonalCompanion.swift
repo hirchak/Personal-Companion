@@ -125,6 +125,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     var updateFailed=false
     var settledUpdateText:String?
     var resumeQueued=false
+    var closingPending=false
     var observers: [NSObjectProtocol] = []
 
     func testEvent(_ name:String,_ fields:[String:Any]=[:]) {
@@ -213,7 +214,14 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         #if LOCAL_TEST
         // No physical microphone access, even with a pre-existing TCC grant.
         let syntheticMedia="""
-        (()=>{window.__pcSyntheticCapture=false;
+        (()=>{window.__pcSyntheticCapture=false;window.__pcSyntheticMode='normal';
+        const nativeFetch=window.fetch.bind(window);let releaseSave=null;
+        window.__pcReleaseSyntheticSave=()=>{releaseSave?.();releaseSave=null;};
+        window.fetch=async(input,...args)=>{
+          if(window.__pcSyntheticMode==='save-held'&&String(input).startsWith('/api/v1/voice/audio'))
+            await new Promise(resolve=>{releaseSave=resolve;});
+          return nativeFetch(input,...args);
+        };
         const trace=(stage,state='',context_id=0)=>window.webkit.messageHandlers.companion.postMessage({
           kind:'voice-trace',stage,state,context_id,t_ms:Math.round(performance.now()),
           gesture:navigator.userActivation?(navigator.userActivation.isActive?'ACTIVE':'INACTIVE'):'UNSUPPORTED',
@@ -231,15 +239,21 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         navigator.mediaDevices.getUserMedia=async constraints=>{
           trace('fixture-requested');
           if(!window.__pcSyntheticCapture||constraints.video)throw new DOMException('Synthetic test microphone denied','NotAllowedError');
-          const context=new AudioContext();const response=await fetch('/native-test-audio.wav');
+          if(window.__pcSyntheticMode==='never')return new Promise(()=>{});
+          const context=new AudioContext();let source=null;let timer;let disposed=false;
+          const cleanup=()=>{if(disposed)return;disposed=true;try{source?.stop()}catch{}void context.close().catch(()=>{});};
+          const activated=context.resume();activated.catch(()=>{});
+          const deadline=new Promise((_,reject)=>{timer=setTimeout(()=>{cleanup();reject(new DOMException('Synthetic fixture timed out','TimeoutError'));},45000);});
+          const ready=(async()=>{const response=await fetch('/native-test-audio.wav');
           trace('fixture-fetched',context.state,context.traceId);
           const buffer=await context.decodeAudioData(await response.arrayBuffer());
           trace('fixture-decoded',context.state,context.traceId);
-          const source=context.createBufferSource();source.buffer=buffer;source.loop=true;
+          source=context.createBufferSource();source.buffer=buffer;source.loop=true;
           const destination=context.createMediaStreamDestination();source.connect(destination);source.start();
-          trace('fixture-wired',context.state,context.traceId);await context.resume();
+          trace('fixture-wired',context.state,context.traceId);await activated;
           const track=destination.stream.getAudioTracks()[0],stop=track.stop.bind(track);
-          track.stop=()=>{stop();source.stop();void context.close()};trace('fixture-returned',context.state,context.traceId);return destination.stream;
+          track.stop=()=>{stop();cleanup()};trace('fixture-returned',context.state,context.traceId);return destination.stream;})();
+          try{return await Promise.race([ready,deadline]);}catch(error){cleanup();throw error;}finally{clearTimeout(timer);}
         };})();
         """
         config.userContentController.addUserScript(WKUserScript(source:syntheticMedia,injectionTime:.atDocumentStart,forMainFrameOnly:true))
@@ -274,6 +288,10 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         help.addItem(menuItem("Коротка інструкція",#selector(guide)))
         #if LOCAL_TEST
         help.addItem(menuItem("Увімкнути synthetic PCM fixture",#selector(syntheticCapture)))
+        help.addItem(menuItem("Synthetic STARTING: never resolve",#selector(syntheticNever)))
+        help.addItem(menuItem("Synthetic save: hold",#selector(syntheticHoldSave)))
+        help.addItem(menuItem("Synthetic save: release",#selector(syntheticReleaseSave)))
+        help.addItem(menuItem("Synthetic producer: hide",#selector(syntheticHide)))
         #endif
         NSApp.mainMenu=menu
     }
@@ -397,17 +415,35 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     @objc func guide() {NSWorkspace.shared.open(bundle.appendingPathComponent("Contents/Resources/User Guide.md"))}
     @objc func syntheticCapture() {
         #if LOCAL_TEST
-        web.evaluateJavaScript("window.__pcSyntheticCapture=true")
+        web.evaluateJavaScript("window.__pcSyntheticCapture=true;window.__pcSyntheticMode='normal'")
         state.stringValue="ORIGINAL SYNTHETIC PCM · фізичний мікрофон заборонений"
         testEvent("synthetic-pcm-enabled")
         #endif
     }
+    #if LOCAL_TEST
+    @objc func syntheticNever() {
+        web.evaluateJavaScript("window.__pcSyntheticCapture=true;window.__pcSyntheticMode='never'")
+        testEvent("synthetic-start-never-enabled")
+    }
+    @objc func syntheticHoldSave() {
+        web.evaluateJavaScript("window.__pcSyntheticMode='save-held'")
+        testEvent("synthetic-save-held-enabled")
+    }
+    @objc func syntheticReleaseSave() {
+        web.evaluateJavaScript("window.__pcSyntheticMode='normal';window.__pcReleaseSyntheticSave()")
+        testEvent("synthetic-save-released")
+    }
+    @objc func syntheticHide() {
+        web.evaluateJavaScript("document.querySelector('.composer-voice')?.style.setProperty('display','none')")
+        testEvent("synthetic-producer-hidden")
+    }
+    #endif
     @objc func checkUpdates() {
         guard !maintenanceBusy else {return}
         #if LOCAL_TEST
         // Conservatively refuse to discard any visible unsaved text or an active
         // recorder. Only a Boolean crosses the native bridge, no draft content.
-        let check="return Array.from(document.querySelectorAll('textarea,input[type=text]')).some(e=>e.getClientRects().length&&e.value.trim().length>0)||!!document.querySelector('[data-native-unsaved=true]')||!!document.querySelector('.recording-strip')?.getClientRects().length"
+        let check=unsavedCheck
         web.callAsyncJavaScript(check,arguments:[:],in:nil,in:.page) {result in
             if case .success(let value)=result,value as? Bool == false {
                 // No new drafts/capture may begin between check and quiescence.
@@ -416,7 +452,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
                 self.web.isHidden=true;self.openButton.isEnabled=false
                 self.window.makeFirstResponder(nil);self.updater?.checkForUpdates()
             }
-            else {self.problem("Збережіть чернетку або завершіть запис і закрийте редактор перед оновленням.")}
+            else {self.testEvent("update-refused-unsaved");self.problem("Збережіть чернетку або завершіть запис і закрийте редактор перед оновленням.")}
         }
         #else
         problem("Канал оновлень ще не активований. Потрібен окремо перевірений підписаний реліз.")
@@ -495,12 +531,26 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     func updater(_ updater:SPUUpdater,didFinishUpdateCycleFor updateCheck:SPUUpdateCheck,error:Error?) {
         if !installing {prepared=false;resumeAfterUpdate()}
     }
+    let unsavedCheck="return Array.from(document.querySelectorAll('textarea,input[type=text]')).some(e=>e.value.trim().length>0)||!!document.querySelector('[data-native-unsaved=true]')||!!document.querySelector('.recording-strip')?.getClientRects().length"
     func applicationShouldTerminate(_ sender:NSApplication) -> NSApplication.TerminateReply {
         if maintenanceBusy {state.stringValue="Дочекайтесь завершення перевірки копії перед закриттям.";return .terminateCancel}
-        let closing=backend;backend=nil
-        DispatchQueue.global(qos:.userInitiated).async {
-            closing?.quit()
-            DispatchQueue.main.async {NSApp.reply(toApplicationShouldTerminate:true)}
+        if closingPending {return .terminateLater}
+        closingPending=true
+        let finish={
+            let closing=self.backend;self.backend=nil
+            DispatchQueue.global(qos:.userInitiated).async {
+                closing?.quit()
+                DispatchQueue.main.async {NSApp.reply(toApplicationShouldTerminate:true)}
+            }
+        }
+        if web.url == nil {finish();return .terminateLater}
+        web.callAsyncJavaScript(unsavedCheck,arguments:[:],in:nil,in:.page) {result in
+            if case .success(let value)=result,value as? Bool == false {finish()}
+            else {
+                self.closingPending=false;NSApp.reply(toApplicationShouldTerminate:false)
+                self.testEvent("quit-refused-unsaved")
+                self.problem("Збережіть чернетку або скасуйте запис перед закриттям програми.")
+            }
         }
         return .terminateLater
     }

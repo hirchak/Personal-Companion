@@ -52,8 +52,8 @@ int denied=(s<0&&se==1)||(n<0&&errno==1);printf("read=%d write=%d network_denied
             'engine_sha256':engine.binary_hash,'checks':rows}
 
 
-def make_feed(work, mode='valid'):
-    meta=validate_bundle(REPO/'generated/m8f/B/Personal Companion.app')
+def make_feed(work, mode='valid', candidate=None):
+    meta=validate_bundle(candidate or REPO/'generated/m8f/B/Personal Companion.app')
     archive=work/'feed/B.zip'
     key=work/('wrong-private.key' if mode=='wrong-signer' else 'test-private.key')
     signer=SPARKLE_DIR/'bin/sign_update'
@@ -124,12 +124,12 @@ class PipeRuntime:
         assert self.process.returncode==0
 
 
-def lifecycle():
+def lifecycle(app=None, output=None):
     """Unmocked protected Mac roots, embedded runtime and real API/audio/ASR bytes."""
     import httpx
     import sqlite3
     from apps.core import release as r
-    app=REPO/'generated/m8f/A/Personal Companion.app'
+    app=Path(app) if app else REPO/'generated/m8f/A/Personal Companion.app'
     m=validate_bundle(app)
     work=Path(tempfile.mkdtemp(prefix='m8f-packaged-original-synthetic-',dir='/private/tmp'))
     base=work/'Standalone';checks={};times={}
@@ -206,7 +206,7 @@ def lifecycle():
     finally:
         runtime.close()
     result={'checks':checks,'timings':times,'source_sha':m['source_sha'],'scope':'REAL_MAC_ORIGINAL_SYNTHETIC_PACKAGED_RUNTIME'}
-    (REPO/'generated/m8f/packaged-lifecycle.json').write_text(encode(result))
+    Path(output or REPO/'generated/m8f/packaged-lifecycle.json').write_text(encode(result))
     return result
 
 

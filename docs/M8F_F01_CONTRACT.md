@@ -21,3 +21,12 @@ clinical/Health/phone activation. Existing approved bundled assets only. Test un
 an explicit substitute for normal OS challenge; physical/human quality remains NOT_VERIFIED.
 All diagnostics are finite whitelisted mechanism enums/numeric times/booleans, no audio,
 transcript/draft/text/credentials/path/IDs. No backend proof substituted for native V03.
+
+Implementation choices: recorder-owned per-attempt resources; synchronous explicit-gesture
+AudioContext resume; start cap45s (human permission opportunity, cancellation immediate).
+Never-promise/held-save/hidden-producer modes exist only in LOCAL_TEST native menu; no
+physical permission changes or transcript substitution. Native Quit fails closed on unsaved
+text/audio/starting/saving, including hidden producer. Durable confirmation remains server
+receipt, not an optimistic UI label. Historic STARTING cause is not yet verified: new
+diagnostic C reproduced two successful starts (1.070s/3.645s), cancellation without save;
+no unbounded wait remains after the fix regardless of the engine promise cause.

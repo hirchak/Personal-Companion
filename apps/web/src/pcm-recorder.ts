@@ -47,56 +47,98 @@ export function pcmWav(chunks: Float32Array[], sourceRate: number): Uint8Array {
   }
   return bytes;
 }
+// A person can still answer a normal macOS permission prompt. Cancellation is
+// immediate; 45 seconds bounds even a WebKit promise that never settles.
+export const PCM_START_TIMEOUT_MS = 45_000;
+type CaptureAttempt = {
+  context: AudioContext | null;
+  stream: MediaStream | null;
+  source: MediaStreamAudioSourceNode | null;
+  processor: ScriptProcessorNode | null;
+  gain: GainNode | null;
+  active: boolean;
+  abort: () => void;
+};
 export class PCMRecorder {
-  private stream: MediaStream | null = null;
-  private context: AudioContext | null = null;
-  private source: MediaStreamAudioSourceNode | null = null;
-  private processor: ScriptProcessorNode | null = null;
-  private gain: GainNode | null = null;
+  private attempt: CaptureAttempt | null = null;
   private chunks: Float32Array[] = [];
   private frames = 0;
   private paused = false;
-  private active = false;
-  private generation = 0;
   constructor(
     private stopped: (audio: Uint8Array, reason: string) => void,
     private interrupted: (reason: string) => void,
   ) {}
   async start() {
-    const generation = ++this.generation;
+    this.cancel();
+    const a: CaptureAttempt = {
+      context: null,
+      stream: null,
+      source: null,
+      processor: null,
+      gain: null,
+      active: false,
+      abort: () => {},
+    };
+    this.attempt = a;
+    const cancelled = new Promise<never>((_, reject) => {
+      a.abort = () =>
+        reject(new DOMException("Capture cancelled", "AbortError"));
+    });
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const deadline = new Promise<never>((_, reject) => {
+      timer = setTimeout(
+        () =>
+          reject(new DOMException("Capture start timed out", "TimeoutError")),
+        PCM_START_TIMEOUT_MS,
+      );
+    });
+    const current = () => this.attempt === a;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          channelCount: 1,
-          echoCancellation: false,
-          noiseSuppression: false,
-          autoGainControl: false,
-        },
-        video: false,
-      });
-      if (generation !== this.generation) {
-        stream.getTracks().forEach((t) => t.stop());
-        return false;
-      }
-      this.stream = stream;
-      this.context = new AudioContext();
-      await this.context.resume();
-      if (generation !== this.generation) {
-        this.dispose();
-        return false;
-      }
-      this.source = this.context.createMediaStreamSource(stream);
-      this.processor = this.context.createScriptProcessor(4096, 1, 1);
-      this.gain = this.context.createGain();
-      this.gain.gain.value = 0;
+      if (!navigator.mediaDevices?.getUserMedia)
+        throw new DOMException("Microphone unavailable", "NotSupportedError");
+      // Activate the context synchronously in the explicit record gesture,
+      // before waiting for a permission prompt or the synthetic fixture.
+      a.context = new AudioContext();
+      const resumed = a.context.resume();
+      const media = navigator.mediaDevices
+        .getUserMedia({
+          audio: {
+            channelCount: 1,
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false,
+          },
+          video: false,
+        })
+        .then((stream) => {
+          if (!current()) {
+            stream.getTracks().forEach((t) => t.stop());
+            return null;
+          }
+          a.stream = stream;
+          return stream;
+        });
+      await Promise.race([Promise.all([resumed, media]), cancelled, deadline]);
+      if (!current()) return false;
+      const context = a.context,
+        stream = a.stream;
+      if (!stream || context.state !== "running")
+        throw new DOMException(
+          "Audio context unavailable",
+          "NotSupportedError",
+        );
+      a.source = context.createMediaStreamSource(stream);
+      a.processor = context.createScriptProcessor(4096, 1, 1);
+      a.gain = context.createGain();
+      a.gain.gain.value = 0;
       this.chunks = [];
       this.frames = 0;
       this.paused = false;
-      this.active = true;
-      this.processor.onaudioprocess = (e) => {
-        if (!this.active || this.paused) return;
+      a.active = true;
+      a.processor.onaudioprocess = (e) => {
+        if (!current() || !a.active || this.paused) return;
         const input = e.inputBuffer.getChannelData(0),
-          remaining = Math.max(0, this.context!.sampleRate * 120 - this.frames);
+          remaining = Math.max(0, context.sampleRate * 120 - this.frames);
         const part = new Float32Array(
           input.subarray(0, Math.min(input.length, remaining)),
         );
@@ -104,21 +146,29 @@ export class PCMRecorder {
           this.chunks.push(part);
           this.frames += part.length;
         }
-        if (this.frames >= this.context!.sampleRate * 120) this.stop("LIMIT");
+        if (this.frames >= context.sampleRate * 120) this.stop("LIMIT");
       };
-      this.source.connect(this.processor);
-      this.processor.connect(this.gain);
-      this.gain.connect(this.context.destination);
-      stream.getAudioTracks().forEach(
-        (track) =>
-          (track.onended = () => {
-            if (this.active) this.stop("TRACK_ENDED");
-          }),
-      );
+      a.source.connect(a.processor);
+      a.processor.connect(a.gain);
+      a.gain.connect(context.destination);
+      stream.getAudioTracks().forEach((track) => {
+        track.onended = () => {
+          if (current() && a.active) this.stop("TRACK_ENDED");
+        };
+      });
+      context.onstatechange = () => {
+        if (current() && a.active && context.state !== "running")
+          this.stop("CONTEXT_INTERRUPTED");
+      };
       return true;
-    } catch (e) {
-      this.dispose();
-      throw e;
+    } catch (error) {
+      if (current()) this.attempt = null;
+      this.dispose(a);
+      if (error instanceof DOMException && error.name === "AbortError")
+        return false;
+      throw error;
+    } finally {
+      clearTimeout(timer);
     }
   }
   pause() {
@@ -126,36 +176,49 @@ export class PCMRecorder {
     return this.paused;
   }
   elapsed() {
-    return this.context ? this.frames / this.context.sampleRate : 0;
+    return this.attempt?.context
+      ? this.frames / this.attempt.context.sampleRate
+      : 0;
   }
   stop(reason = "USER_STOP") {
-    if (!this.active) return;
-    const bytes = pcmWav(this.chunks, this.context!.sampleRate);
-    this.active = false;
-    this.dispose();
+    const a = this.attempt;
+    if (!a?.active || !a.context) return;
+    const bytes = pcmWav(this.chunks, a.context.sampleRate);
+    this.attempt = null;
+    this.chunks = [];
+    this.dispose(a);
     if (reason !== "USER_STOP") this.interrupted(reason);
     this.stopped(bytes, reason);
   }
   cancel() {
-    this.generation++;
-    this.active = false;
+    const a = this.attempt;
+    this.attempt = null;
     this.chunks = [];
-    this.dispose();
+    if (a) {
+      a.abort();
+      this.dispose(a);
+    }
   }
-  private dispose() {
-    this.active = false;
-    this.processor?.disconnect();
-    this.source?.disconnect();
-    this.gain?.disconnect();
-    this.stream?.getTracks().forEach((t) => {
+  private dispose(a: CaptureAttempt) {
+    a.active = false;
+    if (a.processor) {
+      a.processor.onaudioprocess = null;
+      a.processor.disconnect();
+    }
+    a.source?.disconnect();
+    a.gain?.disconnect();
+    a.stream?.getTracks().forEach((t) => {
       t.onended = null;
       t.stop();
     });
-    if (this.context) void this.context.close().catch(() => {});
-    this.stream = null;
-    this.context = null;
-    this.processor = null;
-    this.source = null;
-    this.gain = null;
+    if (a.context) {
+      a.context.onstatechange = null;
+      void a.context.close().catch(() => {});
+    }
+    a.context = null;
+    a.stream = null;
+    a.processor = null;
+    a.source = null;
+    a.gain = null;
   }
 }
