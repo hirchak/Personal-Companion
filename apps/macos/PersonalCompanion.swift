@@ -448,8 +448,11 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         testEvent("synthetic-save-released")
     }
     @objc func syntheticHide() {
-        web.evaluateJavaScript("const e=document.querySelector('.composer-voice');if(e)e.style.display=e.style.display==='none'?'':'none'")
-        testEvent("synthetic-producer-hidden")
+        let hide="(()=>{const e=document.querySelector('.composer-voice');if(!e)return false;e.style.display=e.style.display==='none'?'':'none';return true})()"
+        web.evaluateJavaScript(hide) {value,error in
+            if error == nil,value as? Bool == true {self.testEvent("synthetic-producer-visibility-toggled")}
+            else {self.testEvent("synthetic-producer-toggle-failed")}
+        }
     }
     #endif
     @objc func checkUpdates() {

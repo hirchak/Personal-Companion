@@ -92,6 +92,7 @@ def test_native_fixture_script_reinstalls_after_reload_and_fails_closed(isolated
     from apps.core.storage import REPO
     source = (REPO/'apps/macos/PersonalCompanion.swift').read_text()
     script = source.split('let syntheticMedia="""',1)[1].split('"""',1)[0]
+    hide = source.split('let hide="',1)[1].split('"',1)[0]
     app, srv, thread = server(isolated/'mac')
     audio = isolated/'ORIGINAL_SYNTHETIC_TONE.wav'; audio.write_bytes(wav(1))
     try:
@@ -100,6 +101,12 @@ def test_native_fixture_script_reinstalls_after_reload_and_fails_closed(isolated
             page = ctx.pages[0]
             page.add_init_script("window.syntheticTrace=[];window.webkit={messageHandlers:{companion:{postMessage:v=>window.syntheticTrace.push(v)}}};"+script)
             page.goto('http://127.0.0.1:8770/')
+            page.evaluate("()=>{const e=document.createElement('div');e.className='composer-voice';e.dataset.nativeUnsaved='true';document.body.append(e);}")
+            assert page.evaluate(hide) is True
+            assert page.evaluate("document.querySelector('.composer-voice').style.display") == 'none'
+            assert page.evaluate(hide) is True
+            assert page.evaluate("document.querySelector('.composer-voice').style.display") == ''
+            assert page.locator('[data-native-unsaved=true]').count() == 1
             for iteration in range(2):
                 assert page.evaluate("async()=>{try{await navigator.mediaDevices.getUserMedia({audio:true,video:false});return 'UNEXPECTED';}catch(e){return e.name;}}") == 'NotAllowedError'
                 assert page.evaluate("window.__pcConfigureSynthetic('never')") is True
