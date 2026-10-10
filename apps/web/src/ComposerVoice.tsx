@@ -279,6 +279,9 @@ export function ComposerVoice({
     <div
       className={"composer-voice voice-" + state.toLowerCase()}
       data-voice-state={state}
+      data-native-unsaved={
+        state === "STARTING" || state === "RECORDING" || state === "SAVING" || Boolean(draft)
+      }
     >
       {recording || pending ? (
         <div className="recording-strip">

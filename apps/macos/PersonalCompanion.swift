@@ -389,7 +389,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         #if LOCAL_TEST
         // Conservatively refuse to discard any visible unsaved text or an active
         // recorder. Only a Boolean crosses the native bridge, no draft content.
-        let check="return Array.from(document.querySelectorAll('textarea,input[type=text]')).some(e=>e.getClientRects().length&&e.value.trim().length>0)||!!document.querySelector('.recording-strip')?.getClientRects().length"
+        let check="return Array.from(document.querySelectorAll('textarea,input[type=text]')).some(e=>e.getClientRects().length&&e.value.trim().length>0)||!!document.querySelector('[data-native-unsaved=true]')||!!document.querySelector('.recording-strip')?.getClientRects().length"
         web.callAsyncJavaScript(check,arguments:[:],in:nil,in:.page) {result in
             if case .success(let value)=result,value as? Bool == false {
                 // No new drafts/capture may begin between check and quiescence.

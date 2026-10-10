@@ -406,7 +406,11 @@ export function VoicePanel({
     });
   }
   return (
-    <section className="voice-panel" aria-label="Голосові записи">
+    <section
+      className="voice-panel"
+      aria-label="Голосові записи"
+      data-native-unsaved={starting || recording || Boolean(draft) || Boolean(busy)}
+    >
       <h2>Записати голосом</h2>
       <p>
         {onInsert
