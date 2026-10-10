@@ -28,5 +28,13 @@ Never-promise/held-save/hidden-producer modes exist only in LOCAL_TEST native me
 physical permission changes or transcript substitution. Native Quit fails closed on unsaved
 text/audio/starting/saving, including hidden producer. Durable confirmation remains server
 receipt, not an optimistic UI label. Historic STARTING cause is not yet verified: new
-diagnostic C reproduced two successful starts (1.070s/3.645s), cancellation without save;
+diagnostic C reproduced two successful starts (1.070s/3.711s), cancellation without save;
 no unbounded wait remains after the fix regardless of the engine promise cause.
+
+Forward harness correction after interim f22 relaunch: native delegate denied an
+original getUserMedia call despite test-mode opt-in (no fixture-requested trace).
+Install the fixed synthetic function after document load on wrapper/prototype,
+then verify/reinstall on each explicit test-mode selection; failure does not
+claim enabled. Native delegate remains .deny. This observed harness defect
+does not establish the historical C11 AudioContext hang cause. Hidden-producer
+test menu now toggles visibility so cancellation/recovery remains reachable.

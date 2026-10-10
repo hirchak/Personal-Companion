@@ -85,3 +85,30 @@ def test_composer_cancel_late_permission_retry_and_pending_save(isolated):
             ctx.close()
     finally:
         stop(srv, thread)
+
+
+def test_native_fixture_script_reinstalls_after_reload_and_fails_closed(isolated):
+    """Execute actual Swift-embedded fixture script in Chromium; native proof separate."""
+    from apps.core.storage import REPO
+    source = (REPO/'apps/macos/PersonalCompanion.swift').read_text()
+    script = source.split('let syntheticMedia="""',1)[1].split('"""',1)[0]
+    app, srv, thread = server(isolated/'mac')
+    audio = isolated/'ORIGINAL_SYNTHETIC_TONE.wav'; audio.write_bytes(wav(1))
+    try:
+        with sync_playwright() as pw:
+            ctx = context(pw, isolated/'browser', audio)
+            page = ctx.pages[0]
+            page.add_init_script("window.syntheticTrace=[];window.webkit={messageHandlers:{companion:{postMessage:v=>window.syntheticTrace.push(v)}}};"+script)
+            page.goto('http://127.0.0.1:8770/')
+            for iteration in range(2):
+                assert page.evaluate("async()=>{try{await navigator.mediaDevices.getUserMedia({audio:true,video:false});return 'UNEXPECTED';}catch(e){return e.name;}}") == 'NotAllowedError'
+                assert page.evaluate("window.__pcConfigureSynthetic('never')") is True
+                page.evaluate("()=>{void navigator.mediaDevices.getUserMedia({audio:true,video:false});}")
+                assert page.evaluate("window.syntheticTrace.filter(x=>x.stage==='fixture-requested').length") == 2
+                page.reload()
+            page.evaluate("Object.defineProperty(navigator,'mediaDevices',{value:null,configurable:true})")
+            assert page.evaluate("window.__pcConfigureSynthetic('normal')") is False
+            assert not app.state.voice.list()['items']
+            ctx.close()
+    finally:
+        stop(srv, thread)

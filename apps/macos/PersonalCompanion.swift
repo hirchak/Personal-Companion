@@ -236,7 +236,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         };
         let last='';new MutationObserver(()=>{const state=document.querySelector('[data-voice-state]')?.getAttribute('data-voice-state');
           if(state&&state!==last){last=state;trace('ui-state',state);}}).observe(document,{subtree:true,attributes:true,attributeFilter:['data-voice-state']});
-        navigator.mediaDevices.getUserMedia=async constraints=>{
+        const syntheticGetUserMedia=async constraints=>{
           trace('fixture-requested');
           if(!window.__pcSyntheticCapture||constraints.video)throw new DOMException('Synthetic test microphone denied','NotAllowedError');
           if(window.__pcSyntheticMode==='never')return new Promise(()=>{});
@@ -254,9 +254,23 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
           const track=destination.stream.getAudioTracks()[0],stop=track.stop.bind(track);
           track.stop=()=>{stop();cleanup()};trace('fixture-returned',context.state,context.traceId);return destination.stream;})();
           try{return await Promise.race([ready,deadline]);}catch(error){cleanup();throw error;}finally{clearTimeout(timer);}
-        };})();
+        };
+        const install=()=>{try{
+          const devices=navigator.mediaDevices;if(!devices)return false;
+          // Install on both the current wrapper and its prototype. Reinstall
+          // only through the fixed LOCAL_TEST opt-in menu after each reload.
+          for(const target of [Object.getPrototypeOf(devices),devices])
+            Object.defineProperty(target,'getUserMedia',{value:syntheticGetUserMedia,writable:true,configurable:true});
+          const ready=devices.getUserMedia===syntheticGetUserMedia&&navigator.mediaDevices.getUserMedia===syntheticGetUserMedia;
+          trace(ready?'fixture-hook-installed':'fixture-hook-failed');return ready;
+        }catch{trace('fixture-hook-failed');return false;}};
+        window.__pcConfigureSynthetic=mode=>{
+          if(!['normal','never','save-held'].includes(mode)||!install())return false;
+          window.__pcSyntheticMode=mode;window.__pcSyntheticCapture=true;return true;
+        };
+        install();})();
         """
-        config.userContentController.addUserScript(WKUserScript(source:syntheticMedia,injectionTime:.atDocumentStart,forMainFrameOnly:true))
+        config.userContentController.addUserScript(WKUserScript(source:syntheticMedia,injectionTime:.atDocumentEnd,forMainFrameOnly:true))
         #endif
         web=WKWebView(frame:.zero,configuration:config);web.navigationDelegate=self;web.uiDelegate=self
         web.translatesAutoresizingMaskIntoConstraints=false
@@ -415,26 +429,26 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     @objc func guide() {NSWorkspace.shared.open(bundle.appendingPathComponent("Contents/Resources/User Guide.md"))}
     @objc func syntheticCapture() {
         #if LOCAL_TEST
-        web.evaluateJavaScript("window.__pcSyntheticCapture=true;window.__pcSyntheticMode='normal'")
-        state.stringValue="ORIGINAL SYNTHETIC PCM · фізичний мікрофон заборонений"
-        testEvent("synthetic-pcm-enabled")
+        configureSynthetic("normal",event:"synthetic-pcm-enabled")
         #endif
     }
     #if LOCAL_TEST
-    @objc func syntheticNever() {
-        web.evaluateJavaScript("window.__pcSyntheticCapture=true;window.__pcSyntheticMode='never'")
-        testEvent("synthetic-start-never-enabled")
+    func configureSynthetic(_ mode:String,event:String) {
+        web.callAsyncJavaScript("return window.__pcConfigureSynthetic?.(mode)===true",arguments:["mode":mode],in:nil,in:.page) {result in
+            if case .success(let value)=result,value as? Bool == true {
+                self.state.stringValue="ORIGINAL SYNTHETIC PCM · фізичний мікрофон заборонений"
+                self.testEvent(event)
+            } else {self.testEvent("synthetic-hook-unavailable");self.problem("Synthetic fixture не готова. Фізичний мікрофон заборонений; перезапустіть тестову програму.")}
+        }
     }
-    @objc func syntheticHoldSave() {
-        web.evaluateJavaScript("window.__pcSyntheticMode='save-held'")
-        testEvent("synthetic-save-held-enabled")
-    }
+    @objc func syntheticNever() {configureSynthetic("never",event:"synthetic-start-never-enabled")}
+    @objc func syntheticHoldSave() {configureSynthetic("save-held",event:"synthetic-save-held-enabled")}
     @objc func syntheticReleaseSave() {
         web.evaluateJavaScript("window.__pcSyntheticMode='normal';window.__pcReleaseSyntheticSave()")
         testEvent("synthetic-save-released")
     }
     @objc func syntheticHide() {
-        web.evaluateJavaScript("document.querySelector('.composer-voice')?.style.setProperty('display','none')")
+        web.evaluateJavaScript("const e=document.querySelector('.composer-voice');if(e)e.style.display=e.style.display==='none'?'':'none'")
         testEvent("synthetic-producer-hidden")
     }
     #endif
@@ -577,7 +591,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         if let body=message.body as? [String:Any],body["kind"] as? String=="voice-trace",
            Set(body.keys)==["kind","stage","state","context_id","t_ms","gesture","hidden"],
            let stage=body["stage"] as? String,
-           ["fixture-requested","fixture-fetched","fixture-decoded","fixture-wired","fixture-returned",
+           ["fixture-hook-installed","fixture-hook-failed","fixture-requested","fixture-fetched","fixture-decoded","fixture-wired","fixture-returned",
             "context-created","context-state","context-pending-check","resume-requested","resume-resolved","resume-rejected","ui-state"].contains(stage),
            let state=body["state"] as? String,
            ["","running","suspended","interrupted","closed","IDLE","STARTING","RECORDING","SAVING","LOCAL_AUDIO_SAVED",
