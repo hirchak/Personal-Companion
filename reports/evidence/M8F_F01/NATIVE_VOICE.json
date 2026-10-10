@@ -1,0 +1,152 @@
+{
+  "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+  "scope": "FINAL_MAC_NATIVE_GUI_ORIGINAL_SYNTHETIC_ONLY",
+  "f09": "PASS",
+  "window_ready_count": 3,
+  "physical_device_calls": 0,
+  "native_permission": "HARD_DENY",
+  "fixture_hook_verified_count": 10,
+  "states": [
+    {
+      "state": "STARTING",
+      "t_ms": 7771,
+      "build": "141"
+    },
+    {
+      "state": "IDLE",
+      "t_ms": 7773,
+      "build": "141"
+    },
+    {
+      "state": "STARTING",
+      "t_ms": 10494,
+      "build": "141"
+    },
+    {
+      "state": "CANCELLED",
+      "t_ms": 11687,
+      "build": "141"
+    },
+    {
+      "state": "STARTING",
+      "t_ms": 18128,
+      "build": "141"
+    },
+    {
+      "state": "IDLE",
+      "t_ms": 63221,
+      "build": "141"
+    },
+    {
+      "state": "STARTING",
+      "t_ms": 97795,
+      "build": "141"
+    },
+    {
+      "state": "RECORDING",
+      "t_ms": 98137,
+      "build": "141"
+    },
+    {
+      "state": "SAVING",
+      "t_ms": 110101,
+      "build": "141"
+    },
+    {
+      "state": "TRANSCRIBING",
+      "t_ms": 122824,
+      "build": "141"
+    },
+    {
+      "state": "DRAFT_READY",
+      "t_ms": 129285,
+      "build": "141"
+    },
+    {
+      "state": "IDLE",
+      "t_ms": 195998,
+      "build": "141"
+    },
+    {
+      "state": "STARTING",
+      "t_ms": 17161,
+      "build": "141"
+    },
+    {
+      "state": "RECORDING",
+      "t_ms": 17932,
+      "build": "141"
+    },
+    {
+      "state": "CANCELLED",
+      "t_ms": 29668,
+      "build": "141"
+    }
+  ],
+  "bounded_timeout_ms": 45093,
+  "guards": [
+    {
+      "event": "update-refused-unsaved",
+      "voice_state": "STARTING",
+      "build": "141"
+    },
+    {
+      "event": "update-refused-unsaved",
+      "voice_state": "RECORDING",
+      "build": "141"
+    },
+    {
+      "event": "quit-refused-unsaved",
+      "voice_state": "SAVING",
+      "build": "141"
+    },
+    {
+      "event": "update-refused-unsaved",
+      "voice_state": "SAVING",
+      "build": "141"
+    },
+    {
+      "event": "update-refused-unsaved",
+      "voice_state": "DRAFT_READY",
+      "build": "141"
+    }
+  ],
+  "hidden_starting_guard": true,
+  "maintenance_before_refusal": false,
+  "durable_audio": {
+    "state": "MAC_AUDIO_CONFIRMED",
+    "sha256": "4f2edfca6b1b2737febf5a3471ba831a585f6ac8cace4c333dae9c5f4395c028",
+    "byte_size": 379606,
+    "duration": 11.8613125
+  },
+  "actual_whisper": {
+    "state": "TRANSCRIPT_READY",
+    "engine": "whisper.cpp",
+    "model": "small-multilingual",
+    "model_hash": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
+    "candidate_sha256": "ed0c8842fca84e3e7f5114b5eba7db8c3b6c8c01072105433f505c241b0c4d8a",
+    "elapsed_seconds": 5.131573499995284
+  },
+  "edited_message": {
+    "sha256": "2d06adb6a4b53bfe6c1ab017e5dd35fdd3998e362709c13165c4e7f07c63fd54",
+    "voice_source_kind": "VOICE_TRANSCRIPT",
+    "inference_reference_null": true,
+    "durable_after_quit_relaunch_and_update": true
+  },
+  "audio_rows_after_cancelled_retry": 1,
+  "signed_native_update": {
+    "from": 141,
+    "to": 142,
+    "installed_bundle_validated": true,
+    "highwater": 142,
+    "maintenance_ui_pulses": [
+      26
+    ]
+  },
+  "private_permissions": {
+    "root_mode": "0o700",
+    "database_mode": "0o600"
+  },
+  "provider_calls": 0,
+  "raw_exported": false
+}

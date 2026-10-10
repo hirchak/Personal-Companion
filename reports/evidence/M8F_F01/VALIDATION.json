@@ -1,0 +1,186 @@
+{
+  "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+  "base_sha": "1c09275937c6f152ad09efc8b781591d617359e2",
+  "environment": {
+    "arch": "arm64",
+    "hardware": "Mac14,15 M2 8GB",
+    "macos": "27.0 26A428",
+    "sdk": "26.5",
+    "python": "3.13.2",
+    "live_provider_calls": 0,
+    "new_download_bytes": 0
+  },
+  "checks": [
+    {
+      "name": "Python full",
+      "command": ".venv/bin/python -m pytest -q",
+      "exit_code": 0,
+      "result": "1044 PASS/337.65s",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-exact-python.log",
+      "log_sha256": "30646e801531cbe0a4c690718ab07b033e563da820c2011b694753b64cbcf63f"
+    },
+    {
+      "name": "Web",
+      "command": "npm --prefix apps/web test -- --maxWorkers=1 --no-file-parallelism",
+      "exit_code": 0,
+      "result": "62 PASS",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-exact-web.log",
+      "log_sha256": "603c479326bedbcb2a6078e66c0ef656e316f44485756cb1ebe7393e32c39df3"
+    },
+    {
+      "name": "Native builds",
+      "command": "scripts.build_m8f.build LOCAL_TEST A141/B142 --dmg",
+      "exit_code": 0,
+      "result": "PASS",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/c3-final-build.log",
+      "log_sha256": "a26518e00ef6c688f129b7aec7cd45d6efaa5a431770f3266c405cbf91247cad"
+    },
+    {
+      "name": "Q03",
+      "command": "PYTHONPATH=. .venv/bin/python scripts/audit_m8e_q03.py --output <ignored>",
+      "exit_code": 0,
+      "result": "PASS bounded synthetic characterization",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-q03.log",
+      "log_sha256": "6552ba4c0e17d38deda5db0c8e54c7c44ff5bc7bdde0c5090dc14f3d2595a0ac"
+    },
+    {
+      "name": "Admission",
+      "command": "scripts/m7_admission.py",
+      "exit_code": 0,
+      "result": "PASS structural",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-admission.json",
+      "log_sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde"
+    },
+    {
+      "name": "Qualification",
+      "command": "scripts/qualify_m7d_skills.py --check",
+      "exit_code": 0,
+      "result": "PASS five CANDIDATE/OFF",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-qualification.log",
+      "log_sha256": "c37dfdc41e720cf36d5960a135232675f670268152a7afe3f6304f32113c9432"
+    },
+    {
+      "name": "Schemas A",
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "result": "7 PASS",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-schemas-a.log",
+      "log_sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d"
+    },
+    {
+      "name": "Schemas C",
+      "command": "node scripts/verify_m7c_schemas.mjs",
+      "exit_code": 0,
+      "result": "12 PASS",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-schemas-c.log",
+      "log_sha256": "b688daa486a388bea4e9ae5a702d4ba14f7c843f6205a4d4c9d35eb1412a33b8"
+    },
+    {
+      "name": "Schemas D",
+      "command": "node scripts/verify_m7d_schemas.mjs",
+      "exit_code": 0,
+      "result": "14 PASS",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-schemas-d.log",
+      "log_sha256": "15af5a8d57f49f0fcf855986bef6b29bc8213f982f93dee0c9761fbced65a1d1"
+    },
+    {
+      "name": "Normal Swift",
+      "command": "xcrun swiftc -typecheck normal arm64 macOS14",
+      "exit_code": 0,
+      "result": "PASS",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-normal-typecheck.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "Packaged lifecycle",
+      "command": "scripts.verify_m8f.lifecycle absolute app path",
+      "exit_code": 0,
+      "result": "PASS",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-packaged-lifecycle-rerun.log",
+      "log_sha256": "3d561242d6e9fc4694625bdd924cc7ad382bbb917c933619edbc3ad55aa516a2"
+    },
+    {
+      "name": "Interim full f22",
+      "command": "pytest -q",
+      "exit_code": 1,
+      "result": "1040 PASS/3 FAIL/1404.58s",
+      "source_sha": "f22b3470e75a22016d4250538222ac7302f38f08",
+      "log": "generated/m8f/f01/exact-c-python.log",
+      "log_sha256": "aa9618dee6bfac5ae4e3049dab8070bf3ac93bc011e7950a6f330521bf3ca38b"
+    },
+    {
+      "name": "Same f22 focused",
+      "command": "pytest three failed M4 cases",
+      "exit_code": 0,
+      "result": "3 PASS/23.86s",
+      "source_sha": "f22b3470e75a22016d4250538222ac7302f38f08",
+      "log": "generated/m8f/f01/f22-focused-rerun.log",
+      "log_sha256": "a55c5a79a93df76c9902bdce5d7f50802e351d3f28672485f21a1cd522d37ca4"
+    },
+    {
+      "name": "Initial lifecycle runner",
+      "command": "scripts.verify_m8f.lifecycle relative app path",
+      "exit_code": 1,
+      "result": "FAIL before runtime; caller path corrected",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-packaged-lifecycle.log",
+      "log_sha256": "87d6dd6148fc71159ba8472acdaabb9fecee543b9e7eecb68876356566732441"
+    },
+    {
+      "name": "Gatekeeper restricted",
+      "command": "spctl --assess --type execute test app",
+      "exit_code": 1,
+      "result": "SUBSYSTEM_ERROR; not trust proof",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-gatekeeper.log",
+      "log_sha256": "4d5fd0988efdb88e973825176d280b1fda84bfb7fbe8394bfbb70f43a968949d"
+    },
+    {
+      "name": "Gatekeeper read-only rerun",
+      "command": "spctl --assess --type execute test app",
+      "exit_code": 3,
+      "result": "REJECTED ad-hoc; production NOT_VERIFIED",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-gatekeeper-rerun.log",
+      "log_sha256": "0c5172685da890834c67d1b9df97aadd104574125b25d92b762433296367f631"
+    },
+    {
+      "name": "Snapshot",
+      "command": ".venv/bin/python scripts/build_chatgpt_context.py",
+      "exit_code": 0,
+      "result": "PASS in stated structural scope",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-snapshot.log",
+      "log_sha256": "9f079aa62393a54ee0ffbd128e23df258ed988da9dc5fdd1a5adcbe36f8348e5"
+    },
+    {
+      "name": "Docs",
+      "command": ".venv/bin/python scripts/check_docs.py --json",
+      "exit_code": 0,
+      "result": "PASS in stated structural scope",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-docs.json",
+      "log_sha256": "ddd53690697d0356ffa881598812f21d3db0bce6f174312fea898bfcbda1eaf9"
+    },
+    {
+      "name": "Staged public/privacy",
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "result": "PASS heuristic scope; source/diff also manually reviewed",
+      "source_sha": "da2003f783a077a4173323f523981efec82101b3",
+      "log": "generated/m8f/f01/final-privacy.log",
+      "log_sha256": "067a67816636bd85a10c12d40b561fb394ee3454077f0461cc69c882a47ba20b"
+    }
+  ]
+}

@@ -334,3 +334,13 @@ C11 GUI fixture start NOT_PASS,packaged ASR PASS,prior C10 GUI voice separately 
 Contained C8 physical capture incident remains material. Normal auth/physical mic/olderOS,
 production signing/notarization/hosting/private activation and clinical review separate gates.
 Report reports/M8F_MACOS_APP_REPORT.md;no independent ACCEPT or next milestone.
+
+## M8F-F01 native voice forward fix — 2026-10-10
+
+AWAITING_REVIEW, final C da2003f. Same-C native authored PCM→actual packaged Whisper→
+edit→durable save/relaunch PASS; post-relaunch fixture verified. Bounded45s/Cancel/
+late resource cleanup and hidden unsaved native guards. Signed A141→B142 data
+persistence/antirollback PASS. Full Python1044/web62/offline checks PASS. Historical
+C11 hang cause NOT_VERIFIED, interim failures preserved; C8 remains material.
+Report reports/M8F_F01_NATIVE_VOICE_REPORT.md. Production/private activation,
+normal TCC/human quality and next milestone remain separate, not authorized.
