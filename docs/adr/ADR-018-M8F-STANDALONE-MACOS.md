@@ -44,6 +44,11 @@ only in disposable ignored files, never Keychain or bundles; normal builds canno
 enable this channel. Sparkle performs download/stage/copy/swap/relaunch. The app
 stops writers, verifies a WAL/attachments backup and restores a copy before allowing
 installation; keeps a previous code bundle separately. Incompatible migrations
+are prepared only after the single explicit Update choice. The UI remains
+responsive: maintenance I/O runs on a serialized worker behind a pipe mutex,
+conflicting actions are disabled and a native progress indicator stays visible.
+Update errors remain readable after abort/finish and expose a local recovery action.
+Incompatible migrations
 are blocked until a reviewed migration plan can be proved on a copy. Code recovery
 and fresh-root data recovery remain distinct explicit operations.
 

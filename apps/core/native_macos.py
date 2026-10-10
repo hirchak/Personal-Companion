@@ -330,7 +330,7 @@ class NativeSession:
             acknowledge_no_cloud=True, port=self._free_port())
         return target_app, target_data
 
-    def prepare_update(self, target):
+    def validate_update(self, target):
         if self.native['profile'] != 'LOCAL_TEST' or self.settings is None:
             raise SafeError('UPDATE_IDENTITY_INVALID')
         required = {'product','channel','arch','build','source_sha','manifest_hash','schema'}
@@ -345,6 +345,10 @@ class NativeSession:
         size = sum(p.stat().st_size for p in self.bundle.rglob('*') if p.is_file())
         if shutil.disk_usage(self.base).free < 3*size+128*1024**2:
             raise SafeError('UPDATE_SPACE_REQUIRED')
+        return {'allowed':True}
+
+    def prepare_update(self, target):
+        self.validate_update(target)
         self.stop()
         target_backup = self.base/'backups'/('pre-update-'+str(uuid4()))
         result = r.backup(self.app, self.data, target_backup, self.kind)
@@ -416,6 +420,7 @@ def main():
                 elif op == 'stop': result = session.stop()
                 elif op == 'backup': result = session.backup()
                 elif op == 'prepare-update': result = session.prepare_update(command['target'])
+                elif op == 'validate-update': result = session.validate_update(command['target'])
                 elif op == 'restore': result = session.restore(command['name'], command.get('confirmation'))
                 elif op == 'quit': break
                 else: raise SafeError('NATIVE_OPERATION_FAILED')

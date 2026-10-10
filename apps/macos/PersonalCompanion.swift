@@ -17,17 +17,18 @@ final class UpdateUI: NSObject, SPUUserDriver {
     func showUserInitiatedUpdateCheck(cancellation:@escaping()->Void) {owner?.state.stringValue="Перевіряємо локальний підписаний канал…"}
     func showUpdateFound(with appcastItem:SUAppcastItem,state:SPUUserUpdateState,reply:@escaping(SPUUserUpdateChoice)->Void) {
         let alert=NSAlert();alert.messageText="Доступна нова версія"
-        alert.informativeText="Копію даних і відновлення перевірено. Натисніть «Оновити»: програма перевірить пакет, встановить його й перезапуститься."
+        alert.informativeText="Перед встановленням перевіримо копію даних і відновлення. Натисніть «Оновити»: програма збереже дані, перевірить пакет і перезапуститься."
         alert.addButton(withTitle:"Оновити");alert.addButton(withTitle:"Пізніше")
-        reply(alert.runModal() == .alertFirstButtonReturn ? .install : .dismiss)
+        guard alert.runModal() == .alertFirstButtonReturn,let owner=owner else {reply(.dismiss);return}
+        owner.prepareChosenUpdate {ok in reply(ok ? .install : .dismiss)}
     }
     func showUpdateReleaseNotes(with downloadData:SPUDownloadData) {}
     func showUpdateReleaseNotesFailedToDownloadWithError(_ error:Error) {}
     func showUpdateNotFoundWithError(_ error:Error,acknowledgement:@escaping()->Void) {
-        owner?.state.stringValue="Нової версії немає. Поточний простір збережено.";owner?.testEvent("update-not-found");acknowledgement()
+        owner?.settledUpdateText="Нової версії немає. Поточний простір збережено.";owner?.testEvent("update-not-found");acknowledgement()
     }
     func showUpdaterError(_ error:Error,acknowledgement:@escaping()->Void) {
-        owner?.state.stringValue="Оновлення не пройшло перевірку. Попередні дані й програма збережені.";owner?.testEvent("update-error");acknowledgement()
+        owner?.presentUpdateFailure();acknowledgement()
     }
     func showDownloadInitiated(cancellation:@escaping()->Void) {received=0;expected=0;owner?.state.stringValue="Завантажуємо локальний пакет…"}
     func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength:UInt64) {expected=expectedContentLength}
@@ -48,6 +49,8 @@ final class UpdateUI: NSObject, SPUUserDriver {
 final class Backend {
     let process = Process(), input = Pipe(), output = Pipe()
     var serial = 0
+    private let mutex=NSLock()
+    private let operations=DispatchQueue(label:"personal-companion.backend-maintenance",qos:.userInitiated)
     init(bundle: URL, base: URL) throws {
         let runtime = bundle.appendingPathComponent("Contents/Resources/runtime")
         process.executableURL = runtime.appendingPathComponent("bin/python3.13")
@@ -61,14 +64,14 @@ final class Backend {
         _ = try call("bootstrap", ["bundle":bundle.path, "base":base.path])
     }
     func call(_ op: String, _ fields: [String:Any] = [:]) throws -> [String:Any] {
+        mutex.lock();defer {mutex.unlock()}
         guard process.isRunning else { throw NativeFailure.unavailable }
         serial += 1
         var value = fields; value["op"] = op; value["id"] = serial
         var bytes = try JSONSerialization.data(withJSONObject:value); bytes.append(10)
         try input.fileHandleForWriting.write(contentsOf:bytes)
         var reply = Data()
-        // Backend commands are serialized on the UI thread. They are local and
-        // bounded; update/backup shows native progress before blocking writers.
+        // One inherited pipe conversation at a time, independent of caller thread.
         while reply.count < 32768 {
             let chunk = try output.fileHandleForReading.read(upToCount:1) ?? Data()
             guard !chunk.isEmpty else { throw NativeFailure.unavailable }
@@ -80,7 +83,14 @@ final class Backend {
               let result = object["result"] as? [String:Any] else { throw NativeFailure.unavailable }
         return result
     }
+    func perform(_ work:@escaping(Backend)throws->[String:Any],completion:@escaping(Result<[String:Any],Error>)->Void) {
+        operations.async {
+            let result=Result {try work(self)}
+            DispatchQueue.main.async {completion(result)}
+        }
+    }
     func quit() {
+        mutex.lock();defer {mutex.unlock()}
         try? input.fileHandleForWriting.close()
         if process.isRunning {
             let deadline = Date().addingTimeInterval(18)
@@ -107,6 +117,14 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     var port: Int = 0
     var prepared = false
     var installing = false
+    var maintenanceBusy = false
+    var maintenancePulses = 0
+    var maintenanceTimer: Timer?
+    let progress=NSProgressIndicator()
+    var pendingTarget:[String:Any]?
+    var updateFailed=false
+    var settledUpdateText:String?
+    var resumeQueued=false
     var observers: [NSObjectProtocol] = []
 
     func testEvent(_ name:String,_ fields:[String:Any]=[:]) {
@@ -176,6 +194,8 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         state.textColor = NSColor(calibratedRed:0.22,green:0.32,blue:0.27,alpha:1)
         state.setContentCompressionResistancePriority(.defaultLow,for:.horizontal)
         bar.addArrangedSubview(state)
+        progress.style = .spinning;progress.controlSize = .small;progress.isDisplayedWhenStopped=false
+        bar.addArrangedSubview(progress)
         openButton = NSButton(title:"Відкрити простір",target:self,action:#selector(unlock));openButton.bezelStyle = .rounded
         bar.addArrangedSubview(openButton)
         let lockButton=NSButton(title:"Заблокувати",target:self,action:#selector(lock));lockButton.bezelStyle = .rounded
@@ -272,12 +292,17 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
     }
     func start() throws {
         let status=try backend!.call("start");port=status["port"] as? Int ?? 0
+        try applyStart(status)
+    }
+    func applyStart(_ status:[String:Any]) throws {
+        port=status["port"] as? Int ?? 0
         guard port>0 else { throw NativeFailure.unavailable }
         web.isHidden=false;replaceContent(web);web.load(URLRequest(url:URL(string:"http://127.0.0.1:\(port)/")!))
         state.stringValue="Локальний простір заблоковано · AI недоступний";openButton.isEnabled=true
         testEvent("core-started")
     }
     @objc func unlock() {
+        guard !maintenanceBusy else {return}
         #if LOCAL_TEST
         redeem()
         #else
@@ -304,6 +329,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         } catch { problem("Локальний простір недоступний. Закрийте й відкрийте програму; дані залишаються на Mac.") }
     }
     @objc func lock() {
+        guard !maintenanceBusy else {return}
         _=try? backend?.call("lock");web?.reload()
         state.stringValue="Локальний простір заблоковано · AI вимкнений"
     }
@@ -319,11 +345,16 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         alert.runModal()
     }
     @objc func backup() {
-        state.stringValue="Перевіряємо резервну копію…";lock()
-        do { _=try backend!.call("backup");try start();state.stringValue="Резервну копію перевірено. Простір заблоковано." }
-        catch { try? start();problem("Копію не підтверджено. Попередні дані збережено; перевірте місце й захист диска.") }
+        guard !maintenanceBusy else {return}
+        runMaintenance("Перевіряємо резервну копію…",work: {backend in
+            _=try backend.call("backup");return try backend.call("start")
+        }) {result in
+            do {try self.applyStart(result.get());self.state.stringValue="Резервну копію перевірено. Простір заблоковано."}
+            catch {self.resumeAfterUpdate();self.problem("Копію не підтверджено. Дані збережено; перевірте місце й захист диска.")}
+        }
     }
     @objc func restore() {
+        guard !maintenanceBusy else {return}
         let panel=NSOpenPanel();panel.canChooseDirectories=true;panel.canChooseFiles=false
         panel.directoryURL=base.appendingPathComponent("backups");panel.prompt="Обрати копію"
         guard panel.runModal() == .OK,let url=panel.url,
@@ -332,8 +363,12 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         alert.informativeText="Погоджуюся на нове локальне сховище й захищені копії без хмарної синхронізації. Попереднє сховище зберігається; AI та дозволи потребують нового погодження."
         alert.addButton(withTitle:"Погоджуюсь і відновлюю");alert.addButton(withTitle:"Скасувати")
         guard alert.runModal() == .alertFirstButtonReturn else {return}
-        do {lock();_=try backend!.call("restore",["name":url.lastPathComponent,"confirmation":true]);try start()}
-        catch {try? start();problem("Відновлення не підтверджено. Попереднє сховище й копія збережені.")}
+        runMaintenance("Перевіряємо й відновлюємо копію в новий простір…",work: {backend in
+            _=try backend.call("restore",["name":url.lastPathComponent,"confirmation":true]);return try backend.call("start")
+        }) {result in
+            do {try self.applyStart(result.get());self.state.stringValue="Копію відновлено. Попередній простір збережено."}
+            catch {self.resumeAfterUpdate();self.problem("Відновлення не підтверджено. Попереднє сховище й копія збережені.")}
+        }
     }
     @objc func showBackups() {if FileManager.default.fileExists(atPath:base.appendingPathComponent("backups").path) {NSWorkspace.shared.open(base.appendingPathComponent("backups"))}}
     @objc func previousCode() {
@@ -350,6 +385,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         #endif
     }
     @objc func checkUpdates() {
+        guard !maintenanceBusy else {return}
         #if LOCAL_TEST
         // Conservatively refuse to discard any visible unsaved text or an active
         // recorder. Only a Boolean crosses the native bridge, no draft content.
@@ -358,6 +394,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
             if case .success(let value)=result,value as? Bool == false {
                 // No new drafts/capture may begin between check and quiescence.
                 _=try? self.backend?.call("lock")
+                self.updateFailed=false;self.settledUpdateText=nil;self.pendingTarget=nil
                 self.web.isHidden=true;self.openButton.isEnabled=false
                 self.window.makeFirstResponder(nil);self.updater?.checkForUpdates()
             }
@@ -368,6 +405,55 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         #endif
     }
     func allowedChannels(for updater:SPUUpdater) -> Set<String> { ["M8F_LOCAL_TEST"] }
+    func runMaintenance(_ label:String,work:@escaping(Backend)throws->[String:Any],completion:@escaping(Result<[String:Any],Error>)->Void) {
+        guard !maintenanceBusy,let backend=backend else {completion(.failure(NativeFailure.unavailable));return}
+        _=try? backend.call("lock")
+        maintenanceBusy=true;maintenancePulses=0
+        web.isHidden=true;openButton.isEnabled=false;window.makeFirstResponder(nil)
+        state.stringValue=label;progress.startAnimation(nil)
+        let timer=Timer(timeInterval:0.2,repeats:true) {[weak self] _ in self?.maintenancePulses+=1}
+        maintenanceTimer=timer;RunLoop.main.add(timer,forMode:.common)
+        testEvent("maintenance-started")
+        backend.perform(work) {result in
+            self.maintenanceTimer?.invalidate();self.maintenanceTimer=nil
+            self.maintenanceBusy=false;self.progress.stopAnimation(nil)
+            self.testEvent("maintenance-finished",["ui_pulses":self.maintenancePulses])
+            completion(result)
+        }
+    }
+    func prepareChosenUpdate(_ completion:@escaping(Bool)->Void) {
+        guard let target=pendingTarget else {completion(false);return}
+        runMaintenance("Готуємо оновлення: перевіряємо копію й відновлення…",work: {backend in
+            try backend.call("prepare-update",["target":target])
+        }) {result in
+            do {
+                _=try result.get();self.prepared=true
+                self.state.stringValue="Копію перевірено. Встановлюємо підписану нову версію…"
+                self.testEvent("update-prepared");completion(true)
+            } catch {self.presentUpdateFailure();self.resumeAfterUpdate();completion(false)}
+        }
+    }
+    func presentUpdateFailure() {
+        updateFailed=true
+        settledUpdateText="Оновлення не виконано. Попередня програма й дані збережені. Спробуйте пізніше або відкрийте папку копій."
+        state.stringValue=settledUpdateText!
+        testEvent("update-error")
+        let alert=NSAlert();alert.messageText="Оновлення не виконано"
+        alert.informativeText="Перевірка або встановлення не завершились. Попередня програма та дані збережені. Можна повторити перевірку пізніше; резервні копії й попередній код доступні в меню «Дані»."
+        alert.addButton(withTitle:"Зрозуміло");alert.addButton(withTitle:"Відкрити папку копій")
+        if alert.runModal() == .alertSecondButtonReturn {showBackups()}
+    }
+    func resumeAfterUpdate() {
+        guard !resumeQueued,!maintenanceBusy,let backend=backend else {return}
+        resumeQueued=true
+        backend.perform({try $0.call("start")}) {result in
+            self.resumeQueued=false
+            do {try self.applyStart(result.get())}
+            catch {self.state.stringValue="Локальний простір потребує відновлення. Дані й копії збережені."}
+            if self.updateFailed {self.state.stringValue=self.settledUpdateText ?? "Оновлення не виконано. Попередня програма й дані збережені."}
+            else if let text=self.settledUpdateText {self.state.stringValue=text}
+        }
+    }
     func updater(_ updater:SPUUpdater, shouldProceedWithUpdate item:SUAppcastItem, updateCheck:SPUUpdateCheck) throws {
         #if LOCAL_TEST
         testEvent("update-selected",["property_keys":item.propertiesDictionary.keys.map {String(describing:$0)}])
@@ -379,22 +465,26 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
               let hash=item.propertiesDictionary["pc:manifest"] as? String,
               let schemaString=item.propertiesDictionary["pc:schema"] as? String,let schema=Int(schemaString),
               let url=item.fileURL,url.scheme=="http",url.host=="127.0.0.1" else {throw NativeFailure.unavailable}
-        lock();state.stringValue="Готуємо оновлення: перевіряємо копію й відновлення…"
-        do {_=try backend!.call("prepare-update",["target":["product":product,"channel":item.channel!,"arch":arch,
-            "build":build,"source_sha":sha,"manifest_hash":hash,"schema":schema]])
-            prepared=true;state.stringValue="Доступна нова версія. Копію перевірено; дані призупинено до завершення оновлення.";testEvent("update-prepared")
-        } catch {try? start();throw NSError(domain:"PersonalCompanion",code:1,userInfo:[NSLocalizedDescriptionKey:"Оновлення не пройшло перевірку. Попередня програма й дані збережені."])}
+        let target:[String:Any]=["product":product,"channel":item.channel!,"arch":arch,
+            "build":build,"source_sha":sha,"manifest_hash":hash,"schema":schema]
+        _=try backend!.call("validate-update",["target":target]);pendingTarget=target
         #else
         throw NativeFailure.unavailable
         #endif
     }
     func updater(_ updater:SPUUpdater,willInstallUpdate item:SUAppcastItem) {installing=true;testEvent("update-installing")}
-    func updater(_ updater:SPUUpdater,didAbortWithError error:Error) {prepared=false;installing=false;try? start();state.stringValue="Оновлення не виконано. Попередня версія працює.";testEvent("update-aborted")}
+    func updater(_ updater:SPUUpdater,didAbortWithError error:Error) {prepared=false;installing=false;updateFailed=true;testEvent("update-aborted");resumeAfterUpdate()}
     func updater(_ updater:SPUUpdater,didFinishUpdateCycleFor updateCheck:SPUUpdateCheck,error:Error?) {
-        if !installing {prepared=false;try? start()}
+        if !installing {prepared=false;resumeAfterUpdate()}
     }
     func applicationShouldTerminate(_ sender:NSApplication) -> NSApplication.TerminateReply {
-        backend?.quit();backend=nil;return .terminateNow
+        if maintenanceBusy {state.stringValue="Дочекайтесь завершення перевірки копії перед закриттям.";return .terminateCancel}
+        let closing=backend;backend=nil
+        DispatchQueue.global(qos:.userInitiated).async {
+            closing?.quit()
+            DispatchQueue.main.async {NSApp.reply(toApplicationShouldTerminate:true)}
+        }
+        return .terminateLater
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender:NSApplication)->Bool {false}
     func applicationShouldHandleReopen(_ sender:NSApplication,hasVisibleWindows flag:Bool)->Bool {window.makeKeyAndOrderFront(nil);return true}

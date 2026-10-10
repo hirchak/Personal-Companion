@@ -94,6 +94,16 @@ def test_disk_full_is_refused_before_quiescence(native,monkeypatch):
     assert not list((native.base/'backups').iterdir())
 
 
+def test_update_selection_checks_identity_without_starting_maintenance(native,monkeypatch):
+    native.initialize(True,True)
+    def forbidden_stop():raise AssertionError('SELECTION_MUST_NOT_QUIESCE_OR_WRITE_BACKUP')
+    monkeypatch.setattr(native,'stop',forbidden_stop)
+    assert native.validate_update(target(native))=={'allowed':True}
+    assert not list((native.base/'backups').iterdir())
+    assert not (native.base/'native-update.json').exists()
+    monkeypatch.undo()
+
+
 def test_real_backup_restore_copy_precedes_update_and_preserves_data(native):
     native.initialize(True,True)
     journal=Journal(Store(native.data,root_kind=RootKind.PRIVATE_LOCAL))

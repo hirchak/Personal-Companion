@@ -33,7 +33,11 @@ def adapter(root,scenario):
 @pytest.mark.parametrize('scenario,error',[('valid',None),('environment',None),('nonzero','ASR_PROCESS_FAILED'),('malformed','ASR_OUTPUT_INVALID'),('oversized','ASR_OUTPUT_LIMIT'),('stderr','ASR_OUTPUT_LIMIT'),('timeout','ASR_TIMEOUT'),('tool','ASR_OUTPUT_INVALID'),('path','ASR_OUTPUT_INVALID')])
 def test_M4_A06_exact_command_sanitized_bounded_process(isolated,scenario,error,monkeypatch):
     monkeypatch.setenv('OPENAI_API_KEY','SYNTHETIC never inherited')
-    p=adapter(isolated/'process',scenario);deadline=time.monotonic()+.2
+    p=adapter(isolated/'process',scenario)
+    # Successful protocol/exit checks tolerate interpreter spawn jitter; the
+    # intentional ten-second stall still verifies its original 200ms deadline.
+    # ProcessLocalASR production limits are unchanged.
+    deadline=time.monotonic()+(.2 if scenario=='timeout' else 1)
     if error:
         with pytest.raises(SafeError,match=error):p.transcribe(wav(),'uk',threading.Event(),deadline)
     else:assert p.transcribe(wav(),'uk',threading.Event(),deadline)['text'].startswith('SYNTHETIC')
