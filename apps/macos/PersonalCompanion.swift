@@ -214,14 +214,32 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         // No physical microphone access, even with a pre-existing TCC grant.
         let syntheticMedia="""
         (()=>{window.__pcSyntheticCapture=false;
+        const trace=(stage,state='',context_id=0)=>window.webkit.messageHandlers.companion.postMessage({
+          kind:'voice-trace',stage,state,context_id,t_ms:Math.round(performance.now()),
+          gesture:navigator.userActivation?(navigator.userActivation.isActive?'ACTIVE':'INACTIVE'):'UNSUPPORTED',
+          hidden:document.hidden});
+        let contextId=0;const NativeAudioContext=window.AudioContext;
+        window.AudioContext=class extends NativeAudioContext {
+          constructor(...args){super(...args);this.traceId=++contextId;trace('context-created',this.state,this.traceId);
+            this.addEventListener('statechange',()=>trace('context-state',this.state,this.traceId));
+            setTimeout(()=>trace('context-pending-check',this.state,this.traceId),2000);}
+          resume(){trace('resume-requested',this.state,this.traceId);const result=super.resume();
+            result.then(()=>trace('resume-resolved',this.state,this.traceId),()=>trace('resume-rejected',this.state,this.traceId));return result;}
+        };
+        let last='';new MutationObserver(()=>{const state=document.querySelector('[data-voice-state]')?.getAttribute('data-voice-state');
+          if(state&&state!==last){last=state;trace('ui-state',state);}}).observe(document,{subtree:true,attributes:true,attributeFilter:['data-voice-state']});
         navigator.mediaDevices.getUserMedia=async constraints=>{
+          trace('fixture-requested');
           if(!window.__pcSyntheticCapture||constraints.video)throw new DOMException('Synthetic test microphone denied','NotAllowedError');
           const context=new AudioContext();const response=await fetch('/native-test-audio.wav');
+          trace('fixture-fetched',context.state,context.traceId);
           const buffer=await context.decodeAudioData(await response.arrayBuffer());
+          trace('fixture-decoded',context.state,context.traceId);
           const source=context.createBufferSource();source.buffer=buffer;source.loop=true;
-          const destination=context.createMediaStreamDestination();source.connect(destination);source.start();await context.resume();
+          const destination=context.createMediaStreamDestination();source.connect(destination);source.start();
+          trace('fixture-wired',context.state,context.traceId);await context.resume();
           const track=destination.stream.getAudioTracks()[0],stop=track.stop.bind(track);
-          track.stop=()=>{stop();source.stop();void context.close()};return destination.stream;
+          track.stop=()=>{stop();source.stop();void context.close()};trace('fixture-returned',context.state,context.traceId);return destination.stream;
         };})();
         """
         config.userContentController.addUserScript(WKUserScript(source:syntheticMedia,injectionTime:.atDocumentStart,forMainFrameOnly:true))
@@ -503,8 +521,25 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         #endif
     }
     func userContentController(_ userContentController:WKUserContentController,didReceive message:WKScriptMessage) {
-        guard message.frameInfo.isMainFrame,message.frameInfo.securityOrigin.host=="127.0.0.1",
-              message.frameInfo.securityOrigin.port==port,message.body as? String == "unlock" else {return}
+        guard message.frameInfo.isMainFrame,message.frameInfo.securityOrigin.protocol=="http",
+              message.frameInfo.securityOrigin.host=="127.0.0.1",message.frameInfo.securityOrigin.port==port else {return}
+        #if LOCAL_TEST
+        if let body=message.body as? [String:Any],body["kind"] as? String=="voice-trace",
+           Set(body.keys)==["kind","stage","state","context_id","t_ms","gesture","hidden"],
+           let stage=body["stage"] as? String,
+           ["fixture-requested","fixture-fetched","fixture-decoded","fixture-wired","fixture-returned",
+            "context-created","context-state","context-pending-check","resume-requested","resume-resolved","resume-rejected","ui-state"].contains(stage),
+           let state=body["state"] as? String,
+           ["","running","suspended","interrupted","closed","IDLE","STARTING","RECORDING","SAVING","LOCAL_AUDIO_SAVED",
+            "TRANSCRIBING","WAITING_FOR_LOCAL_ASR","DRAFT_READY","REVIEW_REQUIRED","FAILED","CANCELLED"].contains(state),
+           let id=body["context_id"] as? Int,id>=0,id<=1000,
+           let ms=body["t_ms"] as? Int,ms>=0,ms<=86400000,
+           let gesture=body["gesture"] as? String,["ACTIVE","INACTIVE","UNSUPPORTED"].contains(gesture),
+           let hidden=body["hidden"] as? Bool {
+            testEvent("voice-trace",["stage":stage,"state":state,"context_id":id,"t_ms":ms,"gesture":gesture,"hidden":hidden]);return
+        }
+        #endif
+        guard message.body as? String == "unlock" else {return}
         unlock()
     }
 }

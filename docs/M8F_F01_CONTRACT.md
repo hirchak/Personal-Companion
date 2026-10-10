@@ -1,0 +1,23 @@
+# M8F-F01 — bounded native voice lifetime fix
+
+Authority: [owner goal](../prompts/M8F_F01_NATIVE_VOICE_START_FIX.md).
+Base:1c09275937c6f152ad09efc8b781591d617359e2. F09 currently FIX_REQUIRED.
+
+| ID | Required proof |
+|---|---|
+| V01 | Sanitized native stage/AudioContext/gesture diagnostics establish actual hang location; hypotheses not facts |
+| V02 | New exact-C LOCAL_TEST app/DMG, fresh protected synthetic home, physical input denied at native/page layers |
+| V03 | Real native authored PCM → recording/stop/durable audio → packaged Whisper → edit → explicit durable save/relaunch |
+| V04 | Bounded start failure, actionable error/retry; preserve future normal permission prompt opportunity |
+| V05 | Cancel during pending media/context; late callbacks stop own stream/context, never record/save stale attempt |
+| V06 | Native update refused while STARTING/RECORDING/SAVING/memory draft including hidden producer; settled signed A→B remains functional |
+| V07 | Denied/missing permission/never media/context failure/interruption/save pending/Quit/backend-ASR-unavailable characterization |
+| V08 | Full exact-C relevant Python/web/build/Chromium/Q03/schema/admission/qualification/privacy; original failures retained |
+| V09 | Evidence-only R/normalFF main/remote equality; STOP AWAITING_REVIEW, independent acceptance required |
+
+No physical capture, real vault/pilot/backup, C8 content/history recovery, provider/account calls,
+new dependencies/downloads/system installs, production trust/notarization/hosting/tag/deploy,
+clinical/Health/phone activation. Existing approved bundled assets only. Test unlock remains
+an explicit substitute for normal OS challenge; physical/human quality remains NOT_VERIFIED.
+All diagnostics are finite whitelisted mechanism enums/numeric times/booleans, no audio,
+transcript/draft/text/credentials/path/IDs. No backend proof substituted for native V03.
