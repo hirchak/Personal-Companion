@@ -3,7 +3,7 @@ type NativeWindow = Window & {
 };
 
 export function nativeShell(): boolean {
-  return Boolean((window as NativeWindow).webkit?.messageHandlers?.companion);
+  return typeof window !== "undefined" && Boolean((window as NativeWindow).webkit?.messageHandlers?.companion);
 }
 
 export function nativeUnlock(): void {

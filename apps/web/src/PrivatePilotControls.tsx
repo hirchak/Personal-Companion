@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Sheet } from "./Sheet";
+import { nativeShell } from "./native-macos";
 import {
   PilotCallError,
   pilotErrorMessage,
@@ -223,7 +224,7 @@ export function PrivatePilotControls({
       )}
       {failure && (
         <p role="alert">
-          {failure.message} <small>Код: {failure.code}</small>
+          {failure.message} {!nativeShell() && <small>Код: {failure.code}</small>}
         </p>
       )}
       {open && state && (

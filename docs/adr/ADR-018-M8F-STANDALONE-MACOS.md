@@ -23,6 +23,10 @@ outside-Git path contract.
 PRIVATE_LOCAL still requires verified FileVault APFS, 0700/0600 and no ACL grants.
 No application-level encryption claim. Test builds have a different bundle ID,
 disposable-home boundary and independent test trust; production updates disabled.
+LOCAL_TEST refuses physical microphone access in both the page shim and the native
+permission delegate. Its explicit test-menu action supplies only bundled authored
+synthetic PCM to the existing recorder; Whisper remains the actual packaged engine.
+Normal builds retain explicit human microphone/TCC behavior, separately verified.
 
 An inherited anonymous pipe carries bounded native commands and transient unlock
 codes. No credential is put in arguments, URLs, environment, diagnostics or files.

@@ -1,3 +1,5 @@
+import { nativeShell } from "./native-macos";
+
 export class PilotCallError extends Error {
   readonly code: string;
 
@@ -52,6 +54,8 @@ const MESSAGES = {
 const DISPLAYABLE_CODES: ReadonlySet<string> = new Set(Object.keys(MESSAGES));
 
 export function pilotErrorMessage(code: string): string {
+  if (nativeShell() && code === "PRIVATE_PROVIDER_ROUTE_UNAVAILABLE")
+    return "AI у цій збірці недоступний. Записи, творчість і локальний голос працюють без входу в акаунт.";
   return (
     MESSAGES[code as keyof typeof MESSAGES] ??
     "Дію не виконано. Перевірте локальний сервіс і повторіть спробу."

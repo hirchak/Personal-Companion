@@ -190,6 +190,22 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
             content.topAnchor.constraint(equalTo:bar.bottomAnchor,constant:10),content.bottomAnchor.constraint(equalTo:root.bottomAnchor)])
         let config=WKWebViewConfiguration();config.websiteDataStore = .nonPersistent()
         config.userContentController.add(self,name:"companion")
+        #if LOCAL_TEST
+        // No physical microphone access, even with a pre-existing TCC grant.
+        let syntheticMedia="""
+        (()=>{window.__pcSyntheticCapture=false;
+        navigator.mediaDevices.getUserMedia=async constraints=>{
+          if(!window.__pcSyntheticCapture||constraints.video)throw new DOMException('Synthetic test microphone denied','NotAllowedError');
+          const context=new AudioContext();const response=await fetch('/native-test-audio.wav');
+          const buffer=await context.decodeAudioData(await response.arrayBuffer());
+          const source=context.createBufferSource();source.buffer=buffer;source.loop=true;
+          const destination=context.createMediaStreamDestination();source.connect(destination);source.start();await context.resume();
+          const track=destination.stream.getAudioTracks()[0],stop=track.stop.bind(track);
+          track.stop=()=>{stop();source.stop();void context.close()};return destination.stream;
+        };})();
+        """
+        config.userContentController.addUserScript(WKUserScript(source:syntheticMedia,injectionTime:.atDocumentStart,forMainFrameOnly:true))
+        #endif
         web=WKWebView(frame:.zero,configuration:config);web.navigationDelegate=self;web.uiDelegate=self
         web.translatesAutoresizingMaskIntoConstraints=false
     }
@@ -218,6 +234,9 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         data.addItem(menuItem("Попередня програма",#selector(previousCode)))
         let helpItem=NSMenuItem();menu.addItem(helpItem);let help=NSMenu(title:"Допомога");helpItem.submenu=help
         help.addItem(menuItem("Коротка інструкція",#selector(guide)))
+        #if LOCAL_TEST
+        help.addItem(menuItem("Увімкнути synthetic PCM fixture",#selector(syntheticCapture)))
+        #endif
         NSApp.mainMenu=menu
     }
 
@@ -323,6 +342,13 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
     @objc func guide() {NSWorkspace.shared.open(bundle.appendingPathComponent("Contents/Resources/User Guide.md"))}
+    @objc func syntheticCapture() {
+        #if LOCAL_TEST
+        web.evaluateJavaScript("window.__pcSyntheticCapture=true")
+        state.stringValue="ORIGINAL SYNTHETIC PCM · фізичний мікрофон заборонений"
+        testEvent("synthetic-pcm-enabled")
+        #endif
+    }
     @objc func checkUpdates() {
         #if LOCAL_TEST
         // Conservatively refuse to discard any visible unsaved text or an active
@@ -377,10 +403,14 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         decisionHandler(.allow)
     }
     func webView(_ webView:WKWebView,requestMediaCapturePermissionFor origin:WKSecurityOrigin,initiatedByFrame frame:WKFrameInfo,type:WKMediaCaptureType,decisionHandler:@escaping(WKPermissionDecision)->Void) {
+        #if LOCAL_TEST
+        testEvent("physical-microphone-denied");decisionHandler(.deny);return
+        #else
         guard origin.protocol=="http",origin.host=="127.0.0.1",origin.port==port,type == .microphone else {decisionHandler(.deny);return}
         // WebKit's capture prompt occurs only following the existing explicit
         // microphone action. TCC is never requested at app launch.
         decisionHandler(.prompt)
+        #endif
     }
     func userContentController(_ userContentController:WKUserContentController,didReceive message:WKScriptMessage) {
         guard message.frameInfo.isMainFrame,message.frameInfo.securityOrigin.host=="127.0.0.1",

@@ -35,8 +35,12 @@ def fake(rt,isolated,scenario):
 def test_M3_A10_fake_process_exact_command_env_bounded_output(rt,isolated,scenario,state,error,monkeypatch):
     monkeypatch.setenv('OPENAI_API_KEY','SYNTHETIC-not-a-key')
     monkeypatch.setenv('GITHUB_TOKEN','SYNTHETIC-not-a-token')
-    provider=fake(rt,isolated,scenario);rt.timeout=.15
-    ref=entry(rt);_,j,_=execute(rt,[ref]);assert j['state']==state and j['error']==error
+    provider=fake(rt,isolated,scenario)
+    # Protocol/exit behavior allows ordinary interpreter-spawn jitter on M2/8GB.
+    # The intentional ten-second stall retains its original 150ms deadline.
+    # Production Runtime deadlines are unchanged.
+    rt.timeout=.15 if scenario=='timeout' else 1
+    ref=entry(rt);_,j,_=execute(rt,[ref]);assert (j['state'],j['error'])==(state,error)
     assert provider.last_spec['shell'] is False
     assert provider.last_spec['args'][1:3]==['-I','-S']
     assert set(provider.last_spec['env'])=={'PYTHONIOENCODING'}

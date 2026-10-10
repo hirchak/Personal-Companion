@@ -134,6 +134,10 @@ def build(args):
     shutil.copytree(payload,resources/'payload')
     (resources/'payload/native_entry.py').write_text(
         "import sys\nfrom pathlib import Path\nsys.dont_write_bytecode=True\nsys.path.insert(0,str(Path(__file__).resolve().parent))\nfrom apps.core.native_macos import main\nmain()\n")
+    if args.test_public_key:
+        fixture=ASR/'synthetic-ua-clear.wav'
+        if not fixture.is_file():raise SafeError('SYNTHETIC_AUDIO_FIXTURE_REQUIRED')
+        shutil.copyfile(fixture,resources/'payload/apps/web/dist/native-test-audio.wav')
     # Add entry to the accepted unsigned payload manifest without changing its schema.
     pm=dict(pm);pm['files']=release.file_hashes(resources/'payload');pm['manifest_hash']=release.identity(pm)
     (resources/'payload/release-manifest.json').write_text(encode(pm))
