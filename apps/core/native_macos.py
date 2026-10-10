@@ -122,6 +122,7 @@ class NativeSession:
         self.base = safe_path(base)
         self.kind = RootKind.PRIVATE_LOCAL
         self.settings = None
+        self.fresh_setup = False
         self.server = self.thread = self.application = None
         self.data_lock = self.instance = None
         self.port = None
@@ -131,6 +132,14 @@ class NativeSession:
     def _open(self):
         from .local_private import owner_only
         owner_only(self.base)
+        if not (self.base/'native-managed.json').exists() and (self.base/'native-initializing.json').is_file():
+            marker=r.read_json(self.base/'native-initializing.json')
+            names={p.name for p in self.base.iterdir()}
+            if (marker!={'format':1,'root_kind':'PRIVATE_LOCAL','empty_setup_only':True}
+                    or names-{'native-initializing.json','native-instance.lock','backups'}
+                    or ((self.base/'backups').exists() and any((self.base/'backups').iterdir()))):
+                raise SafeError('NATIVE_ROOT_INVALID')
+            self.fresh_setup=True;self._instance_lock();return
         s = r.read_json(self.base/'native-managed.json')
         if set(s) != {'format', 'root_kind', 'active_app', 'active_data', 'highwater'} or s['format'] != 1:
             raise SafeError('NATIVE_ROOT_INVALID')
@@ -167,16 +176,23 @@ class NativeSession:
     def initialize(self, consent=False, no_cloud=False):
         if consent is not True or no_cloud is not True:
             raise SafeError('NATIVE_CONSENT_REQUIRED')
-        if self.settings is not None or self.base.exists():
+        if self.settings is not None or (self.base.exists() and not self.fresh_setup):
             raise SafeError('NATIVE_ROOT_INVALID')
         from .local_private import CONSENT, require_volume, owner_only
         parent = self.base.parent
         if not parent.is_dir():
             raise SafeError('NATIVE_ROOT_INVALID')
-        require_volume(parent)
-        self.base.mkdir(mode=0o700)
+        # Check only this explicitly created, empty managed container. Passing
+        # shared Application Support/the test home to safe_path would traverse
+        # unrelated siblings and legitimate installed-code symlinks.
+        if not self.base.exists():
+            self.base.mkdir(mode=0o700)
+            durable_write(self.base/'native-initializing.json',encode({
+                'format':1,'root_kind':'PRIVATE_LOCAL','empty_setup_only':True}).encode())
         self._instance_lock()
-        backups = self.base/'backups'; backups.mkdir(mode=0o700)
+        require_volume(self.base)
+        backups = self.base/'backups'
+        if not backups.exists():backups.mkdir(mode=0o700)
         self.app, self.data = self.base/'runtime', self.base/'vault'
         try:
             r.initialize_private(self.package, self.manifest['manifest_hash'], self.app, self.data,
@@ -184,6 +200,8 @@ class NativeSession:
             self.settings = {'format':1, 'root_kind':'PRIVATE_LOCAL', 'active_app':'runtime',
                              'active_data':'vault', 'highwater':self.native['build']}
             self._save_settings()
+            (self.base/'native-initializing.json').unlink();fsync_dir(self.base)
+            self.fresh_setup=False
             owner_only(self.base)
         except BaseException:
             # No existing root is deleted or permissions repaired. A failed fresh

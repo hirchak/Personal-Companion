@@ -21,6 +21,37 @@ from apps.core.native_macos import validate_bundle, PRODUCT, CHANNEL
 from scripts.build_m8f import build, SPARKLE_DIR
 
 
+def packaged_isolation(app, work):
+    """Fresh own sentinels under the actual relocated Whisper profile."""
+    from apps.core.native_macos import BundledWhisper
+    engine=BundledWhisper(app,False)
+    inside=work/'isolation';inside.mkdir(mode=0o700)
+    sentinel=work/'ORIGINAL_SYNTHETIC_OUTSIDE_SENTINEL.txt';sentinel.write_text('ORIGINAL SYNTHETIC')
+    source=inside/'probe.c'
+    source.write_text('''#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <errno.h>
+int main(int argc,char **argv){int r=open(argv[1],O_RDONLY);int w=open(argv[2],O_WRONLY|O_CREAT,0600);
+int s=socket(AF_INET,SOCK_STREAM,0);int se=errno;struct sockaddr_in a={.sin_family=AF_INET,.sin_port=htons(1)};
+inet_pton(AF_INET,"127.0.0.1",&a.sin_addr);int n=connect(s,(struct sockaddr*)&a,sizeof(a));
+int denied=(s<0&&se==1)||(n<0&&errno==1);printf("read=%d write=%d network_denied=%d\\n",r>=0,w>=0,denied);return 0;}
+''')
+    probe=inside/'probe';subprocess.run(['/usr/bin/clang',str(source),'-o',str(probe)],check=True,capture_output=True)
+    profile=inside/'sandbox.sb'
+    profile.write_text(engine.profile(inside)+'\n(allow process-exec (literal '+json.dumps(str(probe))+'))\n')
+    rows=[]
+    for label,target in [('inside',source),('outside',sentinel)]:
+        result=subprocess.run(['/usr/bin/sandbox-exec','-f',str(profile),str(probe),str(target),str(sentinel)+'.write'],capture_output=True,text=True,timeout=10)
+        assert result.returncode==0 and ('read=1' if label=='inside' else 'read=0') in result.stdout
+        assert 'write=0' in result.stdout and 'network_denied=1' in result.stdout
+        rows.append({'case':label,'read_allowed':label=='inside','outside_write_denied':True,'network_denied':True})
+    return {'status':'PASS','actual_packaged_profile':True,'synthetic_sentinels_only':True,
+            'engine_sha256':engine.binary_hash,'checks':rows}
+
+
 def make_feed(work, mode='valid'):
     meta=validate_bundle(REPO/'generated/m8f/B/Personal Companion.app')
     archive=work/'feed/B.zip'
@@ -103,10 +134,14 @@ def lifecycle():
     work=Path(tempfile.mkdtemp(prefix='m8f-packaged-original-synthetic-',dir='/private/tmp'))
     base=work/'Standalone';checks={};times={}
     started=time.monotonic();runtime=PipeRuntime(app,base)
+    times['embedded_bootstrap_ms']=round((time.monotonic()-started)*1000,2)
     try:
+        checks['packaged_isolation']=packaged_isolation(app,work)
         assert runtime.call('status')['initialized'] is False and not base.exists()
-        runtime.call('initialize',consent=True,no_cloud=True)
-        status=runtime.call('start');times['cold_core_ms']=round((time.monotonic()-started)*1000,2)
+        started=time.monotonic();runtime.call('initialize',consent=True,no_cloud=True)
+        times['explicit_initialization_ms']=round((time.monotonic()-started)*1000,2)
+        started=time.monotonic();status=runtime.call('start')
+        times['core_start_ms']=round((time.monotonic()-started)*1000,2)
         auth=runtime.call('unlock');origin=f'http://127.0.0.1:{auth["port"]}'
         client=httpx.Client(base_url=origin,headers={'Origin':origin,'X-PC-Build':m['source_sha']},timeout=30)
         unlocked=client.post('/api/v1/auth/unlock',json={'code':auth['code']});assert unlocked.status_code==200

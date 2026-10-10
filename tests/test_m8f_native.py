@@ -49,9 +49,32 @@ def test_first_run_needs_exact_consent_and_never_reinitializes(native):
 
 def test_root_unknown_and_existing_permissions_are_not_repaired(native):
     native.base.mkdir(mode=0o755)
+    native.base.chmod(0o755)  # Process umask may already be 077 after other private fixtures.
     (native.base/'ORIGINAL_SYNTHETIC_UNKNOWN.txt').write_text('ORIGINAL SYNTHETIC')
     with pytest.raises(SafeError,match='PERMISSIONS_REQUIRED'):n.NativeSession(native.bundle,native.base)
     assert native.base.stat().st_mode & 0o777 == 0o755
+
+
+def test_initialization_never_scans_application_support_siblings(native):
+    sibling=native.base.parent/'OTHER_ORIGINAL_SYNTHETIC_APP';sibling.mkdir()
+    (sibling/'legitimate-code-link').symlink_to(native.bundle)
+    native.initialize(True,True)
+    assert r.inspect_data(native.data,RootKind.PRIVATE_LOCAL)==11
+
+
+def test_empty_failed_volume_setup_can_retry_with_new_explicit_consent(native,monkeypatch):
+    from apps.core import local_private as p
+    monkeypatch.setattr(p,'volume_protection',lambda _: 'SECURITY_REQUIREMENT_NOT_MET')
+    with pytest.raises(SafeError,match='VOLUME_PROTECTION_REQUIRED'):native.initialize(True,True)
+    assert not (native.base/'vault').exists()
+    native.close()
+    reopened=n.NativeSession(native.bundle,native.base)
+    try:
+        with pytest.raises(SafeError,match='CONSENT_REQUIRED'):reopened.initialize(False,True)
+        monkeypatch.setattr(p,'volume_protection',lambda _: 'PASS')
+        reopened.initialize(True,True)
+        assert reopened.status()['initialized']
+    finally:reopened.close()
 
 
 @pytest.mark.parametrize('change',[{'product':'other'},{'channel':'production'},{'arch':'x86_64'},

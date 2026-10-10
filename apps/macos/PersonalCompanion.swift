@@ -94,6 +94,7 @@ final class Backend {
 
 final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SPUUpdaterDelegate {
     let bundle = Bundle.main.bundleURL
+    let openedAt = ProcessInfo.processInfo.systemUptime
     var base: URL!
     var backend: Backend?
     var window: NSWindow!
@@ -158,7 +159,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         do {try updater!.start()} catch {state.stringValue="Локальний канал оновлень недоступний."}
         #endif
         window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps:true)
-        testEvent("window-ready")
+        testEvent("window-ready",["process_to_window_ms":Int((ProcessInfo.processInfo.systemUptime-openedAt)*1000)])
     }
 
     func buildWindow() {
@@ -330,6 +331,7 @@ final class Companion: NSObject, NSApplicationDelegate, WKNavigationDelegate, WK
         web.callAsyncJavaScript(check,arguments:[:],in:nil,in:.page) {result in
             if case .success(let value)=result,value as? Bool == false {
                 // No new drafts/capture may begin between check and quiescence.
+                _=try? self.backend?.call("lock")
                 self.web.isHidden=true;self.openButton.isEnabled=false
                 self.window.makeFirstResponder(nil);self.updater?.checkForUpdates()
             }
