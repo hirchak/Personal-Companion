@@ -1,0 +1,49 @@
+{
+  "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b",
+  "public_images_committed": false,
+  "scope": "C10_ONLY_ORIGINAL_SYNTHETIC_TEST_SCREENSHOTS",
+  "screenshots": [
+    {
+      "path": "generated/m8f/ui/backup-completed-C10.png",
+      "sha256": "c2fca726f104f9b9c61bf134980673a3b9dfeae0c27e8f5e77d4c7cf4997f18f"
+    },
+    {
+      "path": "generated/m8f/ui/consent-C10.png",
+      "sha256": "cb8a1a65cefb5a016471fe220eb7760c33ecf661f047489725ae03a5ebb83260"
+    },
+    {
+      "path": "generated/m8f/ui/post-update-C10.png",
+      "sha256": "0f422217c6259ef233be71bd9455efe55d0bd980d03a4b6b0eb615035f051a8a"
+    },
+    {
+      "path": "generated/m8f/ui/truncated-download-C10.png",
+      "sha256": "7fb63f32f2962ffd664e3bac4579ef61ddd247289879c2f552ce445f2c364be4"
+    },
+    {
+      "path": "generated/m8f/ui/update-busy-C10.png",
+      "sha256": "9f6da5a2393ed1bbe47cd90c17d4a039812551240306a3013cdfe72e200f06de"
+    },
+    {
+      "path": "generated/m8f/ui/update-confirm-C10.png",
+      "sha256": "6457d359bb227efcfcec8c327294c17c33f1bd63f335c14b8c0c92bc2ce16025"
+    },
+    {
+      "path": "generated/m8f/ui/update-error-C10.png",
+      "sha256": "ef07d46c3eef74841fa7f503193d55e19d3c54e7c3247cc8be64243e4894c5b7"
+    },
+    {
+      "path": "generated/m8f/ui/update-error-settled-C10.png",
+      "sha256": "4a77f5867b97271b3c7ae264cbf62ec0cecfd564e58263c298d379ef384ead61"
+    },
+    {
+      "path": "generated/m8f/ui/voice-draft-C10.png",
+      "sha256": "e9b1b93470db0770569948337709e276c122990b3549ad3db5dde3a6a93f1668"
+    },
+    {
+      "path": "generated/m8f/ui/voice-explicit-save-C10.png",
+      "sha256": "078e037cbfb00e1aa817421783370d5ac5f3aca2ce6a32d8a6d58b3c80295b34"
+    }
+  ],
+  "capture_recapture": "Backup completed titlebar was malformed during full-screen transition; replaced with settled valid capture before reviewer verdict",
+  "prior_C8_incident_captures": "EXCLUDED_NOT_USED"
+}

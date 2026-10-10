@@ -1,0 +1,52 @@
+{
+  "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+  "checks": {
+    "interrupted-download-C10.json": {
+      "case": "REAL_SPARKLE_TRUNCATED_DOWNLOAD",
+      "data_db_hash_unchanged": true,
+      "new_build_not_installed": true,
+      "old_build": 101,
+      "one_update_click": true,
+      "pending_target_not_activated": true,
+      "previous_code_available": true,
+      "scope": "NEW_EMPTY_ORIGINAL_SYNTHETIC_NATIVE_ROOT",
+      "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b",
+      "status": "FAIL_CLOSED_PASS",
+      "vault_identity_preserved": true,
+      "verified_preupdate_backup": true
+    },
+    "wrong-product-C10.json": {
+      "case": "ACTUAL_SIGNED_WRONG_PRODUCT_FEED",
+      "scope": "ORIGINAL_SYNTHETIC_NATIVE_A",
+      "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b",
+      "status": "REJECTED_BEFORE_NEW_BACKUP_PASS"
+    },
+    "concurrency-C10.json": {
+      "actual_embedded_second_process": "ALREADY_RUNNING",
+      "original_diagnostic_assertion_error": "EXPECTED_WRONG_ERROR_PREFIX_CORRECTED_NOT_SOURCE_CHANGE",
+      "scope": "SAME_ORIGINAL_SYNTHETIC_NATIVE_ROOT",
+      "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b",
+      "status": "PASS"
+    },
+    "offline-downgrade-C10.json": {
+      "backup_count_unchanged": true,
+      "downgrade_signed_feed": "NO_NEW_VERSION_PRIOR_APP_AVAILABLE",
+      "local_feed_stopped": true,
+      "offline_feed": "NATIVE_ERROR_PRIOR_APP_DATA_RETAINED",
+      "scope": "ORIGINAL_SYNTHETIC_NATIVE_A",
+      "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b"
+    },
+    "quit-C10.json": {
+      "incident_root_absent": true,
+      "native_quit_processes_remaining": 0,
+      "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b"
+    }
+  },
+  "mechanistic_native_tests": 20,
+  "future_schema_migration": "BLOCKED_UNTIL_REVIEWED_PLAN",
+  "disk_full_and_interrupted_preparation": "DETERMINISTIC_FAULT_INJECTION",
+  "kill_during_atomic_sparkle_swap": "NOT_RUN",
+  "higher_successful_build_ordinary_downgrade": "REFUSED_NOT_AUTOMATIC_DATA_ROLLBACK",
+  "checks_scope": "Prior C10 actual native negative receipts retained individually with own source; C11 actual signer/archive/target activation/instance mechanisms rerun separately",
+  "collapsed_voice_browser_test": 1
+}

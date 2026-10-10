@@ -1,0 +1,26 @@
+{
+  "base_sha": "f32038f62e276400c41fb21c76ce753316b7aaa7",
+  "actual_initial_origin_main": "f32038f62e276400c41fb21c76ce753316b7aaa7",
+  "last_reviewed_sha": "8b0a06442e339a553072ca32851b2f5dea6fb73c",
+  "implementation_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+  "branch": "main",
+  "initial_tree": "ONLY_OWNER_M8F_PROMPT_UNTRACKED",
+  "executor": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "verification": "INSTALLED_CODEX_CONFIG_AND_OWN_TURN_METADATA",
+  "plan_mode": "OFF",
+  "hardware": {
+    "model": "Mac14,15",
+    "chip": "Apple M2",
+    "ram_bytes": 8589934592,
+    "macos": "27.0",
+    "build": "26A428",
+    "architecture": "arm64"
+  },
+  "requested_M2_16GB": "NOT_VERIFIED_ACTUAL_HOST_8GB",
+  "minimum_macos": "14.0_DECLARED_NOT_TESTED",
+  "intel": "NOT_VERIFIED",
+  "python": "3.13.2",
+  "privacy_boundary": "NO_OWNER_PILOT_OR_VAULT_ACCESS",
+  "prior_c10": "af24526d1a5703dbbb197c5b8487360714c5d92b"
+}

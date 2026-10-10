@@ -1,0 +1,11 @@
+{
+  "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+  "known_negative_count": 24,
+  "known_negative_excluded": 24,
+  "positive_count": 32,
+  "positive_released": 32,
+  "live_calls": 0,
+  "origin": "ORIGINAL_SCRIPTED_FIXTURE_NOT_LIVE_MODEL",
+  "general_semantic_safety": "OPEN",
+  "qualified_clinical_review": "NOT_RUN"
+}

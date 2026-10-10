@@ -11,7 +11,7 @@ review_branch: null
 historical_review_branch: review/m0-bootstrap
 baseline_sha: cfd496119e07689e389691bb0644624f30a939cb
 current_goal_base_sha: f32038f62e276400c41fb21c76ce753316b7aaa7
-implementation_sha: null
+implementation_sha: 23bcb16a0d33e4d86377ad60c4fcce216f8c808d
 accepted_product_sha: 55b4d3d82e887f59ea4dcf1f8f167aea52d39b1d
 accepted_review_sha: 519bac8f77965ae7165ff536391dd75f19af284b
 report_path: reports/M8F_MACOS_APP_REPORT.md
@@ -20,8 +20,8 @@ current_milestone: M8F
 current_goal: M8F_STANDALONE_MACOS_APP_SAFE_UPDATES
 current_goal_path: prompts/M8F_MACOS_APP_INSTALLER_UPDATES.md
 current_contract_path: docs/M8F_CONTRACT.md
-implementation_status: IN_PROGRESS
-review_status: IN_PROGRESS
+implementation_status: AWAITING_REVIEW
+review_status: AWAITING_REVIEW
 accepted_product_status: ACCEPTED
 owner_pilot_activation_status: ACTIVE_OWNER_AUTHORIZED_C6
 owner_pilot_activation_last_checked: 2026-10-08_FINAL_C6_RUNNING
@@ -40,21 +40,31 @@ deployment_authorized: false
 paid_or_subscription_calls_authorized: false
 ---
 
-# M8F — IN_PROGRESS
+# M8F — AWAITING_REVIEW
 
-Owner issued standalone macOS + safe updates goal; actual base/origin f32038f verified.
-Actual executor GPT-6.1 Sol/High; Plan Mode OFF. Push main authorized; merge/deploy/provider/data not authorized.
-Native AppKit/WKWebView, real relocated Python13, runtime-only dependencies, UI, Whisper and Sparkle2.10.0
-are implemented. Owner separately authorized project-local Sparkle download/integration. Local C8 app/DMG
-and packaged core/ASR/isolation/backup/restore passed; final corrected C9 artifacts/checks pending.
-Actual hardware Mac14,15 / Apple M2 / 8GB / macOS27, not the requested16GB reference.
+Final C11 23bcb16a0d33e4d86377ad60c4fcce216f8c808d; base/origin f32038f.
+Actual Sol6.1/High, Plan OFF. Real standalone development-C11/A/B app/DMG with
+embedded Python/UI/Whisper, protected empty-root onboarding and one-click signed
+local Sparkle A101→B102 verified;2 notes/1message/1authored WAV/identity preserved.
+Final full1042 PASS with unchanged-assertion failure observer;web53/targeted21/Q03
+bad24+positive32/schema/qualification/admission/build/typecheck PASS in stated scopes.
+Prior standard C10 flakes OPEN, not erased. C11 GUI fixture start stuck/canceled
+NOT_PASS;actual packaged C11 ASR PASS,prior C10 GUI voice PASS retained at own source.
+Actual M2/8GB/macOS27;requested16GB/normal auth/physical mic/olderOS/atomic-swap kill unverified.
 
-C8 microphone test unexpectedly captured possible non-synthetic audio locally and ASR ran; no provider
-inference/upload/Git content. Candidate stopped, root excluded and deleted without reading file content
-after exact scoped owner authorization. Incident is retained in final report, not relabeled synthetic.
-C9 LOCAL_TEST denies physical microphone at both native and page layers; an explicit menu uses only
-authored bundled synthetic PCM. Existing owner pilot/vault was never inspected or modified.
+Report reports/M8F_MACOS_APP_REPORT.md; matrix reports/evidence/M8F/ACCEPTANCE_MATRIX.md.
+C11 unsaved voice Boolean guard covers STARTING/RECORDING/SAVING/memory draft and
+hidden legacy producer;legacy hidden in PRIVATE_LOCAL. Native STARTING refusal
+prebackup/pending verified. Code/data recovery distinct;incompatible migration blocked.
+UI review/documentation continuation preserved prior two resolved fixes/incumbent identity.
 
-Next: final clean exact-C build, original-synthetic native Finder/GUI one-button A→B/signature negatives,
-full checks, independent UI review, evidence-only R/privacy scan/normalFF main/remote equality.
-Clinical/five specialists/Health/phone/cloud/telemetry OFF; AI unavailable/defaultOFF. No next milestone.
+C8 possible non-synthetic physical capture/local ASR/accessibility output was a
+material scope incident;exact root removed without reads after owner permission.
+Tool history not erased;not reused/uploaded/committed. Final test profile physically
+denies input and uses only authored PCM. Real owner pilot/vault untouched;fields
+above are historical activation checkpoints,not a fresh M8F check.
+
+Production signing/notarization/key/channel/host/data-owner activation separate gates.
+Clinical/5 specialists/Health/phone/sync/telemetry OFF;provider calls0;AI unavailable/OFF.
+Evidence-only R/normalFF/remote equality finalized after commit. Next independent
+exact C/R review;no next milestone authorized/started. No independent ACCEPT.

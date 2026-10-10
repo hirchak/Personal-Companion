@@ -1,0 +1,306 @@
+{
+  "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+  "artifacts": [
+    {
+      "build": 102,
+      "dmg_sha256": "8e9b6d3899b2e82fa9d81d3e4850f7ceed53d48f96e134536e6d044cece6d1b1",
+      "manifest_hash": "e74845d4a7e999adaaa421936f2a4ecd72719debc72e63dbb8d555f0f6b0aefa",
+      "production_notarization": "NOT_RUN",
+      "profile": "DEVELOPMENT",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "status": "DEVELOPMENT_LOCAL_ONLY",
+      "variant": "development-C11",
+      "app_path": "generated/m8f/development-C11/Personal Companion.app",
+      "dmg_path": "generated/m8f/development-C11/Personal Companion.dmg",
+      "app_file_bytes": 545784446,
+      "dmg_file_bytes": 481698538,
+      "runtime_inventory": [
+        {
+          "licence_files": [
+            "annotated_types-0.8.0.dist-info/licenses/LICENSE"
+          ],
+          "name": "annotated-types",
+          "version": "0.8.0"
+        },
+        {
+          "licence_files": [
+            "anyio-4.15.1.dist-info/licenses/LICENSE"
+          ],
+          "name": "anyio",
+          "version": "4.15.1"
+        },
+        {
+          "licence_files": [
+            "click-8.5.0.dist-info/licenses/LICENSE.txt"
+          ],
+          "name": "click",
+          "version": "8.5.0"
+        },
+        {
+          "licence_files": [
+            "fastapi-0.115.12.dist-info/licenses/LICENSE"
+          ],
+          "name": "fastapi",
+          "version": "0.115.12"
+        },
+        {
+          "licence_files": [
+            "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+          ],
+          "name": "h11",
+          "version": "0.16.0"
+        },
+        {
+          "licence_files": [
+            "idna-3.20.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "idna",
+          "version": "3.20"
+        },
+        {
+          "licence_files": [
+            "pydantic-2.11.3.dist-info/licenses/LICENSE"
+          ],
+          "name": "pydantic",
+          "version": "2.11.3"
+        },
+        {
+          "licence_files": [
+            "pydantic_core-2.33.1.dist-info/licenses/LICENSE"
+          ],
+          "name": "pydantic_core",
+          "version": "2.33.1"
+        },
+        {
+          "licence_files": [
+            "starlette-0.46.2.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "starlette",
+          "version": "0.46.2"
+        },
+        {
+          "licence_files": [
+            "typing_inspection-0.4.4.dist-info/licenses/LICENSE"
+          ],
+          "name": "typing-inspection",
+          "version": "0.4.4"
+        },
+        {
+          "licence_files": [
+            "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+          ],
+          "name": "typing_extensions",
+          "version": "4.16.0"
+        },
+        {
+          "licence_files": [
+            "uvicorn-0.34.2.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "uvicorn",
+          "version": "0.34.2"
+        }
+      ]
+    },
+    {
+      "build": 101,
+      "dmg_sha256": "95d988e802e1bf06d17c48900204516b96d00e22dc2be3ae04357b1801336a5e",
+      "manifest_hash": "8fd146f61175775a1100accad775117c633bd30acefcd1aa2d5eb9d2fd59208d",
+      "production_notarization": "NOT_RUN",
+      "profile": "LOCAL_TEST",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "status": "DEVELOPMENT_LOCAL_ONLY",
+      "variant": "A",
+      "app_path": "generated/m8f/A/Personal Companion.app",
+      "dmg_path": "generated/m8f/A/Personal Companion.dmg",
+      "app_file_bytes": 545927369,
+      "dmg_file_bytes": 480786103,
+      "runtime_inventory": [
+        {
+          "licence_files": [
+            "annotated_types-0.8.0.dist-info/licenses/LICENSE"
+          ],
+          "name": "annotated-types",
+          "version": "0.8.0"
+        },
+        {
+          "licence_files": [
+            "anyio-4.15.1.dist-info/licenses/LICENSE"
+          ],
+          "name": "anyio",
+          "version": "4.15.1"
+        },
+        {
+          "licence_files": [
+            "click-8.5.0.dist-info/licenses/LICENSE.txt"
+          ],
+          "name": "click",
+          "version": "8.5.0"
+        },
+        {
+          "licence_files": [
+            "fastapi-0.115.12.dist-info/licenses/LICENSE"
+          ],
+          "name": "fastapi",
+          "version": "0.115.12"
+        },
+        {
+          "licence_files": [
+            "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+          ],
+          "name": "h11",
+          "version": "0.16.0"
+        },
+        {
+          "licence_files": [
+            "idna-3.20.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "idna",
+          "version": "3.20"
+        },
+        {
+          "licence_files": [
+            "pydantic-2.11.3.dist-info/licenses/LICENSE"
+          ],
+          "name": "pydantic",
+          "version": "2.11.3"
+        },
+        {
+          "licence_files": [
+            "pydantic_core-2.33.1.dist-info/licenses/LICENSE"
+          ],
+          "name": "pydantic_core",
+          "version": "2.33.1"
+        },
+        {
+          "licence_files": [
+            "starlette-0.46.2.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "starlette",
+          "version": "0.46.2"
+        },
+        {
+          "licence_files": [
+            "typing_inspection-0.4.4.dist-info/licenses/LICENSE"
+          ],
+          "name": "typing-inspection",
+          "version": "0.4.4"
+        },
+        {
+          "licence_files": [
+            "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+          ],
+          "name": "typing_extensions",
+          "version": "4.16.0"
+        },
+        {
+          "licence_files": [
+            "uvicorn-0.34.2.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "uvicorn",
+          "version": "0.34.2"
+        }
+      ]
+    },
+    {
+      "build": 102,
+      "dmg_sha256": "df0146e802d4211f26b93b39125ff4348a1b4f8dcd177f71069403589f9e32ac",
+      "manifest_hash": "be6184632e988c4787daf015c63818c7d47833e8b145641ea0d3df8d2ea19a91",
+      "production_notarization": "NOT_RUN",
+      "profile": "LOCAL_TEST",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "status": "DEVELOPMENT_LOCAL_ONLY",
+      "variant": "B",
+      "app_path": "generated/m8f/B/Personal Companion.app",
+      "dmg_path": "generated/m8f/B/Personal Companion.dmg",
+      "app_file_bytes": 545927369,
+      "dmg_file_bytes": 477478899,
+      "runtime_inventory": [
+        {
+          "licence_files": [
+            "annotated_types-0.8.0.dist-info/licenses/LICENSE"
+          ],
+          "name": "annotated-types",
+          "version": "0.8.0"
+        },
+        {
+          "licence_files": [
+            "anyio-4.15.1.dist-info/licenses/LICENSE"
+          ],
+          "name": "anyio",
+          "version": "4.15.1"
+        },
+        {
+          "licence_files": [
+            "click-8.5.0.dist-info/licenses/LICENSE.txt"
+          ],
+          "name": "click",
+          "version": "8.5.0"
+        },
+        {
+          "licence_files": [
+            "fastapi-0.115.12.dist-info/licenses/LICENSE"
+          ],
+          "name": "fastapi",
+          "version": "0.115.12"
+        },
+        {
+          "licence_files": [
+            "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+          ],
+          "name": "h11",
+          "version": "0.16.0"
+        },
+        {
+          "licence_files": [
+            "idna-3.20.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "idna",
+          "version": "3.20"
+        },
+        {
+          "licence_files": [
+            "pydantic-2.11.3.dist-info/licenses/LICENSE"
+          ],
+          "name": "pydantic",
+          "version": "2.11.3"
+        },
+        {
+          "licence_files": [
+            "pydantic_core-2.33.1.dist-info/licenses/LICENSE"
+          ],
+          "name": "pydantic_core",
+          "version": "2.33.1"
+        },
+        {
+          "licence_files": [
+            "starlette-0.46.2.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "starlette",
+          "version": "0.46.2"
+        },
+        {
+          "licence_files": [
+            "typing_inspection-0.4.4.dist-info/licenses/LICENSE"
+          ],
+          "name": "typing-inspection",
+          "version": "0.4.4"
+        },
+        {
+          "licence_files": [
+            "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+          ],
+          "name": "typing_extensions",
+          "version": "4.16.0"
+        },
+        {
+          "licence_files": [
+            "uvicorn-0.34.2.dist-info/licenses/LICENSE.md"
+          ],
+          "name": "uvicorn",
+          "version": "0.34.2"
+        }
+      ]
+    }
+  ],
+  "binary_publication": false
+}

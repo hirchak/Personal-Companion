@@ -1,0 +1,214 @@
+{
+  "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+  "environment": "ACTUAL_MAC14_15_M2_8GB_MACOS27_ARM64_PYTHON3_13_2_EXISTING_NODE_CHROMIUM_CLT",
+  "overall_status": "READY_FOR_OWNER_REVIEW_TEST_SIGNED_LOCAL_ONLY_WITH_LIMITS",
+  "standard_full_flakes": "PRIOR_C10_OPEN_NO_ERASURE",
+  "observed_encrypted_swap_used_mib": 11322.94,
+  "resource_pressure_causality": "PLAUSIBLE_NOT_PROVED",
+  "CI": "NOT_CHECKED_NO_REPOSITORY_WORKFLOW_CONFIGURED",
+  "production_signing_notarization": "NOT_RUN",
+  "runtime_provider_calls": 0,
+  "prior_c10_checks": [
+    {
+      "command": "PYTHONPATH=\"$PWD/generated/m8f:$PWD\" PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q -x -p diag_m4 --tb=short",
+      "exit_code": 0,
+      "result": "1041 PASS; 857.38s; unchanged original assertions; failure-only observer plugin",
+      "log": "generated/m8f/full-C10-diagnostic-3.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q --tb=short",
+      "exit_code": 1,
+      "result": "1039 PASS / 2 FAIL; 816.99s; FLAKY_STANDARD_REGRESSION_OPEN",
+      "log": "generated/m8f/full-C10-final-serial.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q 'tests/test_m3_process.py::test_M3_A10_fake_process_exact_command_env_bounded_output[oversized-FAILED-OUTPUT_LIMIT]' 'tests/test_m4_browser.py::test_M4_browser_recording_interruptions[track]' --tb=short",
+      "exit_code": 0,
+      "result": "2 PASS; 11.57s; same C, no change; does not erase full failures",
+      "log": "generated/m8f/final-two-recheck-C10.log"
+    },
+    {
+      "command": "npm --prefix apps/web test -- --maxWorkers=1 --no-file-parallelism",
+      "exit_code": 0,
+      "result": "53 PASS; original five-second test deadlines unchanged",
+      "log": "generated/m8f/web-tests-C10-isolated.log"
+    },
+    {
+      "command": "npm --prefix apps/web test",
+      "exit_code": 1,
+      "result": "52 PASS / 1 timeout; original failure retained",
+      "log": "generated/m8f/web-tests-C10-serial.log"
+    },
+    {
+      "command": "PYTHONPATH=\"$PWD/generated/m8f:$PWD\" PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q -x -p diag_media tests/test_m4_browser.py tests/test_m8e_browser.py::test_offline_composer_audio_encrypted_reload_no_transport --tb=short",
+      "exit_code": 0,
+      "result": "9 PASS; 64.15s; observational fake-media diagnostics, no physical capture",
+      "log": "generated/m8f/media-diagnostic-all-C10.log"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_m8f_native.py",
+      "exit_code": 0,
+      "result": "20 PASS; 12.25s",
+      "log": "generated/m8f/native-C10.log"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.verify_m8f lifecycle",
+      "exit_code": 0,
+      "result": "Actual packaged core/Whisper/isolation/backup/restart/fresh restore PASS",
+      "log": "generated/m8f/packaged-lifecycle-C10.log"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.verify_m8f prepare",
+      "exit_code": 0,
+      "result": "Actual LOCAL_TEST A101/B102 app/DMG and independently signed feed/archive",
+      "log": "generated/m8f/prepare-C10.log"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.build_m8f --build 102 --output generated/m8f/development --dmg",
+      "exit_code": 0,
+      "result": "Actual development app/DMG, web tsc/vite build and embedded runtime probe",
+      "log": "generated/m8f/development-C10.log"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.build_m8f --build 102 --without-asr --output generated/m8f/no-asr --dmg",
+      "exit_code": 0,
+      "result": "Real optional-no-ASR package and separate embedded backend smoke",
+      "log": "generated/m8f/no-asr-C10.log"
+    },
+    {
+      "command": "xcrun swiftc -typecheck -target arm64-apple-macos14.0 -D LOCAL_TEST -F generated/m8f/dependencies/Sparkle-2.10.0 -module-cache-path generated/m8f/swift-cache apps/macos/PersonalCompanion.swift",
+      "exit_code": 0,
+      "result": "Swift native typecheck PASS",
+      "log": "generated/m8f/swift-C10-final.log"
+    },
+    {
+      "command": ".venv/bin/python scripts/audit_m8e_q03.py --output generated/m8f/Q03-C10.json",
+      "exit_code": 0,
+      "result": "24/24 known bad excluded; 32/32 ordinary authored positives released; live calls0",
+      "log": "generated/m8f/Q03-C10.log"
+    },
+    {
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "result": "7 independent Ajv checks",
+      "log": "generated/m8f/schemas-m7a-C10.log"
+    },
+    {
+      "command": "node scripts/verify_m7c_schemas.mjs",
+      "exit_code": 0,
+      "result": "12 independent Ajv checks",
+      "log": "generated/m8f/schemas-m7c-C10.log"
+    },
+    {
+      "command": "node scripts/verify_m7d_schemas.mjs",
+      "exit_code": 0,
+      "result": "14 independent Ajv checks",
+      "log": "generated/m8f/schemas-m7d-C10.log"
+    },
+    {
+      "command": "PYTHONPATH=. .venv/bin/python scripts/qualify_m7d_skills.py --check",
+      "exit_code": 0,
+      "result": "5 CANDIDATE/OFF; runtime_instructions null; clinical0",
+      "log": "generated/m8f/qualification-C10.log"
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "result": "Canonical admission preserved; clinical0",
+      "log": "generated/m8f/admission-C10.log"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_privacy.py --include-generated",
+      "exit_code": 0,
+      "result": "C10 PASS; all local Git objects incl unreachable/staged + snapshot/built UI",
+      "log": "generated/m8f/privacy-C10.json"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_docs.py --json",
+      "exit_code": 0,
+      "result": "C10 PASS",
+      "log": "generated/m8f/docs-C10.json"
+    }
+  ],
+  "native_gui_fixture_start": "C11_NOT_PASS_STUCK_STARTING_CANCELED_C10_PRIOR_VOICE_PASS_NOT_MISATTRIBUTED",
+  "checks": [
+    {
+      "command": "PYTHONPATH=\"$PWD/generated/m8f:$PWD\" PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q -p diag_m4 --tb=short",
+      "exit_code": 0,
+      "result": "1042 PASS;939.38s; one existing warning; original assertions unchanged",
+      "log": "generated/m8f/full-C11.log"
+    },
+    {
+      "command": "npm --prefix apps/web test -- --maxWorkers=1 --no-file-parallelism",
+      "exit_code": 0,
+      "result": "53 PASS;11.94s",
+      "log": "generated/m8f/web-tests-C11.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q tests/test_m8f_browser.py tests/test_m8f_native.py --tb=short",
+      "exit_code": 0,
+      "result": "21 PASS;21.80s; new collapsed legacy recorder predicate contract",
+      "log": "generated/m8f/guard-C11-pre.log"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.verify_m8f prepare",
+      "exit_code": 0,
+      "result": "Exact clean-C11 A/B app/DMG and signed local feed",
+      "log": "generated/m8f/prepare-C11.log"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.verify_m8f lifecycle",
+      "exit_code": 0,
+      "result": "Actual embedded core/Whisper/sandbox/backup/restart/fresh restore PASS",
+      "log": "generated/m8f/packaged-lifecycle-C11.log"
+    },
+    {
+      "command": ".venv/bin/python -m scripts.build_m8f --build 102 --output generated/m8f/development-C11 --dmg",
+      "exit_code": 0,
+      "result": "Final real development app/DMG, tsc-vite/probe/codesign",
+      "log": "generated/m8f/development-C11.log"
+    },
+    {
+      "command": "xcrun swiftc -typecheck -target arm64-apple-macos14.0 -D LOCAL_TEST -F generated/m8f/dependencies/Sparkle-2.10.0 -module-cache-path generated/m8f/swift-cache apps/macos/PersonalCompanion.swift",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "generated/m8f/swift-C11-pre.log"
+    },
+    {
+      "command": "PYTHONPATH=. .venv/bin/python scripts/audit_m8e_q03.py --output generated/m8f/Q03-C11.json",
+      "exit_code": 0,
+      "result": "24/24 exclusion;32/32 release;live0",
+      "log": "generated/m8f/Q03-C11-corrected.log"
+    },
+    {
+      "command": "node scripts/verify_m7a_schemas.mjs",
+      "exit_code": 0,
+      "result": "PASS in stated structural scope",
+      "log": "generated/m8f/schemas-m7a-C11.log"
+    },
+    {
+      "command": "node scripts/verify_m7c_schemas.mjs",
+      "exit_code": 0,
+      "result": "PASS in stated structural scope",
+      "log": "generated/m8f/schemas-m7c-C11.log"
+    },
+    {
+      "command": "node scripts/verify_m7d_schemas.mjs",
+      "exit_code": 0,
+      "result": "PASS in stated structural scope",
+      "log": "generated/m8f/schemas-m7d-C11.log"
+    },
+    {
+      "command": "PYTHONPATH=. .venv/bin/python scripts/qualify_m7d_skills.py --check",
+      "exit_code": 0,
+      "result": "PASS in stated structural scope",
+      "log": "generated/m8f/qualification-C11.log"
+    },
+    {
+      "command": ".venv/bin/python scripts/m7_admission.py",
+      "exit_code": 0,
+      "result": "PASS in stated structural scope",
+      "log": "generated/m8f/admission-C11.log"
+    }
+  ]
+}

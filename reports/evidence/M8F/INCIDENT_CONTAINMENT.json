@@ -1,0 +1,10 @@
+{
+  "status": "REMOVED_BY_EXPLICIT_OWNER_AUTHORIZATION",
+  "incident": "POSSIBLE_NON_SYNTHETIC_MIC_CAPTURE_LOCAL_ONLY",
+  "root_exists_after": false,
+  "method": "UNLINK_WITHOUT_READING_FILE_CONTENT",
+  "owner_pilot_touched": false,
+  "provider_inference": 0,
+  "private_content_in_git": false,
+  "incident_content_not_reused": true
+}

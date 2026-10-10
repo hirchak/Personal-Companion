@@ -1,19 +1,28 @@
+# M8F — AWAITING_REVIEW
 
-# M8F — IN_PROGRESS
+Base f32038f62e276400c41fb21c76ce753316b7aaa7; final C11
+23bcb16a0d33e4d86377ad60c4fcce216f8c808d. R provided after commit/push.
+Read reports/M8F_MACOS_APP_REPORT.md, reports/evidence/M8F/ACCEPTANCE_MATRIX.md;
+contract/ADR/build/signing/user-guide linked. Artifacts generated/m8f/development-C11,A,B.
 
-Owner issued standalone macOS + safe updates goal; actual base/origin f32038f verified.
-Actual executor GPT-6.1 Sol/High; Plan Mode OFF. Push main authorized; merge/deploy/provider/data not authorized.
-Native AppKit/WKWebView, real relocated Python13, runtime-only dependencies, UI, Whisper and Sparkle2.10.0
-are implemented. Owner separately authorized project-local Sparkle download/integration. Local C8 app/DMG
-and packaged core/ASR/isolation/backup/restore passed; final corrected C9 artifacts/checks pending.
-Actual hardware Mac14,15 / Apple M2 / 8GB / macOS27, not the requested16GB reference.
+Actual readonly-DMG/Finder/embedded core/Whisper/backup/fresh restore and real one-click
+Sparkle A→B preserve2 notes/1message/1authored WAV/identity;backup/pending/highwater verified.
+C11 full1042 PASS with unchanged-assertion failure observer,web53,target21,Q03 bad24/positive32
+and schema/admission/qualification/build/typecheck/privacy PASS in reported scopes.
+Prior C10 standard flakes retained OPEN. C11 GUI fixture start stuck/canceled NOT_PASS;
+packaged C11 ASR PASS and prior C10 GUI voice with own SHA are distinct evidence.
+Actual M2/8GB,requested16GB/normal OS auth/physical mic/olderOS/atomic-swap kill unverified.
 
-C8 microphone test unexpectedly captured possible non-synthetic audio locally and ASR ran; no provider
-inference/upload/Git content. Candidate stopped, root excluded and deleted without reading file content
-after exact scoped owner authorization. Incident is retained in final report, not relabeled synthetic.
-C9 LOCAL_TEST denies physical microphone at both native and page layers; an explicit menu uses only
-authored bundled synthetic PCM. Existing owner pilot/vault was never inspected or modified.
+C11 guard extends unsaved STARTING/RECORDING/SAVING/audio draft Boolean;legacy hidden
+in PRIVATE_LOCAL and characterized by browser fixture. Native STARTING refused before
+backup/pending. Bounded UI continuation preserves two resolved fixes;not whole-product ACCEPT.
+Production identity/notarization/key/host/private owner activation require separate gates.
 
-Next: final clean exact-C build, original-synthetic native Finder/GUI one-button A→B/signature negatives,
-full checks, independent UI review, evidence-only R/privacy scan/normalFF main/remote equality.
-Clinical/five specialists/Health/phone/cloud/telemetry OFF; AI unavailable/defaultOFF. No next milestone.
+C8 possible non-synthetic microphone/local ASR/accessibility incident retained;exact root
+removed without content reads after explicit owner permission;tool history not erased.
+No provider upload/Git content or real pilot/vault access. Final test builds hard-deny
+physical input/use authored PCM. Historical activation fields not current M8F proof.
+
+Push_main true independently merge/deploy/provider/data false. Final R privacy/staged review/
+normalFF main/remote equality;no binary hosting/tag/deploy. Clinical/Health/phone/5 specialists/
+sync/telemetry OFF. STOP for independent exact C/R review;no next milestone.

@@ -1,0 +1,636 @@
+{
+  "implementation_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+  "scope": "METADATA_AND_SANITIZED_TEST_STATUS_ONLY_NOT_PRIVATE_TRANSCRIPTS_OR_KEYS",
+  "logs": [
+    {
+      "log": "generated/m8f/Q03-C1.log",
+      "sha256": "6552ba4c0e17d38deda5db0c8e54c7c44ff5bc7bdde0c5090dc14f3d2595a0ac",
+      "bytes": 124,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/Q03-C10.log",
+      "sha256": "6552ba4c0e17d38deda5db0c8e54c7c44ff5bc7bdde0c5090dc14f3d2595a0ac",
+      "bytes": 124,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/Q03-C7.log",
+      "sha256": "6552ba4c0e17d38deda5db0c8e54c7c44ff5bc7bdde0c5090dc14f3d2595a0ac",
+      "bytes": 124,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/Q03-C9.log",
+      "sha256": "6552ba4c0e17d38deda5db0c8e54c7c44ff5bc7bdde0c5090dc14f3d2595a0ac",
+      "bytes": 124,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/activation-recovery-C10.log",
+      "sha256": "dd2a365914852f888a4951d726f790effe1a280067a8703caf313f66972e6ddc",
+      "bytes": 406,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/admission-C10.log",
+      "sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde",
+      "bytes": 25353,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/admission-C8.log",
+      "sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde",
+      "bytes": 25353,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/development-C10.log",
+      "sha256": "8b72b5e4e447bd49654065eee28f1f4643ba36f6e6d4285a1966964d6d4f72c1",
+      "bytes": 10503,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/full-C10-diagnostic-2.log",
+      "sha256": "b3dd75f821f80915c6ddcc2ede3283360d8f3e303409f27af19578b725f1e9c4",
+      "bytes": 2619,
+      "safe_summary": [
+        "1 failed, 796 passed, 1 warning in 580.24s (0:09:40)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-C10-diagnostic-3.log",
+      "sha256": "16ceacef166ef4bf4f7ecd773ff147beb8fb0460b86ce1e8dbe08d29526fd0fa",
+      "bytes": 1777,
+      "safe_summary": [
+        "1041 passed, 1 warning in 857.38s (0:14:17)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-C10-diagnostic.log",
+      "sha256": "0a082519aacc0fb1c8e6ac60e7add0e0a1500d69e5444aebec6a66778e954936",
+      "bytes": 1563,
+      "safe_summary": [
+        "199 passed, 1 warning, 1 error in 101.59s (0:01:41)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-C10-final-serial.log",
+      "sha256": "f6484ed2e91e35a7f74a97e67e1f2fbc915db4cba74e8bb19707f5aaebc04bd0",
+      "bytes": 3076,
+      "safe_summary": [
+        "2 failed, 1039 passed, 1 warning in 816.99s (0:13:36)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-C10-final.log",
+      "sha256": "cd0ecc4fca0ef05c7981c8f30664b6467a26583c027f7a712e213d38c2269305",
+      "bytes": 4403,
+      "safe_summary": [
+        "3 failed, 1038 passed, 1 warning in 1287.76s (0:21:27)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-C10-isolated.log",
+      "sha256": "85b1b394c4db78b6ac4aacef9bd3645f5a71a02f384eab851a2231c8cb56a322",
+      "bytes": 2210,
+      "safe_summary": [
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/selectors.py:548: KeyboardInterrupt",
+        "(to show a full traceback on KeyboardInterrupt use --full-trace)",
+        "1 failed, 266 passed, 1 warning in 189.31s (0:03:09)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-python-C1.log",
+      "sha256": "d13dbf2b8d95484f6593fdeca000c008b168aa3893c1a0af5c3c0860af731263",
+      "bytes": 349,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/full-python-C10.log",
+      "sha256": "7cea77b2f5a114d3b6154705a1f9724e2296fb5d1082b944f3f0183774bc9e7f",
+      "bytes": 1734,
+      "safe_summary": [
+        "1 failed, 199 passed, 1 warning in 122.84s (0:02:02)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-python-C7-tests.log",
+      "sha256": "e908956f78eeddeeff5c87f3170c2e2afaad60491fead8c54218253f40286334",
+      "bytes": 4240,
+      "safe_summary": [
+        "3 failed, 1035 passed, 1 warning in 615.49s (0:10:15)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-python-C7.log",
+      "sha256": "e5610315a55ffc6c1ea047b93f600ce8da0dc60fc619fab9937cc1c3f982dd85",
+      "bytes": 8136,
+      "safe_summary": [
+        "_ ERROR collecting generated/m8f/interrupted-C5-A/Personal Companion.app/Contents/Resources/runtime/lib/python3.13/site-packages/annotated_types/test_cases.py _",
+        "ERROR generated/m8f/failed-C1-A/Personal Companion.app/Contents/Frameworks/EmbeddedPython/lib/python3.13/site-packages/annotated_types/test_cases.py",
+        "ERROR generated/m8f/failed-C2-A/Personal Companion.app/Contents/Frameworks/EmbeddedPython/lib/python3.13/site-packages/annotated_types/test_cases.py",
+        "ERROR generated/m8f/failed-C3-A/Personal Companion.app/Contents/Resources/runtime/lib/python3.13/site-packages/annotated_types/test_cases.py",
+        "ERROR generated/m8f/failed-C4-A/Personal Companion.app/Contents/Resources/runtime/lib/python3.13/site-packages/annotated_types/test_cases.py"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-python-C8.log",
+      "sha256": "1dee238899d48c21e62adaa29844c8c5ef2223004f51a3421b75731ea3faf036",
+      "bytes": 2400,
+      "safe_summary": [
+        "1 failed, 1039 passed, 1 warning in 691.41s (0:11:31)"
+      ]
+    },
+    {
+      "log": "generated/m8f/full-python-C9.log",
+      "sha256": "8e28912cd818a9486fa9c31e08cc1edb98ad865fed513a1ed1d6ec5e1868528f",
+      "bytes": 3536,
+      "safe_summary": [
+        "    if time.monotonic()>=deadline: raise SafeError('ASR_TIMEOUT')",
+        "E   apps.core.storage.SafeError: ASR_TIMEOUT",
+        "2 failed, 1038 passed, 1 warning in 689.46s (0:11:29)"
+      ]
+    },
+    {
+      "log": "generated/m8f/media-diagnostic-all-C10.log",
+      "sha256": "eba7bc4dd19340936a2c0d16f8326f415f81a9596275f6072183504dc0e3c8a1",
+      "bytes": 109,
+      "safe_summary": [
+        "9 passed in 64.15s (0:01:04)"
+      ]
+    },
+    {
+      "log": "generated/m8f/media-diagnostic-focused-C10.log",
+      "sha256": "992b7341b1c3fa67e1fcc5a341bd852d2cdeba5b03abfca768137dd72c44c4a3",
+      "bytes": 99,
+      "safe_summary": [
+        "1 passed in 14.67s"
+      ]
+    },
+    {
+      "log": "generated/m8f/native-C10.log",
+      "sha256": "c627eaceb8ba00afb0908afd67024f4ffbe707b732adb4ddb351413d42a903f8",
+      "bytes": 644,
+      "safe_summary": [
+        "20 passed, 1 warning in 12.25s"
+      ]
+    },
+    {
+      "log": "generated/m8f/native-C4.log",
+      "sha256": "b48809fb149710857f615e8f061f546748b3f62893527787d9437c6840659e36",
+      "bytes": 643,
+      "safe_summary": [
+        "17 passed, 1 warning in 5.90s"
+      ]
+    },
+    {
+      "log": "generated/m8f/native-C8-precheck.log",
+      "sha256": "7817d2e555f3df382c4384fb3bb024d19adaca2d713fed243ae694bee566a632",
+      "bytes": 643,
+      "safe_summary": [
+        "19 passed, 1 warning in 8.10s"
+      ]
+    },
+    {
+      "log": "generated/m8f/native-unit-pre-c-2.log",
+      "sha256": "2e1d6978d63a423bf943a58531da14ebe71eb0f3c0a6690b3de790f8afb437fc",
+      "bytes": 11574,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/native-unit-pre-c-3.log",
+      "sha256": "b77ca6de949062e6e7673dac0e5096072d69f42c61c7c2afbc0ca38c4a67ff41",
+      "bytes": 644,
+      "safe_summary": [
+        "17 passed, 1 warning in 11.44s"
+      ]
+    },
+    {
+      "log": "generated/m8f/native-unit-pre-c-4.log",
+      "sha256": "091300b5f21ab78dbddd5f07b3c823f3fa03aa2b5582c14d249143530c44c8c0",
+      "bytes": 644,
+      "safe_summary": [
+        "17 passed, 1 warning in 13.56s"
+      ]
+    },
+    {
+      "log": "generated/m8f/native-unit-pre-c.log",
+      "sha256": "617119ec76011cefd3fba0a663ccd43a7b41937b4554feb3aed6bc426eba80d6",
+      "bytes": 1112,
+      "safe_summary": [
+        "__________________ ERROR collecting tests/test_m8f_native.py ___________________"
+      ]
+    },
+    {
+      "log": "generated/m8f/no-asr-C10.log",
+      "sha256": "ddfb7fa8a4b128db5cc31826fbf0103cc18788c25acbd5d28332c4aaaf843999",
+      "bytes": 10333,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/packaged-lifecycle-C10.log",
+      "sha256": "5ce22a9713d7ee635ea857da61e48705e46deec9d05cc779533cdd81b9b97ed3",
+      "bytes": 1305,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/packaged-lifecycle-C6.log",
+      "sha256": "7dedc991b803b08076fc797d3fe648a4e2319e422d3afd98fed310f6a4cd9bde",
+      "bytes": 861,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/packaged-lifecycle-C8.log",
+      "sha256": "a70e23feb6a6c05851a314f2431508ca8c68bb9a712fc0e903a084a651956a69",
+      "bytes": 1305,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/packaged-lifecycle-C9.log",
+      "sha256": "d447530ab056430c703e6792a1b76ce7c0c5dcc0dc0bbecc03ac297824caea26",
+      "bytes": 1305,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C1.log",
+      "sha256": "64a533fde98847651efec68b17ef86bc4cb3935b7466059cb81d69e2013aa464",
+      "bytes": 2317,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C10.log",
+      "sha256": "fb32be2e1f7abb4da2d98e1613752a929ca8803453fb55bc82aefd340fbb278a",
+      "bytes": 20461,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C2.log",
+      "sha256": "851fc196ccc44cb6c7fb5898290ee8949e1a69195d585ebdc29197bd84eeab01",
+      "bytes": 14580,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C3.log",
+      "sha256": "8f31a7da146eababae85febe6d253679eef9426f9fdb83b7a31a289342201e53",
+      "bytes": 12246,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C4.log",
+      "sha256": "0c3d013165c3fb738b9f0a360a216473bcd5861dc857ef883743e006233007d6",
+      "bytes": 11499,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C5.log",
+      "sha256": "380a4ab4e2c6ed3b5d84540d3b954fe7b0af2872d140e65b73ea66e18604227b",
+      "bytes": 11590,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C6.log",
+      "sha256": "11adc7016814ccbb17d3f6e66d8efda4042489f6221fe8df1edcfd58f1876213",
+      "bytes": 20461,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C7.log",
+      "sha256": "fdd2f107079224fc901bdfdc2b2f92f98bff26d3ddd7332265d70630fdd2c9ae",
+      "bytes": 20461,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C8.log",
+      "sha256": "4a6095c5072a73bdb826c0ae4d5e4f1818b732454b1d60836e8874234483856b",
+      "bytes": 20461,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C9.log",
+      "sha256": "fe132833cd117bfb71a1c03c0ebb2d197ccd8030b1d38701a94717e59d7b2563",
+      "bytes": 20461,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/qualification-C10.log",
+      "sha256": "c37dfdc41e720cf36d5960a135232675f670268152a7afe3f6304f32113c9432",
+      "bytes": 69,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/qualification-C8.log",
+      "sha256": "c37dfdc41e720cf36d5960a135232675f670268152a7afe3f6304f32113c9432",
+      "bytes": 69,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7a-C10.log",
+      "sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d",
+      "bytes": 94,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7a-C8.log",
+      "sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d",
+      "bytes": 94,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7c-C10.log",
+      "sha256": "b688daa486a388bea4e9ae5a702d4ba14f7c843f6205a4d4c9d35eb1412a33b8",
+      "bytes": 83,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7c-C8.log",
+      "sha256": "b688daa486a388bea4e9ae5a702d4ba14f7c843f6205a4d4c9d35eb1412a33b8",
+      "bytes": 83,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7d-C10.log",
+      "sha256": "15af5a8d57f49f0fcf855986bef6b29bc8213f982f93dee0c9761fbced65a1d1",
+      "bytes": 137,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7d-C8.log",
+      "sha256": "15af5a8d57f49f0fcf855986bef6b29bc8213f982f93dee0c9761fbced65a1d1",
+      "bytes": 137,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/swift-C10-precheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/swift-C2-precheck.log",
+      "sha256": "80f496bb33e4470a6bf3d18061142626f901c28005786bf950ce1981dbed392a",
+      "bytes": 647,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/swift-C7-precheck-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/swift-C7-precheck.log",
+      "sha256": "4ce9d14f9cc5c00854b2dc180c4338695d7f0d3399961475ba2fb3c043ede9bf",
+      "bytes": 1007,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/swift-C8.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/swift-C9-precheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/web-test-pre-c.log",
+      "sha256": "a51c8fe42936f250741e44012bb341b5cca7346cc1dc797f69518f86575d9edb",
+      "bytes": 290,
+      "safe_summary": [
+        " Test Files  9 passed (9)",
+        "      Tests  53 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/web-tests-C10-isolated.log",
+      "sha256": "8c5769a029efceff645c95538b406a64149e4f84d3be25a3c5152f6fdc794a35",
+      "bytes": 328,
+      "safe_summary": [
+        " Test Files  9 passed (9)",
+        "      Tests  53 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/web-tests-C10-serial.log",
+      "sha256": "0bf097dcb785571ca1b4d1ef1953d3558b9676707fa31ce9ebcb49527a717ead",
+      "bytes": 1159,
+      "safe_summary": [
+        " ❯ tests/phone-audio.test.ts (10 tests | 1 failed) 11668ms",
+        "Error: Test timed out in 5000ms.",
+        " Test Files  1 failed | 8 passed (9)",
+        "      Tests  1 failed | 52 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/web-tests-C10.log",
+      "sha256": "6025ef3d1f020313ca2f600cde1dca7d6f0518826549d6484cd96f8fa7c60c0b",
+      "bytes": 1160,
+      "safe_summary": [
+        " ❯ tests/phone-audio.test.ts (10 tests | 1 failed) 16080ms",
+        "Error: Test timed out in 5000ms.",
+        " Test Files  1 failed | 8 passed (9)",
+        "      Tests  1 failed | 52 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/web-tests-C9-final-precheck.log",
+      "sha256": "7841377c9b8af8744329e9af891b98247b1d70cd9af8bbc484314c815eaf67ca",
+      "bytes": 292,
+      "safe_summary": [
+        " Test Files  9 passed (9)",
+        "      Tests  53 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/web-tests-C9-precheck.log",
+      "sha256": "6e45b7d911b49d2637a87a57c3b2d55aa7c7f707c0033906f6dc9eec1715fd0f",
+      "bytes": 291,
+      "safe_summary": [
+        " Test Files  9 passed (9)",
+        "      Tests  53 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/web-tests-C9.log",
+      "sha256": "0418f018549779852ecdf52c60345879fcd844c47e1a30a090141083f1c8313f",
+      "bytes": 291,
+      "safe_summary": [
+        " Test Files  9 passed (9)",
+        "      Tests  53 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/swift-C10-final.log",
+      "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b",
+      "command": "xcrun swiftc -typecheck -target arm64-apple-macos14.0 -D LOCAL_TEST -F generated/m8f/dependencies/Sparkle-2.10.0 -module-cache-path generated/m8f/swift-cache apps/macos/PersonalCompanion.swift",
+      "exit_code": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/final-two-recheck-C10.log",
+      "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q 'tests/test_m3_process.py::test_M3_A10_fake_process_exact_command_env_bounded_output[oversized-FAILED-OUTPUT_LIMIT]' 'tests/test_m4_browser.py::test_M4_browser_recording_interruptions[track]' --tb=short",
+      "exit_code": 0,
+      "sha256": "db7d9faf2e942cd19901409fe3e3a544ba65632fd57e468d9fed9a1a10c2a5ea",
+      "bytes": 99,
+      "safe_summary": [
+        "2 passed in11.57s"
+      ]
+    },
+    {
+      "log": "generated/m8f/Q03-C11-corrected.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "6552ba4c0e17d38deda5db0c8e54c7c44ff5bc7bdde0c5090dc14f3d2595a0ac",
+      "bytes": 124,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/Q03-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "0d2604fb71ed71036e0bf50d116c6b58ffb1457b5deff6a46ba033998ba57541",
+      "bytes": 239,
+      "safe_summary": [
+        "ModuleNotFoundError: No module named 'apps'"
+      ]
+    },
+    {
+      "log": "generated/m8f/activation-recovery-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "bc8bcbf7935cc549845cbe24aa422946f3d3c3af65c608b774ab65b6288c59e7",
+      "bytes": 406,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/admission-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "3531d99b0f7ead2ff4da07607fe14461d900ceb37b15705051d0c265d9358cde",
+      "bytes": 25353,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/development-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "07a74cc53ed07097dad277a1fe9cb263e1d3117bd9a85ad7742f1e572e2a61d7",
+      "bytes": 10639,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/feed-valid-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "8c44b717f98999fc43341848fa0ab09e80795ab067940f0c050c6ce2d1010841",
+      "bytes": 58,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/full-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "fc3a2ad6850b33bba69886612dd9bbd96ad096422ac90cb415e8550ff6e1e28c",
+      "bytes": 1777,
+      "safe_summary": [
+        "1042 passed, 1 warning in 939.38s (0:15:39)"
+      ]
+    },
+    {
+      "log": "generated/m8f/guard-C11-pre.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "2d406c38dfc5ad07129dc4dbe923f7e3fe2ce6d850f3dde76ee1f8b5806683ca",
+      "bytes": 644,
+      "safe_summary": [
+        "21 passed, 1 warning in 21.80s"
+      ]
+    },
+    {
+      "log": "generated/m8f/local-feed-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "3b7f2096d86c9138856c2b2fdadae52b52504d5d17eae56f7363d07990e410af",
+      "bytes": 1007,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/packaged-lifecycle-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "73ba81b5f284abe09f4a4a67255797bfa1facb7be19addd121f6146666b4c91b",
+      "bytes": 1304,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/prepare-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "0a453f2a517af8e4b03643d111bb87b1efd2f30040aab020b3a41fb2119436b3",
+      "bytes": 20461,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/qualification-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "c37dfdc41e720cf36d5960a135232675f670268152a7afe3f6304f32113c9432",
+      "bytes": 69,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7a-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "6b1387b9f8077cb5b03f8abdedac1a2996bff8673691356b03673e9e3a3c7e9d",
+      "bytes": 94,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7c-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "b688daa486a388bea4e9ae5a702d4ba14f7c843f6205a4d4c9d35eb1412a33b8",
+      "bytes": 83,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/schemas-m7d-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "15af5a8d57f49f0fcf855986bef6b29bc8213f982f93dee0c9761fbced65a1d1",
+      "bytes": 137,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/swift-C11-pre.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/web-build-C11-pre.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "35a3aef23efc89d49ae3ae5913bc17bf89f5fff6911823b38f54c40f086949e8",
+      "bytes": 401,
+      "safe_summary": []
+    },
+    {
+      "log": "generated/m8f/web-tests-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "1833661a390e44d26d7048d05c54a9a6ceb81bad9a7ec19050495f10f3c95b3a",
+      "bytes": 328,
+      "safe_summary": [
+        " Test Files  9 passed (9)",
+        "      Tests  53 passed (53)"
+      ]
+    },
+    {
+      "log": "generated/m8f/wrong-signer-C11.log",
+      "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+      "sha256": "a9bf7f194dc0cc985edbf716e91f48c3c4a163cf28c2c56d29b81540a17659b0",
+      "bytes": 65,
+      "safe_summary": []
+    }
+  ],
+  "canonical_full_original_failures_retained": true,
+  "diagnostic_full_command": "PYTHONPATH=\"$PWD/generated/m8f:$PWD\" PLAYWRIGHT_BROWSERS_PATH=\"$PWD/generated/chromium\" .venv/bin/python -m pytest -q -x -p diag_m4 --tb=short",
+  "diagnostic_plugin_sha256": "817dc79e65581916b6fe345f4fac1e02ef2360caa48ecde5b1782abdd1cbbb24",
+  "diagnostic_plugin_behavior": "Calls original assertions unchanged; captures original-synthetic states only on failure; no skips or deadline changes",
+  "web_pass_command": "npm --prefix apps/web test -- --maxWorkers=1 --no-file-parallelism",
+  "prior_c10_source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b"
+}

@@ -1,0 +1,24 @@
+{
+  "source_sha": "af24526d1a5703dbbb197c5b8487360714c5d92b",
+  "status": "TEST_SIGNED_LOCAL_A_TO_B_PASS",
+  "from_build": 101,
+  "to_build": 102,
+  "one_update_click": true,
+  "relaunch": true,
+  "data_fingerprint_preserved": true,
+  "vault_identity_preserved": true,
+  "entries": 2,
+  "messages": 1,
+  "audio": 1,
+  "backup_count": 2,
+  "pending_cleared": true,
+  "highwater": 102,
+  "maintenance_ui_pulses": [
+    19,
+    35
+  ],
+  "wrong_signer_rejected": true,
+  "production_notarization": "NOT_RUN",
+  "provider_calls": 0,
+  "scope": "C10_ORIGINAL_AUTHORED_SYNTHETIC_ONLY_PHYSICAL_CAPTURE_DENIED"
+}

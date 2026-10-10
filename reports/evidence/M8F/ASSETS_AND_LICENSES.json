@@ -1,0 +1,125 @@
+{
+  "source_sha": "23bcb16a0d33e4d86377ad60c4fcce216f8c808d",
+  "native_manifest_hash": "e74845d4a7e999adaaa421936f2a4ecd72719debc72e63dbb8d555f0f6b0aefa",
+  "asr": {
+    "cloud_asr": false,
+    "engine": "whisper.cpp",
+    "engine_licence": "MIT",
+    "engine_original_sha256": "54d1e7bf2e36ec29bdf70b87a45e26158396d5004909d16d5ad76e51920b566c",
+    "engine_sha256": "54d1e7bf2e36ec29bdf70b87a45e26158396d5004909d16d5ad76e51920b566c",
+    "model": "small-multilingual",
+    "model_licence": "MIT",
+    "model_revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+    "model_sha256": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
+    "new_download_bytes": 0,
+    "source_commit": "927cfce34f31707e17f2bff35c349632fb9e2c3a",
+    "version": "1.9.4-dev"
+  },
+  "sparkle": {
+    "archive_sha256": "c2bf58aa8387266ac179357b1415d6f2635f044da8be41042af32425dae6da0c",
+    "signature": "ADHOC_NO_TEAM",
+    "version": "2.10.0"
+  },
+  "runtime_packages": [
+    {
+      "licence_files": [
+        "annotated_types-0.8.0.dist-info/licenses/LICENSE"
+      ],
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "licence_files": [
+        "anyio-4.15.1.dist-info/licenses/LICENSE"
+      ],
+      "name": "anyio",
+      "version": "4.15.1"
+    },
+    {
+      "licence_files": [
+        "click-8.5.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "name": "click",
+      "version": "8.5.0"
+    },
+    {
+      "licence_files": [
+        "fastapi-0.115.12.dist-info/licenses/LICENSE"
+      ],
+      "name": "fastapi",
+      "version": "0.115.12"
+    },
+    {
+      "licence_files": [
+        "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "licence_files": [
+        "idna-3.20.dist-info/licenses/LICENSE.md"
+      ],
+      "name": "idna",
+      "version": "3.20"
+    },
+    {
+      "licence_files": [
+        "pydantic-2.11.3.dist-info/licenses/LICENSE"
+      ],
+      "name": "pydantic",
+      "version": "2.11.3"
+    },
+    {
+      "licence_files": [
+        "pydantic_core-2.33.1.dist-info/licenses/LICENSE"
+      ],
+      "name": "pydantic_core",
+      "version": "2.33.1"
+    },
+    {
+      "licence_files": [
+        "starlette-0.46.2.dist-info/licenses/LICENSE.md"
+      ],
+      "name": "starlette",
+      "version": "0.46.2"
+    },
+    {
+      "licence_files": [
+        "typing_inspection-0.4.4.dist-info/licenses/LICENSE"
+      ],
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "licence_files": [
+        "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+      ],
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    },
+    {
+      "licence_files": [
+        "uvicorn-0.34.2.dist-info/licenses/LICENSE.md"
+      ],
+      "name": "uvicorn",
+      "version": "0.34.2"
+    }
+  ],
+  "lock_hashes": {
+    "requirements.runtime.lock": "f17abf6ca517eaa32131af3ed3f21690a6ea5f2c6a2481a10a518b3dfcc54b6e",
+    "apps/web/package-lock.json": "77cac87f44669ba593b0f97104aa9f3c6ce848c9e637d5e80b89f74f6c5a49c2"
+  },
+  "notices": {
+    "PYTHON_LICENSE.txt": "62f2c9c2c75d511170eb464ad5f83b78cc1f37eb2eb49c2846c9aa6c4557ee99",
+    "REACT-DOM_LICENSE.txt": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+    "WHISPER_MODEL_LICENSE.txt": "b5d65a59060e68c4ff940e1eddfa6f94b2d68fdf58ed7f4dd57721c997e35e9d",
+    "WHISPER_CPP_LICENSE.txt": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+    "REACT_LICENSE.txt": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+    "SPARKLE_LICENSE.txt": "389a4e4e9a32f059775b13a06e25a591445ba229d2838d26dd3e7c0c45127cfe"
+  },
+  "python_notice_includes_OpenSSL_Apache2_and_libffi": true,
+  "no_new_weights_download": true,
+  "material_rights_scope": "ORIGINAL_ICON_SOURCES_AUTHORED_SYNTHETIC_AUDIO_EXISTING_PINNED_MIT_ASSETS_RETAINED_THIRD_PARTY_NOTICES",
+  "production_distribution_acceptance": "REQUIRED"
+}

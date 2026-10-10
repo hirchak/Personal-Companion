@@ -323,3 +323,14 @@ auth-required. Forward C4 `c95e49ff92b5e4d42b877e91e5e9464258dc7588` adds negati
 Exact-C4 Python846, web53/build, package Chromium21, schemas/docs/context/privacy PASS; provider calls0; owner vault
 not inspected and candidate not installed. H02 remains ACCEPTED; H01 is AWAITING_REVIEW. Evidence:
 `reports/M8E_H01_ACCOUNT_SHAPE_REPORT.md`.
+
+## M8F standalone macOS candidate — 2026-10-10
+
+AWAITING_REVIEW. Final C11 23bcb16 provides real arm64 app/DMG, embedded runtime/UI/Whisper,
+protected onboarding, signed local one-click A101→B102 and preserved original-synthetic data.
+Actual M2/8GB,requested16GB unverified. Full1042 PASS with unchanged-assertion failure observer;
+web53/target21/Q03/schema/build/privacy PASS in reported scopes;prior standard flakes OPEN.
+C11 GUI fixture start NOT_PASS,packaged ASR PASS,prior C10 GUI voice separately retained.
+Contained C8 physical capture incident remains material. Normal auth/physical mic/olderOS,
+production signing/notarization/hosting/private activation and clinical review separate gates.
+Report reports/M8F_MACOS_APP_REPORT.md;no independent ACCEPT or next milestone.
